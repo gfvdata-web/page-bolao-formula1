@@ -6,6 +6,7 @@
   "date": "2026-07-05",
   "sprint": true,
   "bonus_driver": "HAM",
+  "min_score": 1,
   "result_order": [
     "ANT",
     "LEC",

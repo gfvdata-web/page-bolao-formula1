@@ -9,6 +9,7 @@
       "date": "2026-03-08",
       "sprint": false,
       "bonus_driver": "PIA",
+      "min_score": 3,
       "order": [
         "RUS",
         "ANT",
@@ -39,6 +40,7 @@
       "date": "2026-03-15",
       "sprint": true,
       "bonus_driver": "COL",
+      "min_score": 4,
       "order": [
         "ANT",
         "RUS",
@@ -72,6 +74,7 @@
       "date": "2026-03-29",
       "sprint": false,
       "bonus_driver": "BEA",
+      "min_score": 4,
       "order": [
         "ANT",
         "RUS",
@@ -105,6 +108,7 @@
       "date": "2026-05-03",
       "sprint": true,
       "bonus_driver": "STR",
+      "min_score": 4,
       "order": [
         "ANT",
         "VER",
@@ -138,6 +142,7 @@
       "date": "2026-05-24",
       "sprint": true,
       "bonus_driver": "STR",
+      "min_score": 4,
       "order": [
         "RUS",
         "ANT",
@@ -171,6 +176,7 @@
       "date": "2026-06-07",
       "sprint": false,
       "bonus_driver": "LEC",
+      "min_score": 4,
       "order": [
         "ANT",
         "VER",
@@ -204,6 +210,7 @@
       "date": "2026-06-14",
       "sprint": false,
       "bonus_driver": "SAI",
+      "min_score": 3,
       "order": [
         "RUS",
         "HAM",
@@ -237,6 +244,7 @@
       "date": "2026-06-28",
       "sprint": false,
       "bonus_driver": "HAD",
+      "min_score": 5,
       "order": [
         "RUS",
         "LEC",
@@ -270,6 +278,7 @@
       "date": "2026-07-05",
       "sprint": true,
       "bonus_driver": "HAM",
+      "min_score": 1,
       "order": [
         "ANT",
         "LEC",

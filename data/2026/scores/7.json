@@ -6,6 +6,7 @@
   "date": "2026-06-14",
   "sprint": false,
   "bonus_driver": "SAI",
+  "min_score": 3,
   "result_order": [
     "RUS",
     "HAM",

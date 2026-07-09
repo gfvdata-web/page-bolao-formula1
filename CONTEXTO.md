@@ -37,6 +37,19 @@ jogador em outra posição sem conflito).
 ### Total
 **Máximo por corrida: 13 pts.** Sem desempate definido por enquanto (adiado).
 
+### Pontuação mínima (compensação de quem não aposta)
+Nem todo jogador aposta em toda corrida. Para não penalizar demais quem falta
+uma rodada (nem beneficiar quem "escapa" de uma corrida ruim), cada rodada
+define uma **pontuação mínima**: 1 a menos que a menor pontuação registrada
+entre quem apostou naquela rodada (ex.: pontuações de 3 a 6 → mínima = 2).
+
+Todo jogador que **faz parte do ranking da temporada** (apostou em pelo menos
+uma rodada, em qualquer momento do ano) recebe a pontuação mínima da rodada em
+que não apostou — inclusive rodadas **anteriores** à sua estreia no bolão.
+Essa pontuação de compensação **entra no total do ranking**, mas **não conta
+como rodada apostada** (a contagem de circuitos apostados de cada jogador
+continua sendo só as rodadas em que ele realmente enviou palpite).
+
 ## 3. Formato da mensagem de palpite (WhatsApp)
 
 Exemplo real (Silverstone):
@@ -256,7 +269,8 @@ Status: ⬜ não iniciada · 🟡 em andamento · ✅ concluída
   do site em `docs/data/`. CLI: `python -m bolao.site build`
   (`--season`, `--data`, `--docs`). Testes offline: `tests/test_site.py`
   (acúmulo de várias rodadas, rodada sem resultado ignorada, ordenação, nome de
-  exibição) + casos novos em `tests/test_parser.py` — total do projeto: **52**.
+  exibição, pontuação mínima/compensação) + casos novos em `tests/test_parser.py`
+  — total do projeto: **53**.
 
 **Formatos novos definidos aqui (a Etapa 4 consome estes; não reabrir):**
 - **`messages/<round>.txt`:** texto bruto do WhatsApp, um arquivo por rodada. O
@@ -266,11 +280,17 @@ Status: ⬜ não iniciada · 🟡 em andamento · ✅ concluída
   sprint, bonus_driver, result_order:[...], players:[{player_id, player_raw,
   name, top6:[6], top6_detail:[{pos,guess,real,points,reason}], top6_points,
   bonus_guess, bonus_real_pos, bonus_points, total}]}`. Jogadores ordenados por
-  total desc, `player_id` asc.
+  total desc, `player_id` asc. **Não inclui compensação** (ver abaixo) — é a
+  pontuação bruta de quem apostou naquela rodada.
 - **`docs/data/standings.json`:** `{season, rounds:[{round, race_id, race,
-  circuit, date, sprint, bonus_driver}], players:[{position, player_id, name,
-  total, top6_total, bonus_total, rounds_played, per_round:{"<round>":pts}}]}`.
+  circuit, date, sprint, bonus_driver, min_score}], players:[{position,
+  player_id, name, total, top6_total, bonus_total, rounds_played,
+  per_round:{"<round>":pts}, compensated_rounds:[...], compensation_total}]}`.
   Ordenado por total desc, `player_id` asc (desempate adiado → ordem estável).
+  `min_score` = pontuação mínima da rodada (1 a menos que a menor pontuação de
+  quem apostou nela). `total`/`compensation_total` já incluem a compensação de
+  rodadas não apostadas; `rounds_played`/`per_round` continuam refletindo só as
+  rodadas realmente apostadas (compensação não conta como rodada apostada).
 - **`docs/data/bets.json`:** `{season, players:{"<id>":{player_id, name,
   rounds:{"<round>":{round, race_id, race, top6:[6], top6_detail:[...],
   top6_points, bonus_driver, bonus_guess, bonus_real_pos, bonus_points,
@@ -293,6 +313,13 @@ Status: ⬜ não iniciada · 🟡 em andamento · ✅ concluída
   `kimi`→ANT, `russel`→RUS, `l ecole`→LEC; `calendar.json` r3 ganhou o alias PT
   `japao`. Nomes de corrida em PT que diferem do EN podem precisar de alias novo
   no `calendar.json` conforme surgirem no cabeçalho.
+- **Pontuação mínima/compensação** (ver seção 2): "jogador do ranking" =
+  qualquer `player_id` que apareça em pelo menos uma rodada consolidada da
+  temporada (`ranking_players` em `generate()`), calculado **depois** de
+  processar todas as rodadas — por isso a compensação vale até para rodadas
+  **anteriores** à estreia do jogador. `min_score` de uma rodada é calculado
+  sobre quem apostou nela; se ninguém apostou, `min_score = 0` (caso que não
+  deve ocorrer na prática, já que a rodada só entra com `messages/<round>.txt`).
 - **Sem timestamp** nos JSONs gerados (saída determinística → diffs limpos e
   testes estáveis).
 

@@ -6,6 +6,7 @@
   "date": "2026-03-15",
   "sprint": true,
   "bonus_driver": "COL",
+  "min_score": 4,
   "result_order": [
     "ANT",
     "RUS",

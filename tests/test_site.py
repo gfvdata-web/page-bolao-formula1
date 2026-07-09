@@ -103,9 +103,13 @@ class TestGenerate(unittest.TestCase):
 
     def test_ranking_acumula_e_ordena(self):
         players = self.standings["players"]
-        # Joao: 13 (r1) + 10 (r2) = 23; Pedro: 13 (só r2); Maria: 10 (só r1).
+        # r1: joao 13, maria 10 -> min_score r1 = 9 (compensa quem não apostou).
+        # r2: joao 10, pedro 13 -> min_score r2 = 9.
+        # Joao: 13 (r1) + 10 (r2) = 23 (apostou nas duas, sem compensação).
+        # Pedro: 13 (r2) + 9 (compensação r1) = 22.
+        # Maria: 10 (r1) + 9 (compensação r2) = 19.
         self.assertEqual([p["player_id"] for p in players], ["joao", "pedro", "maria"])
-        self.assertEqual([p["total"] for p in players], [23, 13, 10])
+        self.assertEqual([p["total"] for p in players], [23, 22, 19])
         self.assertEqual([p["position"] for p in players], [1, 2, 3])
 
     def test_rounds_played_e_per_round(self):
@@ -114,6 +118,17 @@ class TestGenerate(unittest.TestCase):
         self.assertEqual(por_id["joao"]["per_round"], {"1": 13, "2": 10})
         self.assertEqual(por_id["maria"]["rounds_played"], 1)
         self.assertEqual(por_id["pedro"]["per_round"], {"2": 13})
+
+    def test_compensacao_pontuacao_minima(self):
+        por_id = {p["player_id"]: p for p in self.standings["players"]}
+        self.assertEqual(por_id["joao"]["compensated_rounds"], [])
+        self.assertEqual(por_id["joao"]["compensation_total"], 0)
+        self.assertEqual(por_id["pedro"]["compensated_rounds"], [1])
+        self.assertEqual(por_id["pedro"]["compensation_total"], 9)
+        self.assertEqual(por_id["maria"]["compensated_rounds"], [2])
+        self.assertEqual(por_id["maria"]["compensation_total"], 9)
+        self.assertEqual(self.standings["rounds"][0]["min_score"], 9)
+        self.assertEqual(self.standings["rounds"][1]["min_score"], 9)
 
     def test_top6_e_bonus_totais(self):
         joao = next(p for p in self.standings["players"] if p["player_id"] == "joao")

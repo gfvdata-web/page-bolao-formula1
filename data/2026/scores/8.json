@@ -6,6 +6,7 @@
   "date": "2026-06-28",
   "sprint": false,
   "bonus_driver": "HAD",
+  "min_score": 5,
   "result_order": [
     "RUS",
     "LEC",

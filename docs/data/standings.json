@@ -8,7 +8,8 @@
       "circuit": "albert_park",
       "date": "2026-03-08",
       "sprint": false,
-      "bonus_driver": "PIA"
+      "bonus_driver": "PIA",
+      "min_score": 3
     },
     {
       "round": 2,
@@ -17,7 +18,8 @@
       "circuit": "shanghai",
       "date": "2026-03-15",
       "sprint": true,
-      "bonus_driver": "COL"
+      "bonus_driver": "COL",
+      "min_score": 4
     },
     {
       "round": 3,
@@ -26,7 +28,8 @@
       "circuit": "suzuka",
       "date": "2026-03-29",
       "sprint": false,
-      "bonus_driver": "BEA"
+      "bonus_driver": "BEA",
+      "min_score": 4
     },
     {
       "round": 4,
@@ -35,7 +38,8 @@
       "circuit": "miami",
       "date": "2026-05-03",
       "sprint": true,
-      "bonus_driver": "STR"
+      "bonus_driver": "STR",
+      "min_score": 4
     },
     {
       "round": 5,
@@ -44,7 +48,8 @@
       "circuit": "villeneuve",
       "date": "2026-05-24",
       "sprint": true,
-      "bonus_driver": "STR"
+      "bonus_driver": "STR",
+      "min_score": 4
     },
     {
       "round": 6,
@@ -53,7 +58,8 @@
       "circuit": "monaco",
       "date": "2026-06-07",
       "sprint": false,
-      "bonus_driver": "LEC"
+      "bonus_driver": "LEC",
+      "min_score": 4
     },
     {
       "round": 7,
@@ -62,7 +68,8 @@
       "circuit": "catalunya",
       "date": "2026-06-14",
       "sprint": false,
-      "bonus_driver": "SAI"
+      "bonus_driver": "SAI",
+      "min_score": 3
     },
     {
       "round": 8,
@@ -71,7 +78,8 @@
       "circuit": "red_bull_ring",
       "date": "2026-06-28",
       "sprint": false,
-      "bonus_driver": "HAD"
+      "bonus_driver": "HAD",
+      "min_score": 5
     },
     {
       "round": 9,
@@ -80,7 +88,8 @@
       "circuit": "silverstone",
       "date": "2026-07-05",
       "sprint": true,
-      "bonus_driver": "HAM"
+      "bonus_driver": "HAM",
+      "min_score": 1
     }
   ],
   "players": [
@@ -102,7 +111,9 @@
         "7": 4,
         "8": 6,
         "9": 5
-      }
+      },
+      "compensated_rounds": [],
+      "compensation_total": 0
     },
     {
       "position": 2,
@@ -122,13 +133,15 @@
         "7": 4,
         "8": 7,
         "9": 4
-      }
+      },
+      "compensated_rounds": [],
+      "compensation_total": 0
     },
     {
       "position": 3,
       "player_id": "ferrari",
       "name": "Ferrari",
-      "total": 52,
+      "total": 53,
       "top6_total": 50,
       "bonus_total": 2,
       "rounds_played": 8,
@@ -141,7 +154,11 @@
         "6": 5,
         "7": 5,
         "8": 8
-      }
+      },
+      "compensated_rounds": [
+        9
+      ],
+      "compensation_total": 1
     },
     {
       "position": 4,
@@ -161,13 +178,15 @@
         "7": 5,
         "8": 8,
         "9": 6
-      }
+      },
+      "compensated_rounds": [],
+      "compensation_total": 0
     },
     {
       "position": 5,
       "player_id": "caliman",
       "name": "Caliman",
-      "total": 48,
+      "total": 49,
       "top6_total": 47,
       "bonus_total": 1,
       "rounds_played": 8,
@@ -180,13 +199,17 @@
         "6": 5,
         "7": 4,
         "8": 8
-      }
+      },
+      "compensated_rounds": [
+        9
+      ],
+      "compensation_total": 1
     },
     {
       "position": 6,
       "player_id": "igor",
       "name": "Igor",
-      "total": 43,
+      "total": 47,
       "top6_total": 43,
       "bonus_total": 0,
       "rounds_played": 7,
@@ -198,13 +221,18 @@
         "5": 8,
         "6": 6,
         "8": 6
-      }
+      },
+      "compensated_rounds": [
+        7,
+        9
+      ],
+      "compensation_total": 4
     },
     {
       "position": 7,
       "player_id": "francez",
       "name": "Francez",
-      "total": 36,
+      "total": 44,
       "top6_total": 36,
       "bonus_total": 0,
       "rounds_played": 6,
@@ -215,13 +243,19 @@
         "5": 5,
         "7": 5,
         "8": 6
-      }
+      },
+      "compensated_rounds": [
+        1,
+        6,
+        9
+      ],
+      "compensation_total": 8
     },
     {
       "position": 8,
       "player_id": "caio_l",
       "name": "Caio Lopes",
-      "total": 31,
+      "total": 43,
       "top6_total": 31,
       "bonus_total": 0,
       "rounds_played": 6,
@@ -232,13 +266,19 @@
         "5": 7,
         "6": 5,
         "9": 2
-      }
+      },
+      "compensated_rounds": [
+        2,
+        7,
+        8
+      ],
+      "compensation_total": 12
     },
     {
       "position": 9,
       "player_id": "lage",
       "name": "Lage",
-      "total": 18,
+      "total": 38,
       "top6_total": 18,
       "bonus_total": 0,
       "rounds_played": 3,
@@ -246,7 +286,16 @@
         "2": 7,
         "3": 5,
         "4": 6
-      }
+      },
+      "compensated_rounds": [
+        1,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "compensation_total": 20
     }
   ]
 }

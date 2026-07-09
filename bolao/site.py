@@ -136,6 +136,7 @@ def generate(
     round_scores: dict[int, list[PlayerScore]] = {}
     round_bonus: dict[int, str] = {}
     round_order: dict[int, list[str]] = {}
+    round_min_score: dict[int, int] = {}
 
     for rnd in rounds:
         texto = (messages_dir / f"{rnd}.txt").read_text(encoding="utf-8")
@@ -152,10 +153,22 @@ def generate(
         for s in scores:
             names.observe(s.player_id, s.player_raw)
 
-        round_infos.append({**_round_meta(race), "bonus_driver": sheet.bonus_driver})
+        # Pontuação mínima da rodada: 1 a menos que a menor pontuação
+        # registrada por quem apostou (compensação de quem não apostou).
+        min_score = min(s.total for s in scores) - 1 if scores else 0
+
+        round_infos.append(
+            {**_round_meta(race), "bonus_driver": sheet.bonus_driver, "min_score": min_score}
+        )
         round_scores[rnd] = scores
         round_bonus[rnd] = sheet.bonus_driver
         round_order[rnd] = result.order
+        round_min_score[rnd] = min_score
+
+    # Jogadores do ranking = todo mundo que apostou em pelo menos uma rodada
+    # da temporada. Quem não aposta numa rodada recebe a pontuação mínima
+    # daquela rodada (compensação), mas isso não conta como rodada apostada.
+    ranking_players = {s.player_id for scores in round_scores.values() for s in scores}
 
     # --- data/2026/scores/<round>.json (intermediário) ---
     for info in round_infos:
@@ -171,24 +184,32 @@ def generate(
         _dump_json(season_dir / "scores" / f"{rnd}.json", conteudo)
 
     # --- docs/data/standings.json (ranking acumulado) ---
-    acumulado: dict[str, dict] = {}
+    acumulado: dict[str, dict] = {
+        pid: {
+            "player_id": pid,
+            "total": 0,
+            "top6_total": 0,
+            "bonus_total": 0,
+            "per_round": {},
+            "compensated_rounds": [],
+            "compensation_total": 0,
+        }
+        for pid in ranking_players
+    }
     for info in round_infos:
         rnd = info["round"]
+        apostaram = {s.player_id for s in round_scores[rnd]}
         for s in round_scores[rnd]:
-            ac = acumulado.setdefault(
-                s.player_id,
-                {
-                    "player_id": s.player_id,
-                    "total": 0,
-                    "top6_total": 0,
-                    "bonus_total": 0,
-                    "per_round": {},
-                },
-            )
+            ac = acumulado[s.player_id]
             ac["total"] += s.total
             ac["top6_total"] += s.top6_points
             ac["bonus_total"] += s.bonus_points
             ac["per_round"][str(rnd)] = s.total
+        for pid in ranking_players - apostaram:
+            ac = acumulado[pid]
+            ac["total"] += round_min_score[rnd]
+            ac["compensation_total"] += round_min_score[rnd]
+            ac["compensated_rounds"].append(rnd)
 
     ordenados = sorted(
         acumulado.values(), key=lambda a: (-a["total"], a["player_id"])
@@ -205,6 +226,8 @@ def generate(
                 "bonus_total": ac["bonus_total"],
                 "rounds_played": len(ac["per_round"]),
                 "per_round": ac["per_round"],
+                "compensated_rounds": sorted(ac["compensated_rounds"]),
+                "compensation_total": ac["compensation_total"],
             }
         )
     standings = {

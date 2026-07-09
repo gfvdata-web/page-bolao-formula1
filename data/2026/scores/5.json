@@ -6,6 +6,7 @@
   "date": "2026-05-24",
   "sprint": true,
   "bonus_driver": "STR",
+  "min_score": 4,
   "result_order": [
     "RUS",
     "ANT",
