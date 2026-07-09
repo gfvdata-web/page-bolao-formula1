@@ -205,91 +205,93 @@ function renderPalpitesJogador(playerId, bets, standings) {
   container.replaceChildren(...cards);
 }
 
-// ---------- Temporada (gráfico de pontos por corrida, sem acumular) ----------
+// ---------- Temporada (gráficos acumulado e por corrida) ----------
 
-let graficoTemporada = null;
+let graficoTemporadaAcumulado = null;
+let graficoTemporadaPorRodada = null;
+let standingsParaTemporada = null;
+
+function construirSerieJogador(jogador, rounds, cor) {
+  const compensadas = new Set(jogador.compensated_rounds);
+  const porRodada = [];
+  const acumulado = [];
+  const pointStyle = [];
+  const pointRadius = [];
+  const pointBackgroundColor = [];
+  const compensadoPorIndice = [];
+  let soma = 0;
+
+  for (const rodada of rounds) {
+    const numero = rodada.round;
+    let valor;
+    if (compensadas.has(numero)) {
+      valor = rodada.min_score;
+      pointStyle.push("triangle");
+      pointRadius.push(6);
+      pointBackgroundColor.push("#fff");
+      compensadoPorIndice.push(true);
+    } else {
+      valor = jogador.per_round[numero] ?? null;
+      pointStyle.push("circle");
+      pointRadius.push(4);
+      pointBackgroundColor.push(cor);
+      compensadoPorIndice.push(false);
+    }
+    porRodada.push(valor);
+    soma += valor ?? 0;
+    acumulado.push(valor == null ? null : soma);
+  }
+
+  const base = {
+    label: jogador.name,
+    playerId: jogador.player_id,
+    borderColor: cor,
+    backgroundColor: cor,
+    pointStyle,
+    pointRadius,
+    pointBackgroundColor,
+    pointBorderColor: cor,
+    pointBorderWidth: 2,
+    borderWidth: 2,
+    tension: 0.15,
+    spanGaps: false,
+    segment: {
+      borderDash: (ctx) => (compensadoPorIndice[ctx.p1DataIndex] ? [6, 4] : undefined),
+    },
+  };
+
+  return {
+    datasetAcumulado: { ...base, data: acumulado },
+    datasetPorRodada: { ...base, data: porRodada },
+  };
+}
 
 function construirDadosTemporada(standings) {
   const rounds = standings.rounds.slice().sort((a, b) => a.round - b.round);
-  const datasets = standings.players.map((jogador, indice) => {
+  const datasetsAcumulado = [];
+  const datasetsPorRodada = [];
+
+  standings.players.forEach((jogador, indice) => {
     const cor = corJogador(indice);
-    const compensadas = new Set(jogador.compensated_rounds);
-    const data = [];
-    const pointStyle = [];
-    const pointRadius = [];
-    const pointBackgroundColor = [];
-    const compensadoPorIndice = [];
-
-    for (const rodada of rounds) {
-      const numero = rodada.round;
-      if (compensadas.has(numero)) {
-        data.push(rodada.min_score);
-        pointStyle.push("triangle");
-        pointRadius.push(6);
-        pointBackgroundColor.push("#fff");
-        compensadoPorIndice.push(true);
-      } else {
-        data.push(jogador.per_round[numero] ?? null);
-        pointStyle.push("circle");
-        pointRadius.push(4);
-        pointBackgroundColor.push(cor);
-        compensadoPorIndice.push(false);
-      }
-    }
-
-    return {
-      label: jogador.name,
-      playerId: jogador.player_id,
-      data,
-      borderColor: cor,
-      backgroundColor: cor,
-      pointStyle,
-      pointRadius,
-      pointBackgroundColor,
-      pointBorderColor: cor,
-      pointBorderWidth: 2,
-      borderWidth: 2,
-      tension: 0.15,
-      spanGaps: false,
-      segment: {
-        borderDash: (ctx) => (compensadoPorIndice[ctx.p1DataIndex] ? [6, 4] : undefined),
-      },
-    };
+    const { datasetAcumulado, datasetPorRodada } = construirSerieJogador(jogador, rounds, cor);
+    datasetsAcumulado.push(datasetAcumulado);
+    datasetsPorRodada.push(datasetPorRodada);
   });
 
-  return { labels: rounds.map((r) => r.race), datasets };
+  return { labels: rounds.map((r) => r.race), datasetsAcumulado, datasetsPorRodada };
 }
 
-function renderTemporada(standings) {
-  const { labels, datasets } = construirDadosTemporada(standings);
-
-  const cardsContainer = document.getElementById("temporada-cards");
-  cardsContainer.replaceChildren(
-    ...datasets.map((dataset, indice) => {
-      const card = el(
-        "button",
-        { class: "jogador-card", type: "button", style: `--cor-jogador:${dataset.borderColor}` },
-        [el("span", { class: "jogador-card__bolinha" }), dataset.label]
-      );
-      card.addEventListener("click", () => {
-        const desligado = card.classList.toggle("jogador-card--desligado");
-        graficoTemporada.data.datasets[indice].hidden = desligado;
-        graficoTemporada.update();
-      });
-      return card;
-    })
-  );
-
+function criarGraficoTemporada(canvasId, labels, datasets, standings, tituloEixoY) {
   const corTexto = corCss("--texto-fraco");
   const corGrade = corCss("--borda");
-  const ctx = document.getElementById("temporada-grafico").getContext("2d");
-  if (graficoTemporada) graficoTemporada.destroy();
-  graficoTemporada = new Chart(ctx, {
+  const ctx = document.getElementById(canvasId).getContext("2d");
+  return new Chart(ctx, {
     type: "line",
     data: { labels, datasets },
     options: {
       responsive: true,
       maintainAspectRatio: false,
+      animation: false,
       interaction: { mode: "nearest", intersect: false },
       plugins: {
         legend: { display: false },
@@ -310,11 +312,43 @@ function renderTemporada(standings) {
           beginAtZero: true,
           ticks: { color: corTexto },
           grid: { color: corGrade },
-          title: { display: true, text: "Pontos na rodada", color: corTexto },
+          title: { display: true, text: tituloEixoY, color: corTexto },
         },
       },
     },
   });
+}
+
+function renderTemporada(standings) {
+  const { labels, datasetsAcumulado, datasetsPorRodada } = construirDadosTemporada(standings);
+
+  const cardsContainer = document.getElementById("temporada-cards");
+  cardsContainer.replaceChildren(
+    ...datasetsAcumulado.map((dataset, indice) => {
+      const card = el(
+        "button",
+        { class: "jogador-card", type: "button", style: `--cor-jogador:${dataset.borderColor}` },
+        [el("span", { class: "jogador-card__bolinha" }), dataset.label]
+      );
+      card.addEventListener("click", () => {
+        const desligado = card.classList.toggle("jogador-card--desligado");
+        graficoTemporadaAcumulado.data.datasets[indice].hidden = desligado;
+        graficoTemporadaPorRodada.data.datasets[indice].hidden = desligado;
+        graficoTemporadaAcumulado.update();
+        graficoTemporadaPorRodada.update();
+      });
+      return card;
+    })
+  );
+
+  if (graficoTemporadaAcumulado) graficoTemporadaAcumulado.destroy();
+  if (graficoTemporadaPorRodada) graficoTemporadaPorRodada.destroy();
+  graficoTemporadaAcumulado = criarGraficoTemporada(
+    "temporada-grafico-acumulado", labels, datasetsAcumulado, standings, "Pontos acumulados"
+  );
+  graficoTemporadaPorRodada = criarGraficoTemporada(
+    "temporada-grafico", labels, datasetsPorRodada, standings, "Pontos na rodada"
+  );
 }
 
 // ---------- Preferência piloto ----------
@@ -384,6 +418,19 @@ function renderPreferenciaPiloto(playerId, bets) {
 
 // ---------- Abas ----------
 
+// Chart.js não recupera bem de ser inicializado num canvas ainda escondido
+// (0x0) — resize() sozinho não corrige. Por isso os gráficos da Temporada só
+// são criados na primeira vez que a sub-aba fica visível (garantirGraficosTemporada).
+function garantirGraficosTemporada() {
+  if (!standingsParaTemporada) return;
+  if (graficoTemporadaAcumulado && graficoTemporadaPorRodada) {
+    graficoTemporadaAcumulado.resize();
+    graficoTemporadaPorRodada.resize();
+  } else {
+    renderTemporada(standingsParaTemporada);
+  }
+}
+
 function configurarAbas() {
   const botoes = document.querySelectorAll("button.aba");
   const secoes = {
@@ -397,7 +444,10 @@ function configurarAbas() {
       for (const [nome, secao] of Object.entries(secoes)) {
         secao.hidden = nome !== botao.dataset.aba;
       }
-      if (graficoTemporada) graficoTemporada.resize();
+      const subabaAtiva = document.querySelector("button.subaba[aria-selected=\"true\"]");
+      if (botao.dataset.aba === "palpites" && subabaAtiva && subabaAtiva.dataset.subaba === "temporada") {
+        garantirGraficosTemporada();
+      }
     });
   });
 }
@@ -416,8 +466,8 @@ function configurarSubAbas() {
       for (const [nome, secao] of Object.entries(secoes)) {
         secao.hidden = nome !== botao.dataset.subaba;
       }
-      if (botao.dataset.subaba === "temporada" && graficoTemporada) {
-        graficoTemporada.resize();
+      if (botao.dataset.subaba === "temporada") {
+        garantirGraficosTemporada();
       }
     });
   });
@@ -446,7 +496,7 @@ async function main() {
       renderPalpitesJogador(jogadores[0].player_id, bets, standings);
     }
 
-    renderTemporada(standings);
+    standingsParaTemporada = standings;
 
     popularSelectPreferencia(bets);
     const selectPreferencia = document.getElementById("select-preferencia-jogador");

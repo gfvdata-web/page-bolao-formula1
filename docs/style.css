@@ -374,6 +374,24 @@ button.subaba[aria-selected="true"] {
   border-radius: 10px;
   box-shadow: var(--sombra);
   padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.temporada-grafico-wrap:last-child {
+  margin-bottom: 0;
+}
+
+.temporada-grafico-titulo {
+  margin: 0 0 0.6rem;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--texto-fraco);
+}
+
+.temporada-grafico-canvas {
+  position: relative;
+  height: 260px;
 }
 
 /* Preferência piloto */

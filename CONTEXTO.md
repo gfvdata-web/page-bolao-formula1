@@ -363,20 +363,41 @@ Palpites por jogador.**
   replica a lógica de `configurarAbas()`.
   - **Histórico** = a visão de palpites por jogador já existente (sem
     mudança de comportamento).
-  - **Temporada**: gráfico de linha (pontos por corrida, **sem
-    acumular**) via **Chart.js 4 (CDN, `<script>` em `index.html`)** —
-    exceção pontual à decisão de "zero dependências" da Etapa 4, pedida
-    explicitamente pelo usuário. Uma linha por jogador, cor cíclica em
-    `PALETA_JOGADOR` (`app.js`, decorativa, sem relação com equipes).
-    Mini cards acima do gráfico (um por jogador, todos ligados por
-    padrão) ligam/desligam a linha ao clicar (`dataset.hidden` +
-    `chart.update()`). Rodada em que o jogador não apostou usa o
-    `min_score` da rodada (via `compensated_rounds`/`standings.rounds`)
-    e é destacada no gráfico com marcador triangular + segmento
-    tracejado (`segment.borderDash`), com nota "mínima — não apostou"
-    no tooltip. Fonte de dados: só `standings.json` (`per_round`,
-    `compensated_rounds`, `rounds[].min_score`) — nenhuma mudança em
-    `bolao/site.py`.
+  - **Temporada**: **dois** gráficos de linha empilhados via **Chart.js 4
+    (CDN, `<script>` em `index.html`)** — exceção pontual à decisão de
+    "zero dependências" da Etapa 4, pedida explicitamente pelo usuário.
+    Em cima, **pontuação acumulada** (`#temporada-grafico-acumulado`); embaixo,
+    **pontuação por corrida sem acumular** (`#temporada-grafico`, o
+    original). Os dois compartilham os mesmos mini cards de jogador
+    (`#temporada-cards`, um por jogador, todos ligados por padrão) —
+    clicar num card liga/desliga a linha daquele jogador **nos dois
+    gráficos ao mesmo tempo** (`renderTemporada` em `app.js` monta ambos
+    os `Chart` a partir de `construirDadosTemporada`/
+    `construirSerieJogador`, que gera os dois datasets — acumulado e por
+    rodada — a partir da mesma série de pontos por jogador, então o
+    toggle seta `hidden` nos dois `chart.data.datasets[indice]` e chama
+    `update()` nos dois). Cor cíclica por jogador em `PALETA_JOGADOR`
+    (`app.js`, decorativa, sem relação com equipes). Rodada em que o
+    jogador não apostou usa o `min_score` da rodada (via
+    `compensated_rounds`/`standings.rounds`) e é destacada nos dois
+    gráficos com marcador triangular + segmento tracejado
+    (`segment.borderDash`), com nota "mínima — não apostou" no tooltip;
+    no gráfico acumulado o `min_score` também entra na soma corrida a
+    corrida (mesmo cálculo de `total` do `standings.json`). Fonte de
+    dados: só `standings.json` (`per_round`, `compensated_rounds`,
+    `rounds[].min_score`) — nenhuma mudança em `bolao/site.py`.
+  - **Importante (bug de layout já corrigido):** os dois gráficos da
+    Temporada só são criados (`new Chart(...)`) na **primeira vez** que a
+    sub-aba fica visível (`garantirGraficosTemporada()`, chamada tanto no
+    clique da aba principal quanto da sub-aba) — Chart.js, ao ser
+    inicializado num `<canvas>` ainda `hidden` (0×0), trava nesse tamanho
+    e **não recupera** com `resize()` depois. Por isso `main()` não
+    renderiza mais a Temporada de cara; só guarda `standingsParaTemporada`
+    e o primeiro `renderTemporada()` roda sob demanda, com o container já
+    visível (`.temporada-grafico-canvas` tem `height: 260px` fixo em
+    `style.css`, para o container ter altura mesmo antes do Chart.js
+    medir). Se essa sub-aba ganhar mais gráficos no futuro, seguir o
+    mesmo padrão de inicialização preguiçosa.
   - **Preferência piloto**: tabela (não gráfico) com a posição média de
     aposta de cada piloto no top6, calculada só a partir de `bets.json`
     (`top6` array, índice 0 = P1). Filtro "Jogador" com opção "Todos"
