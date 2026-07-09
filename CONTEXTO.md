@@ -323,12 +323,34 @@ Status: ⬜ não iniciada · 🟡 em andamento · ✅ concluída
 - **Sem timestamp** nos JSONs gerados (saída determinística → diffs limpos e
   testes estáveis).
 
-### Etapa 4 — Site estático ⬜
+### Etapa 4 — Site estático ✅
 - **Objetivo:** `docs/index.html` que lê os JSONs e mostra **ranking da
   temporada** + **palpites por jogador (com filtro)**.
 - **Pronto quando:** abre no navegador (e no GitHub Pages) mostrando ranking e
   filtro funcionando.
 - **Depende de:** Etapa 3 (formato dos JSONs).
+- **Entregue:** `docs/index.html` + `docs/style.css` + `docs/app.js` (vanilla
+  JS, sem build, sem dependências). Fetch relativo (`./data/...json`) — testar
+  local com `python -m http.server` a partir de `docs/` (não abrir via
+  `file://`). Duas abas: **Ranking** (tabela: posição, jogador, pontos,
+  rodadas apostadas; nota de compensação quando houver) e **Palpites por
+  jogador** (seletor de jogador; lista todas as rodadas da temporada como
+  cards empilhados — top6 apostado vs. grid real por posição com badge de
+  pontos 2/1/0 colorido, linha do piloto-bônus com chute/real/pontos, total da
+  rodada). Rodadas em que o jogador não apostou (presentes em
+  `compensated_rounds` do `standings.json`) aparecem como card "não apostou"
+  com a pontuação de compensação (`min_score` da rodada). Códigos de piloto
+  exibidos com um círculo de cor por equipe (mapa fixo `CORES_PILOTO` em
+  `app.js`, decorativo — não vem dos dados). Tema claro/escuro via
+  `prefers-color-scheme`, layout responsivo (mobile-first, cards).
+
+**Decisões fixadas na Etapa 4 (não reabrir sem o usuário pedir):**
+- Consumido **sem alterações** o formato atual de `docs/data/*.json` (inclui
+  os campos de compensação `compensated_rounds`/`compensation_total`/
+  `min_score` já entregues na Etapa 3).
+- Cores de equipe são só estética do front-end (não um dado do projeto);
+  ficam hardcoded em `docs/app.js`, mapeadas por código de piloto (2 pilotos
+  por equipe, grid 2026 com 11 equipes).
 
 ### Etapa 5 — GitHub Actions ⬜
 - **Objetivo:** workflow acionado por `repository_dispatch` que roda o pipeline

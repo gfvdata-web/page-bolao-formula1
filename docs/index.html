@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bolão F1 2026</title>
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<header class="topo">
+  <h1>🏁 Bolão F1 2026</h1>
+  <nav class="abas" role="tablist">
+    <button class="aba" data-aba="ranking" role="tab" aria-selected="true">Ranking</button>
+    <button class="aba" data-aba="palpites" role="tab" aria-selected="false">Palpites por jogador</button>
+  </nav>
+</header>
+
+<main>
+  <section id="secao-ranking" class="secao" role="tabpanel">
+    <div id="ranking-status" class="status"></div>
+    <div id="ranking-container"></div>
+  </section>
+
+  <section id="secao-palpites" class="secao" hidden role="tabpanel">
+    <div class="filtro-jogador">
+      <label for="select-jogador">Jogador:</label>
+      <select id="select-jogador"></select>
+    </div>
+    <div id="palpites-status" class="status"></div>
+    <div id="palpites-container"></div>
+  </section>
+</main>
+
+<footer class="rodape">
+  <p>Qualifying da F1 · temporada 2026</p>
+</footer>
+
+<script src="./app.js"></script>
+</body>
+</html>
