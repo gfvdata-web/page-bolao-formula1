@@ -1,0 +1,31 @@
+{
+  "race_id": "2026-06",
+  "season": 2026,
+  "round": 6,
+  "circuit": "monaco",
+  "race": "Monte Carlo",
+  "order": [
+    "ANT",
+    "VER",
+    "HAM",
+    "LEC",
+    "HAD",
+    "RUS",
+    "PIA",
+    "NOR",
+    "GAS",
+    "LAW",
+    "ALB",
+    "SAI",
+    "HUL",
+    "COL",
+    "LIN",
+    "BOR",
+    "OCO",
+    "PER",
+    "BEA",
+    "BOT",
+    "ALO",
+    "STR"
+  ]
+}

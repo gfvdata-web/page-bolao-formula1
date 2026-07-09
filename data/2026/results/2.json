@@ -1,0 +1,31 @@
+{
+  "race_id": "2026-02",
+  "season": 2026,
+  "round": 2,
+  "circuit": "shanghai",
+  "race": "Shanghai",
+  "order": [
+    "ANT",
+    "RUS",
+    "HAM",
+    "LEC",
+    "PIA",
+    "NOR",
+    "GAS",
+    "VER",
+    "HAD",
+    "BEA",
+    "HUL",
+    "COL",
+    "OCO",
+    "LAW",
+    "LIN",
+    "BOR",
+    "SAI",
+    "ALB",
+    "ALO",
+    "BOT",
+    "STR",
+    "PER"
+  ]
+}

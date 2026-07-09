@@ -1,0 +1,31 @@
+{
+  "race_id": "2026-03",
+  "season": 2026,
+  "round": 3,
+  "circuit": "suzuka",
+  "race": "Suzuka",
+  "order": [
+    "ANT",
+    "RUS",
+    "PIA",
+    "LEC",
+    "NOR",
+    "HAM",
+    "GAS",
+    "HAD",
+    "BOR",
+    "LIN",
+    "VER",
+    "OCO",
+    "HUL",
+    "LAW",
+    "COL",
+    "SAI",
+    "ALB",
+    "BEA",
+    "PER",
+    "BOT",
+    "ALO",
+    "STR"
+  ]
+}

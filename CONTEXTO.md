@@ -200,10 +200,13 @@ Status: ⬜ não iniciada · 🟡 em andamento · ✅ concluída
   (resolvedor nome→rodada, offline). Gerados dos dados reais de 2026:
   `data/2026/calendar.json`, `data/drivers.json`, `data/2026/results/1.json`.
   Fixtures reais da Jolpica em `tests/fixtures/jolpica/`; testes offline
-  (`tests/test_jolpica.py`, `tests/test_calendar.py`) — total do projeto: 38.
-  CLI: `python -m bolao.jolpica {calendar|drivers|result <round>}`
-  (`--season`, `--base-url`, `--out`). Um quali real (Melbourne, rodada 1)
-  alimenta a pontuação da Etapa 1 e dá 13 num palpite perfeito.
+  (`tests/test_jolpica.py`, `tests/test_calendar.py`) — total do projeto: 39.
+  CLI: `python -m bolao.jolpica {calendar|drivers|result <round>|results}`
+  (`--season`, `--base-url`, `--out`). `results` baixa todos os qualis já
+  ocorridos do ano de uma vez (pula rodadas futuras). Um quali real (Melbourne,
+  rodada 1) alimenta a pontuação da Etapa 1 e dá 13 num palpite perfeito.
+  **Baixados e conferidos** os qualis já ocorridos de 2026: rodadas 1–9 em
+  `data/2026/results/` (top6 batendo com a Jolpica).
 
 **Decisões fixadas na Etapa 2 (não reabrir sem o usuário pedir):**
 - **API:** base `https://api.jolpi.ca/ergast/f1` (compatível Ergast), sem chave.
@@ -222,12 +225,17 @@ Status: ⬜ não iniciada · 🟡 em andamento · ✅ concluída
 - **`results/<round>.json`:** além de `race`+`order` (o que a Etapa 1 usa),
   grava metadados `race_id`, `season`, `round`, `circuit` (Etapas 3+ usam).
 - **`drivers.json` agora é real** (entry list 2026), não mock. Pilotos reserva
-  sem código oficial na Jolpica são ignorados (não inventar código). Verstappen
-  não está no grid 2026 da Jolpica — o mock de Silverstone (Etapa 1) usa códigos
-  de 3 letras que caem no fallback, então segue passando.
-- **Resolução ambígua:** um nome que casa com >1 corrida (ex.: país "Spain" =
-  Barcelona r7 e Madrid r14) levanta erro claro (`AmbiguousRace`) pedindo nome
-  mais específico; nome desconhecido levanta `RaceNotFound`.
+  sem código oficial na Jolpica são ignorados (não inventar código). O mock de
+  Silverstone (Etapa 1) segue passando porque todos os códigos que usa estão na
+  entry list real. Obs.: uma rodada pode ter menos de 20 pilotos no quali (ex.:
+  a rodada 1/Melbourne teve 19); `order` grava o grid como veio.
+- **Resolução por palavras:** `resolve_race` (em `bolao/calendar.py`) casa o
+  nome bruto com a corrida por **palavras em comum** com os aliases (não por
+  igualdade exata) — vence quem tem mais palavras casadas. Assim, corridas no
+  mesmo país se distinguem só acrescentando a cidade no cabeçalho (ex.: "Espanha
+  Madrid" → r14; "Spain Barcelona" → r7; "USA Las Vegas" → r20). Só o país
+  (ex.: "Spain", "USA") dá empate → `AmbiguousRace` (colocar as duas
+  informações); nome desconhecido → `RaceNotFound`.
 - **Indisponível:** quali sem resultado na Jolpica levanta `ResultUnavailable`
   (CLI retorna código 2, **não grava arquivo**) — pode re-rodar depois.
 

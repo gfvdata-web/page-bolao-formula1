@@ -1,0 +1,31 @@
+{
+  "race_id": "2026-09",
+  "season": 2026,
+  "round": 9,
+  "circuit": "silverstone",
+  "race": "Silverstone",
+  "order": [
+    "ANT",
+    "LEC",
+    "HAM",
+    "RUS",
+    "HAD",
+    "NOR",
+    "VER",
+    "PIA",
+    "LIN",
+    "LAW",
+    "BOR",
+    "GAS",
+    "HUL",
+    "BEA",
+    "SAI",
+    "ALB",
+    "OCO",
+    "BOT",
+    "COL",
+    "PER",
+    "STR",
+    "ALO"
+  ]
+}
