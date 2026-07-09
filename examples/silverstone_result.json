@@ -1,0 +1,10 @@
+{
+  "_comment": "MOCK do resultado do quali de Silverstone (Etapa 1). 'order' = codigos por posicao, indice 0 = P1. Na Etapa 2 este arquivo vem da Jolpica no mesmo formato.",
+  "race": "Silverstone",
+  "order": [
+    "VER", "NOR", "RUS", "HAM", "ANT", "PIA",
+    "LEC", "SAI", "ALO", "GAS", "ALB", "OCO",
+    "STR", "HUL", "TSU", "LAW", "HAD", "BEA",
+    "BOR", "COL"
+  ]
+}

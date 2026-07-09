@@ -1,0 +1,10 @@
+{
+  "_comment": "MOCK da Etapa 1. Mapa apelido->id canonico do jogador. Chaves ja normalizadas (sem acento, minusculo). Serve para unir variantes de nome (ex.: 'Caio' e 'Caio L.') no mesmo id ao somar o ranking da temporada.",
+  "aliases": {
+    "guilherme": "guilherme",
+    "dalla": "dalla",
+    "vinicius": "vinicius",
+    "caio": "caio_l",
+    "caio l": "caio_l"
+  }
+}

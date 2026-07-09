@@ -160,7 +160,7 @@ Status: ⬜ não iniciada · 🟡 em andamento · ✅ concluída
 
 ---
 
-### Etapa 1 — Parser + pontuação (núcleo Python) ⬜
+### Etapa 1 — Parser + pontuação (núcleo Python) 🟡
 - **Objetivo:** módulo Python puro que recebe (a) o texto do WhatsApp e (b) o
   resultado do quali, e devolve a pontuação por jogador (top6 + bônus).
 - **Entradas:** texto de exemplo (Silverstone, na seção 3); resultado do quali

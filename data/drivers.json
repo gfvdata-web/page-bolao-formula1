@@ -1,0 +1,27 @@
+{
+  "_comment": "MOCK da Etapa 1. Mapa alias->codigo. Chaves ja normalizadas (sem acento, minusculo). Na Etapa 2 este arquivo passa a ser gerado da entry list real da Jolpica (nao inventar codigos).",
+  "aliases": {
+    "verstappen": "VER",
+    "max verstappen": "VER",
+    "norris": "NOR",
+    "russell": "RUS",
+    "hamilton": "HAM",
+    "antonelli": "ANT",
+    "kimi antonelli": "ANT",
+    "piastri": "PIA",
+    "leclerc": "LEC",
+    "sainz": "SAI",
+    "alonso": "ALO",
+    "gasly": "GAS",
+    "albon": "ALB",
+    "ocon": "OCO",
+    "stroll": "STR",
+    "hulkenberg": "HUL",
+    "tsunoda": "TSU",
+    "lawson": "LAW",
+    "hadjar": "HAD",
+    "bearman": "BEA",
+    "bortoleto": "BOR",
+    "colapinto": "COL"
+  }
+}
