@@ -1,10 +1,27 @@
 {
-  "_comment": "MOCK da Etapa 1. Mapa apelido->id canonico do jogador. Chaves ja normalizadas (sem acento, minusculo). Serve para unir variantes de nome (ex.: 'Caio' e 'Caio L.') no mesmo id ao somar o ranking da temporada.",
+  "_comment": "Mapa apelido->id canonico do jogador e nome de exibicao. 'aliases': chaves ja normalizadas (sem acento, minusculo) unindo variantes no mesmo id (ex.: 'caio', 'caio l', 'caio lopes' -> 'caio_l'). Jogador novo sem alias vira id pelo fallback (nome normalizado com '_'). 'names': id canonico -> nome bonito da tabela (override; sem entrada, a Etapa 3 usa a variante mais completa vista nas mensagens). Correcao de identidade e manual: ajuste aqui quando dois nomes forem a mesma pessoa.",
   "aliases": {
     "guilherme": "guilherme",
     "dalla": "dalla",
     "vinicius": "vinicius",
     "caio": "caio_l",
-    "caio l": "caio_l"
+    "caio l": "caio_l",
+    "caio lopes": "caio_l",
+    "ferrari": "ferrari",
+    "francez": "francez",
+    "caliman": "caliman",
+    "igor": "igor",
+    "lage": "lage"
+  },
+  "names": {
+    "guilherme": "Guilherme",
+    "dalla": "Dalla",
+    "vinicius": "Vinícius",
+    "caio_l": "Caio Lopes",
+    "ferrari": "Ferrari",
+    "francez": "Francez",
+    "caliman": "Caliman",
+    "igor": "Igor",
+    "lage": "Lage"
   }
 }
