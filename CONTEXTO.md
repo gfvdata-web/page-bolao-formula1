@@ -160,7 +160,7 @@ Status: ⬜ não iniciada · 🟡 em andamento · ✅ concluída
 
 ---
 
-### Etapa 1 — Parser + pontuação (núcleo Python) 🟡
+### Etapa 1 — Parser + pontuação (núcleo Python) ✅
 - **Objetivo:** módulo Python puro que recebe (a) o texto do WhatsApp e (b) o
   resultado do quali, e devolve a pontuação por jogador (top6 + bônus).
 - **Entradas:** texto de exemplo (Silverstone, na seção 3); resultado do quali
@@ -169,6 +169,24 @@ Status: ⬜ não iniciada · 🟡 em andamento · ✅ concluída
   testes automatizados usando o exemplo de Silverstone.
 - **Pronto quando:** a pontuação bate com conferência manual e os testes passam.
 - **Depende de:** nada externo (roda 100% offline). É a base de tudo.
+- **Entregue:** pacote `bolao/` (`normalize`, `parser`, `scoring`, `cli`),
+  mocks em `data/`, exemplo em `examples/silverstone.*`, 21 testes (unittest).
+  Rodar: `python -m unittest discover -s tests`. CLI:
+  `python -m bolao.cli examples/silverstone.txt examples/silverstone_result.json --detalhe`.
+  Conferência manual bateu: Vinícius 13 (máx), Guilherme 7, Dalla 6, Caio L. 3.
+
+**Formatos estáveis definidos aqui (a Etapa 2 deve produzir isto):**
+- **Resultado do quali** (o que `scoring.Result.from_dict` consome):
+  `{"race": "<nome>", "order": ["VER","NOR", ...]}` — `order` = códigos de 3
+  letras por posição, **índice 0 = P1** (aceita também a chave `results`).
+- **drivers.json:** `{"aliases": {"<chave normalizada>": "<COD3>"}}`. Chave
+  passada por `normalize.normalize_key` (sem acento, minúscula). Etapa 2 gera
+  da entry list real (não inventar códigos); o formato do arquivo não muda.
+- **players.json:** `{"aliases": {"<chave normalizada>": "<id canônico>"}}`,
+  para unir variantes de nome no mesmo id do ranking.
+- Sem alias, o fallback é: piloto = 3 primeiras letras maiúsculas; jogador =
+  nome normalizado com espaços → `_`. Cada bloco de jogador = 8 linhas
+  (nome + 6 pilotos + `P#`).
 
 ### Etapa 2 — Integração Jolpica-F1 ⬜
 - **Objetivo:** buscar dados reais de 2026 na API Jolpica.
