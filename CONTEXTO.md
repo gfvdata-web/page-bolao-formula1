@@ -188,7 +188,7 @@ Status: ⬜ não iniciada · 🟡 em andamento · ✅ concluída
   nome normalizado com espaços → `_`. Cada bloco de jogador = 8 linhas
   (nome + 6 pilotos + `P#`).
 
-### Etapa 2 — Integração Jolpica-F1 ⬜
+### Etapa 2 — Integração Jolpica-F1 ✅
 - **Objetivo:** buscar dados reais de 2026 na API Jolpica.
 - **Saídas:** `calendar.json` (corridas 2026), `drivers.json` (entry list →
   código de 3 letras) e `results/<round>.json` no **formato que a Etapa 1
@@ -196,6 +196,40 @@ Status: ⬜ não iniciada · 🟡 em andamento · ✅ concluída
 - **Pronto quando:** consegue puxar um quali real de 2026 e alimentar a
   pontuação da Etapa 1 sem adaptação manual.
 - **Depende de:** Etapa 1 (o formato de resultado esperado pelo pontuador).
+- **Entregue:** `bolao/jolpica.py` (fetch + build + CLI) e `bolao/calendar.py`
+  (resolvedor nome→rodada, offline). Gerados dos dados reais de 2026:
+  `data/2026/calendar.json`, `data/drivers.json`, `data/2026/results/1.json`.
+  Fixtures reais da Jolpica em `tests/fixtures/jolpica/`; testes offline
+  (`tests/test_jolpica.py`, `tests/test_calendar.py`) — total do projeto: 38.
+  CLI: `python -m bolao.jolpica {calendar|drivers|result <round>}`
+  (`--season`, `--base-url`, `--out`). Um quali real (Melbourne, rodada 1)
+  alimenta a pontuação da Etapa 1 e dá 13 num palpite perfeito.
+
+**Decisões fixadas na Etapa 2 (não reabrir sem o usuário pedir):**
+- **API:** base `https://api.jolpi.ca/ergast/f1` (compatível Ergast), sem chave.
+  Rede via `urllib` (stdlib, sem dependências). `fetch_*` (rede) é separado de
+  `build_*` (transformação pura) — os testes exercitam só `build_*`, offline.
+- **`race_id = "{season}-{round:02d}"`** (ex.: `"2026-12"`) — chave única
+  temporada+rodada em todo o projeto.
+- **`calendar.json`:** `{"season", "races":[{race_id, season, round, circuit
+  (slug=circuitId), race (exibição=locality), date, sprint (bool), aliases:[]}]}`.
+  `aliases` = nomes normalizados (circuito/cidade/país/nome oficial) para
+  resolver o nome solto do cabeçalho → rodada.
+- **Sprint:** só marcado (`"sprint": true`); **não exclui** a corrida. O quali
+  **principal** de fim de semana de Sprint continua valendo (ex.: Silverstone
+  2026 = rodada 9 é Sprint, e ainda assim conta). Nunca buscamos a sessão de
+  Sprint — só `/qualifying`.
+- **`results/<round>.json`:** além de `race`+`order` (o que a Etapa 1 usa),
+  grava metadados `race_id`, `season`, `round`, `circuit` (Etapas 3+ usam).
+- **`drivers.json` agora é real** (entry list 2026), não mock. Pilotos reserva
+  sem código oficial na Jolpica são ignorados (não inventar código). Verstappen
+  não está no grid 2026 da Jolpica — o mock de Silverstone (Etapa 1) usa códigos
+  de 3 letras que caem no fallback, então segue passando.
+- **Resolução ambígua:** um nome que casa com >1 corrida (ex.: país "Spain" =
+  Barcelona r7 e Madrid r14) levanta erro claro (`AmbiguousRace`) pedindo nome
+  mais específico; nome desconhecido levanta `RaceNotFound`.
+- **Indisponível:** quali sem resultado na Jolpica levanta `ResultUnavailable`
+  (CLI retorna código 2, **não grava arquivo**) — pode re-rodar depois.
 
 ### Etapa 3 — Geração dos dados do site ⬜
 - **Objetivo:** consolidar as pontuações por rodada no ranking da temporada e
