@@ -352,6 +352,40 @@ Status: ⬜ não iniciada · 🟡 em andamento · ✅ concluída
   ficam hardcoded em `docs/app.js`, mapeadas por código de piloto (2 pilotos
   por equipe, grid 2026 com 11 equipes).
 
+**Mapa do front-end (para ajustes futuros de HTML/CSS/JS sem reler tudo):**
+- `docs/index.html`: esqueleto fixo — `header.topo` com as 2 abas
+  (`button.aba[data-aba="ranking|palpites"]`), `#secao-ranking` (contém
+  `#ranking-status` + `#ranking-container`) e `#secao-palpites` (contém
+  `#select-jogador` + `#palpites-status` + `#palpites-container`). Novas
+  seções/abas devem seguir esse mesmo padrão `id`/`data-aba`.
+- `docs/app.js` (funções puras, sem framework):
+  - `CORES_PILOTO` — mapa código→hex de cor de equipe (editar aqui para
+    trocar cores/adicionar piloto novo).
+  - `carregarJson(caminho)` — fetch genérico dos JSONs em `docs/data/`.
+  - `el(tag, props, filhos)` — helper de criação de DOM (evita template
+    strings/innerHTML solto).
+  - `chipPiloto`, `badgePonto` — átomos visuais reutilizados nas duas abas.
+  - `renderRanking(standings)` — monta `#ranking-container`.
+  - `popularSelectJogadores(bets)`, `cardTop6`, `linhaBonus`, `cardRodada`,
+    `cardSemPalpite`, `renderPalpitesJogador` — pipeline da aba de palpites.
+  - `configurarAbas()` — alterna `hidden`/`aria-selected` entre as seções.
+  - `main()` — ponto de entrada: carrega `standings.json` e `bets.json`,
+    popula a UI; **não usa `results.json` ainda** (grid completo da rodada
+    fica disponível para uma visão futura, ex. pódio ou grid inteiro).
+- `docs/style.css`: variáveis de tema em `:root` (claro) e
+  `@media (prefers-color-scheme: dark)` (escuro) — `--bg`, `--bg-card`,
+  `--texto`, `--texto-fraco`, `--borda`, `--acento`, `--ok2`/`--ok2-bg`
+  (2 pts), `--ok1`/`--ok1-bg` (1 pt), `--ok0-bg`/`--ok0-texto` (0 pt),
+  `--sombra`. Trocar uma cor de status = editar só a variável, não procurar
+  por classes espalhadas. Breakpoint mobile único em `max-width: 480px`.
+- **Preview local:** `.claude/launch.json` define o server `docs-static`
+  (`python -m http.server 8123 --directory docs`) — usar a tool de preview
+  com esse nome em vez de subir servidor manualmente.
+- Ajustes futuros de **conteúdo/dado exibido** (ex. novo campo, nova métrica)
+  quase sempre exigem tocar `docs/app.js` (o que é lido/renderizado) e às
+  vezes `bolao/site.py` (o que é gerado) — checar se o dado já existe em
+  `docs/data/*.json` antes de assumir que precisa mudar o gerador.
+
 ### Etapa 5 — GitHub Actions ⬜
 - **Objetivo:** workflow acionado por `repository_dispatch` que roda o pipeline
   completo (parse → buscar resultado → pontuar → gerar dados → commit).
