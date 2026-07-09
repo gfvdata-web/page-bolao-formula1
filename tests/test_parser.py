@@ -34,6 +34,42 @@ class TestParseSilverstone(unittest.TestCase):
         self.assertEqual(gui.bonus_guess, 1)
 
 
+class TestParseMensagensReais(unittest.TestCase):
+    """Robustez p/ as variações das transcrições reais (Etapa 3)."""
+
+    def test_cabecalho_com_circuito(self):
+        texto = (
+            "Bolão Qualify 2026\n"
+            "Circuito: Austrália\n"
+            "Piloto sorteado: Piastri\n\n"
+            "Joao\nVER\nNOR\nRUS\nHAM\nANT\nPIA\nP1\n"
+        )
+        sheet = parse_sheet(texto, DRIVERS)
+        self.assertEqual(sheet.race, "Austrália")
+        self.assertEqual(sheet.bonus_driver, "PIA")
+        self.assertEqual(len(sheet.bets), 1)
+
+    def test_piloto_com_palavra_de_enfeite(self):
+        texto = "Corrida\nPiloto escolhido: Hadjar\n\nJoao\nVER\nNOR\nRUS\nHAM\nANT\nPIA\nP1\n"
+        sheet = parse_sheet(texto, DRIVERS)
+        self.assertEqual(sheet.bonus_driver, "HAD")
+
+    def test_linha_em_branco_apos_o_nome(self):
+        texto = (
+            "Corrida\nPiloto Hamilton\n\n"
+            "Ferrari\n\nHAM\nLEC\nVER\nANT\nRUS\nNOR\nP2\n"
+        )
+        sheet = parse_sheet(texto, DRIVERS)
+        self.assertEqual(len(sheet.bets), 1)
+        self.assertEqual(sheet.bets[0].player_raw, "Ferrari")
+        self.assertEqual(sheet.bets[0].top6, ["HAM", "LEC", "VER", "ANT", "RUS", "NOR"])
+
+    def test_chute_ate_p22_aceito(self):
+        texto = "Corrida\nPiloto Hamilton\n\nJoao\nVER\nNOR\nRUS\nHAM\nANT\nPIA\nP22\n"
+        sheet = parse_sheet(texto, DRIVERS)
+        self.assertEqual(sheet.bets[0].bonus_guess, 22)
+
+
 class TestParseErros(unittest.TestCase):
     def test_bloco_incompleto(self):
         texto = "Corrida\nPiloto Hamilton\n\nJoao\nVER\nNOR\nP1\n"
@@ -42,6 +78,16 @@ class TestParseErros(unittest.TestCase):
 
     def test_bonus_invalido(self):
         texto = "Corrida\nPiloto Hamilton\n\nJoao\nVER\nNOR\nRUS\nHAM\nANT\nPIA\nPX\n"
+        with self.assertRaises(ParseError):
+            parse_sheet(texto, DRIVERS)
+
+    def test_chute_fora_da_grade(self):
+        texto = "Corrida\nPiloto Hamilton\n\nJoao\nVER\nNOR\nRUS\nHAM\nANT\nPIA\nP23\n"
+        with self.assertRaises(ParseError):
+            parse_sheet(texto, DRIVERS)
+
+    def test_sem_linha_do_piloto(self):
+        texto = "Corrida\n\nJoao\nVER\nNOR\nRUS\nHAM\nANT\nPIA\nP1\n"
         with self.assertRaises(ParseError):
             parse_sheet(texto, DRIVERS)
 
