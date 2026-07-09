@@ -1,7 +1,7 @@
 """CLI da Etapa 1: parseia uma mensagem e imprime a pontuação por jogador.
 
 Uso:
-    python -m bolao.cli examples/silverstone.txt examples/silverstone_result.json
+    python -m bolao.cli data/2026/messages/9.txt data/2026/results/9.json
 
 Opcionais:
     --drivers data/drivers.json

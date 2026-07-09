@@ -173,11 +173,11 @@ Status: ⬜ não iniciada · 🟡 em andamento · ✅ concluída
   testes automatizados usando o exemplo de Silverstone.
 - **Pronto quando:** a pontuação bate com conferência manual e os testes passam.
 - **Depende de:** nada externo (roda 100% offline). É a base de tudo.
-- **Entregue:** pacote `bolao/` (`normalize`, `parser`, `scoring`, `cli`),
-  mocks em `data/`, exemplo em `examples/silverstone.*`, 21 testes (unittest).
-  Rodar: `python -m unittest discover -s tests`. CLI:
-  `python -m bolao.cli examples/silverstone.txt examples/silverstone_result.json --detalhe`.
-  Conferência manual bateu: Vinícius 13 (máx), Guilherme 7, Dalla 6, Caio L. 3.
+- **Entregue:** pacote `bolao/` (`normalize`, `parser`, `scoring`, `cli`) +
+  testes offline. Rodar: `python -m unittest discover -s tests`. CLI de uma
+  rodada: `python -m bolao.cli <mensagem.txt> <resultado.json> --detalhe`.
+  (O mock de Silverstone foi removido na Etapa 3; os testes usam os dados reais
+  de 2026 em `data/2026/`.)
 
 **Formatos estáveis definidos aqui (a Etapa 2 deve produzir isto):**
 - **Resultado do quali** (o que `scoring.Result.from_dict` consome):

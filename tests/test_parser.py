@@ -7,7 +7,7 @@ from bolao.parser import ParseError, parse_sheet
 RAIZ = Path(__file__).resolve().parent.parent
 DRIVERS = json.loads((RAIZ / "data" / "drivers.json").read_text(encoding="utf-8"))["aliases"]
 PLAYERS = json.loads((RAIZ / "data" / "2026" / "players.json").read_text(encoding="utf-8"))["aliases"]
-TEXTO = (RAIZ / "examples" / "silverstone.txt").read_text(encoding="utf-8")
+TEXTO = (RAIZ / "data" / "2026" / "messages" / "9.txt").read_text(encoding="utf-8")
 
 
 class TestParseSilverstone(unittest.TestCase):

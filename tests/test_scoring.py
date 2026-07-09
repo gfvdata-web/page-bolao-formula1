@@ -8,19 +8,27 @@ from bolao.scoring import Result, score_sheet
 RAIZ = Path(__file__).resolve().parent.parent
 DRIVERS = json.loads((RAIZ / "data" / "drivers.json").read_text(encoding="utf-8"))["aliases"]
 PLAYERS = json.loads((RAIZ / "data" / "2026" / "players.json").read_text(encoding="utf-8"))["aliases"]
-TEXTO = (RAIZ / "examples" / "silverstone.txt").read_text(encoding="utf-8")
-RESULTADO = json.loads((RAIZ / "examples" / "silverstone_result.json").read_text(encoding="utf-8"))
+# Rodada 9 (Silverstone) — palpite e resultado REAIS de 2026.
+TEXTO = (RAIZ / "data" / "2026" / "messages" / "9.txt").read_text(encoding="utf-8")
+RESULTADO = json.loads((RAIZ / "data" / "2026" / "results" / "9.json").read_text(encoding="utf-8"))
 
-# Conferência manual (ver CONTEXTO.md, seção 2).
+# Conferência manual contra o grid real (top6 real: ANT LEC HAM RUS HAD NOR).
 ESPERADO = {
-    "vinicius": {"top6": 12, "bonus": 1, "total": 13},
-    "guilherme": {"top6": 7, "bonus": 0, "total": 7},
-    "dalla": {"top6": 6, "bonus": 0, "total": 6},
-    "caio_l": {"top6": 3, "bonus": 0, "total": 3},
+    "guilherme": {"top6": 6, "bonus": 0, "total": 6},
+    "dalla": {"top6": 5, "bonus": 0, "total": 5},
+    "vinicius": {"top6": 4, "bonus": 0, "total": 4},
+    "caio_l": {"top6": 2, "bonus": 0, "total": 2},
 }
 
+# Fixture de unidade (não é um quali real) p/ exercitar as regras isoladas.
+ORDER = [
+    "VER", "NOR", "RUS", "HAM", "ANT", "PIA", "LEC", "SAI", "ALO", "GAS",
+    "ALB", "OCO", "STR", "HUL", "LIN", "LAW", "HAD", "BEA", "BOR", "COL", "PER", "BOT",
+]
+RESULT_FIX = {"race": "Fixture", "order": ORDER}
 
-class TestScoreSilverstone(unittest.TestCase):
+
+class TestScoreSilverstoneReal(unittest.TestCase):
     def setUp(self):
         sheet = parse_sheet(TEXTO, DRIVERS, PLAYERS)
         result = Result.from_dict(RESULTADO)
@@ -33,9 +41,6 @@ class TestScoreSilverstone(unittest.TestCase):
                 self.assertEqual(s.top6_points, esp["top6"])
                 self.assertEqual(s.bonus_points, esp["bonus"])
                 self.assertEqual(s.total, esp["total"])
-
-    def test_palpite_perfeito_bate_no_maximo(self):
-        self.assertEqual(self.scores["vinicius"].total, 13)
 
     def test_ordenacao_por_total(self):
         sheet = parse_sheet(TEXTO, DRIVERS, PLAYERS)
@@ -50,11 +55,16 @@ class TestRegrasIsoladas(unittest.TestCase):
             bonus_driver, "\n".join(top6), bonus_guess
         )
         sheet = parse_sheet(texto, DRIVERS)
-        return score_sheet(sheet, Result.from_dict(RESULTADO))[0]
+        return score_sheet(sheet, Result.from_dict(RESULT_FIX))[0]
 
     def test_posicao_exata_vale_2(self):
         s = self._score_de(["VER", "NOR", "RUS", "HAM", "ANT", "PIA"], 4)
         self.assertEqual(s.top6_points, 12)
+
+    def test_palpite_perfeito_bate_no_maximo(self):
+        # top6 exato + bônus (HAM está em P4) exato = 13.
+        s = self._score_de(["VER", "NOR", "RUS", "HAM", "ANT", "PIA"], 4)
+        self.assertEqual(s.total, 13)
 
     def test_dentro_do_top6_vale_1(self):
         # Todos no top6 real, mas nenhum na posição exata.
