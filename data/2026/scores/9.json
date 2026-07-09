@@ -6,7 +6,7 @@
   "date": "2026-07-05",
   "sprint": true,
   "bonus_driver": "HAM",
-  "min_score": 1,
+  "min_score": 4,
   "result_order": [
     "ANT",
     "LEC",
@@ -32,6 +32,254 @@
     "ALO"
   ],
   "players": [
+    {
+      "player_id": "caliman",
+      "player_raw": "Caliman",
+      "name": "Caliman",
+      "top6": [
+        "HAM",
+        "ANT",
+        "VER",
+        "RUS",
+        "LEC",
+        "NOR"
+      ],
+      "top6_detail": [
+        {
+          "pos": 1,
+          "guess": "HAM",
+          "real": "ANT",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 2,
+          "guess": "ANT",
+          "real": "LEC",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 3,
+          "guess": "VER",
+          "real": "HAM",
+          "points": 0,
+          "reason": "fora"
+        },
+        {
+          "pos": 4,
+          "guess": "RUS",
+          "real": "RUS",
+          "points": 2,
+          "reason": "exata"
+        },
+        {
+          "pos": 5,
+          "guess": "LEC",
+          "real": "HAD",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 6,
+          "guess": "NOR",
+          "real": "NOR",
+          "points": 2,
+          "reason": "exata"
+        }
+      ],
+      "top6_points": 7,
+      "bonus_guess": 1,
+      "bonus_real_pos": 3,
+      "bonus_points": 0,
+      "total": 7
+    },
+    {
+      "player_id": "ferrari",
+      "player_raw": "Ferrari",
+      "name": "Ferrari",
+      "top6": [
+        "HAM",
+        "ANT",
+        "VER",
+        "RUS",
+        "LEC",
+        "NOR"
+      ],
+      "top6_detail": [
+        {
+          "pos": 1,
+          "guess": "HAM",
+          "real": "ANT",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 2,
+          "guess": "ANT",
+          "real": "LEC",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 3,
+          "guess": "VER",
+          "real": "HAM",
+          "points": 0,
+          "reason": "fora"
+        },
+        {
+          "pos": 4,
+          "guess": "RUS",
+          "real": "RUS",
+          "points": 2,
+          "reason": "exata"
+        },
+        {
+          "pos": 5,
+          "guess": "LEC",
+          "real": "HAD",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 6,
+          "guess": "NOR",
+          "real": "NOR",
+          "points": 2,
+          "reason": "exata"
+        }
+      ],
+      "top6_points": 7,
+      "bonus_guess": 1,
+      "bonus_real_pos": 3,
+      "bonus_points": 0,
+      "total": 7
+    },
+    {
+      "player_id": "caio_l",
+      "player_raw": "Caio L.",
+      "name": "Caio Lopes",
+      "top6": [
+        "HAM",
+        "ANT",
+        "VER",
+        "RUS",
+        "NOR",
+        "LEC"
+      ],
+      "top6_detail": [
+        {
+          "pos": 1,
+          "guess": "HAM",
+          "real": "ANT",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 2,
+          "guess": "ANT",
+          "real": "LEC",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 3,
+          "guess": "VER",
+          "real": "HAM",
+          "points": 0,
+          "reason": "fora"
+        },
+        {
+          "pos": 4,
+          "guess": "RUS",
+          "real": "RUS",
+          "points": 2,
+          "reason": "exata"
+        },
+        {
+          "pos": 5,
+          "guess": "NOR",
+          "real": "HAD",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 6,
+          "guess": "LEC",
+          "real": "NOR",
+          "points": 1,
+          "reason": "no top6"
+        }
+      ],
+      "top6_points": 6,
+      "bonus_guess": 1,
+      "bonus_real_pos": 3,
+      "bonus_points": 0,
+      "total": 6
+    },
+    {
+      "player_id": "filipe",
+      "player_raw": "Filipe",
+      "name": "Filipe",
+      "top6": [
+        "HAM",
+        "ANT",
+        "VER",
+        "RUS",
+        "NOR",
+        "LEC"
+      ],
+      "top6_detail": [
+        {
+          "pos": 1,
+          "guess": "HAM",
+          "real": "ANT",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 2,
+          "guess": "ANT",
+          "real": "LEC",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 3,
+          "guess": "VER",
+          "real": "HAM",
+          "points": 0,
+          "reason": "fora"
+        },
+        {
+          "pos": 4,
+          "guess": "RUS",
+          "real": "RUS",
+          "points": 2,
+          "reason": "exata"
+        },
+        {
+          "pos": 5,
+          "guess": "NOR",
+          "real": "HAD",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 6,
+          "guess": "LEC",
+          "real": "NOR",
+          "points": 1,
+          "reason": "no top6"
+        }
+      ],
+      "top6_points": 6,
+      "bonus_guess": 1,
+      "bonus_real_pos": 3,
+      "bonus_points": 0,
+      "total": 6
+    },
     {
       "player_id": "guilherme",
       "player_raw": "Guilherme",
@@ -86,6 +334,68 @@
           "real": "NOR",
           "points": 0,
           "reason": "fora"
+        }
+      ],
+      "top6_points": 6,
+      "bonus_guess": 1,
+      "bonus_real_pos": 3,
+      "bonus_points": 0,
+      "total": 6
+    },
+    {
+      "player_id": "igor",
+      "player_raw": "Igor",
+      "name": "Igor",
+      "top6": [
+        "HAM",
+        "ANT",
+        "RUS",
+        "VER",
+        "LEC",
+        "NOR"
+      ],
+      "top6_detail": [
+        {
+          "pos": 1,
+          "guess": "HAM",
+          "real": "ANT",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 2,
+          "guess": "ANT",
+          "real": "LEC",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 3,
+          "guess": "RUS",
+          "real": "HAM",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 4,
+          "guess": "VER",
+          "real": "RUS",
+          "points": 0,
+          "reason": "fora"
+        },
+        {
+          "pos": 5,
+          "guess": "LEC",
+          "real": "HAD",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 6,
+          "guess": "NOR",
+          "real": "NOR",
+          "points": 2,
+          "reason": "exata"
         }
       ],
       "top6_points": 6,
@@ -161,74 +471,12 @@
       "player_raw": "Vinícius",
       "name": "Vinícius",
       "top6": [
-        "VER",
-        "NOR",
-        "RUS",
         "HAM",
         "ANT",
-        "PIA"
-      ],
-      "top6_detail": [
-        {
-          "pos": 1,
-          "guess": "VER",
-          "real": "ANT",
-          "points": 0,
-          "reason": "fora"
-        },
-        {
-          "pos": 2,
-          "guess": "NOR",
-          "real": "LEC",
-          "points": 1,
-          "reason": "no top6"
-        },
-        {
-          "pos": 3,
-          "guess": "RUS",
-          "real": "HAM",
-          "points": 1,
-          "reason": "no top6"
-        },
-        {
-          "pos": 4,
-          "guess": "HAM",
-          "real": "RUS",
-          "points": 1,
-          "reason": "no top6"
-        },
-        {
-          "pos": 5,
-          "guess": "ANT",
-          "real": "HAD",
-          "points": 1,
-          "reason": "no top6"
-        },
-        {
-          "pos": 6,
-          "guess": "PIA",
-          "real": "NOR",
-          "points": 0,
-          "reason": "fora"
-        }
-      ],
-      "top6_points": 4,
-      "bonus_guess": 4,
-      "bonus_real_pos": 3,
-      "bonus_points": 0,
-      "total": 4
-    },
-    {
-      "player_id": "caio_l",
-      "player_raw": "Caio L.",
-      "name": "Caio Lopes",
-      "top6": [
-        "HAM",
-        "VER",
-        "PIA",
         "LEC",
-        "SAI",
-        "ALO"
+        "VER",
+        "NOR",
+        "RUS"
       ],
       "top6_detail": [
         {
@@ -240,45 +488,45 @@
         },
         {
           "pos": 2,
-          "guess": "VER",
+          "guess": "ANT",
           "real": "LEC",
-          "points": 0,
-          "reason": "fora"
-        },
-        {
-          "pos": 3,
-          "guess": "PIA",
-          "real": "HAM",
-          "points": 0,
-          "reason": "fora"
-        },
-        {
-          "pos": 4,
-          "guess": "LEC",
-          "real": "RUS",
           "points": 1,
           "reason": "no top6"
         },
         {
-          "pos": 5,
-          "guess": "SAI",
-          "real": "HAD",
+          "pos": 3,
+          "guess": "LEC",
+          "real": "HAM",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 4,
+          "guess": "VER",
+          "real": "RUS",
           "points": 0,
           "reason": "fora"
         },
         {
+          "pos": 5,
+          "guess": "NOR",
+          "real": "HAD",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
           "pos": 6,
-          "guess": "ALO",
+          "guess": "RUS",
           "real": "NOR",
-          "points": 0,
-          "reason": "fora"
+          "points": 1,
+          "reason": "no top6"
         }
       ],
-      "top6_points": 2,
-      "bonus_guess": 10,
+      "top6_points": 5,
+      "bonus_guess": 1,
       "bonus_real_pos": 3,
       "bonus_points": 0,
-      "total": 2
+      "total": 5
     }
   ]
 }

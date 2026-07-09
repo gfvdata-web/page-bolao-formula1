@@ -326,11 +326,11 @@
           "race": "Silverstone",
           "top6": [
             "HAM",
+            "ANT",
             "VER",
-            "PIA",
-            "LEC",
-            "SAI",
-            "ALO"
+            "RUS",
+            "NOR",
+            "LEC"
           ],
           "top6_detail": [
             {
@@ -342,46 +342,46 @@
             },
             {
               "pos": 2,
-              "guess": "VER",
+              "guess": "ANT",
               "real": "LEC",
-              "points": 0,
-              "reason": "fora"
+              "points": 1,
+              "reason": "no top6"
             },
             {
               "pos": 3,
-              "guess": "PIA",
+              "guess": "VER",
               "real": "HAM",
               "points": 0,
               "reason": "fora"
             },
             {
               "pos": 4,
-              "guess": "LEC",
+              "guess": "RUS",
               "real": "RUS",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 5,
+              "guess": "NOR",
+              "real": "HAD",
               "points": 1,
               "reason": "no top6"
             },
             {
-              "pos": 5,
-              "guess": "SAI",
-              "real": "HAD",
-              "points": 0,
-              "reason": "fora"
-            },
-            {
               "pos": 6,
-              "guess": "ALO",
+              "guess": "LEC",
               "real": "NOR",
-              "points": 0,
-              "reason": "fora"
+              "points": 1,
+              "reason": "no top6"
             }
           ],
-          "top6_points": 2,
+          "top6_points": 6,
           "bonus_driver": "HAM",
-          "bonus_guess": 10,
+          "bonus_guess": 1,
           "bonus_real_pos": 3,
           "bonus_points": 0,
-          "total": 2
+          "total": 6
         }
       }
     },
@@ -892,6 +892,69 @@
           "bonus_real_pos": 8,
           "bonus_points": 1,
           "total": 8
+        },
+        "9": {
+          "round": 9,
+          "race_id": "2026-09",
+          "race": "Silverstone",
+          "top6": [
+            "HAM",
+            "ANT",
+            "VER",
+            "RUS",
+            "LEC",
+            "NOR"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "HAM",
+              "real": "ANT",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "ANT",
+              "real": "LEC",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "VER",
+              "real": "HAM",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 4,
+              "guess": "RUS",
+              "real": "RUS",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 5,
+              "guess": "LEC",
+              "real": "HAD",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "NOR",
+              "real": "NOR",
+              "points": 2,
+              "reason": "exata"
+            }
+          ],
+          "top6_points": 7,
+          "bonus_driver": "HAM",
+          "bonus_guess": 1,
+          "bonus_real_pos": 3,
+          "bonus_points": 0,
+          "total": 7
         }
       }
     },
@@ -1975,6 +2038,138 @@
           "bonus_real_pos": 8,
           "bonus_points": 0,
           "total": 8
+        },
+        "9": {
+          "round": 9,
+          "race_id": "2026-09",
+          "race": "Silverstone",
+          "top6": [
+            "HAM",
+            "ANT",
+            "VER",
+            "RUS",
+            "LEC",
+            "NOR"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "HAM",
+              "real": "ANT",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "ANT",
+              "real": "LEC",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "VER",
+              "real": "HAM",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 4,
+              "guess": "RUS",
+              "real": "RUS",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 5,
+              "guess": "LEC",
+              "real": "HAD",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "NOR",
+              "real": "NOR",
+              "points": 2,
+              "reason": "exata"
+            }
+          ],
+          "top6_points": 7,
+          "bonus_driver": "HAM",
+          "bonus_guess": 1,
+          "bonus_real_pos": 3,
+          "bonus_points": 0,
+          "total": 7
+        }
+      }
+    },
+    "filipe": {
+      "player_id": "filipe",
+      "name": "Filipe",
+      "rounds": {
+        "9": {
+          "round": 9,
+          "race_id": "2026-09",
+          "race": "Silverstone",
+          "top6": [
+            "HAM",
+            "ANT",
+            "VER",
+            "RUS",
+            "NOR",
+            "LEC"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "HAM",
+              "real": "ANT",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "ANT",
+              "real": "LEC",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "VER",
+              "real": "HAM",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 4,
+              "guess": "RUS",
+              "real": "RUS",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 5,
+              "guess": "NOR",
+              "real": "HAD",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "LEC",
+              "real": "NOR",
+              "points": 1,
+              "reason": "no top6"
+            }
+          ],
+          "top6_points": 6,
+          "bonus_driver": "HAM",
+          "bonus_guess": 1,
+          "bonus_real_pos": 3,
+          "bonus_points": 0,
+          "total": 6
         }
       }
     },
@@ -3379,6 +3574,69 @@
           "bonus_real_pos": 8,
           "bonus_points": 0,
           "total": 6
+        },
+        "9": {
+          "round": 9,
+          "race_id": "2026-09",
+          "race": "Silverstone",
+          "top6": [
+            "HAM",
+            "ANT",
+            "RUS",
+            "VER",
+            "LEC",
+            "NOR"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "HAM",
+              "real": "ANT",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "ANT",
+              "real": "LEC",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "RUS",
+              "real": "HAM",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "VER",
+              "real": "RUS",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 5,
+              "guess": "LEC",
+              "real": "HAD",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "NOR",
+              "real": "NOR",
+              "points": 2,
+              "reason": "exata"
+            }
+          ],
+          "top6_points": 6,
+          "bonus_driver": "HAM",
+          "bonus_guess": 1,
+          "bonus_real_pos": 3,
+          "bonus_points": 0,
+          "total": 6
         }
       }
     },
@@ -4090,63 +4348,63 @@
           "race_id": "2026-09",
           "race": "Silverstone",
           "top6": [
-            "VER",
-            "NOR",
-            "RUS",
             "HAM",
             "ANT",
-            "PIA"
+            "LEC",
+            "VER",
+            "NOR",
+            "RUS"
           ],
           "top6_detail": [
             {
               "pos": 1,
-              "guess": "VER",
+              "guess": "HAM",
               "real": "ANT",
-              "points": 0,
-              "reason": "fora"
+              "points": 1,
+              "reason": "no top6"
             },
             {
               "pos": 2,
-              "guess": "NOR",
+              "guess": "ANT",
               "real": "LEC",
               "points": 1,
               "reason": "no top6"
             },
             {
               "pos": 3,
-              "guess": "RUS",
+              "guess": "LEC",
               "real": "HAM",
               "points": 1,
               "reason": "no top6"
             },
             {
               "pos": 4,
-              "guess": "HAM",
+              "guess": "VER",
               "real": "RUS",
-              "points": 1,
-              "reason": "no top6"
+              "points": 0,
+              "reason": "fora"
             },
             {
               "pos": 5,
-              "guess": "ANT",
+              "guess": "NOR",
               "real": "HAD",
               "points": 1,
               "reason": "no top6"
             },
             {
               "pos": 6,
-              "guess": "PIA",
+              "guess": "RUS",
               "real": "NOR",
-              "points": 0,
-              "reason": "fora"
+              "points": 1,
+              "reason": "no top6"
             }
           ],
-          "top6_points": 4,
+          "top6_points": 5,
           "bonus_driver": "HAM",
-          "bonus_guess": 4,
+          "bonus_guess": 1,
           "bonus_real_pos": 3,
           "bonus_points": 0,
-          "total": 4
+          "total": 5
         }
       }
     }
