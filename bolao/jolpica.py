@@ -243,14 +243,20 @@ def _write_json(caminho: Path, dados: dict) -> None:
 
 
 def main(argv: list[str] | None = None) -> int:
-    p = argparse.ArgumentParser(description="Bolão F1 — fetch Jolpica (Etapa 2)")
-    p.add_argument("--season", type=int, default=SEASON)
-    p.add_argument("--base-url", default=BASE_URL)
-    p.add_argument("--out", help="caminho de saída (sobrescreve o padrão)")
+    # Opções comuns num parent parser: valem antes ou depois do subcomando
+    # (ex.: `... --out X result 1` e `... result 1 --out X` funcionam).
+    comum = argparse.ArgumentParser(add_help=False)
+    comum.add_argument("--season", type=int, default=SEASON)
+    comum.add_argument("--base-url", default=BASE_URL)
+    comum.add_argument("--out", help="caminho de saída (sobrescreve o padrão)")
+
+    p = argparse.ArgumentParser(
+        description="Bolão F1 — fetch Jolpica (Etapa 2)", parents=[comum]
+    )
     sub = p.add_subparsers(dest="cmd", required=True)
-    sub.add_parser("calendar", help="grava o calendário da temporada")
-    sub.add_parser("drivers", help="grava o drivers.json da entry list")
-    sp = sub.add_parser("result", help="grava o resultado de um quali")
+    sub.add_parser("calendar", help="grava o calendário da temporada", parents=[comum])
+    sub.add_parser("drivers", help="grava o drivers.json da entry list", parents=[comum])
+    sp = sub.add_parser("result", help="grava o resultado de um quali", parents=[comum])
     sp.add_argument("round", type=int, help="número da rodada")
     args = p.parse_args(argv)
 
