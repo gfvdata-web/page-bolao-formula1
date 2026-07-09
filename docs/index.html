@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bolão F1 2026</title>
 <link rel="stylesheet" href="./style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 </head>
 <body>
 <header class="topo">
@@ -19,15 +20,49 @@
   <section id="secao-ranking" class="secao" role="tabpanel">
     <div id="ranking-status" class="status"></div>
     <div id="ranking-container"></div>
+    <div class="regras-pontuacao">
+      <h2>Regras de pontuação</h2>
+      <ul>
+        <li><strong>Top6</strong> (máx. 12 pts): cada piloto apostado vale 2 pts na posição exata, 1 pt se estiver no top6 real em outra posição, 0 pt se estiver fora do top6 real.</li>
+        <li><strong>Piloto da rodada</strong> (máx. 1 pt): 1 pt por acertar a posição exata dele no grid inteiro; 0 pt caso contrário.</li>
+        <li><strong>Total por corrida:</strong> máximo 13 pts (12 do top6 + 1 do piloto da rodada).</li>
+        <li><strong>Pontuação mínima:</strong> quem não aposta numa rodada recebe a pontuação mínima daquela rodada (1 a menos que a menor pontuação de quem apostou nela).</li>
+      </ul>
+    </div>
   </section>
 
   <section id="secao-palpites" class="secao" hidden role="tabpanel">
-    <div class="filtro-jogador">
-      <label for="select-jogador">Jogador:</label>
-      <select id="select-jogador"></select>
+    <nav class="subabas" role="tablist">
+      <button class="subaba" data-subaba="historico" role="tab" aria-selected="true">Histórico</button>
+      <button class="subaba" data-subaba="temporada" role="tab" aria-selected="false">Temporada</button>
+      <button class="subaba" data-subaba="preferencia" role="tab" aria-selected="false">Preferência piloto</button>
+    </nav>
+
+    <div id="subsecao-historico" class="subsecao" role="tabpanel">
+      <div class="filtro-jogador">
+        <label for="select-jogador">Jogador:</label>
+        <select id="select-jogador"></select>
+      </div>
+      <div id="palpites-status" class="status"></div>
+      <div id="palpites-container"></div>
     </div>
-    <div id="palpites-status" class="status"></div>
-    <div id="palpites-container"></div>
+
+    <div id="subsecao-temporada" class="subsecao" hidden role="tabpanel">
+      <div id="temporada-cards" class="temporada-cards"></div>
+      <div class="temporada-grafico-wrap">
+        <canvas id="temporada-grafico" height="260"></canvas>
+      </div>
+    </div>
+
+    <div id="subsecao-preferencia" class="subsecao" hidden role="tabpanel">
+      <div class="filtro-jogador">
+        <label for="select-preferencia-jogador">Jogador:</label>
+        <select id="select-preferencia-jogador">
+          <option value="todos">Todos</option>
+        </select>
+      </div>
+      <div id="preferencia-container"></div>
+    </div>
   </section>
 </main>
 

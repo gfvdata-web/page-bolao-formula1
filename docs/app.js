@@ -20,6 +20,21 @@ function corPiloto(codigo) {
   return CORES_PILOTO[codigo] || "#9aa0a8";
 }
 
+// Paleta cíclica para linhas de jogador nos gráficos (decorativo, sem relação com equipes).
+const PALETA_JOGADOR = [
+  "#e10600", "#1e9e5a", "#3671C6", "#FF8000", "#c99a00",
+  "#8e44ad", "#00b8d9", "#e91e63", "#795548", "#009688",
+  "#607d8b", "#ff5722",
+];
+
+function corJogador(indice) {
+  return PALETA_JOGADOR[indice % PALETA_JOGADOR.length];
+}
+
+function corCss(variavel) {
+  return getComputedStyle(document.documentElement).getPropertyValue(variavel).trim();
+}
+
 async function carregarJson(caminho) {
   const resp = await fetch(caminho);
   if (!resp.ok) throw new Error(`Falha ao buscar ${caminho}: ${resp.status}`);
@@ -190,6 +205,183 @@ function renderPalpitesJogador(playerId, bets, standings) {
   container.replaceChildren(...cards);
 }
 
+// ---------- Temporada (gráfico de pontos por corrida, sem acumular) ----------
+
+let graficoTemporada = null;
+
+function construirDadosTemporada(standings) {
+  const rounds = standings.rounds.slice().sort((a, b) => a.round - b.round);
+  const datasets = standings.players.map((jogador, indice) => {
+    const cor = corJogador(indice);
+    const compensadas = new Set(jogador.compensated_rounds);
+    const data = [];
+    const pointStyle = [];
+    const pointRadius = [];
+    const pointBackgroundColor = [];
+    const compensadoPorIndice = [];
+
+    for (const rodada of rounds) {
+      const numero = rodada.round;
+      if (compensadas.has(numero)) {
+        data.push(rodada.min_score);
+        pointStyle.push("triangle");
+        pointRadius.push(6);
+        pointBackgroundColor.push("#fff");
+        compensadoPorIndice.push(true);
+      } else {
+        data.push(jogador.per_round[numero] ?? null);
+        pointStyle.push("circle");
+        pointRadius.push(4);
+        pointBackgroundColor.push(cor);
+        compensadoPorIndice.push(false);
+      }
+    }
+
+    return {
+      label: jogador.name,
+      playerId: jogador.player_id,
+      data,
+      borderColor: cor,
+      backgroundColor: cor,
+      pointStyle,
+      pointRadius,
+      pointBackgroundColor,
+      pointBorderColor: cor,
+      pointBorderWidth: 2,
+      borderWidth: 2,
+      tension: 0.15,
+      spanGaps: false,
+      segment: {
+        borderDash: (ctx) => (compensadoPorIndice[ctx.p1DataIndex] ? [6, 4] : undefined),
+      },
+    };
+  });
+
+  return { labels: rounds.map((r) => r.race), datasets };
+}
+
+function renderTemporada(standings) {
+  const { labels, datasets } = construirDadosTemporada(standings);
+
+  const cardsContainer = document.getElementById("temporada-cards");
+  cardsContainer.replaceChildren(
+    ...datasets.map((dataset, indice) => {
+      const card = el(
+        "button",
+        { class: "jogador-card", type: "button", style: `--cor-jogador:${dataset.borderColor}` },
+        [el("span", { class: "jogador-card__bolinha" }), dataset.label]
+      );
+      card.addEventListener("click", () => {
+        const desligado = card.classList.toggle("jogador-card--desligado");
+        graficoTemporada.data.datasets[indice].hidden = desligado;
+        graficoTemporada.update();
+      });
+      return card;
+    })
+  );
+
+  const corTexto = corCss("--texto-fraco");
+  const corGrade = corCss("--borda");
+  const ctx = document.getElementById("temporada-grafico").getContext("2d");
+  if (graficoTemporada) graficoTemporada.destroy();
+  graficoTemporada = new Chart(ctx, {
+    type: "line",
+    data: { labels, datasets },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: "nearest", intersect: false },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label(item) {
+              const numero = standings.rounds.slice().sort((a, b) => a.round - b.round)[item.dataIndex].round;
+              const jogador = standings.players.find((p) => p.player_id === item.dataset.playerId);
+              const compensou = jogador && jogador.compensated_rounds.includes(numero);
+              return `${item.dataset.label}: ${item.formattedValue} pts${compensou ? " (mínima — não apostou)" : ""}`;
+            },
+          },
+        },
+      },
+      scales: {
+        x: { ticks: { color: corTexto }, grid: { color: corGrade } },
+        y: {
+          beginAtZero: true,
+          ticks: { color: corTexto },
+          grid: { color: corGrade },
+          title: { display: true, text: "Pontos na rodada", color: corTexto },
+        },
+      },
+    },
+  });
+}
+
+// ---------- Preferência piloto ----------
+
+function popularSelectPreferencia(bets) {
+  const select = document.getElementById("select-preferencia-jogador");
+  const jogadores = Object.values(bets.players).sort((a, b) => a.name.localeCompare(b.name, "pt-BR"));
+  select.replaceChildren(
+    el("option", { value: "todos" }, ["Todos"]),
+    ...jogadores.map((j) => el("option", { value: j.player_id }, [j.name]))
+  );
+}
+
+function coletarPalpitesTop6(bets, playerId) {
+  const jogadoresAlvo = playerId === "todos" ? Object.values(bets.players) : [bets.players[playerId]].filter(Boolean);
+  const porPiloto = new Map(); // codigo -> { soma, count }
+
+  for (const jogador of jogadoresAlvo) {
+    for (const rodada of Object.values(jogador.rounds)) {
+      rodada.top6.forEach((codigo, indice) => {
+        const posicao = indice + 1;
+        const registro = porPiloto.get(codigo) || { soma: 0, count: 0 };
+        registro.soma += posicao;
+        registro.count += 1;
+        porPiloto.set(codigo, registro);
+      });
+    }
+  }
+  return porPiloto;
+}
+
+function renderPreferenciaPiloto(playerId, bets) {
+  const container = document.getElementById("preferencia-container");
+  const porPiloto = coletarPalpitesTop6(bets, playerId);
+
+  const linhas = [...porPiloto.entries()]
+    .map(([codigo, { soma, count }]) => ({ codigo, media: soma / count, count }))
+    .sort((a, b) => a.media - b.media || a.codigo.localeCompare(b.codigo));
+
+  if (!linhas.length) {
+    container.replaceChildren(el("p", { class: "status" }, ["Sem palpites de top6 registrados."]));
+    return;
+  }
+
+  const tabela = el("table", { class: "preferencia-tabela" }, [
+    el("thead", {}, [
+      el("tr", {}, [
+        el("th", {}, ["Piloto"]),
+        el("th", { class: "num" }, ["Posição média"]),
+        el("th", { class: "num" }, ["Vezes apostado"]),
+      ]),
+    ]),
+  ]);
+  const tbody = el("tbody");
+  for (const linha of linhas) {
+    tbody.appendChild(
+      el("tr", {}, [
+        el("td", {}, [chipPiloto(linha.codigo)]),
+        el("td", { class: "num" }, [linha.media.toFixed(2)]),
+        el("td", { class: "num" }, [String(linha.count)]),
+      ])
+    );
+  }
+  tabela.appendChild(tbody);
+  container.replaceChildren(tabela);
+}
+
 // ---------- Abas ----------
 
 function configurarAbas() {
@@ -205,12 +397,35 @@ function configurarAbas() {
       for (const [nome, secao] of Object.entries(secoes)) {
         secao.hidden = nome !== botao.dataset.aba;
       }
+      if (graficoTemporada) graficoTemporada.resize();
+    });
+  });
+}
+
+function configurarSubAbas() {
+  const botoes = document.querySelectorAll("button.subaba");
+  const secoes = {
+    historico: document.getElementById("subsecao-historico"),
+    temporada: document.getElementById("subsecao-temporada"),
+    preferencia: document.getElementById("subsecao-preferencia"),
+  };
+  botoes.forEach((botao) => {
+    botao.addEventListener("click", () => {
+      botoes.forEach((b) => b.setAttribute("aria-selected", "false"));
+      botao.setAttribute("aria-selected", "true");
+      for (const [nome, secao] of Object.entries(secoes)) {
+        secao.hidden = nome !== botao.dataset.subaba;
+      }
+      if (botao.dataset.subaba === "temporada" && graficoTemporada) {
+        graficoTemporada.resize();
+      }
     });
   });
 }
 
 async function main() {
   configurarAbas();
+  configurarSubAbas();
 
   try {
     const standings = await carregarJson("./data/standings.json");
@@ -230,6 +445,15 @@ async function main() {
       select.value = jogadores[0].player_id;
       renderPalpitesJogador(jogadores[0].player_id, bets, standings);
     }
+
+    renderTemporada(standings);
+
+    popularSelectPreferencia(bets);
+    const selectPreferencia = document.getElementById("select-preferencia-jogador");
+    selectPreferencia.addEventListener("change", () => {
+      renderPreferenciaPiloto(selectPreferencia.value, bets);
+    });
+    renderPreferenciaPiloto("todos", bets);
   } catch (erro) {
     console.error(erro);
     document.getElementById("ranking-status").textContent = "Erro ao carregar os dados do bolão.";

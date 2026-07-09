@@ -271,6 +271,146 @@ main {
   color: var(--texto-fraco);
 }
 
+/* Regras de pontuação (Ranking) */
+
+.regras-pontuacao {
+  margin-top: 1rem;
+  padding: 0.9rem 1rem;
+  background: var(--bg-card);
+  border-radius: 10px;
+  box-shadow: var(--sombra);
+  font-size: 0.85rem;
+  color: var(--texto-fraco);
+}
+
+.regras-pontuacao h2 {
+  margin: 0 0 0.5rem;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--texto);
+}
+
+.regras-pontuacao ul {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+
+.regras-pontuacao li {
+  margin-bottom: 0.3rem;
+}
+
+.regras-pontuacao li:last-child {
+  margin-bottom: 0;
+}
+
+/* Sub-abas (Palpites por jogador) */
+
+nav.subabas {
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--borda);
+}
+
+button.subaba {
+  flex: 1;
+  padding: 0.5rem 0.4rem;
+  border: none;
+  background: transparent;
+  color: var(--texto-fraco);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+}
+
+button.subaba[aria-selected="true"] {
+  color: var(--acento);
+  border-bottom-color: var(--acento);
+}
+
+/* Temporada */
+
+.temporada-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.jogador-card {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.7rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--cor-jogador, var(--borda));
+  background: var(--bg-card);
+  color: var(--texto);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.jogador-card__bolinha {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  background: var(--cor-jogador, var(--texto-fraco));
+  flex-shrink: 0;
+}
+
+.jogador-card--desligado {
+  opacity: 0.4;
+}
+
+.jogador-card--desligado .jogador-card__bolinha {
+  background: var(--texto-fraco);
+}
+
+.temporada-grafico-wrap {
+  background: var(--bg-card);
+  border-radius: 10px;
+  box-shadow: var(--sombra);
+  padding: 1rem;
+}
+
+/* Preferência piloto */
+
+.preferencia-tabela {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--bg-card);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: var(--sombra);
+}
+
+.preferencia-tabela th, .preferencia-tabela td {
+  padding: 0.55rem 0.7rem;
+  text-align: left;
+  border-bottom: 1px solid var(--borda);
+  font-size: 0.88rem;
+}
+
+.preferencia-tabela th {
+  color: var(--texto-fraco);
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.preferencia-tabela tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.preferencia-tabela td.num, .preferencia-tabela th.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
 @media (max-width: 480px) {
   main { padding: 0.6rem; }
   .top6-tabela th, .top6-tabela td { padding: 0.25rem 0.3rem; font-size: 0.85rem; }

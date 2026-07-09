@@ -352,6 +352,41 @@ Status: ⬜ não iniciada · 🟡 em andamento · ✅ concluída
   ficam hardcoded em `docs/app.js`, mapeadas por código de piloto (2 pilotos
   por equipe, grid 2026 com 11 equipes).
 
+**Ajuste posterior (ainda Etapa 4): regras de pontuação + sub-abas em
+Palpites por jogador.**
+- Aba **Ranking** ganhou um bloco `.regras-pontuacao` (HTML estático, sem
+  JS/dado) logo abaixo da tabela, resumindo a seção 2 deste documento.
+- Aba **Palpites por jogador** virou um `nav.subabas` com 3 sub-abas
+  (`button.subaba[data-subaba="historico|temporada|preferencia"]` +
+  `#subsecao-historico|temporada|preferencia`), no mesmo padrão
+  `id`/`data-*` das abas principais. `configurarSubAbas()` em `app.js`
+  replica a lógica de `configurarAbas()`.
+  - **Histórico** = a visão de palpites por jogador já existente (sem
+    mudança de comportamento).
+  - **Temporada**: gráfico de linha (pontos por corrida, **sem
+    acumular**) via **Chart.js 4 (CDN, `<script>` em `index.html`)** —
+    exceção pontual à decisão de "zero dependências" da Etapa 4, pedida
+    explicitamente pelo usuário. Uma linha por jogador, cor cíclica em
+    `PALETA_JOGADOR` (`app.js`, decorativa, sem relação com equipes).
+    Mini cards acima do gráfico (um por jogador, todos ligados por
+    padrão) ligam/desligam a linha ao clicar (`dataset.hidden` +
+    `chart.update()`). Rodada em que o jogador não apostou usa o
+    `min_score` da rodada (via `compensated_rounds`/`standings.rounds`)
+    e é destacada no gráfico com marcador triangular + segmento
+    tracejado (`segment.borderDash`), com nota "mínima — não apostou"
+    no tooltip. Fonte de dados: só `standings.json` (`per_round`,
+    `compensated_rounds`, `rounds[].min_score`) — nenhuma mudança em
+    `bolao/site.py`.
+  - **Preferência piloto**: tabela (não gráfico) com a posição média de
+    aposta de cada piloto no top6, calculada só a partir de `bets.json`
+    (`top6` array, índice 0 = P1). Filtro "Jogador" com opção "Todos"
+    (padrão) = **uma média única sobre todos os palpites de todos os
+    jogadores juntos** (não é média das médias por jogador). Só lista
+    pilotos que já apareceram em algum top6 apostado (do filtro ativo).
+    Ordenada por média crescente.
+  - Nenhuma mudança nos geradores Python nem nos formatos de
+    `docs/data/*.json` — tudo consumido como já estava.
+
 **Mapa do front-end (para ajustes futuros de HTML/CSS/JS sem reler tudo):**
 - `docs/index.html`: esqueleto fixo — `header.topo` com as 2 abas
   (`button.aba[data-aba="ranking|palpites"]`), `#secao-ranking` (contém
