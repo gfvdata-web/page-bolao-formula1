@@ -231,6 +231,31 @@ def fetch_result(rnd: int, season: int = SEASON, base_url: str = BASE_URL) -> di
     return build_result(fetch_json(qualifying_url(season, rnd, base_url)), season, rnd)
 
 
+def fetch_all_results(
+    season: int = SEASON, base_url: str = BASE_URL, pausa: float = 0.25
+) -> tuple[list[dict], list[int]]:
+    """Baixa todos os qualis **já disponíveis** da temporada.
+
+    Percorre as rodadas do calendário e busca cada quali principal. Rodadas sem
+    resultado ainda (futuras) são puladas — não geram erro. Devolve
+    ``(gravaveis, indisponiveis)``.
+    """
+    import time
+
+    cal = fetch_calendar(season, base_url)
+    gravaveis: list[dict] = []
+    indisponiveis: list[int] = []
+    for corrida in cal["races"]:
+        rnd = corrida["round"]
+        try:
+            gravaveis.append(fetch_result(rnd, season, base_url))
+        except ResultUnavailable:
+            indisponiveis.append(rnd)
+        if pausa:
+            time.sleep(pausa)  # gentileza com a API (rate limit)
+    return gravaveis, indisponiveis
+
+
 # ---------------------------------------------------------------------------
 # CLI
 # ---------------------------------------------------------------------------
@@ -258,12 +283,28 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("drivers", help="grava o drivers.json da entry list", parents=[comum])
     sp = sub.add_parser("result", help="grava o resultado de um quali", parents=[comum])
     sp.add_argument("round", type=int, help="número da rodada")
+    sub.add_parser(
+        "results",
+        help="grava todos os qualis já disponíveis (--out = diretório)",
+        parents=[comum],
+    )
     args = p.parse_args(argv)
 
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8")
 
     try:
+        if args.cmd == "results":
+            diretorio = Path(args.out or f"data/{args.season}/results")
+            gravaveis, indisponiveis = fetch_all_results(args.season, args.base_url)
+            for res in gravaveis:
+                _write_json(diretorio / f"{res['round']}.json", res)
+            rounds = [res["round"] for res in gravaveis]
+            print(f"Gravados {len(gravaveis)} qualis em {diretorio}/ (rodadas {rounds}).")
+            if indisponiveis:
+                print(f"Ainda sem resultado (futuras/re-rodar depois): {indisponiveis}")
+            return 0
+
         if args.cmd == "calendar":
             dados = fetch_calendar(args.season, args.base_url)
             destino = Path(args.out or f"data/{args.season}/calendar.json")
