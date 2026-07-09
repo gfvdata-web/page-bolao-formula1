@@ -1,0 +1,28 @@
+{
+  "race_id": "2026-01",
+  "season": 2026,
+  "round": 1,
+  "circuit": "albert_park",
+  "race": "Melbourne",
+  "order": [
+    "RUS",
+    "ANT",
+    "HAD",
+    "LEC",
+    "PIA",
+    "NOR",
+    "HAM",
+    "LAW",
+    "LIN",
+    "BOR",
+    "HUL",
+    "BEA",
+    "OCO",
+    "GAS",
+    "ALB",
+    "COL",
+    "ALO",
+    "PER",
+    "BOT"
+  ]
+}
