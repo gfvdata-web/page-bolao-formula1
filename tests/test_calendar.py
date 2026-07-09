@@ -39,6 +39,16 @@ class TestResolveRace(unittest.TestCase):
         # "Spain" serve para Barcelona (7) e Madrid (14) em 2026.
         with self.assertRaises(AmbiguousRace):
             resolve_race("Spain", self.cal)
+        # "USA" serve para Miami (4), Austin (17) e Las Vegas (20).
+        with self.assertRaises(AmbiguousRace):
+            resolve_race("USA", self.cal)
+
+    def test_mesmo_pais_desambigua_pela_cidade(self):
+        # Duas informações no nome (país + cidade) identificam a corrida.
+        self.assertEqual(resolve_race("Espanha Madrid", self.cal)["round"], 14)
+        self.assertEqual(resolve_race("Spain Barcelona", self.cal)["round"], 7)
+        self.assertEqual(resolve_race("USA Las Vegas", self.cal)["round"], 20)
+        self.assertEqual(resolve_race("United States Austin", self.cal)["round"], 17)
 
     def test_nome_desconhecido_falha(self):
         with self.assertRaises(RaceNotFound):

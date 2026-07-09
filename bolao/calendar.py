@@ -34,25 +34,52 @@ def load_calendar(caminho: str | Path) -> dict:
     return json.loads(Path(caminho).read_text(encoding="utf-8"))
 
 
+# Palavras genéricas que não distinguem uma corrida de outra.
+_GENERICOS = {"grand", "prix", "gp"}
+
+
+def _palavras(textos: list[str]) -> set[str]:
+    """Conjunto de palavras (sem os genéricos) de uma lista de aliases."""
+    palavras: set[str] = set()
+    for t in textos:
+        palavras.update(normalize_key(t).split())
+    return palavras - _GENERICOS
+
+
 def resolve_race(bruto: str, calendar: dict) -> dict:
     """Devolve a entrada de corrida do calendário que casa com ``bruto``.
 
-    Casa por alias normalizado exato. Levanta `RaceNotFound` se nada casar e
-    `AmbiguousRace` se um mesmo nome servir a mais de uma corrida (ex.: o país
-    "Spain", que em 2026 vale para Barcelona e Madrid) — nesses casos o nome
-    precisa ser mais específico (a cidade/circuito).
+    Casa por **palavras em comum** entre o nome bruto e os aliases da corrida
+    (circuito, cidade, país, nome oficial). Vence a corrida com mais palavras
+    casadas — assim, quando há mais de uma corrida no mesmo país, basta o
+    cabeçalho trazer também a cidade para desambiguar (ex.: ``"Espanha Madrid"``
+    → Madrid; ``"Espanha Barcelona"`` → Barcelona).
+
+    Levanta `RaceNotFound` se nada casar e `AmbiguousRace` num empate — ex.: só
+    o país ``"Spain"`` (vale para Barcelona r7 e Madrid r14 em 2026), ou só
+    ``"USA"`` (Miami/Austin/Las Vegas): aí é preciso colocar as duas informações.
     """
-    chave = normalize_key(bruto)
-    if not chave:
+    header = _palavras([bruto])
+    if not header:
         raise RaceNotFound("Nome de corrida vazio.")
 
-    casadas = [r for r in calendar.get("races", []) if chave in r.get("aliases", [])]
-    if not casadas:
+    melhores: list[dict] = []
+    melhor_score = 0
+    for r in calendar.get("races", []):
+        score = len(header & _palavras(r.get("aliases", [])))
+        if score == 0:
+            continue
+        if score > melhor_score:
+            melhor_score, melhores = score, [r]
+        elif score == melhor_score:
+            melhores.append(r)
+
+    if not melhores:
         raise RaceNotFound(f"Corrida não encontrada no calendário: {bruto!r}")
-    if len(casadas) > 1:
-        rounds = ", ".join(str(r["round"]) for r in casadas)
+    if len(melhores) > 1:
+        rounds = ", ".join(str(r["round"]) for r in melhores)
         raise AmbiguousRace(
             f"Nome {bruto!r} casa com várias corridas (rodadas {rounds}); "
-            "use um nome mais específico (cidade/circuito)."
+            "acrescente a cidade/circuito para desambiguar."
         )
-    return casadas[0]
+    return melhores[0]
