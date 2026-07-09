@@ -421,11 +421,52 @@ Palpites por jogador.**
   vezes `bolao/site.py` (o que é gerado) — checar se o dado já existe em
   `docs/data/*.json` antes de assumir que precisa mudar o gerador.
 
-### Etapa 5 — GitHub Actions ⬜
+### Etapa 5 — GitHub Actions 🟡
 - **Objetivo:** workflow acionado por `repository_dispatch` que roda o pipeline
   completo (parse → buscar resultado → pontuar → gerar dados → commit).
 - **Pronto quando:** disparar o evento atualiza o site sozinho.
 - **Depende de:** Etapas 1–4.
+- **Entregue até aqui:** `bolao/pipeline.py` (`run`/`retry` + CLI) e
+  `.github/workflows/pipeline.yml`. Testes offline em `tests/test_pipeline.py`
+  (mock de `fetch_result`, sem rede) — total do projeto: **61**. Repositório
+  remoto criado e remote local configurado (`origin`); **ainda falta**: fazer o
+  primeiro `push` (só quando o usuário pedir), ativar o GitHub Pages no repo, e
+  testar um disparo `repository_dispatch` de ponta a ponta.
+
+**Decisões fixadas na Etapa 5 (não reabrir sem o usuário pedir):**
+- **Repositório remoto:** `https://github.com/gfvdata-web/page-bolao-formula1`,
+  **público** (necessário para GitHub Pages gratuito em conta pessoal).
+- **Pages:** a partir da pasta `docs/` na branch `main` (sem Action de deploy
+  separada) — ativar isso nas configurações do repo após o primeiro push.
+- **Novo módulo `bolao/pipeline.py`** (não altera `bolao/jolpica.py`,
+  `bolao/calendar.py`, `bolao/site.py` nem `bolao/parser.py` — só orquestra):
+  - `run(texto, round=None, ...)`: grava `messages/<round>.txt`; se `round` for
+    omitido, resolve pelo cabeçalho (`parse_sheet` + `resolve_race`); busca o
+    resultado na Jolpica só se `results/<round>.json` ainda não existir;
+    **não falha** se `ResultUnavailable` (grava a mensagem, pula o resultado,
+    `site.generate` simplesmente não consolida a rodada ainda); sempre roda
+    `site.generate` no final.
+  - `retry(round, ...)`: para re-disparo manual quando o quali ainda não tinha
+    resultado — exige que `messages/<round>.txt` já exista; busca o resultado
+    (se faltando) e regenera o site. Levanta `FileNotFoundError` se a rodada
+    nunca recebeu mensagem.
+  - CLI: `python -m bolao.pipeline run [--round N] [--texto-file F]` (lê stdin
+    se `--texto-file` omitido) e `python -m bolao.pipeline retry <round>`.
+- **Workflow `.github/workflows/pipeline.yml`:**
+  - Gatilho 1 — `repository_dispatch`, evento **`novo_palpite`**,
+    `client_payload: {texto: <bloco colado do WhatsApp, obrigatório>, round:
+    <int, opcional — se omitido, o pipeline resolve pelo cabeçalho>}`. Chama
+    `bolao.pipeline run`.
+  - Gatilho 2 — `workflow_dispatch` com input `round` (obrigatório): re-tenta
+    buscar resultado de uma rodada cuja mensagem já foi gravada (equivalente ao
+    "re-disparo" citado na seção 5). Chama `bolao.pipeline retry`.
+  - Ambos os gatilhos terminam com um passo que `git add data docs/data`,
+    commita (só se houver mudanças) e dá `push`.
+  - **Commit automático como `github-actions[bot]`** (usa o `GITHUB_TOKEN`
+    padrão da Action, sem PAT/secret extra) — não conta como contribuição na
+    conta pessoal, mas deixa claro o que foi automático vs. manual.
+  - Sem `requirements.txt` (projeto usa só stdlib) — o workflow só precisa de
+    `actions/setup-python`, sem passo de `pip install`.
 
 ### Etapa 6 — Google Forms + Apps Script ⬜
 - **Objetivo:** formulário no celular + Apps Script que dispara o
@@ -449,6 +490,9 @@ Palpites por jogador.**
 - ✅ Repositório Git **inicializado** com `.gitignore` (Python) e commit inicial.
   Fluxo de Git obrigatório descrito no `CLAUDE.md` — commits pequenos e
   frequentes, status atualizado no mesmo commit, sem `push` até a Etapa 5.
-- ⬜ Remote no GitHub (entra na Etapa 5, junto com o Actions/Pages).
+- 🟡 Remote no GitHub **criado** (`origin` →
+  `https://github.com/gfvdata-web/page-bolao-formula1`, público, via `gh repo
+  create`). Falta: primeiro `push` (só quando o usuário pedir) e ativar o
+  Pages (`docs/` na branch `main`) nas configurações do repo.
 - ⬜ Conta/projeto do Google para o Forms + Apps Script (Etapa 6).
 - ⬜ Token/permissão para o Apps Script disparar o `repository_dispatch` (Etapa 6).
