@@ -1,0 +1,252 @@
+{
+  "season": 2026,
+  "rounds": [
+    {
+      "round": 1,
+      "race_id": "2026-01",
+      "race": "Melbourne",
+      "circuit": "albert_park",
+      "date": "2026-03-08",
+      "sprint": false,
+      "bonus_driver": "PIA"
+    },
+    {
+      "round": 2,
+      "race_id": "2026-02",
+      "race": "Shanghai",
+      "circuit": "shanghai",
+      "date": "2026-03-15",
+      "sprint": true,
+      "bonus_driver": "COL"
+    },
+    {
+      "round": 3,
+      "race_id": "2026-03",
+      "race": "Suzuka",
+      "circuit": "suzuka",
+      "date": "2026-03-29",
+      "sprint": false,
+      "bonus_driver": "BEA"
+    },
+    {
+      "round": 4,
+      "race_id": "2026-04",
+      "race": "Miami",
+      "circuit": "miami",
+      "date": "2026-05-03",
+      "sprint": true,
+      "bonus_driver": "STR"
+    },
+    {
+      "round": 5,
+      "race_id": "2026-05",
+      "race": "Montreal",
+      "circuit": "villeneuve",
+      "date": "2026-05-24",
+      "sprint": true,
+      "bonus_driver": "STR"
+    },
+    {
+      "round": 6,
+      "race_id": "2026-06",
+      "race": "Monte Carlo",
+      "circuit": "monaco",
+      "date": "2026-06-07",
+      "sprint": false,
+      "bonus_driver": "LEC"
+    },
+    {
+      "round": 7,
+      "race_id": "2026-07",
+      "race": "Barcelona",
+      "circuit": "catalunya",
+      "date": "2026-06-14",
+      "sprint": false,
+      "bonus_driver": "SAI"
+    },
+    {
+      "round": 8,
+      "race_id": "2026-08",
+      "race": "Spielberg",
+      "circuit": "red_bull_ring",
+      "date": "2026-06-28",
+      "sprint": false,
+      "bonus_driver": "HAD"
+    },
+    {
+      "round": 9,
+      "race_id": "2026-09",
+      "race": "Silverstone",
+      "circuit": "silverstone",
+      "date": "2026-07-05",
+      "sprint": true,
+      "bonus_driver": "HAM"
+    }
+  ],
+  "players": [
+    {
+      "position": 1,
+      "player_id": "dalla",
+      "name": "Dalla",
+      "total": 60,
+      "top6_total": 59,
+      "bonus_total": 1,
+      "rounds_played": 9,
+      "per_round": {
+        "1": 4,
+        "2": 8,
+        "3": 10,
+        "4": 6,
+        "5": 9,
+        "6": 8,
+        "7": 4,
+        "8": 6,
+        "9": 5
+      }
+    },
+    {
+      "position": 2,
+      "player_id": "vinicius",
+      "name": "Vinícius",
+      "total": 57,
+      "top6_total": 56,
+      "bonus_total": 1,
+      "rounds_played": 9,
+      "per_round": {
+        "1": 4,
+        "2": 7,
+        "3": 12,
+        "4": 5,
+        "5": 9,
+        "6": 5,
+        "7": 4,
+        "8": 7,
+        "9": 4
+      }
+    },
+    {
+      "position": 3,
+      "player_id": "ferrari",
+      "name": "Ferrari",
+      "total": 52,
+      "top6_total": 50,
+      "bonus_total": 2,
+      "rounds_played": 8,
+      "per_round": {
+        "1": 7,
+        "2": 7,
+        "3": 7,
+        "4": 7,
+        "5": 6,
+        "6": 5,
+        "7": 5,
+        "8": 8
+      }
+    },
+    {
+      "position": 4,
+      "player_id": "guilherme",
+      "name": "Guilherme",
+      "total": 50,
+      "top6_total": 49,
+      "bonus_total": 1,
+      "rounds_played": 9,
+      "per_round": {
+        "1": 4,
+        "2": 6,
+        "3": 6,
+        "4": 5,
+        "5": 5,
+        "6": 5,
+        "7": 5,
+        "8": 8,
+        "9": 6
+      }
+    },
+    {
+      "position": 5,
+      "player_id": "caliman",
+      "name": "Caliman",
+      "total": 48,
+      "top6_total": 47,
+      "bonus_total": 1,
+      "rounds_played": 8,
+      "per_round": {
+        "1": 4,
+        "2": 6,
+        "3": 7,
+        "4": 6,
+        "5": 8,
+        "6": 5,
+        "7": 4,
+        "8": 8
+      }
+    },
+    {
+      "position": 6,
+      "player_id": "igor",
+      "name": "Igor",
+      "total": 43,
+      "top6_total": 43,
+      "bonus_total": 0,
+      "rounds_played": 7,
+      "per_round": {
+        "1": 4,
+        "2": 8,
+        "3": 6,
+        "4": 5,
+        "5": 8,
+        "6": 6,
+        "8": 6
+      }
+    },
+    {
+      "position": 7,
+      "player_id": "francez",
+      "name": "Francez",
+      "total": 36,
+      "top6_total": 36,
+      "bonus_total": 0,
+      "rounds_played": 6,
+      "per_round": {
+        "2": 5,
+        "3": 6,
+        "4": 9,
+        "5": 5,
+        "7": 5,
+        "8": 6
+      }
+    },
+    {
+      "position": 8,
+      "player_id": "caio_l",
+      "name": "Caio Lopes",
+      "total": 31,
+      "top6_total": 31,
+      "bonus_total": 0,
+      "rounds_played": 6,
+      "per_round": {
+        "1": 4,
+        "3": 8,
+        "4": 5,
+        "5": 7,
+        "6": 5,
+        "9": 2
+      }
+    },
+    {
+      "position": 9,
+      "player_id": "lage",
+      "name": "Lage",
+      "total": 18,
+      "top6_total": 18,
+      "bonus_total": 0,
+      "rounds_played": 3,
+      "per_round": {
+        "2": 7,
+        "3": 5,
+        "4": 6
+      }
+    }
+  ]
+}

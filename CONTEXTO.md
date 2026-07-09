@@ -25,7 +25,9 @@ O jogador aposta 6 pilotos, em ordem (P1 a P6). Para **cada** piloto apostado:
 
 ### Piloto da rodada (máximo 1 pt)
 A cada corrida, um piloto específico é escolhido (definido no cabeçalho da
-mensagem). Todos chutam a **posição exata dele no grid inteiro (P1–P20)**.
+mensagem). Todos chutam a **posição exata dele no grid inteiro (P1–P22)** — a
+grade de 2026 tem até 22 pilotos (11 equipes). Chutes fora da grade são aceitos
+como vieram (preservam o palpite), mas nunca casam com a posição real → 0 pt.
 - Acertou a posição exata → **1 pt**
 - Caso contrário → **0 pt**
 
@@ -121,15 +123,17 @@ re-disparado (re-run da Action) sem reenviar os palpites.
 data/
   drivers.json              # grid 2026: alias/nome -> código 3 letras
   2026/
-    players.json            # jogadores: id canônico + apelidos
+    players.json            # jogadores: id canônico + apelidos + nomes
     calendar.json           # corridas 2026: round, circuito, data, piloto-bônus
-    bets/<round>.json       # palpites parseados da rodada
+    messages/<round>.txt    # texto bruto do WhatsApp por rodada (entrada da Etapa 3)
     results/<round>.json    # resultado do quali (da Jolpica)
-    scores/<round>.json     # pontuação por jogador na rodada
-    standings.json          # ranking acumulado da temporada
+    scores/<round>.json     # pontuação por jogador na rodada (gerado na Etapa 3)
 docs/                       # site estático servido pelo GitHub Pages
   index.html                # ranking + palpites por jogador (com filtro)
-  data/*.json               # dados que o front-end lê
+  data/                     # dados que o front-end lê (gerados na Etapa 3)
+    standings.json          # ranking acumulado da temporada
+    bets.json               # histórico de palpites por jogador (detalhe)
+    results.json            # grid real por rodada (histórico de posições)
 ```
 
 Decisões de modelagem a fechar na implementação:
@@ -239,13 +243,58 @@ Status: ⬜ não iniciada · 🟡 em andamento · ✅ concluída
 - **Indisponível:** quali sem resultado na Jolpica levanta `ResultUnavailable`
   (CLI retorna código 2, **não grava arquivo**) — pode re-rodar depois.
 
-### Etapa 3 — Geração dos dados do site ⬜
+### Etapa 3 — Geração dos dados do site ✅
 - **Objetivo:** consolidar as pontuações por rodada no ranking da temporada e
   nos dados de palpites por jogador.
 - **Saídas:** `standings.json` + JSONs de palpites em `docs/data/`.
 - **Pronto quando:** os JSONs do site refletem corretamente várias rodadas
   acumuladas.
 - **Depende de:** Etapas 1 e 2.
+- **Entregue:** `bolao/site.py` (consolidação + CLI). Entrada: os textos brutos
+  do WhatsApp em `data/2026/messages/<round>.txt` (as 9 rodadas reais de 2026 já
+  transcritas). Gera `data/2026/scores/<round>.json` (intermediário) e os dados
+  do site em `docs/data/`. CLI: `python -m bolao.site build`
+  (`--season`, `--data`, `--docs`). Testes offline: `tests/test_site.py`
+  (acúmulo de várias rodadas, rodada sem resultado ignorada, ordenação, nome de
+  exibição) + casos novos em `tests/test_parser.py` — total do projeto: **52**.
+
+**Formatos novos definidos aqui (a Etapa 4 consome estes; não reabrir):**
+- **`messages/<round>.txt`:** texto bruto do WhatsApp, um arquivo por rodada. O
+  nome do arquivo é a rodada; a Etapa 3 confere batendo com `resolve_race` do
+  cabeçalho. Uma rodada só entra na consolidação se tiver **messages + results**.
+- **`scores/<round>.json`:** `{round, race_id, season?, race, circuit, date,
+  sprint, bonus_driver, result_order:[...], players:[{player_id, player_raw,
+  name, top6:[6], top6_detail:[{pos,guess,real,points,reason}], top6_points,
+  bonus_guess, bonus_real_pos, bonus_points, total}]}`. Jogadores ordenados por
+  total desc, `player_id` asc.
+- **`docs/data/standings.json`:** `{season, rounds:[{round, race_id, race,
+  circuit, date, sprint, bonus_driver}], players:[{position, player_id, name,
+  total, top6_total, bonus_total, rounds_played, per_round:{"<round>":pts}}]}`.
+  Ordenado por total desc, `player_id` asc (desempate adiado → ordem estável).
+- **`docs/data/bets.json`:** `{season, players:{"<id>":{player_id, name,
+  rounds:{"<round>":{round, race_id, race, top6:[6], top6_detail:[...],
+  top6_points, bonus_driver, bonus_guess, bonus_real_pos, bonus_points,
+  total}}}}}`. Chaveado por id (útil p/ o filtro por jogador do site).
+- **`docs/data/results.json`:** `{season, rounds:{"<round>":{round, race_id,
+  race, circuit, date, sprint, bonus_driver, order:[...]}}}` — grid real por
+  rodada (base p/ histórico de posições por piloto).
+
+**Decisões fixadas na Etapa 3 (não reabrir sem o usuário pedir):**
+- **Identidade do jogador auto-descoberta** das mensagens: nome novo = jogador
+  novo (id pelo fallback = nome normalizado com `_`). Variantes do mesmo nome se
+  unem pelos aliases de `players.json`, que é a **correção manual** (ex.: `caio`,
+  `caio l`, `caio lopes` → `caio_l`). Nome de exibição: `players.json.names[id]`
+  se houver; senão a variante mais completa vista nas mensagens.
+- **Parser fortalecido** (mesmo formato de saída Sheet/Bet): tolera cabeçalho
+  `Circuito: X`, enfeites na linha do piloto (`escolhido`/`sorteado`/`:`), linha
+  em branco logo após o nome do jogador (bloco reconhecido pela linha `P#`) e
+  chute até P22. Os 39 testes anteriores seguem passando.
+- **Aliases estendidos** (dados, não formato): `drivers.json` ganhou `max`→VER,
+  `kimi`→ANT, `russel`→RUS, `l ecole`→LEC; `calendar.json` r3 ganhou o alias PT
+  `japao`. Nomes de corrida em PT que diferem do EN podem precisar de alias novo
+  no `calendar.json` conforme surgirem no cabeçalho.
+- **Sem timestamp** nos JSONs gerados (saída determinística → diffs limpos e
+  testes estáveis).
 
 ### Etapa 4 — Site estático ⬜
 - **Objetivo:** `docs/index.html` que lê os JSONs e mostra **ranking da
