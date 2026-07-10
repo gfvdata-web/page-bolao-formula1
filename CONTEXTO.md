@@ -442,17 +442,23 @@ Palpites por jogador.**
   vezes `bolao/site.py` (o que é gerado) — checar se o dado já existe em
   `docs/data/*.json` antes de assumir que precisa mudar o gerador.
 
-### Etapa 5 — GitHub Actions 🟡
+### Etapa 5 — GitHub Actions ✅
 - **Objetivo:** workflow acionado por `repository_dispatch` que roda o pipeline
   completo (parse → buscar resultado → pontuar → gerar dados → commit).
 - **Pronto quando:** disparar o evento atualiza o site sozinho.
 - **Depende de:** Etapas 1–4.
-- **Entregue até aqui:** `bolao/pipeline.py` (`run`/`retry` + CLI) e
+- **Entregue:** `bolao/pipeline.py` (`run`/`retry` + CLI) e
   `.github/workflows/pipeline.yml`. Testes offline em `tests/test_pipeline.py`
   (mock de `fetch_result`, sem rede) — total do projeto: **61**. Repositório
-  remoto criado e remote local configurado (`origin`); **ainda falta**: fazer o
-  primeiro `push` (só quando o usuário pedir), ativar o GitHub Pages no repo, e
-  testar um disparo `repository_dispatch` de ponta a ponta.
+  remoto criado (`gfvdata-web/page-bolao-formula1`, público), primeiro `push`
+  feito, Pages ativado. **Validado de ponta a ponta em produção**: disparo real
+  de `repository_dispatch` (evento `novo_palpite`, com e sem `round` explícito
+  no `client_payload`) e de `workflow_dispatch` (`retry`) na rodada 9
+  (idempotente — resultado já existia, "Nada para commitar", sem push
+  indevido); confirmado também que a rodada é resolvida corretamente pelo
+  cabeçalho quando `round` é omitido. Site publicado e no ar em
+  `https://gfvdata-web.github.io/page-bolao-formula1/` (conferido via fetch,
+  mostra ranking/palpites/regras corretamente).
 
 **Decisões fixadas na Etapa 5 (não reabrir sem o usuário pedir):**
 - **Repositório remoto:** `https://github.com/gfvdata-web/page-bolao-formula1`,
@@ -511,9 +517,9 @@ Palpites por jogador.**
 - ✅ Repositório Git **inicializado** com `.gitignore` (Python) e commit inicial.
   Fluxo de Git obrigatório descrito no `CLAUDE.md` — commits pequenos e
   frequentes, status atualizado no mesmo commit, sem `push` até a Etapa 5.
-- 🟡 Remote no GitHub **criado** (`origin` →
+- ✅ Remote no GitHub **criado e publicado** (`origin` →
   `https://github.com/gfvdata-web/page-bolao-formula1`, público, via `gh repo
-  create`). Falta: primeiro `push` (só quando o usuário pedir) e ativar o
-  Pages (`docs/` na branch `main`) nas configurações do repo.
+  create`). Pages ativo (`docs/` na branch `main`):
+  `https://gfvdata-web.github.io/page-bolao-formula1/`.
 - ⬜ Conta/projeto do Google para o Forms + Apps Script (Etapa 6).
 - ⬜ Token/permissão para o Apps Script disparar o `repository_dispatch` (Etapa 6).
