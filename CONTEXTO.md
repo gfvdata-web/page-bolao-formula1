@@ -516,19 +516,29 @@ temporadas anteriores, 2021–2025).**
   - Sem `requirements.txt` (projeto usa só stdlib) — o workflow só precisa de
     `actions/setup-python`, sem passo de `pip install`.
 
-### Etapa 6 — Google Forms + Apps Script 🟡
+### Etapa 6 — Google Forms + Apps Script ✅
 - **Objetivo:** formulário no celular + Apps Script que dispara o
   `repository_dispatch` com o texto colado e a corrida.
 - **Pronto quando:** enviar o formulário pelo celular atualiza o site
   ponta-a-ponta.
 - **Depende de:** Etapa 5 (nome do evento e formato do payload).
-- **Entregue até agora:** `google-apps-script/Code.gs` (função `onFormSubmit`
-  + `dispararRepositoryDispatch` + `notificarErro`) e
+- **Entregue:** `google-apps-script/Code.gs` (função `onFormSubmit` +
+  `dispararRepositoryDispatch` + `notificarErro` + `testarDisparoManual`) e
   `google-apps-script/SETUP.md` (passo a passo completo: gerar o token,
   criar o Forms, vincular o Apps Script, configurar propriedades/gatilho,
-  testar). **Falta:** o usuário executar o setup manual (Forms/Apps
-  Script/token vivem na conta Google, não no repositório) e validar o
-  disparo ponta a ponta.
+  testar). Setup manual executado na conta Google real (token fine-grained
+  gerado, Forms criado, Apps Script vinculado, propriedades e gatilho
+  configurados). **Validado via `testarDisparoManual`**: disparo real de
+  `repository_dispatch` confirmado na aba Actions do repositório (run
+  iniciado corretamente pelo evento `novo_palpite`).
+- **Pendência de validação (não bloqueia a etapa):** o gatilho instalável
+  `onFormSubmit` (envio real pelo Google Forms, em vez do teste manual)
+  ainda não foi exercitado ponta a ponta — combinado com o usuário testar
+  isso no envio de palpites da próxima corrida real. Se falhar nesse
+  primeiro uso real, o mais provável é os títulos das perguntas do Forms
+  não baterem com `PERGUNTA_RODADA`/`PERGUNTA_TEXTO` em `Code.gs`, ou o
+  gatilho ter sido criado sem a autorização completa (ver "Solução de
+  problemas" em `SETUP.md`).
 
 **Decisões fixadas na Etapa 6 (não reabrir sem o usuário pedir):**
 - **Autenticação:** fine-grained PAT do GitHub (repo único
@@ -572,8 +582,8 @@ temporadas anteriores, 2021–2025).**
   `https://github.com/gfvdata-web/page-bolao-formula1`, público, via `gh repo
   create`). Pages ativo (`docs/` na branch `main`):
   `https://gfvdata-web.github.io/page-bolao-formula1/`.
-- ⬜ Conta/projeto do Google para o Forms + Apps Script (Etapa 6) — código e
-  guia prontos em `google-apps-script/`; falta o usuário executar o setup
-  manual na conta Google.
-- ⬜ Token/permissão para o Apps Script disparar o `repository_dispatch`
-  (Etapa 6) — decidido fine-grained PAT (ver seção 8); falta gerar de fato.
+- ✅ Conta/projeto do Google para o Forms + Apps Script (Etapa 6) — Forms +
+  Apps Script criados e configurados, código em `google-apps-script/`.
+- ✅ Token/permissão para o Apps Script disparar o `repository_dispatch`
+  (Etapa 6) — fine-grained PAT gerado e configurado; renovação em ~1 ano
+  (lembrete agendado para 2027-06-25).
