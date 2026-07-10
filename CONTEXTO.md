@@ -495,12 +495,42 @@ Palpites por jogador.**
   - Sem `requirements.txt` (projeto usa só stdlib) — o workflow só precisa de
     `actions/setup-python`, sem passo de `pip install`.
 
-### Etapa 6 — Google Forms + Apps Script ⬜
+### Etapa 6 — Google Forms + Apps Script 🟡
 - **Objetivo:** formulário no celular + Apps Script que dispara o
   `repository_dispatch` com o texto colado e a corrida.
 - **Pronto quando:** enviar o formulário pelo celular atualiza o site
   ponta-a-ponta.
 - **Depende de:** Etapa 5 (nome do evento e formato do payload).
+- **Entregue até agora:** `google-apps-script/Code.gs` (função `onFormSubmit`
+  + `dispararRepositoryDispatch` + `notificarErro`) e
+  `google-apps-script/SETUP.md` (passo a passo completo: gerar o token,
+  criar o Forms, vincular o Apps Script, configurar propriedades/gatilho,
+  testar). **Falta:** o usuário executar o setup manual (Forms/Apps
+  Script/token vivem na conta Google, não no repositório) e validar o
+  disparo ponta a ponta.
+
+**Decisões fixadas na Etapa 6 (não reabrir sem o usuário pedir):**
+- **Autenticação:** fine-grained PAT do GitHub (repo único
+  `page-bolao-formula1`, permissão `Contents: Read and write`, expiração de
+  366 dias), guardado em `PropertiesService` (Propriedades do script) do
+  Apps Script — nunca no código-fonte nem no repositório. Lembrete de
+  renovação agendado para 2027-06-25 (a própria GitHub também avisa por
+  e-mail antes de expirar).
+- **Campo "Rodada" do Forms:** resposta curta, **opcional** — texto livre
+  ou vazio; o pipeline já resolve a rodada pelo cabeçalho da mensagem
+  quando `round` vem omitido (decisão da Etapa 5).
+- **Campo do texto:** um único campo "Parágrafo", obrigatório, com o bloco
+  inteiro colado do WhatsApp — vai direto para `client_payload.texto`.
+- **Títulos das perguntas no Forms devem bater exatamente** com
+  `PERGUNTA_RODADA`/`PERGUNTA_TEXTO` no topo de `Code.gs` (`"Rodada
+  (opcional)"` e `"Texto colado do WhatsApp"`).
+- **Falha ao disparar:** `notificarErro` manda e-mail (via `MailApp`) para
+  `ALERTA_EMAIL` (propriedade opcional) ou, na ausência, para o e-mail
+  efetivo do dono do script — inclui o erro e a orientação de reenviar o
+  Forms ou usar `workflow_dispatch` (retry) manualmente.
+- Nenhuma mudança no pipeline Python, no workflow do Actions nem no
+  front-end — a Etapa 6 só adiciona `google-apps-script/` como novo
+  disparador do evento `novo_palpite` já existente.
 
 ### Etapa 7 — Histórico ⬜
 - **Objetivo:** importar temporadas anteriores para o site.
@@ -521,5 +551,8 @@ Palpites por jogador.**
   `https://github.com/gfvdata-web/page-bolao-formula1`, público, via `gh repo
   create`). Pages ativo (`docs/` na branch `main`):
   `https://gfvdata-web.github.io/page-bolao-formula1/`.
-- ⬜ Conta/projeto do Google para o Forms + Apps Script (Etapa 6).
-- ⬜ Token/permissão para o Apps Script disparar o `repository_dispatch` (Etapa 6).
+- ⬜ Conta/projeto do Google para o Forms + Apps Script (Etapa 6) — código e
+  guia prontos em `google-apps-script/`; falta o usuário executar o setup
+  manual na conta Google.
+- ⬜ Token/permissão para o Apps Script disparar o `repository_dispatch`
+  (Etapa 6) — decidido fine-grained PAT (ver seção 8); falta gerar de fato.
