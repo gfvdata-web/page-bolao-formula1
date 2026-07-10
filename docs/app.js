@@ -416,6 +416,83 @@ function renderPreferenciaPiloto(playerId, bets) {
   container.replaceChildren(tabela);
 }
 
+// ---------- Hall of Fame ----------
+
+function nomeHall(hof, id) {
+  return hof.nomes[id] || id;
+}
+
+function construirRankingHall(hof) {
+  const contagem = new Map(); // id -> { ouro, prata, bronze }
+  const registrar = (id, medalha) => {
+    if (!id) return;
+    if (!contagem.has(id)) contagem.set(id, { ouro: 0, prata: 0, bronze: 0 });
+    contagem.get(id)[medalha]++;
+  };
+  for (const ano of hof.anos) {
+    registrar(ano.ouro, "ouro");
+    registrar(ano.prata, "prata");
+    registrar(ano.bronze, "bronze");
+  }
+  return [...contagem.entries()]
+    .map(([id, m]) => ({ id, nome: nomeHall(hof, id), ...m }))
+    .sort((a, b) => b.ouro - a.ouro || b.prata - a.prata || b.bronze - a.bronze || a.nome.localeCompare(b.nome, "pt-BR"));
+}
+
+function renderRankingHall(hof) {
+  const linhas = construirRankingHall(hof);
+  const tabela = el("table", { class: "hall-ranking-tabela" }, [
+    el("thead", {}, [
+      el("tr", {}, [
+        el("th", {}, ["Jogador"]),
+        el("th", { class: "num" }, ["🥇"]),
+        el("th", { class: "num" }, ["🥈"]),
+        el("th", { class: "num" }, ["🥉"]),
+      ]),
+    ]),
+  ]);
+  const tbody = el("tbody");
+  for (const linha of linhas) {
+    tbody.appendChild(
+      el("tr", {}, [
+        el("td", {}, [linha.nome]),
+        el("td", { class: "num" }, [String(linha.ouro)]),
+        el("td", { class: "num" }, [String(linha.prata)]),
+        el("td", { class: "num" }, [String(linha.bronze)]),
+      ])
+    );
+  }
+  tabela.appendChild(tbody);
+  return tabela;
+}
+
+function renderListaAnosHall(hof) {
+  const medalhas = { ouro: "🥇", prata: "🥈", bronze: "🥉" };
+  const anos = hof.anos.slice().sort((a, b) => b.ano - a.ano);
+  const lista = el("ul", { class: "hall-anos-lista" });
+  for (const ano of anos) {
+    lista.appendChild(
+      el("li", { class: "hall-ano-item" }, [
+        el("span", { class: "hall-ano-item__ano" }, [String(ano.ano)]),
+        el("span", { class: "hall-ano-item__medalha" }, [`${medalhas.ouro} ${nomeHall(hof, ano.ouro)}`]),
+        el("span", { class: "hall-ano-item__medalha" }, [`${medalhas.prata} ${nomeHall(hof, ano.prata)}`]),
+        el("span", { class: "hall-ano-item__medalha" }, [`${medalhas.bronze} ${nomeHall(hof, ano.bronze)}`]),
+      ])
+    );
+  }
+  return lista;
+}
+
+function renderHallOfFame(hof) {
+  const container = document.getElementById("hall-container");
+  container.replaceChildren(
+    el("div", { class: "hall-grid" }, [
+      el("div", { class: "hall-coluna" }, [el("h2", {}, ["Ranking de vitórias"]), renderRankingHall(hof)]),
+      el("div", { class: "hall-coluna" }, [el("h2", {}, ["Pódios por ano"]), renderListaAnosHall(hof)]),
+    ])
+  );
+}
+
 // ---------- Abas ----------
 
 // Chart.js não recupera bem de ser inicializado num canvas ainda escondido
@@ -436,6 +513,7 @@ function configurarAbas() {
   const secoes = {
     ranking: document.getElementById("secao-ranking"),
     palpites: document.getElementById("secao-palpites"),
+    hall: document.getElementById("secao-hall"),
   };
   botoes.forEach((botao) => {
     botao.addEventListener("click", () => {
@@ -504,12 +582,18 @@ async function main() {
       renderPreferenciaPiloto(selectPreferencia.value, bets);
     });
     renderPreferenciaPiloto("todos", bets);
+
+    const hof = await carregarJson("./data/hall_of_fame.json");
+    renderHallOfFame(hof);
+    document.getElementById("hall-status").textContent = "";
   } catch (erro) {
     console.error(erro);
     document.getElementById("ranking-status").textContent = "Erro ao carregar os dados do bolão.";
     document.getElementById("ranking-status").classList.add("erro");
     document.getElementById("palpites-status").textContent = "Erro ao carregar os dados do bolão.";
     document.getElementById("palpites-status").classList.add("erro");
+    document.getElementById("hall-status").textContent = "Erro ao carregar os dados do bolão.";
+    document.getElementById("hall-status").classList.add("erro");
   }
 }
 

@@ -1,0 +1,19 @@
+{
+  "anos": [
+    { "ano": 2025, "ouro": "vinicius", "prata": "guilherme", "bronze": "igor" },
+    { "ano": 2024, "ouro": "arthur", "prata": "dalla", "bronze": "lage" },
+    { "ano": 2023, "ouro": "dalla", "prata": "lage", "bronze": "igor" },
+    { "ano": 2022, "ouro": "caliman", "prata": "dalla", "bronze": "vinicius" },
+    { "ano": 2021, "ouro": "guilherme", "prata": "vinicius", "bronze": "ferrari" }
+  ],
+  "nomes": {
+    "guilherme": "Guilherme",
+    "vinicius": "Vinícius",
+    "igor": "Igor",
+    "dalla": "Dalla",
+    "lage": "Lage",
+    "caliman": "Caliman",
+    "ferrari": "Ferrari",
+    "arthur": "Arthur"
+  }
+}

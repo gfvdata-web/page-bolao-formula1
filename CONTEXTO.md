@@ -442,6 +442,27 @@ Palpites por jogador.**
   vezes `bolao/site.py` (o que é gerado) — checar se o dado já existe em
   `docs/data/*.json` antes de assumir que precisa mudar o gerador.
 
+**Ajuste posterior (ainda Etapa 4): aba "Hall of Fame" (vencedores de
+temporadas anteriores, 2021–2025).**
+- **Não é a Etapa 7** (histórico completo de apostas/corridas — segue adiada).
+  É só uma aba simples e estática com quem ficou em 1º/2º/3º em cada temporada
+  passada, pedida pelo usuário fora da ordem das etapas.
+- **Dado novo, sem gerador Python:** `docs/data/hall_of_fame.json`, escrito à
+  mão (`{"anos":[{"ano","ouro","prata","bronze"}], "nomes":{"<id>":"<nome>"}}`,
+  `id` reaproveita os ids de `players.json` quando o jogador segue ativo em
+  2026; jogador antigo sem id atual ganha um novo, ex.: `"arthur"`).
+- **3ª aba principal** `data-aba="hall"` em `docs/index.html`
+  (`#secao-hall` → `#hall-status` + `#hall-container`), ao lado de
+  Ranking/Palpites — segue o mesmo padrão de `configurarAbas()`.
+- **`docs/app.js`:** `renderHallOfFame(hof)` monta duas colunas
+  (`.hall-grid`) — esquerda `renderRankingHall` (tabela ordenada por
+  🥇 desc, 🥈 desc, 🥉 desc, calculada em JS a partir de `hof.anos`, não
+  hardcoded) e direita `renderListaAnosHall` (lista por ano, mais recente
+  primeiro, 🥇🥈🥉 + nome). Carregado em `main()` junto dos outros JSONs.
+- **`docs/style.css`:** bloco `/* Hall of Fame */` (`.hall-grid` 2 colunas
+  → 1 coluna em `max-width: 480px`, reaproveita variáveis de tema
+  existentes).
+
 ### Etapa 5 — GitHub Actions ✅
 - **Objetivo:** workflow acionado por `repository_dispatch` que roda o pipeline
   completo (parse → buscar resultado → pontuar → gerar dados → commit).

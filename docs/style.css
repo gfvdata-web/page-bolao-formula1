@@ -429,6 +429,92 @@ button.subaba[aria-selected="true"] {
   font-variant-numeric: tabular-nums;
 }
 
+/* Hall of Fame */
+
+.hall-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.hall-coluna h2 {
+  margin: 0 0 0.6rem;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--texto-fraco);
+}
+
+.hall-ranking-tabela {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--bg-card);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: var(--sombra);
+}
+
+.hall-ranking-tabela th, .hall-ranking-tabela td {
+  padding: 0.6rem 0.7rem;
+  text-align: left;
+  border-bottom: 1px solid var(--borda);
+  font-size: 0.9rem;
+}
+
+.hall-ranking-tabela th {
+  color: var(--texto-fraco);
+  font-weight: 600;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.hall-ranking-tabela tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.hall-ranking-tabela td.num, .hall-ranking-tabela th.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.hall-anos-lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background: var(--bg-card);
+  border-radius: 10px;
+  box-shadow: var(--sombra);
+  overflow: hidden;
+}
+
+.hall-ano-item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem 0.8rem;
+  border-bottom: 1px solid var(--borda);
+  font-size: 0.88rem;
+}
+
+.hall-ano-item:last-child {
+  border-bottom: none;
+}
+
+.hall-ano-item__ano {
+  font-weight: 700;
+  min-width: 3rem;
+}
+
+.hall-ano-item__medalha {
+  white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+  .hall-grid { grid-template-columns: 1fr; gap: 0.8rem; }
+}
+
 @media (max-width: 480px) {
   main { padding: 0.6rem; }
   .top6-tabela th, .top6-tabela td { padding: 0.25rem 0.3rem; font-size: 0.85rem; }
