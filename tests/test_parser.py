@@ -19,15 +19,15 @@ class TestParseSilverstone(unittest.TestCase):
         self.assertEqual(self.sheet.bonus_driver, "HAM")
 
     def test_quantidade_de_jogadores(self):
-        self.assertEqual(len(self.sheet.bets), 4)
+        self.assertEqual(len(self.sheet.bets), 8)
 
     def test_normaliza_top6(self):
         vini = next(b for b in self.sheet.bets if b.player_id == "vinicius")
-        self.assertEqual(vini.top6, ["VER", "NOR", "RUS", "HAM", "ANT", "PIA"])
+        self.assertEqual(vini.top6, ["HAM", "ANT", "LEC", "VER", "NOR", "RUS"])
 
     def test_nomes_completos_viram_codigo(self):
         caio = next(b for b in self.sheet.bets if b.player_id == "caio_l")
-        self.assertEqual(caio.top6, ["HAM", "VER", "PIA", "LEC", "SAI", "ALO"])
+        self.assertEqual(caio.top6, ["HAM", "ANT", "VER", "RUS", "NOR", "LEC"])
 
     def test_chute_bonus(self):
         gui = next(b for b in self.sheet.bets if b.player_id == "guilherme")

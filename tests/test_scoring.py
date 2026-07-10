@@ -16,8 +16,8 @@ RESULTADO = json.loads((RAIZ / "data" / "2026" / "results" / "9.json").read_text
 ESPERADO = {
     "guilherme": {"top6": 6, "bonus": 0, "total": 6},
     "dalla": {"top6": 5, "bonus": 0, "total": 5},
-    "vinicius": {"top6": 4, "bonus": 0, "total": 4},
-    "caio_l": {"top6": 2, "bonus": 0, "total": 2},
+    "vinicius": {"top6": 5, "bonus": 0, "total": 5},
+    "caio_l": {"top6": 6, "bonus": 0, "total": 6},
 }
 
 # Fixture de unidade (não é um quali real) p/ exercitar as regras isoladas.
