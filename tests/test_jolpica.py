@@ -42,6 +42,7 @@ class TestBuildCalendar(unittest.TestCase):
         self.assertEqual(r1["circuit"], "albert_park")
         self.assertEqual(r1["race"], "Melbourne")
         self.assertEqual(r1["date"], "2026-03-08")
+        self.assertEqual(r1["qualifying_utc"], "2026-03-07T05:00:00Z")
 
     def test_flag_de_sprint(self):
         # Fins de semana de Sprint em 2026: 2, 4, 5, 9, 12, 16 (o resto não).

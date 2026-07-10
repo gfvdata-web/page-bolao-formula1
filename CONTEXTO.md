@@ -415,7 +415,55 @@ Palpites por jogador.**
   - Nenhuma mudança nos geradores Python nem nos formatos de
     `docs/data/*.json` — tudo consumido como já estava.
 
-**Mapa do front-end (para ajustes futuros de HTML/CSS/JS sem reler tudo):**
+**Ajuste posterior (ainda Etapa 4): sub-abas "Geral"/"Corridas" no Ranking, com
+cards de última/próxima corrida.**
+- **Dado novo (pequena extensão da Etapa 2):** `calendar.json` ganhou o campo
+  `"qualifying_utc"` (ISO 8601 em UTC, ex. `"2026-07-18T14:00:00Z"`), vindo do
+  bloco `Qualifying.date`/`Qualifying.time` que a Jolpica já retorna por
+  rodada (`bolao/jolpica.py: build_calendar`); `None` se a Jolpica ainda não
+  divulgou o horário do quali daquela rodada. `data/2026/calendar.json` foi
+  **re-baixado da Jolpica** para preencher esse campo em todas as rodadas
+  (o alias manual `"japao"` da rodada 3, ver Etapa 3, foi reaplicado depois —
+  cuidado ao rodar `python -m bolao.jolpica calendar` de novo: ele sobrescreve
+  aliases manuais, que precisam ser reaplicados).
+- **Novo arquivo `docs/data/calendar.json`:** cópia enxuta do calendário
+  completo da temporada (`round`, `race_id`, `race`, `circuit`, `date`,
+  `qualifying_utc`, `sprint` por corrida), gerada por `bolao/site.py:generate`
+  a partir de `data/<season>/calendar.json` — sem gerador Python novo, só mais
+  uma saída de `generate()`.
+- **Ranking virou sub-abas** (`button.subaba[data-subaba="geral|corridas"]`
+  dentro de `#secao-ranking`, mesmo padrão de `id`/`data-*` das sub-abas de
+  Palpites):
+  - **Geral** = dois cards pequenos informativos (`#corridas-cards` →
+    `renderCorridas` em `app.js`) **acima** da tabela de ranking + regras de
+    pontuação (sem mudança na tabela/regras em si). Card 1 = última rodada em
+    `standings.json.rounds` (maior `round`, é sempre a última consolidada).
+    Card 2 = a rodada de menor `round` do `calendar.json` que **ainda não**
+    aparece em `standings.json.rounds` (não depende da data do navegador) —
+    mostra local + horário do quali convertido para **America/Sao_Paulo** via
+    `Intl.DateTimeFormat` (`formatarQualiBrasilia`), com nota "prazo para
+    apostar"; se `qualifying_utc` for `null`, mostra "Data do quali ainda não
+    divulgada".
+  - **Corridas** = tabela matriz (`#corridas-tabela-container` →
+    `renderTabelaCorridas` em `app.js`): uma linha por jogador (mesma ordem de
+    `standings.json.players`), uma coluna por rodada (`R{round}` + nome da
+    corrida no cabeçalho) mostrando os pontos daquela rodada
+    (`per_round[round]`), coluna `Total` no fim. Rodada compensada (jogador
+    não apostou) mostra o `min_score` em itálico/estilo apagado
+    (`.corridas-tabela__compensado`) em vez do valor de `per_round`. Sem
+    filtro/seleção — a tabela inteira é sempre exibida (rola horizontalmente
+    em telas pequenas, `overflow-x: auto` no container).
+- **Como a Ranking e a Palpites agora têm sub-abas com a mesma classe
+  `button.subaba`**, `configurarSubAbas()` (Palpites) e a nova
+  `configurarSubAbasRanking()` escopam a busca a `#secao-palpites`/
+  `#secao-ranking` respectivamente (`querySelectorAll` com prefixo do `id` da
+  seção) — não usar `document.querySelectorAll("button.subaba")` sem escopo se
+  uma 3ª aba principal ganhar sub-abas no futuro.
+- Nenhuma mudança em `bets.json`/`results.json`/`hall_of_fame.json` nem nos
+  formatos já consumidos por eles.
+
+**Mapa do front-end (desatualizado nos detalhes — ver também Hall of Fame e
+sub-abas Ranking/Corridas acima; mantido como visão geral inicial):**
 - `docs/index.html`: esqueleto fixo — `header.topo` com as 2 abas
   (`button.aba[data-aba="ranking|palpites"]`), `#secao-ranking` (contém
   `#ranking-status` + `#ranking-container`) e `#secao-palpites` (contém

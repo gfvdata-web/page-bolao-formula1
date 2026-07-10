@@ -110,6 +110,106 @@ function renderRanking(standings) {
   container.replaceChildren(tabela);
 }
 
+// ---------- Ranking / Corridas (última contabilizada + próxima) ----------
+
+function formatarDataBR(dataISO) {
+  if (!dataISO) return "";
+  const [ano, mes, dia] = dataISO.split("-");
+  return `${dia}/${mes}/${ano}`;
+}
+
+function formatarQualiBrasilia(qualiUtcISO) {
+  if (!qualiUtcISO) return null;
+  const data = new Date(qualiUtcISO);
+  const formatado = new Intl.DateTimeFormat("pt-BR", {
+    timeZone: "America/Sao_Paulo",
+    weekday: "short",
+    day: "2-digit",
+    month: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(data);
+  return `${formatado} (horário de Brasília)`;
+}
+
+function cardCorrida(titulo, race, extra) {
+  return el("div", { class: "corrida-card" }, [
+    el("div", { class: "corrida-card__titulo" }, [titulo]),
+    el("div", { class: "corrida-card__corrida" }, [`R${race.round} · ${race.race}`]),
+    extra ? el("div", { class: "corrida-card__extra" }, [extra]) : null,
+  ]);
+}
+
+function renderCorridas(standings, calendar) {
+  const container = document.getElementById("corridas-cards");
+  const rounds = standings.rounds.slice().sort((a, b) => a.round - b.round);
+  const ultima = rounds[rounds.length - 1];
+  const consolidadas = new Set(rounds.map((r) => r.round));
+  const proxima = calendar.races
+    .slice()
+    .sort((a, b) => a.round - b.round)
+    .find((r) => !consolidadas.has(r.round));
+
+  const cards = [];
+  if (ultima) {
+    cards.push(cardCorrida("Última corrida contabilizada", ultima, formatarDataBR(ultima.date)));
+  }
+  if (proxima) {
+    const horario = formatarQualiBrasilia(proxima.qualifying_utc);
+    cards.push(
+      cardCorrida(
+        "Próxima corrida",
+        proxima,
+        horario ? `Quali: ${horario} — prazo para apostar` : "Data do quali ainda não divulgada"
+      )
+    );
+  }
+  container.replaceChildren(...cards);
+}
+
+function renderTabelaCorridas(standings) {
+  const container = document.getElementById("corridas-tabela-container");
+  const rounds = standings.rounds.slice().sort((a, b) => a.round - b.round);
+
+  const tabela = el("table", { class: "corridas-tabela" }, [
+    el("thead", {}, [
+      el("tr", {}, [
+        el("th", {}, ["Jogador"]),
+        ...rounds.map((r) =>
+          el("th", { class: "num" }, [
+            el("span", { class: "corridas-tabela__rodada" }, [`R${r.round}`]),
+            el("span", { class: "corridas-tabela__corrida" }, [r.race]),
+          ])
+        ),
+        el("th", { class: "num" }, ["Total"]),
+      ]),
+    ]),
+  ]);
+
+  const tbody = el("tbody");
+  for (const jogador of standings.players) {
+    const celulas = rounds.map((r) => {
+      const compensou = jogador.compensated_rounds.includes(r.round);
+      const valor = compensou ? r.min_score : jogador.per_round[r.round];
+      if (valor == null) return el("td", { class: "num" }, ["–"]);
+      return el(
+        "td",
+        { class: compensou ? "num corridas-tabela__compensado" : "num" },
+        [String(valor)]
+      );
+    });
+    tbody.appendChild(
+      el("tr", {}, [
+        el("td", {}, [jogador.name]),
+        ...celulas,
+        el("td", { class: "num corridas-tabela__total" }, [String(jogador.total)]),
+      ])
+    );
+  }
+  tabela.appendChild(tbody);
+  container.replaceChildren(tabela);
+}
+
 // ---------- Palpites por jogador ----------
 
 function popularSelectJogadores(bets) {
@@ -535,7 +635,7 @@ function configurarAbas() {
 }
 
 function configurarSubAbas() {
-  const botoes = document.querySelectorAll("button.subaba");
+  const botoes = document.querySelectorAll("#secao-palpites button.subaba");
   const secoes = {
     historico: document.getElementById("subsecao-historico"),
     temporada: document.getElementById("subsecao-temporada"),
@@ -555,14 +655,36 @@ function configurarSubAbas() {
   });
 }
 
+function configurarSubAbasRanking() {
+  const botoes = document.querySelectorAll("#secao-ranking button.subaba");
+  const secoes = {
+    geral: document.getElementById("subsecao-ranking-geral"),
+    corridas: document.getElementById("subsecao-ranking-corridas"),
+  };
+  botoes.forEach((botao) => {
+    botao.addEventListener("click", () => {
+      botoes.forEach((b) => b.setAttribute("aria-selected", "false"));
+      botao.setAttribute("aria-selected", "true");
+      for (const [nome, secao] of Object.entries(secoes)) {
+        secao.hidden = nome !== botao.dataset.subaba;
+      }
+    });
+  });
+}
+
 async function main() {
   configurarAbas();
   configurarSubAbas();
+  configurarSubAbasRanking();
 
   try {
     const standings = await carregarJson("./data/standings.json");
     renderRanking(standings);
     document.getElementById("ranking-status").textContent = "";
+
+    const calendar = await carregarJson("./data/calendar.json");
+    renderCorridas(standings, calendar);
+    renderTabelaCorridas(standings);
 
     const bets = await carregarJson("./data/bets.json");
     const jogadores = popularSelectJogadores(bets);

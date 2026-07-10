@@ -8,6 +8,7 @@
       "circuit": "albert_park",
       "race": "Melbourne",
       "date": "2026-03-08",
+      "qualifying_utc": "2026-03-07T05:00:00Z",
       "sprint": false,
       "aliases": [
         "albert park",
@@ -25,6 +26,7 @@
       "circuit": "shanghai",
       "race": "Shanghai",
       "date": "2026-03-15",
+      "qualifying_utc": "2026-03-14T07:00:00Z",
       "sprint": true,
       "aliases": [
         "shanghai",
@@ -41,14 +43,15 @@
       "circuit": "suzuka",
       "race": "Suzuka",
       "date": "2026-03-29",
+      "qualifying_utc": "2026-03-28T06:00:00Z",
       "sprint": false,
       "aliases": [
         "suzuka",
         "suzuka circuit",
         "japan",
-        "japao",
         "japanese grand prix",
-        "japanese"
+        "japanese",
+        "japao"
       ]
     },
     {
@@ -58,6 +61,7 @@
       "circuit": "miami",
       "race": "Miami",
       "date": "2026-05-03",
+      "qualifying_utc": "2026-05-02T20:00:00Z",
       "sprint": true,
       "aliases": [
         "miami",
@@ -73,6 +77,7 @@
       "circuit": "villeneuve",
       "race": "Montreal",
       "date": "2026-05-24",
+      "qualifying_utc": "2026-05-23T20:00:00Z",
       "sprint": true,
       "aliases": [
         "villeneuve",
@@ -90,6 +95,7 @@
       "circuit": "monaco",
       "race": "Monte Carlo",
       "date": "2026-06-07",
+      "qualifying_utc": "2026-06-06T14:00:00Z",
       "sprint": false,
       "aliases": [
         "monaco",
@@ -105,6 +111,7 @@
       "circuit": "catalunya",
       "race": "Barcelona",
       "date": "2026-06-14",
+      "qualifying_utc": "2026-06-13T14:00:00Z",
       "sprint": false,
       "aliases": [
         "catalunya",
@@ -121,6 +128,7 @@
       "circuit": "red_bull_ring",
       "race": "Spielberg",
       "date": "2026-06-28",
+      "qualifying_utc": "2026-06-27T14:00:00Z",
       "sprint": false,
       "aliases": [
         "red bull ring",
@@ -137,6 +145,7 @@
       "circuit": "silverstone",
       "race": "Silverstone",
       "date": "2026-07-05",
+      "qualifying_utc": "2026-07-04T15:00:00Z",
       "sprint": true,
       "aliases": [
         "silverstone",
@@ -153,6 +162,7 @@
       "circuit": "spa",
       "race": "Spa",
       "date": "2026-07-19",
+      "qualifying_utc": "2026-07-18T14:00:00Z",
       "sprint": false,
       "aliases": [
         "spa",
@@ -169,6 +179,7 @@
       "circuit": "hungaroring",
       "race": "Budapest",
       "date": "2026-07-26",
+      "qualifying_utc": "2026-07-25T14:00:00Z",
       "sprint": false,
       "aliases": [
         "hungaroring",
@@ -185,6 +196,7 @@
       "circuit": "zandvoort",
       "race": "Zandvoort",
       "date": "2026-08-23",
+      "qualifying_utc": "2026-08-22T14:00:00Z",
       "sprint": true,
       "aliases": [
         "zandvoort",
@@ -201,6 +213,7 @@
       "circuit": "monza",
       "race": "Monza",
       "date": "2026-09-06",
+      "qualifying_utc": "2026-09-05T14:00:00Z",
       "sprint": false,
       "aliases": [
         "monza",
@@ -217,6 +230,7 @@
       "circuit": "madring",
       "race": "Madrid",
       "date": "2026-09-13",
+      "qualifying_utc": "2026-09-12T14:00:00Z",
       "sprint": false,
       "aliases": [
         "madring",
@@ -233,6 +247,7 @@
       "circuit": "baku",
       "race": "Baku",
       "date": "2026-09-26",
+      "qualifying_utc": "2026-09-25T12:00:00Z",
       "sprint": false,
       "aliases": [
         "baku",
@@ -248,6 +263,7 @@
       "circuit": "marina_bay",
       "race": "Marina Bay",
       "date": "2026-10-11",
+      "qualifying_utc": "2026-10-10T13:00:00Z",
       "sprint": true,
       "aliases": [
         "marina bay",
@@ -263,6 +279,7 @@
       "circuit": "americas",
       "race": "Austin",
       "date": "2026-10-25",
+      "qualifying_utc": "2026-10-24T21:00:00Z",
       "sprint": false,
       "aliases": [
         "americas",
@@ -280,6 +297,7 @@
       "circuit": "rodriguez",
       "race": "Mexico City",
       "date": "2026-11-01",
+      "qualifying_utc": "2026-10-31T21:00:00Z",
       "sprint": false,
       "aliases": [
         "rodriguez",
@@ -296,6 +314,7 @@
       "circuit": "interlagos",
       "race": "São Paulo",
       "date": "2026-11-08",
+      "qualifying_utc": "2026-11-07T18:00:00Z",
       "sprint": false,
       "aliases": [
         "interlagos",
@@ -313,6 +332,7 @@
       "circuit": "vegas",
       "race": "Las Vegas",
       "date": "2026-11-22",
+      "qualifying_utc": "2026-11-21T04:00:00Z",
       "sprint": false,
       "aliases": [
         "vegas",
@@ -329,6 +349,7 @@
       "circuit": "losail",
       "race": "Lusail",
       "date": "2026-11-29",
+      "qualifying_utc": "2026-11-28T18:00:00Z",
       "sprint": false,
       "aliases": [
         "losail",
@@ -345,6 +366,7 @@
       "circuit": "yas_marina",
       "race": "Abu Dhabi",
       "date": "2026-12-06",
+      "qualifying_utc": "2026-12-05T14:00:00Z",
       "sprint": false,
       "aliases": [
         "yas marina",

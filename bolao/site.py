@@ -8,6 +8,8 @@ da Jolpica + núcleo de parsing/pontuação) e produz:
 - ``docs/data/standings.json`` — ranking acumulado da temporada.
 - ``docs/data/bets.json`` — histórico de palpites por jogador (detalhe completo).
 - ``docs/data/results.json`` — grid real por rodada (histórico de posições).
+- ``docs/data/calendar.json`` — calendário completo da temporada (cópia enxuta
+  de ``data/<season>/calendar.json``, para os cards de última/próxima corrida).
 
 Uma rodada entra na consolidação quando existem **os dois** arquivos:
 ``messages/<round>.txt`` (palpites) e ``results/<round>.json`` (quali). Rodadas
@@ -287,6 +289,24 @@ def generate(
         },
     }
     _dump_json(docs_data / "results.json", results_doc)
+
+    # --- docs/data/calendar.json (calendário completo, p/ cards de rodada) ---
+    calendar_doc = {
+        "season": season,
+        "races": [
+            {
+                "round": race["round"],
+                "race_id": race["race_id"],
+                "race": race["race"],
+                "circuit": race["circuit"],
+                "date": race.get("date"),
+                "qualifying_utc": race.get("qualifying_utc"),
+                "sprint": race.get("sprint", False),
+            }
+            for race in calendar["races"]
+        ],
+    }
+    _dump_json(docs_data / "calendar.json", calendar_doc)
 
     return {
         "rounds": [info["round"] for info in round_infos],

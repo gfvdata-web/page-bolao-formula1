@@ -19,16 +19,28 @@
 
 <main>
   <section id="secao-ranking" class="secao" role="tabpanel">
-    <div id="ranking-status" class="status"></div>
-    <div id="ranking-container"></div>
-    <div class="regras-pontuacao">
-      <h2>Regras de pontuação</h2>
-      <ul>
-        <li><strong>Top6</strong> (máx. 12 pts): cada piloto apostado vale 2 pts na posição exata, 1 pt se estiver no top6 real em outra posição, 0 pt se estiver fora do top6 real.</li>
-        <li><strong>Piloto da rodada</strong> (máx. 1 pt): 1 pt por acertar a posição exata dele no grid inteiro; 0 pt caso contrário.</li>
-        <li><strong>Total por corrida:</strong> máximo 13 pts (12 do top6 + 1 do piloto da rodada).</li>
-        <li><strong>Pontuação mínima:</strong> quem não aposta numa rodada recebe a pontuação mínima daquela rodada (1 a menos que a menor pontuação de quem apostou nela).</li>
-      </ul>
+    <nav class="subabas" role="tablist">
+      <button class="subaba" data-subaba="geral" role="tab" aria-selected="true">Geral</button>
+      <button class="subaba" data-subaba="corridas" role="tab" aria-selected="false">Corridas</button>
+    </nav>
+
+    <div id="subsecao-ranking-geral" class="subsecao" role="tabpanel">
+      <div id="corridas-cards" class="corridas-cards"></div>
+      <div id="ranking-status" class="status"></div>
+      <div id="ranking-container"></div>
+      <div class="regras-pontuacao">
+        <h2>Regras de pontuação</h2>
+        <ul>
+          <li><strong>Top6</strong> (máx. 12 pts): cada piloto apostado vale 2 pts na posição exata, 1 pt se estiver no top6 real em outra posição, 0 pt se estiver fora do top6 real.</li>
+          <li><strong>Piloto da rodada</strong> (máx. 1 pt): 1 pt por acertar a posição exata dele no grid inteiro; 0 pt caso contrário.</li>
+          <li><strong>Total por corrida:</strong> máximo 13 pts (12 do top6 + 1 do piloto da rodada).</li>
+          <li><strong>Pontuação mínima:</strong> quem não aposta numa rodada recebe a pontuação mínima daquela rodada (1 a menos que a menor pontuação de quem apostou nela).</li>
+        </ul>
+      </div>
+    </div>
+
+    <div id="subsecao-ranking-corridas" class="subsecao" hidden role="tabpanel">
+      <div id="corridas-tabela-container"></div>
     </div>
   </section>
 

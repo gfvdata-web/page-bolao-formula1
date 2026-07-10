@@ -138,6 +138,102 @@ main {
   color: var(--texto-fraco);
 }
 
+/* Corridas — cards informativos (última contabilizada + próxima) */
+
+.corridas-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.corrida-card {
+  flex: 1 1 200px;
+  background: var(--bg-card);
+  border-radius: 8px;
+  box-shadow: var(--sombra);
+  padding: 0.55rem 0.7rem;
+}
+
+.corrida-card__titulo {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--texto-fraco);
+  margin-bottom: 0.15rem;
+}
+
+.corrida-card__corrida {
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.corrida-card__extra {
+  margin-top: 0.15rem;
+  font-size: 0.78rem;
+  color: var(--texto-fraco);
+}
+
+/* Corridas — tabela de pontuação por rodada */
+
+#corridas-tabela-container {
+  overflow-x: auto;
+}
+
+.corridas-tabela {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--bg-card);
+  border-radius: 10px;
+  box-shadow: var(--sombra);
+  font-size: 0.85rem;
+}
+
+.corridas-tabela th, .corridas-tabela td {
+  padding: 0.5rem 0.6rem;
+  text-align: left;
+  border-bottom: 1px solid var(--borda);
+  white-space: nowrap;
+}
+
+.corridas-tabela th {
+  color: var(--texto-fraco);
+  font-weight: 600;
+  font-size: 0.72rem;
+}
+
+.corridas-tabela tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.corridas-tabela td.num, .corridas-tabela th.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.corridas-tabela__rodada {
+  display: block;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.corridas-tabela__corrida {
+  display: block;
+  font-weight: 400;
+  text-transform: none;
+  font-size: 0.68rem;
+}
+
+.corridas-tabela__compensado {
+  color: var(--texto-fraco);
+  font-style: italic;
+}
+
+.corridas-tabela__total {
+  font-weight: 700;
+  color: var(--texto);
+}
+
 /* Filtro jogador */
 
 .filtro-jogador {

@@ -125,6 +125,9 @@ def build_calendar(season_json: dict, season: int) -> dict:
         rnd = int(race["round"])
         circuit = race.get("Circuit", {})
         local = circuit.get("Location", {})
+        quali = race.get("Qualifying", {})
+        quali_data = quali.get("date", "")
+        quali_hora = quali.get("time", "")
         saida.append(
             {
                 "race_id": race_id(season, rnd),
@@ -133,6 +136,7 @@ def build_calendar(season_json: dict, season: int) -> dict:
                 "circuit": circuit.get("circuitId", ""),
                 "race": local.get("locality") or race.get("raceName", ""),
                 "date": race.get("date", ""),
+                "qualifying_utc": f"{quali_data}T{quali_hora}" if quali_data and quali_hora else None,
                 "sprint": "Sprint" in race,
                 "aliases": _race_aliases(race),
             }
