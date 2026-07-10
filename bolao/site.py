@@ -216,6 +216,11 @@ def generate(
     )
     standings_players = []
     for pos, ac in enumerate(ordenados, 1):
+        rounds_played = len(ac["per_round"])
+        # Média por corrida: só considera o que foi de fato apostado, sem
+        # contar a pontuação mínima de compensação.
+        pontos_apostados = ac["top6_total"] + ac["bonus_total"]
+        avg_points = round(pontos_apostados / rounds_played, 1) if rounds_played else 0.0
         standings_players.append(
             {
                 "position": pos,
@@ -224,7 +229,8 @@ def generate(
                 "total": ac["total"],
                 "top6_total": ac["top6_total"],
                 "bonus_total": ac["bonus_total"],
-                "rounds_played": len(ac["per_round"]),
+                "rounds_played": rounds_played,
+                "avg_points": avg_points,
                 "per_round": ac["per_round"],
                 "compensated_rounds": sorted(ac["compensated_rounds"]),
                 "compensation_total": ac["compensation_total"],

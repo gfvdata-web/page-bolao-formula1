@@ -101,6 +101,7 @@
       "top6_total": 59,
       "bonus_total": 1,
       "rounds_played": 9,
+      "avg_points": 6.7,
       "per_round": {
         "1": 4,
         "2": 8,
@@ -123,6 +124,7 @@
       "top6_total": 57,
       "bonus_total": 2,
       "rounds_played": 9,
+      "avg_points": 6.6,
       "per_round": {
         "1": 7,
         "2": 7,
@@ -145,6 +147,7 @@
       "top6_total": 57,
       "bonus_total": 1,
       "rounds_played": 9,
+      "avg_points": 6.4,
       "per_round": {
         "1": 4,
         "2": 7,
@@ -167,6 +170,7 @@
       "top6_total": 54,
       "bonus_total": 1,
       "rounds_played": 9,
+      "avg_points": 6.1,
       "per_round": {
         "1": 4,
         "2": 6,
@@ -189,6 +193,7 @@
       "top6_total": 49,
       "bonus_total": 0,
       "rounds_played": 8,
+      "avg_points": 6.1,
       "per_round": {
         "1": 4,
         "2": 8,
@@ -212,6 +217,7 @@
       "top6_total": 49,
       "bonus_total": 1,
       "rounds_played": 9,
+      "avg_points": 5.6,
       "per_round": {
         "1": 4,
         "2": 6,
@@ -234,6 +240,7 @@
       "top6_total": 35,
       "bonus_total": 0,
       "rounds_played": 6,
+      "avg_points": 5.8,
       "per_round": {
         "1": 4,
         "3": 8,
@@ -257,6 +264,7 @@
       "top6_total": 36,
       "bonus_total": 0,
       "rounds_played": 6,
+      "avg_points": 6.0,
       "per_round": {
         "2": 5,
         "3": 6,
@@ -280,6 +288,7 @@
       "top6_total": 18,
       "bonus_total": 0,
       "rounds_played": 3,
+      "avg_points": 6.0,
       "per_round": {
         "2": 7,
         "3": 5,
@@ -303,6 +312,7 @@
       "top6_total": 6,
       "bonus_total": 0,
       "rounds_played": 1,
+      "avg_points": 6.0,
       "per_round": {
         "9": 6
       },

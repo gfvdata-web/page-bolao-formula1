@@ -284,13 +284,20 @@ Status: ⬜ não iniciada · 🟡 em andamento · ✅ concluída
   pontuação bruta de quem apostou naquela rodada.
 - **`docs/data/standings.json`:** `{season, rounds:[{round, race_id, race,
   circuit, date, sprint, bonus_driver, min_score}], players:[{position,
-  player_id, name, total, top6_total, bonus_total, rounds_played,
+  player_id, name, total, top6_total, bonus_total, rounds_played, avg_points,
   per_round:{"<round>":pts}, compensated_rounds:[...], compensation_total}]}`.
   Ordenado por total desc, `player_id` asc (desempate adiado → ordem estável).
   `min_score` = pontuação mínima da rodada (1 a menos que a menor pontuação de
   quem apostou nela). `total`/`compensation_total` já incluem a compensação de
   rodadas não apostadas; `rounds_played`/`per_round` continuam refletindo só as
   rodadas realmente apostadas (compensação não conta como rodada apostada).
+  `avg_points` = `(top6_total + bonus_total) / rounds_played` arredondado a 1
+  casa decimal (0.0 se não apostou em nenhuma rodada) — também não conta
+  compensação, só o que foi de fato apostado. `bonus_total` funciona também
+  como "quantas vezes acertou o piloto da rodada", já que o bônus vale no
+  máximo 1 pt por corrida. Colunas do ranking no site (nessa ordem): jogador,
+  pontos (`total`), média por corrida (`avg_points`), pontos extra
+  (`bonus_total`), rodadas (`rounds_played`).
 - **`docs/data/bets.json`:** `{season, players:{"<id>":{player_id, name,
   rounds:{"<round>":{round, race_id, race, top6:[6], top6_detail:[...],
   top6_points, bonus_driver, bonus_guess, bonus_real_pos, bonus_points,

@@ -135,6 +135,14 @@ class TestGenerate(unittest.TestCase):
         self.assertEqual(joao["top6_total"], 22)  # 12 + 10
         self.assertEqual(joao["bonus_total"], 1)  # acertou VER em P1 na r1
 
+    def test_media_por_rodada_ignora_compensacao(self):
+        por_id = {p["player_id"]: p for p in self.standings["players"]}
+        # joao: 22 top6 + 1 bonus = 23 pontos apostados em 2 rodadas -> 11.5
+        self.assertEqual(por_id["joao"]["avg_points"], 11.5)
+        # pedro: apostou só na r2 (13 pts), r1 foi compensação -> não conta.
+        self.assertEqual(por_id["pedro"]["rounds_played"], 1)
+        self.assertEqual(por_id["pedro"]["avg_points"], 13.0)
+
     def test_nome_de_exibicao(self):
         por_id = {p["player_id"]: p for p in self.standings["players"]}
         self.assertEqual(por_id["joao"]["name"], "João")  # override em players.json

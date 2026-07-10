@@ -76,6 +76,8 @@ function renderRanking(standings) {
         el("th", {}, ["#"]),
         el("th", {}, ["Jogador"]),
         el("th", { class: "num" }, ["Pontos"]),
+        el("th", { class: "num" }, ["Média/Corrida"]),
+        el("th", { class: "num" }, ["Pontos Extra"]),
         el("th", { class: "num" }, ["Rodadas"]),
       ]),
     ]),
@@ -98,6 +100,8 @@ function renderRanking(standings) {
         el("td", { class: "pos-medalha" }, [medalhas[jogador.position] || String(jogador.position)]),
         nomeCell,
         el("td", { class: "num" }, [String(jogador.total)]),
+        el("td", { class: "num" }, [jogador.avg_points.toFixed(1)]),
+        el("td", { class: "num" }, [String(jogador.bonus_total)]),
         el("td", { class: "num" }, [String(jogador.rounds_played)]),
       ])
     );
