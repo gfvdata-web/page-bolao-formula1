@@ -552,6 +552,15 @@ Geral do Ranking.**
   cálculo de `renderTabelaCorridas`: `jogador.compensated_rounds.includes(round)
   ? roundInfo.min_score : jogador.per_round[round]` — cobre também quem
   recebeu pontuação mínima por não ter apostado na rodada.
+- **Ajuste posterior (bug de cor corrigido):** `badgePonto(pts)` reaproveitava
+  `pts` como nível de cor (0/1/2 → cinza/amarelo/verde), o que é certo pro
+  top6 (teto 2 pts) mas fazia o piloto da rodada (teto 1 pt) mostrar 1pt em
+  amarelo em vez de verde — 1pt já é o máximo ali. `badgePonto` ganhou um 2º
+  parâmetro opcional `max`: sem ele, comportamento antigo (`nivel = pts`,
+  usado no top6); com `max`, quem bate o teto vira nível verde mesmo que o
+  teto seja 1 (`nivel = pts >= max ? 2 : pts > 0 ? 1 : 0`). Todo lugar que
+  pontua o piloto da rodada passa `max: 1` — `celBonusPalpite` (card novo) e
+  `linhaBonus` (cards de rodada da aba Palpites, que tinha o mesmo bug).
 
 ### Etapa 5 — GitHub Actions ✅
 - **Objetivo:** workflow acionado por `repository_dispatch` que roda o pipeline

@@ -62,8 +62,13 @@ function chipPiloto(codigo) {
   ]);
 }
 
-function badgePonto(pts) {
-  return el("span", { class: `ponto-badge ponto-${pts}` }, [`${pts}pt`]);
+// `max` é o teto de pontos daquele tipo de acerto (2 no top6, 1 no piloto da
+// rodada) — sem ele, `pts` já corresponde ao nível de cor (comportamento do
+// top6, onde 0/1/2 pt = nível 0/1/2). Com `max`, quem bate o teto vira
+// nível 2 (verde) mesmo que o teto seja 1, como no piloto da rodada.
+function badgePonto(pts, max) {
+  const nivel = max == null ? pts : pts >= max ? 2 : pts > 0 ? 1 : 0;
+  return el("span", { class: `ponto-badge ponto-${nivel}` }, [`${pts}pt`]);
 }
 
 // ---------- Ranking ----------
@@ -219,7 +224,7 @@ function celPalpite(guess, points) {
 function celBonusPalpite(pos, points) {
   return el("div", { class: "corrida-detalhe-cel" }, [
     el("span", { class: "corrida-detalhe-cel__pos" }, [`P${pos}`]),
-    badgePonto(points),
+    badgePonto(points, 1),
   ]);
 }
 
@@ -346,7 +351,7 @@ function linhaBonus(rodada) {
     el("span", { class: "bonus-linha__label" }, ["Piloto da rodada:"]),
     chipPiloto(rodada.bonus_driver),
     el("span", { class: "bonus-linha__label" }, [`· chute P${rodada.bonus_guess} · real P${rodada.bonus_real_pos} ·`]),
-    badgePonto(rodada.bonus_points),
+    badgePonto(rodada.bonus_points, 1),
   ]);
 }
 
