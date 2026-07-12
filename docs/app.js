@@ -249,12 +249,20 @@ function renderCorridaDetalhe(roundNumber, standings, bets, results) {
   const bonusDriver = roundInfo.bonus_driver;
   const bonusRealPos = resultado.order.indexOf(bonusDriver) + 1;
 
+  const totalRodadaJogador = (jogador) =>
+    jogador.compensated_rounds.includes(roundNumber) ? roundInfo.min_score : jogador.per_round[roundNumber];
+
   const tabela = el("table", { class: "corrida-detalhe-tabela" }, [
     el("thead", {}, [
       el("tr", {}, [
         el("th", {}, ["Pos"]),
         el("th", {}, ["Resultado"]),
-        ...standings.players.map((j) => el("th", { title: j.name }, [j.name.split(" ")[0]])),
+        ...standings.players.map((j) =>
+          el("th", { title: j.name }, [
+            el("span", { class: "corrida-detalhe-th__nome" }, [j.name.split(" ")[0]]),
+            el("span", { class: "corrida-detalhe-th__total" }, [`${totalRodadaJogador(j)} pts`]),
+          ])
+        ),
       ]),
     ]),
   ]);

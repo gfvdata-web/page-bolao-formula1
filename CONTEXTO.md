@@ -547,6 +547,11 @@ Geral do Ranking.**
   para poder comparar o resultado real com os palpites mesmo rolando.
 - Nenhuma mudança em `bolao/site.py` nem nos formatos de `docs/data/*.json`
   — `results.json` já existia, só passou a ser consumido no front-end.
+- **Ajuste posterior:** cabeçalho de cada coluna de jogador ganhou o total de
+  pontos da rodada, abaixo do nome (`.corrida-detalhe-th__total`). Mesmo
+  cálculo de `renderTabelaCorridas`: `jogador.compensated_rounds.includes(round)
+  ? roundInfo.min_score : jogador.per_round[round]` — cobre também quem
+  recebeu pontuação mínima por não ter apostado na rodada.
 
 ### Etapa 5 — GitHub Actions ✅
 - **Objetivo:** workflow acionado por `repository_dispatch` que roda o pipeline

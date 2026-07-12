@@ -428,6 +428,20 @@ main {
   letter-spacing: 0.02em;
 }
 
+.corrida-detalhe-th__nome {
+  display: block;
+}
+
+.corrida-detalhe-th__total {
+  display: block;
+  margin-top: 0.1rem;
+  font-weight: 700;
+  font-size: 0.78rem;
+  text-transform: none;
+  letter-spacing: normal;
+  color: var(--texto);
+}
+
 .corrida-detalhe-tabela tbody tr:last-child td {
   border-bottom: none;
 }
