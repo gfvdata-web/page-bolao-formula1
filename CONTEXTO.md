@@ -594,6 +594,29 @@ Geral do Ranking.**
   caixa alta; a regra do total agora é escopada como
   `.corrida-detalhe-tabela th .corrida-detalhe-th__total` para ganhar a
   cascata.
+- **Ajuste posterior: coluna "Posição Média REAL" na tabela de Preferência
+  piloto** (`renderPreferenciaPiloto`).
+  - Nova coluna com a posição média que o piloto **realmente** faz nas
+    corridas (`docs/data/results.json`, `rounds[].order`, índice + 1),
+    calculada uma única vez a partir de todas as rodadas já disputadas —
+    **independe do filtro de jogador** (mesmo valor em "Todos" e em cada
+    jogador).
+  - **Universo fixo de pilotos:** as linhas da tabela deixaram de vir só do
+    filtro ativo — agora são sempre a união de todos os pilotos que já
+    apareceram no top6 de **qualquer** jogador (mesmo cálculo do filtro
+    "Todos"). Isso garante que os mesmos pilotos apareçam em todos os
+    filtros, na mesma "identidade" de linha.
+  - Piloto que o jogador do filtro ativo nunca apostou no top6: aparece no
+    **fim da lista**, com "-" na Posição média e 0 em "Vezes apostado", mas
+    com a Posição Média REAL preenchida normalmente.
+  - **Ordenação:** pilotos com aposta no filtro ativo primeiro (por Posição
+    média crescente, como antes); pilotos sem aposta depois, entre si por
+    Posição Média REAL crescente (decisão do usuário, para ordem estável e
+    útil mesmo sem dado de aposta).
+  - Nenhuma mudança nos geradores Python nem nos formatos de
+    `docs/data/*.json` — `results.json` já existia (já usado no card
+    "Pontuação da corrida"), só passou a ser carregado também por
+    `renderPreferenciaPiloto` (nova assinatura recebe `results`).
 
 ### Etapa 5 — GitHub Actions ✅
 - **Objetivo:** workflow acionado por `repository_dispatch` que roda o pipeline

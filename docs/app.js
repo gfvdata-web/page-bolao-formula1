@@ -583,13 +583,48 @@ function coletarPalpitesTop6(bets, playerId) {
   return porPiloto;
 }
 
-function renderPreferenciaPiloto(playerId, bets) {
-  const container = document.getElementById("preferencia-container");
-  const porPiloto = coletarPalpitesTop6(bets, playerId);
+function calcularPosicaoMediaReal(results) {
+  const porPiloto = new Map(); // codigo -> { soma, count }
+  for (const rodada of Object.values(results.rounds)) {
+    (rodada.order || []).forEach((codigo, indice) => {
+      const posicao = indice + 1;
+      const registro = porPiloto.get(codigo) || { soma: 0, count: 0 };
+      registro.soma += posicao;
+      registro.count += 1;
+      porPiloto.set(codigo, registro);
+    });
+  }
+  const medias = new Map();
+  for (const [codigo, { soma, count }] of porPiloto) {
+    medias.set(codigo, soma / count);
+  }
+  return medias;
+}
 
-  const linhas = [...porPiloto.entries()]
-    .map(([codigo, { soma, count }]) => ({ codigo, media: soma / count, count }))
-    .sort((a, b) => a.media - b.media || a.codigo.localeCompare(b.codigo));
+function renderPreferenciaPiloto(playerId, bets, results) {
+  const container = document.getElementById("preferencia-container");
+  const universo = coletarPalpitesTop6(bets, "todos");
+  const porPiloto = playerId === "todos" ? universo : coletarPalpitesTop6(bets, playerId);
+  const posicaoMediaReal = calcularPosicaoMediaReal(results);
+
+  const linhas = [...universo.keys()]
+    .map((codigo) => {
+      const registro = porPiloto.get(codigo);
+      return {
+        codigo,
+        media: registro ? registro.soma / registro.count : null,
+        count: registro ? registro.count : 0,
+        mediaReal: posicaoMediaReal.get(codigo) ?? null,
+      };
+    })
+    .sort((a, b) => {
+      if (a.media !== null && b.media !== null) return a.media - b.media || a.codigo.localeCompare(b.codigo);
+      if (a.media !== null) return -1;
+      if (b.media !== null) return 1;
+      const realA = a.mediaReal ?? Infinity;
+      const realB = b.mediaReal ?? Infinity;
+      return realA - realB || a.codigo.localeCompare(b.codigo);
+    });
 
   if (!linhas.length) {
     container.replaceChildren(el("p", { class: "status" }, ["Sem palpites de top6 registrados."]));
@@ -601,6 +636,7 @@ function renderPreferenciaPiloto(playerId, bets) {
       el("tr", {}, [
         el("th", {}, ["Piloto"]),
         el("th", { class: "num" }, ["Posição média"]),
+        el("th", { class: "num" }, ["Posição Média REAL"]),
         el("th", { class: "num" }, ["Vezes apostado"]),
       ]),
     ]),
@@ -610,7 +646,8 @@ function renderPreferenciaPiloto(playerId, bets) {
     tbody.appendChild(
       el("tr", {}, [
         el("td", {}, [chipPiloto(linha.codigo)]),
-        el("td", { class: "num" }, [linha.media.toFixed(2)]),
+        el("td", { class: "num" }, [linha.media === null ? "-" : linha.media.toFixed(2)]),
+        el("td", { class: "num" }, [linha.mediaReal === null ? "-" : linha.mediaReal.toFixed(2)]),
         el("td", { class: "num" }, [String(linha.count)]),
       ])
     );
@@ -815,9 +852,9 @@ async function main() {
     popularSelectPreferencia(bets);
     const selectPreferencia = document.getElementById("select-preferencia-jogador");
     selectPreferencia.addEventListener("change", () => {
-      renderPreferenciaPiloto(selectPreferencia.value, bets);
+      renderPreferenciaPiloto(selectPreferencia.value, bets, results);
     });
-    renderPreferenciaPiloto("todos", bets);
+    renderPreferenciaPiloto("todos", bets, results);
 
     const hof = await carregarJson("./data/hall_of_fame.json");
     renderHallOfFame(hof);
