@@ -432,11 +432,15 @@ main {
   display: block;
 }
 
-.corrida-detalhe-th__total {
-  display: block;
-  margin-top: 0.1rem;
+.corrida-detalhe-tabela th .corrida-detalhe-th__total {
+  display: inline-block;
+  margin-top: 0.35rem;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  background: var(--bg);
+  border: 1px solid var(--borda);
   font-weight: 700;
-  font-size: 0.78rem;
+  font-size: 0.72rem;
   text-transform: none;
   letter-spacing: normal;
   color: var(--texto);
