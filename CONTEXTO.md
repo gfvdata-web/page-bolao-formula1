@@ -561,6 +561,14 @@ Geral do Ranking.**
   teto seja 1 (`nivel = pts >= max ? 2 : pts > 0 ? 1 : 0`). Todo lugar que
   pontua o piloto da rodada passa `max: 1` — `celBonusPalpite` (card novo) e
   `linhaBonus` (cards de rodada da aba Palpites, que tinha o mesmo bug).
+- **Ajuste posterior:** o total de pontos no cabeçalho (`.corrida-detalhe-th__total`)
+  virou uma pill própria (fundo `--bg`, borda `--borda`, `border-radius: 999px`,
+  espaçamento acima do nome) em vez de texto solto colado no nome — também
+  corrige um bug de especificidade CSS em que `.corrida-detalhe-tabela th`
+  (maiúsculas) vencia o `text-transform: none` do total, deixando "pts" em
+  caixa alta; a regra do total agora é escopada como
+  `.corrida-detalhe-tabela th .corrida-detalhe-th__total` para ganhar a
+  cascata.
 
 ### Etapa 5 — GitHub Actions ✅
 - **Objetivo:** workflow acionado por `repository_dispatch` que roda o pipeline
