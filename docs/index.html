@@ -47,27 +47,6 @@
     </div>
 
     <div id="subsecao-ranking-corridas" class="subsecao" hidden role="tabpanel">
-      <div id="corridas-tabela-container"></div>
-    </div>
-  </section>
-
-  <section id="secao-palpites" class="secao" hidden role="tabpanel">
-    <nav class="subabas" role="tablist">
-      <button class="subaba" data-subaba="historico" role="tab" aria-selected="true">Histórico</button>
-      <button class="subaba" data-subaba="temporada" role="tab" aria-selected="false">Temporada</button>
-      <button class="subaba" data-subaba="preferencia" role="tab" aria-selected="false">Preferência piloto</button>
-    </nav>
-
-    <div id="subsecao-historico" class="subsecao" role="tabpanel">
-      <div class="filtro-jogador">
-        <label for="select-jogador">Jogador:</label>
-        <select id="select-jogador"></select>
-      </div>
-      <div id="palpites-status" class="status"></div>
-      <div id="palpites-container"></div>
-    </div>
-
-    <div id="subsecao-temporada" class="subsecao" hidden role="tabpanel">
       <div id="temporada-cards" class="temporada-cards"></div>
       <div class="temporada-grafico-wrap">
         <h3 class="temporada-grafico-titulo">Pontuação acumulada</h3>
@@ -81,6 +60,23 @@
           <canvas id="temporada-grafico"></canvas>
         </div>
       </div>
+      <div id="corridas-tabela-container"></div>
+    </div>
+  </section>
+
+  <section id="secao-palpites" class="secao" hidden role="tabpanel">
+    <nav class="subabas" role="tablist">
+      <button class="subaba" data-subaba="historico" role="tab" aria-selected="true">Histórico</button>
+      <button class="subaba" data-subaba="preferencia" role="tab" aria-selected="false">Preferência piloto</button>
+    </nav>
+
+    <div id="subsecao-historico" class="subsecao" role="tabpanel">
+      <div class="filtro-jogador">
+        <label for="select-jogador">Jogador:</label>
+        <select id="select-jogador"></select>
+      </div>
+      <div id="palpites-status" class="status"></div>
+      <div id="palpites-container"></div>
     </div>
 
     <div id="subsecao-preferencia" class="subsecao" hidden role="tabpanel">

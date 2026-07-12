@@ -700,7 +700,7 @@ function renderHallOfFame(hof) {
 
 // Chart.js não recupera bem de ser inicializado num canvas ainda escondido
 // (0x0) — resize() sozinho não corrige. Por isso os gráficos da Temporada só
-// são criados na primeira vez que a sub-aba fica visível (garantirGraficosTemporada).
+// são criados na primeira vez que a sub-aba Corridas fica visível (garantirGraficosTemporada).
 function garantirGraficosTemporada() {
   if (!standingsParaTemporada) return;
   if (graficoTemporadaAcumulado && graficoTemporadaPorRodada) {
@@ -725,8 +725,8 @@ function configurarAbas() {
       for (const [nome, secao] of Object.entries(secoes)) {
         secao.hidden = nome !== botao.dataset.aba;
       }
-      const subabaAtiva = document.querySelector("button.subaba[aria-selected=\"true\"]");
-      if (botao.dataset.aba === "palpites" && subabaAtiva && subabaAtiva.dataset.subaba === "temporada") {
+      const subabaAtiva = document.querySelector("#secao-ranking button.subaba[aria-selected=\"true\"]");
+      if (botao.dataset.aba === "ranking" && subabaAtiva && subabaAtiva.dataset.subaba === "corridas") {
         garantirGraficosTemporada();
       }
     });
@@ -737,7 +737,6 @@ function configurarSubAbas() {
   const botoes = document.querySelectorAll("#secao-palpites button.subaba");
   const secoes = {
     historico: document.getElementById("subsecao-historico"),
-    temporada: document.getElementById("subsecao-temporada"),
     preferencia: document.getElementById("subsecao-preferencia"),
   };
   botoes.forEach((botao) => {
@@ -746,9 +745,6 @@ function configurarSubAbas() {
       botao.setAttribute("aria-selected", "true");
       for (const [nome, secao] of Object.entries(secoes)) {
         secao.hidden = nome !== botao.dataset.subaba;
-      }
-      if (botao.dataset.subaba === "temporada") {
-        garantirGraficosTemporada();
       }
     });
   });
@@ -767,6 +763,9 @@ function configurarSubAbasRanking() {
       for (const [nome, secao] of Object.entries(secoes)) {
         secao.hidden = nome !== botao.dataset.subaba;
       }
+      if (botao.dataset.subaba === "corridas") {
+        garantirGraficosTemporada();
+      }
     });
   });
 }
@@ -780,6 +779,7 @@ async function main() {
     const standings = await carregarJson("./data/standings.json");
     renderRanking(standings);
     document.getElementById("ranking-status").textContent = "";
+    standingsParaTemporada = standings;
 
     const calendar = await carregarJson("./data/calendar.json");
     renderCorridas(standings, calendar);
@@ -811,8 +811,6 @@ async function main() {
       select.value = jogadores[0].player_id;
       renderPalpitesJogador(jogadores[0].player_id, bets, standings);
     }
-
-    standingsParaTemporada = standings;
 
     popularSelectPreferencia(bets);
     const selectPreferencia = document.getElementById("select-preferencia-jogador");

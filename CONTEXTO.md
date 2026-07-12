@@ -462,6 +462,31 @@ cards de última/próxima corrida.**
 - Nenhuma mudança em `bets.json`/`results.json`/`hall_of_fame.json` nem nos
   formatos já consumidos por eles.
 
+**Ajuste posterior (ainda Etapa 4): gráficos da Temporada movidos para
+Ranking/Corridas; sub-aba "Temporada" removida.**
+- Os dois gráficos de linha (`#temporada-grafico-acumulado`,
+  `#temporada-grafico`) e os mini cards de filtro por jogador
+  (`#temporada-cards`) saíram da sub-aba **Temporada** (que deixou de existir,
+  junto com `#subsecao-temporada`) e foram para dentro de
+  `#subsecao-ranking-corridas`, **acima** da tabela matriz
+  (`#corridas-tabela-container`). Aba **Palpites por jogador** agora só tem 2
+  sub-abas: `historico|preferencia`.
+- IDs/funções internos (`temporada-cards`, `renderTemporada`,
+  `construirDadosTemporada`, `garantirGraficosTemporada`,
+  `standingsParaTemporada` etc.) **não foram renomeados** — só o HTML em volta
+  mudou de seção. Não estranhar o prefixo "temporada" em código que hoje vive
+  em Ranking/Corridas.
+- O gatilho da inicialização preguiçosa dos gráficos (ver bug de layout do
+  Chart.js explicado acima) mudou de lugar: `garantirGraficosTemporada()`
+  agora é chamado ao clicar na sub-aba **Corridas** do Ranking
+  (`configurarSubAbasRanking()`) e ao clicar na aba principal **Ranking**
+  enquanto a sub-aba **Corridas** já estiver ativa (`configurarAbas()`) — o
+  equivalente do que antes disparava em Palpites/Temporada.
+  `standingsParaTemporada` também passou a ser preenchida logo após carregar
+  `standings.json` em `main()` (antes só era preenchida no fim, depois de
+  `bets.json`/`results.json`), já que agora pode ser necessária mais cedo (o
+  Ranking é a aba padrão ao abrir o site).
+
 **Mapa do front-end (desatualizado nos detalhes — ver também Hall of Fame e
 sub-abas Ranking/Corridas acima; mantido como visão geral inicial):**
 - `docs/index.html`: esqueleto fixo — `header.topo` com as 2 abas
