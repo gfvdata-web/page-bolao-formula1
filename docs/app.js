@@ -641,8 +641,8 @@ function renderPreferenciaPiloto(playerId, bets, results) {
     el("thead", {}, [
       el("tr", {}, [
         el("th", {}, ["Piloto"]),
-        el("th", { class: "num" }, ["Posição média palpite"]),
         el("th", { class: "num" }, ["Posição Média REAL"]),
+        el("th", { class: "num" }, ["Posição média palpite"]),
         el("th", { class: "num" }, ["Vezes apostado"]),
       ]),
     ]),
@@ -652,6 +652,7 @@ function renderPreferenciaPiloto(playerId, bets, results) {
     tbody.appendChild(
       el("tr", {}, [
         el("td", {}, [chipPiloto(linha.codigo)]),
+        el("td", { class: "num" }, [linha.mediaReal === null ? "-" : linha.mediaReal.toFixed(2)]),
         el(
           "td",
           { class: "num" },
@@ -662,7 +663,6 @@ function renderPreferenciaPiloto(playerId, bets, results) {
                 ...(linha.mediaReal === null ? [] : [badgeDistanciaReal(linha.media, linha.mediaReal)]),
               ]
         ),
-        el("td", { class: "num" }, [linha.mediaReal === null ? "-" : linha.mediaReal.toFixed(2)]),
         el("td", { class: "num" }, [String(linha.count)]),
       ])
     );
