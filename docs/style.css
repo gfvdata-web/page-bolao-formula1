@@ -367,6 +367,133 @@ main {
   color: var(--texto-fraco);
 }
 
+/* Pontuação da corrida (Ranking / Geral) */
+
+.corrida-detalhe-card {
+  margin-top: 1rem;
+  padding: 0.9rem 1rem 1rem;
+  background: var(--bg-card);
+  border-radius: 10px;
+  box-shadow: var(--sombra);
+}
+
+.corrida-detalhe-card__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.7rem;
+}
+
+.corrida-detalhe-card__header h2 {
+  margin: 0;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--texto);
+}
+
+.corrida-detalhe-select {
+  padding: 0.4rem 0.6rem;
+  border-radius: 8px;
+  border: 1px solid var(--borda);
+  background: var(--bg);
+  color: var(--texto);
+  font-size: 0.85rem;
+}
+
+.corrida-detalhe-tabela-wrap {
+  overflow-x: auto;
+}
+
+.corrida-detalhe-tabela {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.corrida-detalhe-tabela th, .corrida-detalhe-tabela td {
+  padding: 0.4rem 0.55rem;
+  text-align: left;
+  border-bottom: 1px solid var(--borda);
+  white-space: nowrap;
+}
+
+.corrida-detalhe-tabela th {
+  color: var(--texto-fraco);
+  font-weight: 600;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.corrida-detalhe-tabela tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.corrida-detalhe-tabela th:first-child,
+.corrida-detalhe-tabela td:first-child,
+.corrida-detalhe-tabela th:nth-child(2),
+.corrida-detalhe-tabela td:nth-child(2) {
+  position: sticky;
+  background: var(--bg-card);
+  z-index: 1;
+}
+
+.corrida-detalhe-tabela th:first-child,
+.corrida-detalhe-tabela td:first-child {
+  left: 0;
+  width: 3.6rem;
+  min-width: 3.6rem;
+}
+
+.corrida-detalhe-tabela th:nth-child(2),
+.corrida-detalhe-tabela td:nth-child(2) {
+  left: 3.6rem;
+  min-width: 4.2rem;
+  border-right: 1px solid var(--borda);
+}
+
+.corrida-detalhe-rotulo {
+  display: table-cell;
+  vertical-align: middle;
+  color: var(--texto-fraco);
+  font-weight: 600;
+}
+
+.corrida-detalhe-rotulo span {
+  display: block;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.corrida-detalhe-rotulo .piloto-chip {
+  margin-top: 0.15rem;
+  font-weight: 600;
+}
+
+.corrida-detalhe-cel {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.corrida-detalhe-cel__pos {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+.corrida-detalhe-vazio {
+  color: var(--texto-fraco);
+}
+
+@media (max-width: 480px) {
+  .corrida-detalhe-cel { flex-direction: column; align-items: flex-start; gap: 0.15rem; }
+  .corrida-detalhe-tabela th, .corrida-detalhe-tabela td { padding: 0.35rem 0.4rem; font-size: 0.8rem; }
+}
+
 /* Regras de pontuação (Ranking) */
 
 .regras-pontuacao {

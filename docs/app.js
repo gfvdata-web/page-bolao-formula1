@@ -210,6 +210,92 @@ function renderTabelaCorridas(standings) {
   container.replaceChildren(tabela);
 }
 
+// ---------- Ranking / Geral — pontuação da corrida (por jogador) ----------
+
+function celPalpite(guess, points) {
+  return el("div", { class: "corrida-detalhe-cel" }, [chipPiloto(guess), badgePonto(points)]);
+}
+
+function celBonusPalpite(pos, points) {
+  return el("div", { class: "corrida-detalhe-cel" }, [
+    el("span", { class: "corrida-detalhe-cel__pos" }, [`P${pos}`]),
+    badgePonto(points),
+  ]);
+}
+
+function celVazia() {
+  return el("span", { class: "corrida-detalhe-vazio", title: "Não apostou nesta rodada" }, ["–"]);
+}
+
+function popularSelectCorridaDetalhe(standings) {
+  const select = document.getElementById("select-corrida-detalhe");
+  const rounds = standings.rounds.slice().sort((a, b) => a.round - b.round);
+  select.replaceChildren(
+    ...rounds.map((r) => el("option", { value: String(r.round) }, [`R${r.round} · ${r.race}`]))
+  );
+  return rounds;
+}
+
+function renderCorridaDetalhe(roundNumber, standings, bets, results) {
+  const wrap = document.getElementById("corrida-detalhe-tabela-wrap");
+  const roundInfo = standings.rounds.find((r) => r.round === roundNumber);
+  const resultado = results.rounds[String(roundNumber)];
+  if (!roundInfo || !resultado) {
+    wrap.replaceChildren(el("p", { class: "status" }, ["Sem resultado para esta corrida."]));
+    return;
+  }
+
+  const realTop6 = resultado.order.slice(0, 6);
+  const bonusDriver = roundInfo.bonus_driver;
+  const bonusRealPos = resultado.order.indexOf(bonusDriver) + 1;
+
+  const tabela = el("table", { class: "corrida-detalhe-tabela" }, [
+    el("thead", {}, [
+      el("tr", {}, [
+        el("th", {}, ["Pos"]),
+        el("th", {}, ["Resultado"]),
+        ...standings.players.map((j) => el("th", { title: j.name }, [j.name.split(" ")[0]])),
+      ]),
+    ]),
+  ]);
+
+  const tbody = el("tbody");
+
+  realTop6.forEach((codigoReal, indice) => {
+    const pos = indice + 1;
+    tbody.appendChild(
+      el("tr", {}, [
+        el("td", { class: "corrida-detalhe-rotulo" }, [`P${pos}`]),
+        el("td", {}, [chipPiloto(codigoReal)]),
+        ...standings.players.map((jogador) => {
+          const rodada = bets.players[jogador.player_id]?.rounds[roundNumber];
+          if (!rodada) return el("td", {}, [celVazia()]);
+          const linha = rodada.top6_detail[indice];
+          return el("td", {}, [celPalpite(linha.guess, linha.points)]);
+        }),
+      ])
+    );
+  });
+
+  tbody.appendChild(
+    el("tr", {}, [
+      el("td", { class: "corrida-detalhe-rotulo" }, [
+        el("span", {}, ["Piloto"]),
+        chipPiloto(bonusDriver),
+      ]),
+      el("td", {}, [`P${bonusRealPos}`]),
+      ...standings.players.map((jogador) => {
+        const rodada = bets.players[jogador.player_id]?.rounds[roundNumber];
+        if (!rodada) return el("td", {}, [celVazia()]);
+        return el("td", {}, [celBonusPalpite(rodada.bonus_guess, rodada.bonus_points)]);
+      }),
+    ])
+  );
+
+  tabela.appendChild(tbody);
+  wrap.replaceChildren(tabela);
+}
+
 // ---------- Palpites por jogador ----------
 
 function popularSelectJogadores(bets) {
@@ -686,7 +772,20 @@ async function main() {
     renderCorridas(standings, calendar);
     renderTabelaCorridas(standings);
 
+    const results = await carregarJson("./data/results.json");
     const bets = await carregarJson("./data/bets.json");
+
+    const roundsDetalhe = popularSelectCorridaDetalhe(standings);
+    const selectCorridaDetalhe = document.getElementById("select-corrida-detalhe");
+    selectCorridaDetalhe.addEventListener("change", () => {
+      renderCorridaDetalhe(Number(selectCorridaDetalhe.value), standings, bets, results);
+    });
+    if (roundsDetalhe.length) {
+      const ultimaRodada = roundsDetalhe[roundsDetalhe.length - 1];
+      selectCorridaDetalhe.value = String(ultimaRodada.round);
+      renderCorridaDetalhe(ultimaRodada.round, standings, bets, results);
+    }
+
     const jogadores = popularSelectJogadores(bets);
     document.getElementById("palpites-status").textContent = "";
 

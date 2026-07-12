@@ -518,6 +518,36 @@ temporadas anteriores, 2021–2025).**
   → 1 coluna em `max-width: 480px`, reaproveita variáveis de tema
   existentes).
 
+**Ajuste posterior (ainda Etapa 4): card "Pontuação da corrida" na sub-aba
+Geral do Ranking.**
+- Fica em `#subsecao-ranking-geral`, **abaixo** da tabela de ranking
+  (`#ranking-container`) e **acima** do bloco de regras (`.regras-pontuacao`):
+  `.corrida-detalhe-card` com um `<select id="select-corrida-detalhe">`
+  (filtro de rodada — **sempre uma rodada específica, sem opção "todos"**,
+  por padrão a última consolidada em `standings.json.rounds`) e uma tabela
+  matriz (`#corrida-detalhe-tabela-wrap` → `renderCorridaDetalhe` em
+  `app.js`): linhas P1–P6 + linha "Piloto" (bônus), colunas Pos/Resultado +
+  uma por jogador (nome abreviado ao primeiro nome no cabeçalho, nome
+  completo no `title` do `<th>`), célula = `chipPiloto` do palpite +
+  `badgePonto` com os pontos daquela posição (`top6_detail[i]` /
+  `bonus_guess`+`bonus_points` de `bets.json`); jogador sem palpite na
+  rodada mostra "–" (`.corrida-detalhe-vazio`). Coluna "Resultado" vem do
+  grid completo em `docs/data/results.json` (`rounds[round].order`, primeiro
+  uso desse arquivo no front-end — antes só `standings.json`/`bets.json`
+  eram carregados), não de um palpite específico.
+- **Cores:** reaproveita a paleta de pontos já existente (`--ok2`/`--ok1`/
+  `--ok0-bg`, mesma escala de `badgePonto`) — decisão explícita do usuário
+  de **não** introduzir vermelho para 0 pt, para manter uma paleta única de
+  "pontos" em todo o site.
+- **Tabela larga (muitos jogadores) rola horizontalmente** dentro de
+  `.corrida-detalhe-tabela-wrap` (mesmo padrão de `.corridas-tabela`), com
+  as duas primeiras colunas (Pos/Resultado) fixas via `position: sticky`
+  (`left: 0` / `left: 3.6rem`, largura da 1ª coluna hardcoded em
+  `style.css` para bater com o offset da 2ª) — decisão explícita do usuário,
+  para poder comparar o resultado real com os palpites mesmo rolando.
+- Nenhuma mudança em `bolao/site.py` nem nos formatos de `docs/data/*.json`
+  — `results.json` já existia, só passou a ser consumido no front-end.
+
 ### Etapa 5 — GitHub Actions ✅
 - **Objetivo:** workflow acionado por `repository_dispatch` que roda o pipeline
   completo (parse → buscar resultado → pontuar → gerar dados → commit).
