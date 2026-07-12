@@ -617,6 +617,19 @@ Geral do Ranking.**
     `docs/data/*.json` — `results.json` já existia (já usado no card
     "Pontuação da corrida"), só passou a ser carregado também por
     `renderPreferenciaPiloto` (nova assinatura recebe `results`).
+- **Ajuste posterior: coluna renomeada + badge de distância na Preferência
+  piloto.**
+  - "Posição média" → **"Posição média palpite"** (deixa explícito que é a
+    média do palpite, para não confundir com a REAL ao lado).
+  - Ao lado do valor de posição média palpite (mesma célula), badge cinza
+    (`badgeDistanciaReal`/`.distancia-badge`: fundo `var(--bg)`, borda
+    `var(--borda)`, texto `var(--texto-fraco)`, sempre cinza independente do
+    sinal) com seta + distância até a posição média REAL, no máx. 2 casas
+    decimais: `diferenca = mediaPalpite - mediaReal`; seta **▲** quando
+    `diferenca >= 0` (palpite "pior", número maior que o real), **▼** quando
+    negativa (palpite "melhor" que o real); valor exibido é
+    `Math.abs(diferenca)`. Só aparece quando a linha tem palpite (não nas
+    linhas "-" de piloto não apostado pelo filtro ativo).
 
 ### Etapa 5 — GitHub Actions ✅
 - **Objetivo:** workflow acionado por `repository_dispatch` que roda o pipeline

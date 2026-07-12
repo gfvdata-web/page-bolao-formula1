@@ -353,6 +353,20 @@ main {
 .ponto-1 { background: var(--ok1-bg); color: var(--ok1); }
 .ponto-0 { background: var(--ok0-bg); color: var(--ok0-texto); }
 
+.distancia-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  background: var(--bg);
+  border: 1px solid var(--borda);
+  color: var(--texto-fraco);
+  font-size: 0.78rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
 .bonus-linha {
   display: flex;
   flex-wrap: wrap;

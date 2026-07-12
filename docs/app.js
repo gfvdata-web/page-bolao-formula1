@@ -601,6 +601,12 @@ function calcularPosicaoMediaReal(results) {
   return medias;
 }
 
+function badgeDistanciaReal(media, mediaReal) {
+  const diferenca = media - mediaReal;
+  const seta = diferenca >= 0 ? "▲" : "▼";
+  return el("span", { class: "distancia-badge" }, [seta, ` ${Math.abs(diferenca).toFixed(2)}`]);
+}
+
 function renderPreferenciaPiloto(playerId, bets, results) {
   const container = document.getElementById("preferencia-container");
   const universo = coletarPalpitesTop6(bets, "todos");
@@ -635,7 +641,7 @@ function renderPreferenciaPiloto(playerId, bets, results) {
     el("thead", {}, [
       el("tr", {}, [
         el("th", {}, ["Piloto"]),
-        el("th", { class: "num" }, ["Posição média"]),
+        el("th", { class: "num" }, ["Posição média palpite"]),
         el("th", { class: "num" }, ["Posição Média REAL"]),
         el("th", { class: "num" }, ["Vezes apostado"]),
       ]),
@@ -646,7 +652,16 @@ function renderPreferenciaPiloto(playerId, bets, results) {
     tbody.appendChild(
       el("tr", {}, [
         el("td", {}, [chipPiloto(linha.codigo)]),
-        el("td", { class: "num" }, [linha.media === null ? "-" : linha.media.toFixed(2)]),
+        el(
+          "td",
+          { class: "num" },
+          linha.media === null
+            ? ["-"]
+            : [
+                `${linha.media.toFixed(2)} `,
+                ...(linha.mediaReal === null ? [] : [badgeDistanciaReal(linha.media, linha.mediaReal)]),
+              ]
+        ),
         el("td", { class: "num" }, [linha.mediaReal === null ? "-" : linha.mediaReal.toFixed(2)]),
         el("td", { class: "num" }, [String(linha.count)]),
       ])
