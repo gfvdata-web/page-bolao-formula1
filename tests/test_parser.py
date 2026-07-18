@@ -69,6 +69,22 @@ class TestParseMensagensReais(unittest.TestCase):
         sheet = parse_sheet(texto, DRIVERS)
         self.assertEqual(sheet.bets[0].bonus_guess, 22)
 
+    def test_chute_com_negrito_do_whatsapp(self):
+        # Bug real (rodada de Spa): o WhatsApp deixou o chute em negrito
+        # (*P14*) e sem linha em branco antes do próximo jogador — o parser
+        # precisa reconhecer *P14* como fim de bloco mesmo assim.
+        texto = (
+            "Corrida\nPiloto Hamilton\n\n"
+            "Filipe\nANT\nVER\nHAM\nNOR\nRUS\nLEC\n*P14*\n"
+            "Caliman\nANT\nVER\nNOR\nRUS\nLEC\nPIA\nP16\n"
+        )
+        sheet = parse_sheet(texto, DRIVERS)
+        self.assertEqual(len(sheet.bets), 2)
+        self.assertEqual(sheet.bets[0].player_raw, "Filipe")
+        self.assertEqual(sheet.bets[0].bonus_guess, 14)
+        self.assertEqual(sheet.bets[1].player_raw, "Caliman")
+        self.assertEqual(sheet.bets[1].bonus_guess, 16)
+
 
 class TestParseErros(unittest.TestCase):
     def test_bloco_incompleto(self):

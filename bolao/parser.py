@@ -26,6 +26,8 @@ que o exemplo acima. O parser tolera, **sem mudar o formato de saída**:
 - **Linha em branco logo após o nome** do jogador (o bloco é reconhecido pela
   linha ``P#`` que o encerra, não pela separação em branco).
 - **Chute até P22** (grid 2026 tem até 22 pilotos).
+- **Linha do chute com enfeite** de negrito/itálico do WhatsApp (``*P14*``,
+  ``_P14_``) — ignora ``*``/``_`` ao redor ao reconhecer o fim do bloco.
 """
 
 import re
@@ -81,8 +83,13 @@ _MAX_GRID = 22
 
 
 def _is_guess_line(linha: str) -> bool:
-    """True se a linha é um chute de posição (encerra o bloco de um jogador)."""
-    return bool(_GUESS_RE.match(linha.strip()))
+    """True se a linha é um chute de posição (encerra o bloco de um jogador).
+
+    Ignora ``*``/``_`` de negrito/itálico que o WhatsApp às vezes deixa em
+    volta do número (ex.: ``*P14*``) — sem isso, a linha não bate com
+    ``_GUESS_RE`` e o bloco não fecha, misturando o jogador seguinte.
+    """
+    return bool(_GUESS_RE.match(linha.strip().strip("*_")))
 
 
 def _parse_bonus_guess(linha: str, player_raw: str) -> int:
