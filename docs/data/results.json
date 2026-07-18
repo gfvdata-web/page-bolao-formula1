@@ -303,6 +303,40 @@
         "STR",
         "ALO"
       ]
+    },
+    "10": {
+      "round": 10,
+      "race_id": "2026-10",
+      "race": "Spa",
+      "circuit": "spa",
+      "date": "2026-07-19",
+      "sprint": false,
+      "bonus_driver": "GAS",
+      "min_score": 6,
+      "order": [
+        "ANT",
+        "VER",
+        "NOR",
+        "RUS",
+        "LEC",
+        "HAM",
+        "PIA",
+        "LIN",
+        "BOR",
+        "HAD",
+        "LAW",
+        "GAS",
+        "COL",
+        "HUL",
+        "SAI",
+        "BEA",
+        "ALB",
+        "OCO",
+        "BOT",
+        "PER",
+        "ALO",
+        "STR"
+      ]
     }
   }
 }

@@ -1,0 +1,31 @@
+{
+  "race_id": "2026-10",
+  "season": 2026,
+  "round": 10,
+  "circuit": "spa",
+  "race": "Spa",
+  "order": [
+    "ANT",
+    "VER",
+    "NOR",
+    "RUS",
+    "LEC",
+    "HAM",
+    "PIA",
+    "LIN",
+    "BOR",
+    "HAD",
+    "LAW",
+    "GAS",
+    "COL",
+    "HUL",
+    "SAI",
+    "BEA",
+    "ALB",
+    "OCO",
+    "BOT",
+    "PER",
+    "ALO",
+    "STR"
+  ]
+}
