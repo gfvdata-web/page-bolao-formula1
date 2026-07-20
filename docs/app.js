@@ -668,7 +668,10 @@ function renderPreferenciaPiloto(playerId, bets, results) {
     );
   }
   tabela.appendChild(tbody);
-  container.replaceChildren(tabela);
+  const legenda = el("p", { class: "preferencia-legenda" }, [
+    "Posição Média REAL: média das posições em que o piloto realmente terminou os quali. Posição média palpite: média das posições em que os jogadores apostaram nesse piloto.",
+  ]);
+  container.replaceChildren(tabela, legenda);
 }
 
 // ---------- Hall of Fame ----------
