@@ -690,13 +690,10 @@ button.subaba[aria-selected="true"] {
 
 .simulador-cards {
   display: grid;
-  grid-auto-flow: column;
   grid-template-rows: repeat(2, auto);
-  grid-auto-columns: 170px;
-  gap: 0.5rem;
+  grid-auto-flow: row;
+  gap: 0.4rem;
   margin-bottom: 1rem;
-  overflow-x: auto;
-  padding-bottom: 0.3rem;
 }
 
 .simulador-card {

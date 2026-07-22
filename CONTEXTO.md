@@ -652,12 +652,20 @@ Geral do Ranking.**
     "Projeção final" (pontos) **não muda** — já usava `total` real + média
     simulada × restantes, que é exata independente dessa ponderação. Estado
     (`simuladorEstado`) ganhou o campo `rodadasJaRodadas`.
-  - **Cards compactados para caber em 2 linhas** (`.simulador-cards`:
-    `grid-auto-flow: column` + `grid-template-rows: repeat(2, auto)` +
-    `overflow-x: auto` — mais jogadores viram colunas extras, rolagem
-    horizontal, nunca 3ª linha), com paddings/fontes reduzidos
-    (`.simulador-card`, `.simulador-card__nome`, `.simulador-card__valor`
-    etc.).
+  - **Cards compactados para caber em 2 linhas** (`.simulador-card`,
+    `.simulador-card__nome`, `.simulador-card__valor` etc. com
+    paddings/fontes reduzidos).
+  - **Ajuste posterior: sem rolagem horizontal, nº de colunas calculado em
+    JS.** A 1ª versão usava `grid-auto-flow: column` + `overflow-x: auto`
+    (rolagem lateral); o usuário pediu **sem scroll**, os cards devem só
+    encolher. `renderCardsSimulador()` agora calcula
+    `colunas = Math.ceil(nº de jogadores / 2)` e seta
+    `cardsContainer.style.gridTemplateColumns = "repeat(colunas, minmax(0,
+    1fr))"` antes de montar os cards — sempre exatamente 2 linhas
+    (`grid-template-rows: repeat(2, auto)`, `grid-auto-flow: row` no CSS),
+    qualquer que seja o nº de jogadores; os cards encolhem
+    (`minmax(0, 1fr)`) em vez de vazar da tela. Testado com até 20
+    jogadores simulados sem quebrar o layout.
   - Slider de cada card **já iniciava exatamente na média atual do jogador**
     desde a versão original (`mediaSimulada` = `Map` inicializado com
     `j.avg_points`) — confirmado que é o comportamento correto (ao abrir a

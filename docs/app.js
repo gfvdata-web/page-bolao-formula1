@@ -468,8 +468,14 @@ function cardSimuladorJogador(jogador, indice) {
 
 function renderCardsSimulador() {
   const cardsContainer = document.getElementById("simulador-cards");
+  const jogadores = simuladorEstado.standings.players;
+  // Nº de colunas calculado para caber exatamente 2 linhas, qualquer que
+  // seja o nº de jogadores — os cards encolhem (minmax(0, 1fr)) em vez de
+  // criar rolagem horizontal.
+  const colunas = Math.max(1, Math.ceil(jogadores.length / 2));
+  cardsContainer.style.gridTemplateColumns = `repeat(${colunas}, minmax(0, 1fr))`;
   cardsContainer.replaceChildren(
-    ...simuladorEstado.standings.players.map((jogador, indice) => cardSimuladorJogador(jogador, indice))
+    ...jogadores.map((jogador, indice) => cardSimuladorJogador(jogador, indice))
   );
 }
 
