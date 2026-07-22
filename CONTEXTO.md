@@ -617,6 +617,31 @@ Geral do Ranking.**
     `docs/data/*.json` — `results.json` já existia (já usado no card
     "Pontuação da corrida"), só passou a ser carregado também por
     `renderPreferenciaPiloto` (nova assinatura recebe `results`).
+- **Ajuste posterior: sub-aba "Simulador" no Ranking (projeção do fim de
+  temporada).**
+  - **3ª sub-aba** de `#secao-ranking` (`data-subaba="simulador"`, ao lado de
+    Geral/Corridas), mesmo padrão de `configurarSubAbasRanking()`.
+  - **Sem cálculo novo no Python** — tudo client-side em `app.js`, a partir de
+    `standings.json` (`total`, `avg_points`, `position` de cada jogador) e
+    `calendar.json` (total de corridas da temporada). Rodadas restantes =
+    corridas do `calendar.json` cujo `round` ainda não está em
+    `standings.rounds` (mesmo padrão de `renderCorridas`).
+  - **Cards por jogador** (`#simulador-cards` → `cardSimuladorJogador`): um
+    slider (`input[type=range]`, 0–13, passo 0.1) inicia na `avg_points` real
+    do jogador; arrastar atualiza `simuladorEstado.mediaSimulada` (um `Map`
+    em memória, estado só de front-end) e re-renderiza a tabela a cada
+    evento `input` (`renderTabelaSimulador`) — daí o efeito dinâmico. Botão
+    `↺` por card restaura a média real.
+  - **Tabela de projeção** (`#simulador-tabela-container` →
+    `renderTabelaSimulador`/`construirProjecoesSimulador`): projeção final =
+    `total atual + média simulada × rodadas restantes`; reordenada por
+    projeção desc a cada re-render (empate por `player_id` asc, mesmo padrão
+    do resto do site). Coluna `Δ posição` compara a posição simulada com a
+    posição atual em `standings.players[].position` (badge ▲/▼/`=`,
+    `badgeDeltaPosicao`).
+  - Nenhuma mudança em `bolao/site.py` nem nos formatos de
+    `docs/data/*.json` — consumido como já estava.
+
 - **Ajuste posterior: coluna renomeada + badge de distância na Preferência
   piloto.**
   - "Posição média" → **"Posição média palpite"** (deixa explícito que é a

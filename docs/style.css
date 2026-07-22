@@ -655,6 +655,91 @@ button.subaba[aria-selected="true"] {
   height: 260px;
 }
 
+/* Simulador (Ranking) */
+
+.simulador-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.simulador-card {
+  background: var(--bg-card);
+  border-radius: 10px;
+  box-shadow: var(--sombra);
+  padding: 0.7rem 0.8rem;
+  border-top: 3px solid var(--cor-jogador, var(--borda));
+}
+
+.simulador-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+  margin-bottom: 0.5rem;
+}
+
+.simulador-card__nome {
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.simulador-card__reset {
+  border: 1px solid var(--borda);
+  background: var(--bg);
+  color: var(--texto-fraco);
+  border-radius: 999px;
+  width: 1.6rem;
+  height: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.simulador-card__reset:hover {
+  color: var(--texto);
+  border-color: var(--cor-jogador, var(--borda));
+}
+
+.simulador-card__controle {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.simulador-card__slider {
+  flex: 1;
+  min-width: 0;
+}
+
+.simulador-card__valor {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  min-width: 2.4rem;
+  text-align: right;
+  color: var(--cor-jogador, var(--texto));
+}
+
+.simulador-tabela__projecao {
+  font-weight: 700;
+  color: var(--acento);
+}
+
+.delta-posicao {
+  display: inline-block;
+  padding: 0.1rem 0.4rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.delta-posicao--sobe { background: var(--ok2-bg); color: var(--ok2); }
+.delta-posicao--desce { background: var(--ok0-bg); color: var(--acento); }
+.delta-posicao--igual { background: var(--ok0-bg); color: var(--ok0-texto); }
+
 /* Preferência piloto */
 
 .preferencia-tabela {

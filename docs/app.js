@@ -309,6 +309,139 @@ function renderCorridaDetalhe(roundNumber, standings, bets, results) {
   wrap.replaceChildren(tabela);
 }
 
+// ---------- Ranking / Simulador ----------
+
+// Estado vivo da simulação: média editável por jogador (inicia = avg_points
+// real) e nº de rodadas restantes na temporada (calendar - já consolidadas).
+let simuladorEstado = null;
+
+function calcularRodadasRestantes(standings, calendar) {
+  const consolidadas = new Set(standings.rounds.map((r) => r.round));
+  return calendar.races.filter((r) => !consolidadas.has(r.round)).length;
+}
+
+function construirProjecoesSimulador() {
+  const { standings, mediaSimulada, rodadasRestantes } = simuladorEstado;
+  const posicaoAtual = new Map(standings.players.map((j) => [j.player_id, j.position]));
+
+  const linhas = standings.players.map((jogador) => {
+    const media = mediaSimulada.get(jogador.player_id);
+    const projecao = jogador.total + media * rodadasRestantes;
+    return { jogador, media, projecao };
+  });
+
+  linhas.sort((a, b) => b.projecao - a.projecao || a.jogador.player_id.localeCompare(b.jogador.player_id));
+  linhas.forEach((linha, indice) => {
+    linha.posicaoSimulada = indice + 1;
+    linha.deltaPosicao = posicaoAtual.get(linha.jogador.player_id) - linha.posicaoSimulada;
+  });
+  return linhas;
+}
+
+function badgeDeltaPosicao(delta) {
+  if (delta === 0) return el("span", { class: "delta-posicao delta-posicao--igual" }, ["="]);
+  const classe = delta > 0 ? "delta-posicao--sobe" : "delta-posicao--desce";
+  const seta = delta > 0 ? "▲" : "▼";
+  return el("span", { class: `delta-posicao ${classe}` }, [`${seta} ${Math.abs(delta)}`]);
+}
+
+function renderTabelaSimulador() {
+  const container = document.getElementById("simulador-tabela-container");
+  const linhas = construirProjecoesSimulador();
+  const medalhas = { 1: "🥇", 2: "🥈", 3: "🥉" };
+
+  const tabela = el("table", { class: "ranking-tabela simulador-tabela" }, [
+    el("thead", {}, [
+      el("tr", {}, [
+        el("th", {}, ["#"]),
+        el("th", {}, ["Jogador"]),
+        el("th", { class: "num" }, ["Pontos atuais"]),
+        el("th", { class: "num" }, ["Média simulada"]),
+        el("th", { class: "num" }, ["Projeção final"]),
+        el("th", { class: "num" }, ["Δ posição"]),
+      ]),
+    ]),
+  ]);
+
+  const tbody = el("tbody");
+  for (const linha of linhas) {
+    tbody.appendChild(
+      el("tr", {}, [
+        el("td", { class: "pos-medalha" }, [medalhas[linha.posicaoSimulada] || String(linha.posicaoSimulada)]),
+        el("td", {}, [linha.jogador.name]),
+        el("td", { class: "num" }, [String(linha.jogador.total)]),
+        el("td", { class: "num" }, [linha.media.toFixed(1)]),
+        el("td", { class: "num simulador-tabela__projecao" }, [linha.projecao.toFixed(1)]),
+        el("td", { class: "num" }, [badgeDeltaPosicao(linha.deltaPosicao)]),
+      ])
+    );
+  }
+  tabela.appendChild(tbody);
+  container.replaceChildren(tabela);
+}
+
+function cardSimuladorJogador(jogador, indice) {
+  const cor = corJogador(indice);
+  const valorInicial = simuladorEstado.mediaSimulada.get(jogador.player_id);
+
+  const valorSpan = el("span", { class: "simulador-card__valor" }, [valorInicial.toFixed(1)]);
+  const slider = el("input", {
+    type: "range",
+    min: "0",
+    max: "13",
+    step: "0.1",
+    value: String(valorInicial),
+    class: "simulador-card__slider",
+    style: `accent-color:${cor}`,
+  });
+
+  slider.addEventListener("input", () => {
+    const novoValor = Number(slider.value);
+    simuladorEstado.mediaSimulada.set(jogador.player_id, novoValor);
+    valorSpan.textContent = novoValor.toFixed(1);
+    renderTabelaSimulador();
+  });
+
+  const botaoReset = el(
+    "button",
+    { type: "button", class: "simulador-card__reset", title: "Restaurar média atual" },
+    ["↺"]
+  );
+  botaoReset.addEventListener("click", () => {
+    slider.value = String(jogador.avg_points);
+    simuladorEstado.mediaSimulada.set(jogador.player_id, jogador.avg_points);
+    valorSpan.textContent = jogador.avg_points.toFixed(1);
+    renderTabelaSimulador();
+  });
+
+  return el("div", { class: "simulador-card", style: `--cor-jogador:${cor}` }, [
+    el("div", { class: "simulador-card__header" }, [
+      el("span", { class: "simulador-card__nome" }, [jogador.name]),
+      botaoReset,
+    ]),
+    el("div", { class: "simulador-card__controle" }, [slider, valorSpan]),
+  ]);
+}
+
+function renderSimulador(standings, calendar) {
+  const rodadasRestantes = calcularRodadasRestantes(standings, calendar);
+  const mediaSimulada = new Map(standings.players.map((j) => [j.player_id, j.avg_points]));
+  simuladorEstado = { standings, calendar, mediaSimulada, rodadasRestantes };
+
+  const status = document.getElementById("simulador-status");
+  status.textContent =
+    rodadasRestantes > 0
+      ? `Simulando as ${rodadasRestantes} corrida(s) que faltam na temporada — arraste os cards para testar médias.`
+      : "Temporada já concluída — não há mais corridas para simular.";
+
+  const cardsContainer = document.getElementById("simulador-cards");
+  cardsContainer.replaceChildren(
+    ...standings.players.map((jogador, indice) => cardSimuladorJogador(jogador, indice))
+  );
+
+  renderTabelaSimulador();
+}
+
 // ---------- Palpites por jogador ----------
 
 function popularSelectJogadores(bets) {
@@ -810,6 +943,7 @@ function configurarSubAbasRanking() {
   const secoes = {
     geral: document.getElementById("subsecao-ranking-geral"),
     corridas: document.getElementById("subsecao-ranking-corridas"),
+    simulador: document.getElementById("subsecao-ranking-simulador"),
   };
   botoes.forEach((botao) => {
     botao.addEventListener("click", () => {
@@ -839,6 +973,7 @@ async function main() {
     const calendar = await carregarJson("./data/calendar.json");
     renderCorridas(standings, calendar);
     renderTabelaCorridas(standings);
+    renderSimulador(standings, calendar);
 
     const results = await carregarJson("./data/results.json");
     const bets = await carregarJson("./data/bets.json");
