@@ -714,21 +714,46 @@ button.subaba[aria-selected="true"] {
 .simulador-card__controle {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.3rem;
 }
 
-.simulador-card__slider {
+.simulador-card__passo {
+  border: 1px solid var(--borda);
+  background: var(--bg);
+  color: var(--texto);
+  border-radius: 6px;
+  width: 1.5rem;
+  height: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  padding: 0;
+}
+
+.simulador-card__passo:hover {
+  border-color: var(--cor-jogador, var(--borda));
+  color: var(--cor-jogador, var(--texto));
+}
+
+.simulador-card__input {
   flex: 1;
   min-width: 0;
-}
-
-.simulador-card__valor {
+  width: 100%;
+  border: 1px solid var(--borda);
+  border-radius: 6px;
+  background: var(--bg);
   font-variant-numeric: tabular-nums;
   font-weight: 700;
   font-size: 0.82rem;
-  min-width: 2rem;
-  text-align: right;
-  color: var(--cor-jogador, var(--texto));
+  text-align: center;
+  padding: 0.2rem 0.1rem;
+}
+
+.simulador-card__input:focus {
+  outline: none;
+  border-color: var(--cor-jogador, var(--acento));
 }
 
 .simulador-tabela__projecao {

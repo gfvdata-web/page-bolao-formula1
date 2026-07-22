@@ -391,26 +391,53 @@ function renderTabelaSimulador() {
   container.replaceChildren(tabela);
 }
 
+const SIMULADOR_MIN = 0;
+const SIMULADOR_MAX = 13;
+
+function clampMedia(valor) {
+  if (Number.isNaN(valor)) return SIMULADOR_MIN;
+  return Math.min(SIMULADOR_MAX, Math.max(SIMULADOR_MIN, Math.round(valor * 10) / 10));
+}
+
 function cardSimuladorJogador(jogador, indice) {
   const cor = corJogador(indice);
   const valorInicial = simuladorEstado.mediaSimulada.get(jogador.player_id);
 
-  const valorSpan = el("span", { class: "simulador-card__valor" }, [valorInicial.toFixed(1)]);
-  const slider = el("input", {
-    type: "range",
-    min: "0",
-    max: "13",
-    step: "0.1",
-    value: String(valorInicial),
-    class: "simulador-card__slider",
-    style: `accent-color:${cor}`,
+  const input = el("input", {
+    type: "text",
+    inputmode: "decimal",
+    value: valorInicial.toFixed(1),
+    class: "simulador-card__input",
+    style: `color:${cor}`,
   });
 
-  slider.addEventListener("input", () => {
-    const novoValor = Number(slider.value);
-    simuladorEstado.mediaSimulada.set(jogador.player_id, novoValor);
-    valorSpan.textContent = novoValor.toFixed(1);
+  const aplicarValor = (novoValor) => {
+    const valorFinal = clampMedia(novoValor);
+    simuladorEstado.mediaSimulada.set(jogador.player_id, valorFinal);
+    input.value = valorFinal.toFixed(1);
     renderTabelaSimulador();
+  };
+
+  input.addEventListener("change", () => {
+    aplicarValor(parseFloat(input.value.replace(",", ".")));
+  });
+
+  const botaoMenos = el(
+    "button",
+    { type: "button", class: "simulador-card__passo", title: "-0.1" },
+    ["−"]
+  );
+  botaoMenos.addEventListener("click", () => {
+    aplicarValor(simuladorEstado.mediaSimulada.get(jogador.player_id) - 0.1);
+  });
+
+  const botaoMais = el(
+    "button",
+    { type: "button", class: "simulador-card__passo", title: "+0.1" },
+    ["+"]
+  );
+  botaoMais.addEventListener("click", () => {
+    aplicarValor(simuladorEstado.mediaSimulada.get(jogador.player_id) + 0.1);
   });
 
   const botaoReset = el(
@@ -419,10 +446,7 @@ function cardSimuladorJogador(jogador, indice) {
     ["↺"]
   );
   botaoReset.addEventListener("click", () => {
-    slider.value = String(jogador.avg_points);
-    simuladorEstado.mediaSimulada.set(jogador.player_id, jogador.avg_points);
-    valorSpan.textContent = jogador.avg_points.toFixed(1);
-    renderTabelaSimulador();
+    aplicarValor(jogador.avg_points);
   });
 
   return el("div", { class: "simulador-card", style: `--cor-jogador:${cor}` }, [
@@ -430,7 +454,7 @@ function cardSimuladorJogador(jogador, indice) {
       el("span", { class: "simulador-card__nome" }, [jogador.name]),
       botaoReset,
     ]),
-    el("div", { class: "simulador-card__controle" }, [slider, valorSpan]),
+    el("div", { class: "simulador-card__controle" }, [botaoMenos, input, botaoMais]),
   ]);
 }
 

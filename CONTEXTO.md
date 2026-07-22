@@ -663,6 +663,16 @@ Geral do Ranking.**
     `j.avg_points`) — confirmado que é o comportamento correto (ao abrir a
     página, projeção = mesma média atual até o fim da temporada, `Δ posição`
     = "=" pra todo mundo).
+  - **Ajuste posterior: slider trocado por botões −/+ e campo digitável.**
+    O `input[type=range]` de cada card virou `input[type=text]`
+    (`.simulador-card__input`, `inputmode="decimal"` para teclado numérico no
+    celular) ladeado por dois botões (`.simulador-card__passo`, `−`/`+`) que
+    somam/subtraem exatamente 0.1 por clique. O valor também pode ser apagado
+    e digitado direto (aceita vírgula ou ponto decimal, evento `change` —
+    só aplica ao sair do campo, não a cada tecla). Toda entrada passa por
+    `clampMedia()` (arredonda a 1 casa, limita a `[0, 13]` — os mesmos
+    limites do slider antigo; texto inválido vira `0.0`). Mantém o botão `↺`
+    de restaurar a média real.
 
 - **Ajuste posterior: coluna renomeada + badge de distância na Preferência
   piloto.**
