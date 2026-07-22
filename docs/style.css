@@ -675,9 +675,9 @@ button.subaba[aria-selected="true"] {
   border: 1px solid var(--borda);
   background: var(--bg-card);
   color: var(--texto);
-  border-radius: 8px;
-  padding: 0.4rem 0.7rem;
-  font-size: 0.82rem;
+  border-radius: 6px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.72rem;
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
@@ -692,7 +692,7 @@ button.subaba[aria-selected="true"] {
   display: grid;
   grid-auto-flow: column;
   grid-template-rows: repeat(2, auto);
-  grid-auto-columns: 150px;
+  grid-auto-columns: 170px;
   gap: 0.5rem;
   margin-bottom: 1rem;
   overflow-x: auto;
@@ -709,10 +709,18 @@ button.subaba[aria-selected="true"] {
 
 .simulador-card__header {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 0.3rem;
   margin-bottom: 0.3rem;
+}
+
+.simulador-card__nome-linha {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem;
+  min-width: 0;
 }
 
 .simulador-card__nome {
@@ -721,6 +729,23 @@ button.subaba[aria-selected="true"] {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.simulador-card__badge {
+  display: inline-block;
+  padding: 0.05rem 0.35rem;
+  border-radius: 999px;
+  background: var(--cor-jogador, var(--acento));
+  color: #fff;
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.simulador-card__badge--oculto {
+  display: none;
 }
 
 .simulador-card__reset {

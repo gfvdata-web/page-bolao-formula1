@@ -679,6 +679,14 @@ Geral do Ranking.**
     de todos os jogadores de volta a `avg_points` e re-renderiza cards +
     tabela de uma vez (`renderCardsSimulador()` extraído de `renderSimulador`
     para ser reutilizável nesse reset e na carga inicial).
+  - **Ajuste posterior: badge "simulado" no card + botão de reset geral
+    menor.** Cada card ganhou um badge (`.simulador-card__badge`, pílula
+    colorida com a cor do jogador) ao lado do nome, visível **só quando a
+    média simulada do jogador difere da média real** (comparação por
+    `toFixed(1)`, mesma precisão do `clampMedia`) — escondido via classe
+    `.simulador-card__badge--oculto` (`display: none`), alternada em
+    `aplicarValor()` (dentro de `cardSimuladorJogador`) a cada mudança de
+    valor. `.simulador-reset-geral` ficou com padding/fonte menores.
 
 - **Ajuste posterior: coluna renomeada + badge de distância na Preferência
   piloto.**

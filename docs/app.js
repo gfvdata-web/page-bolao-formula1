@@ -411,10 +411,13 @@ function cardSimuladorJogador(jogador, indice) {
     style: `color:${cor}`,
   });
 
+  const badgeSimulado = el("span", { class: "simulador-card__badge" }, ["simulado"]);
+
   const aplicarValor = (novoValor) => {
     const valorFinal = clampMedia(novoValor);
     simuladorEstado.mediaSimulada.set(jogador.player_id, valorFinal);
     input.value = valorFinal.toFixed(1);
+    badgeSimulado.classList.toggle("simulador-card__badge--oculto", valorFinal.toFixed(1) === jogador.avg_points.toFixed(1));
     renderTabelaSimulador();
   };
 
@@ -449,9 +452,14 @@ function cardSimuladorJogador(jogador, indice) {
     aplicarValor(jogador.avg_points);
   });
 
+  badgeSimulado.classList.toggle("simulador-card__badge--oculto", valorInicial.toFixed(1) === jogador.avg_points.toFixed(1));
+
   return el("div", { class: "simulador-card", style: `--cor-jogador:${cor}` }, [
     el("div", { class: "simulador-card__header" }, [
-      el("span", { class: "simulador-card__nome" }, [jogador.name]),
+      el("span", { class: "simulador-card__nome-linha" }, [
+        el("span", { class: "simulador-card__nome" }, [jogador.name]),
+        badgeSimulado,
+      ]),
       botaoReset,
     ]),
     el("div", { class: "simulador-card__controle" }, [botaoMenos, input, botaoMais]),
