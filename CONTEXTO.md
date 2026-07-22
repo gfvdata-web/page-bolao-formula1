@@ -641,6 +641,28 @@ Geral do Ranking.**
     `badgeDeltaPosicao`).
   - Nenhuma mudança em `bolao/site.py` nem nos formatos de
     `docs/data/*.json` — consumido como já estava.
+  - **Ajuste posterior (correção de matemática pedida pelo usuário):
+    "Média simulada" virou duas colunas na tabela — "Média atual" (fixa,
+    `avg_points` real) e "Média final"** (ponderada, decisão confirmada com o
+    usuário): `mediaFinal = (mediaAtual × rodadasJaRodadas + mediaSimulada ×
+    rodadasRestantes) / (rodadasJaRodadas + rodadasRestantes)`, onde
+    `rodadasJaRodadas = standings.rounds.length` (progresso da temporada como
+    um todo, igual para todos os jogadores — não o `rounds_played` individual
+    de cada um, que pode ser menor por causa de rodadas puladas). A coluna
+    "Projeção final" (pontos) **não muda** — já usava `total` real + média
+    simulada × restantes, que é exata independente dessa ponderação. Estado
+    (`simuladorEstado`) ganhou o campo `rodadasJaRodadas`.
+  - **Cards compactados para caber em 2 linhas** (`.simulador-cards`:
+    `grid-auto-flow: column` + `grid-template-rows: repeat(2, auto)` +
+    `overflow-x: auto` — mais jogadores viram colunas extras, rolagem
+    horizontal, nunca 3ª linha), com paddings/fontes reduzidos
+    (`.simulador-card`, `.simulador-card__nome`, `.simulador-card__valor`
+    etc.).
+  - Slider de cada card **já iniciava exatamente na média atual do jogador**
+    desde a versão original (`mediaSimulada` = `Map` inicializado com
+    `j.avg_points`) — confirmado que é o comportamento correto (ao abrir a
+    página, projeção = mesma média atual até o fim da temporada, `Δ posição`
+    = "=" pra todo mundo).
 
 - **Ajuste posterior: coluna renomeada + badge de distância na Preferência
   piloto.**

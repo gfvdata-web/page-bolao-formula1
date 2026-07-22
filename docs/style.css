@@ -659,16 +659,20 @@ button.subaba[aria-selected="true"] {
 
 .simulador-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 0.6rem;
+  grid-auto-flow: column;
+  grid-template-rows: repeat(2, auto);
+  grid-auto-columns: 150px;
+  gap: 0.5rem;
   margin-bottom: 1rem;
+  overflow-x: auto;
+  padding-bottom: 0.3rem;
 }
 
 .simulador-card {
   background: var(--bg-card);
-  border-radius: 10px;
+  border-radius: 8px;
   box-shadow: var(--sombra);
-  padding: 0.7rem 0.8rem;
+  padding: 0.45rem 0.55rem;
   border-top: 3px solid var(--cor-jogador, var(--borda));
 }
 
@@ -676,13 +680,16 @@ button.subaba[aria-selected="true"] {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.4rem;
-  margin-bottom: 0.5rem;
+  gap: 0.3rem;
+  margin-bottom: 0.3rem;
 }
 
 .simulador-card__nome {
   font-weight: 700;
-  font-size: 0.9rem;
+  font-size: 0.78rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .simulador-card__reset {
@@ -690,12 +697,13 @@ button.subaba[aria-selected="true"] {
   background: var(--bg);
   color: var(--texto-fraco);
   border-radius: 999px;
-  width: 1.6rem;
-  height: 1.6rem;
+  width: 1.3rem;
+  height: 1.3rem;
   line-height: 1;
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: 0.75rem;
   flex-shrink: 0;
+  padding: 0;
 }
 
 .simulador-card__reset:hover {
@@ -706,7 +714,7 @@ button.subaba[aria-selected="true"] {
 .simulador-card__controle {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.4rem;
 }
 
 .simulador-card__slider {
@@ -717,7 +725,8 @@ button.subaba[aria-selected="true"] {
 .simulador-card__valor {
   font-variant-numeric: tabular-nums;
   font-weight: 700;
-  min-width: 2.4rem;
+  font-size: 0.82rem;
+  min-width: 2rem;
   text-align: right;
   color: var(--cor-jogador, var(--texto));
 }

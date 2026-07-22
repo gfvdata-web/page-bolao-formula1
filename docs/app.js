@@ -321,13 +321,22 @@ function calcularRodadasRestantes(standings, calendar) {
 }
 
 function construirProjecoesSimulador() {
-  const { standings, mediaSimulada, rodadasRestantes } = simuladorEstado;
+  const { standings, mediaSimulada, rodadasRestantes, rodadasJaRodadas } = simuladorEstado;
   const posicaoAtual = new Map(standings.players.map((j) => [j.player_id, j.position]));
+  const totalTemporada = rodadasJaRodadas + rodadasRestantes;
 
   const linhas = standings.players.map((jogador) => {
-    const media = mediaSimulada.get(jogador.player_id);
-    const projecao = jogador.total + media * rodadasRestantes;
-    return { jogador, media, projecao };
+    const mediaAtual = jogador.avg_points;
+    const mediaFinalSimulada = mediaSimulada.get(jogador.player_id);
+    // Média final pondera o que já rodou (média real) com o que falta (média
+    // simulada), pelo nº de rodadas de cada lado — não é a média simulada
+    // "pura", que só vale para as rodadas futuras.
+    const mediaFinal =
+      totalTemporada > 0
+        ? (mediaAtual * rodadasJaRodadas + mediaFinalSimulada * rodadasRestantes) / totalTemporada
+        : mediaAtual;
+    const projecao = jogador.total + mediaFinalSimulada * rodadasRestantes;
+    return { jogador, mediaAtual, mediaFinal, projecao };
   });
 
   linhas.sort((a, b) => b.projecao - a.projecao || a.jogador.player_id.localeCompare(b.jogador.player_id));
@@ -356,7 +365,8 @@ function renderTabelaSimulador() {
         el("th", {}, ["#"]),
         el("th", {}, ["Jogador"]),
         el("th", { class: "num" }, ["Pontos atuais"]),
-        el("th", { class: "num" }, ["Média simulada"]),
+        el("th", { class: "num" }, ["Média atual"]),
+        el("th", { class: "num" }, ["Média final"]),
         el("th", { class: "num" }, ["Projeção final"]),
         el("th", { class: "num" }, ["Δ posição"]),
       ]),
@@ -370,7 +380,8 @@ function renderTabelaSimulador() {
         el("td", { class: "pos-medalha" }, [medalhas[linha.posicaoSimulada] || String(linha.posicaoSimulada)]),
         el("td", {}, [linha.jogador.name]),
         el("td", { class: "num" }, [String(linha.jogador.total)]),
-        el("td", { class: "num" }, [linha.media.toFixed(1)]),
+        el("td", { class: "num" }, [linha.mediaAtual.toFixed(1)]),
+        el("td", { class: "num" }, [linha.mediaFinal.toFixed(1)]),
         el("td", { class: "num simulador-tabela__projecao" }, [linha.projecao.toFixed(1)]),
         el("td", { class: "num" }, [badgeDeltaPosicao(linha.deltaPosicao)]),
       ])
@@ -425,8 +436,9 @@ function cardSimuladorJogador(jogador, indice) {
 
 function renderSimulador(standings, calendar) {
   const rodadasRestantes = calcularRodadasRestantes(standings, calendar);
+  const rodadasJaRodadas = standings.rounds.length;
   const mediaSimulada = new Map(standings.players.map((j) => [j.player_id, j.avg_points]));
-  simuladorEstado = { standings, calendar, mediaSimulada, rodadasRestantes };
+  simuladorEstado = { standings, calendar, mediaSimulada, rodadasRestantes, rodadasJaRodadas };
 
   const status = document.getElementById("simulador-status");
   status.textContent =
