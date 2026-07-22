@@ -458,6 +458,21 @@ function cardSimuladorJogador(jogador, indice) {
   ]);
 }
 
+function renderCardsSimulador() {
+  const cardsContainer = document.getElementById("simulador-cards");
+  cardsContainer.replaceChildren(
+    ...simuladorEstado.standings.players.map((jogador, indice) => cardSimuladorJogador(jogador, indice))
+  );
+}
+
+function resetarTodasSimulacoes() {
+  for (const jogador of simuladorEstado.standings.players) {
+    simuladorEstado.mediaSimulada.set(jogador.player_id, jogador.avg_points);
+  }
+  renderCardsSimulador();
+  renderTabelaSimulador();
+}
+
 function renderSimulador(standings, calendar) {
   const rodadasRestantes = calcularRodadasRestantes(standings, calendar);
   const rodadasJaRodadas = standings.rounds.length;
@@ -467,14 +482,12 @@ function renderSimulador(standings, calendar) {
   const status = document.getElementById("simulador-status");
   status.textContent =
     rodadasRestantes > 0
-      ? `Simulando as ${rodadasRestantes} corrida(s) que faltam na temporada — arraste os cards para testar médias.`
+      ? `Simulando as ${rodadasRestantes} corrida(s) que faltam na temporada — ajuste os cards para testar médias.`
       : "Temporada já concluída — não há mais corridas para simular.";
 
-  const cardsContainer = document.getElementById("simulador-cards");
-  cardsContainer.replaceChildren(
-    ...standings.players.map((jogador, indice) => cardSimuladorJogador(jogador, indice))
-  );
+  document.getElementById("simulador-reset-geral").addEventListener("click", resetarTodasSimulacoes);
 
+  renderCardsSimulador();
   renderTabelaSimulador();
 }
 

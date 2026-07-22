@@ -673,6 +673,12 @@ Geral do Ranking.**
     `clampMedia()` (arredonda a 1 casa, limita a `[0, 13]` — os mesmos
     limites do slider antigo; texto inválido vira `0.0`). Mantém o botão `↺`
     de restaurar a média real.
+  - **Ajuste posterior: botão "↺ Restaurar todas as médias"**
+    (`#simulador-reset-geral`, no topo da sub-aba, ao lado do texto de
+    status) — `resetarTodasSimulacoes()` zera `simuladorEstado.mediaSimulada`
+    de todos os jogadores de volta a `avg_points` e re-renderiza cards +
+    tabela de uma vez (`renderCardsSimulador()` extraído de `renderSimulador`
+    para ser reutilizável nesse reset e na carga inicial).
 
 - **Ajuste posterior: coluna renomeada + badge de distância na Preferência
   piloto.**

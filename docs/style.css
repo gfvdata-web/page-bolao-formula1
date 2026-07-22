@@ -657,6 +657,37 @@ button.subaba[aria-selected="true"] {
 
 /* Simulador (Ranking) */
 
+.simulador-topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.simulador-topo .status {
+  padding: 0;
+  text-align: left;
+  flex: 1;
+}
+
+.simulador-reset-geral {
+  border: 1px solid var(--borda);
+  background: var(--bg-card);
+  color: var(--texto);
+  border-radius: 8px;
+  padding: 0.4rem 0.7rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.simulador-reset-geral:hover {
+  border-color: var(--acento);
+  color: var(--acento);
+}
+
 .simulador-cards {
   display: grid;
   grid-auto-flow: column;
