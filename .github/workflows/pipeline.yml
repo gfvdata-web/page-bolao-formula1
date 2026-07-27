@@ -59,7 +59,10 @@ jobs:
           bash .github/scripts/registra-estado.sh "$CODIGO" "$RESUMO"
 
       - name: Commit e push dos dados atualizados
-        run: bash .github/scripts/commit-push.sh "Etapa 5: atualiza dados via Actions (rodada ${RODADA})"
+        # Bloco (|) e não linha solta: a mensagem tem ": ", que num escalar
+        # YAML sem aspas quebra o parse do workflow inteiro.
+        run: |
+          bash .github/scripts/commit-push.sh "Etapa 5: atualiza dados via Actions (rodada ${RODADA})"
 
       # A rodada ficou gravada mas não pontuada porque a Jolpica ainda não
       # publicou o quali. Em vez de exigir um retry manual, a própria run fica
