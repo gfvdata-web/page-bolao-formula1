@@ -84,6 +84,7 @@
     <nav class="subabas" role="tablist">
       <button class="subaba" data-subaba="historico" role="tab" aria-selected="true">Histórico</button>
       <button class="subaba" data-subaba="preferencia" role="tab" aria-selected="false">Preferência piloto</button>
+      <button class="subaba" data-subaba="rendimento" role="tab" aria-selected="false">Rendimento</button>
     </nav>
 
     <div id="subsecao-historico" class="subsecao" role="tabpanel">
@@ -103,6 +104,22 @@
         </select>
       </div>
       <div id="preferencia-container"></div>
+    </div>
+
+    <div id="subsecao-rendimento" class="subsecao" hidden role="tabpanel">
+      <div class="filtro-jogador">
+        <label for="select-rendimento-jogador">Jogador:</label>
+        <select id="select-rendimento-jogador">
+          <option value="todos">Todos</option>
+        </select>
+      </div>
+      <div class="rendimento-grafico-wrap">
+        <h3 class="rendimento-grafico-titulo" id="rendimento-titulo">Pontos que cada piloto rende por aposta</h3>
+        <div class="rendimento-grafico-canvas">
+          <canvas id="rendimento-grafico"></canvas>
+        </div>
+      </div>
+      <div id="rendimento-container"></div>
     </div>
   </section>
 

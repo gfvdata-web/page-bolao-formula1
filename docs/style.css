@@ -863,9 +863,9 @@ button.subaba[aria-selected="true"] {
 .delta-posicao--desce { background: var(--ok0-bg); color: var(--acento); }
 .delta-posicao--igual { background: var(--ok0-bg); color: var(--ok0-texto); }
 
-/* Preferência piloto */
+/* Preferência piloto e Rendimento (mesmo visual de tabela) */
 
-.preferencia-tabela {
+.preferencia-tabela, .rendimento-tabela {
   width: 100%;
   border-collapse: collapse;
   background: var(--bg-card);
@@ -874,14 +874,15 @@ button.subaba[aria-selected="true"] {
   box-shadow: var(--sombra);
 }
 
-.preferencia-tabela th, .preferencia-tabela td {
+.preferencia-tabela th, .preferencia-tabela td,
+.rendimento-tabela th, .rendimento-tabela td {
   padding: 0.55rem 0.7rem;
   text-align: left;
   border-bottom: 1px solid var(--borda);
   font-size: 0.88rem;
 }
 
-.preferencia-tabela th {
+.preferencia-tabela th, .rendimento-tabela th {
   color: var(--texto-fraco);
   font-weight: 600;
   font-size: 0.75rem;
@@ -889,13 +890,56 @@ button.subaba[aria-selected="true"] {
   letter-spacing: 0.03em;
 }
 
-.preferencia-tabela tbody tr:last-child td {
+.preferencia-tabela tbody tr:last-child td,
+.rendimento-tabela tbody tr:last-child td {
   border-bottom: none;
 }
 
-.preferencia-tabela td.num, .preferencia-tabela th.num {
+.preferencia-tabela td.num, .preferencia-tabela th.num,
+.rendimento-tabela td.num, .rendimento-tabela th.num {
   text-align: right;
   font-variant-numeric: tabular-nums;
+}
+
+/* Rendimento por piloto */
+
+.rendimento-grafico-wrap {
+  background: var(--bg-card);
+  border-radius: 10px;
+  box-shadow: var(--sombra);
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.rendimento-grafico-titulo {
+  margin: 0 0 0.6rem;
+  font-size: 0.95rem;
+}
+
+/* Altura só como fallback: renderGraficoRendimento ajusta conforme o nº de pilotos. */
+.rendimento-grafico-canvas {
+  position: relative;
+  height: 420px;
+}
+
+/* Com o filtro de jogador a tabela ganha uma coluna a mais — rola lateralmente
+   em telas pequenas, mesmo padrão das outras tabelas largas do site. */
+.rendimento-tabela-wrap {
+  overflow-x: auto;
+}
+
+.rendimento-tabela {
+  min-width: 34rem;
+}
+
+.rendimento-pos {
+  color: var(--texto-fraco);
+  width: 2rem;
+}
+
+.rendimento-media {
+  font-weight: 600;
+  white-space: nowrap;
 }
 
 /* Hall of Fame */

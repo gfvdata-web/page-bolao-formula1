@@ -910,8 +910,9 @@ function renderTemporada(standings) {
 
 // ---------- Preferência piloto ----------
 
-function popularSelectPreferencia(bets) {
-  const select = document.getElementById("select-preferencia-jogador");
+// Usado pelos filtros com opção "Todos" (Preferência piloto e Rendimento).
+function popularSelectComTodos(selectId, bets) {
+  const select = document.getElementById(selectId);
   const jogadores = Object.values(bets.players).sort((a, b) => a.name.localeCompare(b.name, "pt-BR"));
   select.replaceChildren(
     el("option", { value: "todos" }, ["Todos"]),
@@ -1028,6 +1029,218 @@ function renderPreferenciaPiloto(playerId, bets, results) {
   container.replaceChildren(tabela, legenda);
 }
 
+// ---------- Rendimento por piloto ----------
+
+let graficoRendimento = null;
+let rendimentoEstado = null; // { bets, playerId, linhas }
+
+// Quanto cada piloto rende para quem aposta nele: percorre os palpites de top6
+// e soma os pontos que cada piloto escolhido gerou (2 pt posição exata, 1 pt
+// dentro do top6 real, 0 fora). O piloto da rodada (bônus) fica de fora —
+// ele é definido pela rodada, ninguém "aposta nele" por escolha própria.
+function coletarRendimento(bets, playerId) {
+  const jogadores = playerId === "todos" ? Object.values(bets.players) : [bets.players[playerId]].filter(Boolean);
+  const porPiloto = new Map(); // codigo -> { apostas, pontos, exatas, dentro, fora }
+
+  for (const jogador of jogadores) {
+    for (const rodada of Object.values(jogador.rounds)) {
+      for (const detalhe of rodada.top6_detail || []) {
+        const registro = porPiloto.get(detalhe.guess) || { apostas: 0, pontos: 0, exatas: 0, dentro: 0, fora: 0 };
+        registro.apostas += 1;
+        registro.pontos += detalhe.points;
+        if (detalhe.points >= 2) registro.exatas += 1;
+        else if (detalhe.points === 1) registro.dentro += 1;
+        else registro.fora += 1;
+        porPiloto.set(detalhe.guess, registro);
+      }
+    }
+  }
+  return porPiloto;
+}
+
+// Só entram os pilotos que o filtro ativo realmente apostou (rendimento sem
+// aposta não existe). `mediaGeral` é sempre a média de todos os jogadores
+// juntos, para a comparação "esse jogador tira mais ou menos desse piloto".
+function construirLinhasRendimento(bets, playerId) {
+  const geral = coletarRendimento(bets, "todos");
+  const doFiltro = playerId === "todos" ? geral : coletarRendimento(bets, playerId);
+
+  return [...doFiltro.entries()]
+    .map(([codigo, registro]) => {
+      const registroGeral = geral.get(codigo);
+      return {
+        codigo,
+        ...registro,
+        media: registro.pontos / registro.apostas,
+        apostasGeral: registroGeral ? registroGeral.apostas : 0,
+        mediaGeral: registroGeral ? registroGeral.pontos / registroGeral.apostas : null,
+      };
+    })
+    .sort((a, b) => b.media - a.media || b.apostas - a.apostas || a.codigo.localeCompare(b.codigo));
+}
+
+function nomeJogadorBets(bets, playerId) {
+  const jogador = bets.players[playerId];
+  return jogador ? jogador.name : playerId;
+}
+
+// Barras horizontais ordenadas (melhor rendimento no topo), coloridas pela
+// equipe do piloto. Com um jogador no filtro, entra uma 2ª barra cinza com a
+// média geral daquele piloto.
+function renderGraficoRendimento(linhas, playerId, bets) {
+  const canvas = document.getElementById("rendimento-grafico");
+  const comparando = playerId !== "todos";
+  // Altura proporcional ao nº de pilotos (o wrap tem altura fixa no CSS só
+  // como fallback) — com ~20 pilotos, barras de 26px ainda ficam legíveis.
+  canvas.parentElement.style.height = `${Math.max(200, linhas.length * (comparando ? 34 : 26) + 56)}px`;
+
+  const corTexto = corCss("--texto-fraco");
+  const corGrade = corCss("--borda");
+  const datasets = [
+    {
+      label: comparando ? nomeJogadorBets(bets, playerId) : "Todos os jogadores",
+      data: linhas.map((linha) => linha.media),
+      backgroundColor: linhas.map((linha) => corPiloto(linha.codigo)),
+      borderWidth: 0,
+    },
+  ];
+  if (comparando) {
+    datasets.push({
+      label: "Média geral",
+      data: linhas.map((linha) => linha.mediaGeral),
+      backgroundColor: corGrade,
+      borderWidth: 0,
+    });
+  }
+
+  if (graficoRendimento) graficoRendimento.destroy();
+  graficoRendimento = new Chart(canvas.getContext("2d"), {
+    type: "bar",
+    data: { labels: linhas.map((linha) => linha.codigo), datasets },
+    options: {
+      indexAxis: "y",
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: false,
+      plugins: {
+        legend: {
+          display: comparando,
+          labels: { color: corTexto, boxWidth: 12, boxHeight: 8, font: { size: 11 } },
+        },
+        tooltip: {
+          callbacks: {
+            label(item) {
+              const linha = linhas[item.dataIndex];
+              const geral = item.datasetIndex === 1;
+              const media = geral ? linha.mediaGeral : linha.media;
+              const apostas = geral ? linha.apostasGeral : linha.apostas;
+              return `${item.dataset.label}: ${media.toFixed(2)} pts/aposta (${apostas} apostas)`;
+            },
+          },
+        },
+      },
+      scales: {
+        x: {
+          min: 0,
+          max: 2,
+          ticks: { color: corTexto, stepSize: 0.5 },
+          grid: { color: corGrade },
+          title: { display: true, text: "Pontos por aposta (máx. 2)", color: corTexto },
+        },
+        y: { ticks: { color: corTexto, font: { size: 11 } }, grid: { display: false } },
+      },
+    },
+  });
+}
+
+// Sinaliza rendimento acima (▲) ou abaixo (▼) da média geral daquele piloto.
+function badgeRendimentoGeral(media, mediaGeral) {
+  const diferenca = media - mediaGeral;
+  const seta = diferenca >= 0 ? "▲" : "▼";
+  return el("span", { class: "distancia-badge" }, [seta, ` ${Math.abs(diferenca).toFixed(2)}`]);
+}
+
+function renderTabelaRendimento(linhas, playerId) {
+  const container = document.getElementById("rendimento-container");
+  const comparando = playerId !== "todos";
+
+  const cabecalho = [
+    el("th", { class: "num" }, ["#"]),
+    el("th", {}, ["Piloto"]),
+    el("th", { class: "num" }, ["Pts/aposta"]),
+    comparando ? el("th", { class: "num" }, ["Média geral"]) : null,
+    el("th", { class: "num" }, ["Pontos"]),
+    el("th", { class: "num" }, ["Apostas"]),
+    el("th", { class: "num" }, ["2 pt"]),
+    el("th", { class: "num" }, ["1 pt"]),
+    el("th", { class: "num" }, ["0 pt"]),
+  ].filter(Boolean);
+
+  const tabela = el("table", { class: "rendimento-tabela" }, [el("thead", {}, [el("tr", {}, cabecalho)])]);
+  const tbody = el("tbody");
+  linhas.forEach((linha, indice) => {
+    tbody.appendChild(
+      el(
+        "tr",
+        {},
+        [
+          el("td", { class: "num rendimento-pos" }, [String(indice + 1)]),
+          el("td", {}, [chipPiloto(linha.codigo)]),
+          el("td", { class: "num rendimento-media" }, [
+            `${linha.media.toFixed(2)} `,
+            ...(comparando && linha.mediaGeral !== null ? [badgeRendimentoGeral(linha.media, linha.mediaGeral)] : []),
+          ]),
+          comparando ? el("td", { class: "num" }, [linha.mediaGeral === null ? "-" : linha.mediaGeral.toFixed(2)]) : null,
+          el("td", { class: "num" }, [String(linha.pontos)]),
+          el("td", { class: "num" }, [String(linha.apostas)]),
+          el("td", { class: "num" }, [String(linha.exatas)]),
+          el("td", { class: "num" }, [String(linha.dentro)]),
+          el("td", { class: "num" }, [String(linha.fora)]),
+        ].filter(Boolean)
+      )
+    );
+  });
+  tabela.appendChild(tbody);
+
+  const legenda = el("p", { class: "preferencia-legenda" }, [
+    "Pts/aposta: média de pontos que o piloto gerou em cada palpite de top6 em que foi escolhido " +
+      "(2 pt = posição exata, 1 pt = dentro do top6 real, 0 pt = fora). O piloto da rodada não entra nessa conta.",
+  ]);
+  container.replaceChildren(el("div", { class: "rendimento-tabela-wrap" }, [tabela]), legenda);
+}
+
+function renderRendimento(playerId, bets) {
+  const linhas = construirLinhasRendimento(bets, playerId);
+  rendimentoEstado = { bets, playerId, linhas };
+
+  const titulo = document.getElementById("rendimento-titulo");
+  titulo.textContent =
+    playerId === "todos"
+      ? "Pontos que cada piloto rende por aposta"
+      : `Rendimento por piloto — ${nomeJogadorBets(bets, playerId)} vs. média geral`;
+
+  if (!linhas.length) {
+    document
+      .getElementById("rendimento-container")
+      .replaceChildren(el("p", { class: "status" }, ["Sem palpites de top6 registrados."]));
+    if (graficoRendimento) {
+      graficoRendimento.destroy();
+      graficoRendimento = null;
+    }
+    return;
+  }
+
+  renderTabelaRendimento(linhas, playerId);
+  // Mesmo cuidado dos gráficos da Temporada: só criar o Chart com o canvas
+  // visível (ver garantirGraficoRendimento).
+  if (!document.getElementById("subsecao-rendimento").hidden && !document.getElementById("secao-palpites").hidden) {
+    renderGraficoRendimento(linhas, playerId, bets);
+  } else if (graficoRendimento) {
+    graficoRendimento.destroy();
+    graficoRendimento = null;
+  }
+}
+
 // ---------- Hall of Fame ----------
 
 function nomeHall(hof, id) {
@@ -1120,6 +1333,14 @@ function garantirGraficosTemporada() {
   }
 }
 
+// Mesmo problema de layout do Chart.js descrito acima: o gráfico de rendimento
+// só é criado quando a sub-aba Rendimento fica de fato visível.
+function garantirGraficoRendimento() {
+  if (!rendimentoEstado || !rendimentoEstado.linhas.length) return;
+  if (graficoRendimento) graficoRendimento.resize();
+  else renderGraficoRendimento(rendimentoEstado.linhas, rendimentoEstado.playerId, rendimentoEstado.bets);
+}
+
 function configurarAbas() {
   const botoes = document.querySelectorAll("button.aba");
   const secoes = {
@@ -1134,9 +1355,13 @@ function configurarAbas() {
       for (const [nome, secao] of Object.entries(secoes)) {
         secao.hidden = nome !== botao.dataset.aba;
       }
-      const subabaAtiva = document.querySelector("#secao-ranking button.subaba[aria-selected=\"true\"]");
-      if (botao.dataset.aba === "ranking" && subabaAtiva && subabaAtiva.dataset.subaba === "corridas") {
+      const subabaRanking = document.querySelector("#secao-ranking button.subaba[aria-selected=\"true\"]");
+      if (botao.dataset.aba === "ranking" && subabaRanking && subabaRanking.dataset.subaba === "corridas") {
         garantirGraficosTemporada();
+      }
+      const subabaPalpites = document.querySelector("#secao-palpites button.subaba[aria-selected=\"true\"]");
+      if (botao.dataset.aba === "palpites" && subabaPalpites && subabaPalpites.dataset.subaba === "rendimento") {
+        garantirGraficoRendimento();
       }
     });
   });
@@ -1147,6 +1372,7 @@ function configurarSubAbas() {
   const secoes = {
     historico: document.getElementById("subsecao-historico"),
     preferencia: document.getElementById("subsecao-preferencia"),
+    rendimento: document.getElementById("subsecao-rendimento"),
   };
   botoes.forEach((botao) => {
     botao.addEventListener("click", () => {
@@ -1154,6 +1380,9 @@ function configurarSubAbas() {
       botao.setAttribute("aria-selected", "true");
       for (const [nome, secao] of Object.entries(secoes)) {
         secao.hidden = nome !== botao.dataset.subaba;
+      }
+      if (botao.dataset.subaba === "rendimento") {
+        garantirGraficoRendimento();
       }
     });
   });
@@ -1224,12 +1453,19 @@ async function main() {
       renderPalpitesJogador(jogadores[0].player_id, bets, standings);
     }
 
-    popularSelectPreferencia(bets);
+    popularSelectComTodos("select-preferencia-jogador", bets);
     const selectPreferencia = document.getElementById("select-preferencia-jogador");
     selectPreferencia.addEventListener("change", () => {
       renderPreferenciaPiloto(selectPreferencia.value, bets, results);
     });
     renderPreferenciaPiloto("todos", bets, results);
+
+    popularSelectComTodos("select-rendimento-jogador", bets);
+    const selectRendimento = document.getElementById("select-rendimento-jogador");
+    selectRendimento.addEventListener("change", () => {
+      renderRendimento(selectRendimento.value, bets);
+    });
+    renderRendimento("todos", bets);
 
     const hof = await carregarJson("./data/hall_of_fame.json");
     renderHallOfFame(hof);

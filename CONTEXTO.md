@@ -742,6 +742,44 @@ Ranking/Corridas.**
   "Posição" ele mostraria a posição como se fossem pontos.
 - Nenhuma mudança em `bolao/site.py` nem nos formatos de `docs/data/*.json`.
 
+**Ajuste posterior (ainda Etapa 4): sub-aba "Rendimento" em Palpites por
+jogador (quanto cada piloto rende para quem aposta nele).**
+- **3ª sub-aba** de `#secao-palpites` (`data-subaba="rendimento"` →
+  `#subsecao-rendimento`, ao lado de Histórico/Preferência piloto), mesmo
+  padrão de `configurarSubAbas()`.
+- **Métrica: `pts/aposta`** — para cada piloto, a média de pontos que ele gerou
+  nos palpites de top6 em que foi escolhido (`bets.json`, `top6_detail[].guess`
+  + `.points`; 2 pt exata / 1 pt dentro do top6 / 0 fora). Máx. 2. O **piloto da
+  rodada (bônus) não entra** na conta — ele é definido pela rodada, não é uma
+  escolha do jogador (dito na legenda da tabela).
+- **Filtro "Jogador" com opção "Todos"** (padrão), igual ao da Preferência
+  piloto — `popularSelectPreferencia` virou `popularSelectComTodos(selectId,
+  bets)`, usada pelos dois filtros. Só entram os pilotos que o filtro ativo
+  realmente apostou (diferente da Preferência piloto, que usa universo fixo:
+  rendimento sem aposta não existe).
+- **Gráfico** (`#rendimento-grafico`, Chart.js barras horizontais,
+  `indexAxis: "y"`, eixo X fixo em 0–2): uma barra por piloto, ordenado por
+  `pts/aposta` desc (melhor no topo), colorida pela equipe (`corPiloto`, mesmo
+  mapa dos chips). Com um jogador no filtro, entra uma **2ª barra cinza com a
+  média geral** daquele piloto (a comparação "esse jogador tira mais ou menos
+  desse piloto que a média"). Altura do canvas calculada em JS
+  (`linhas × 26px`, ou 34px comparando) — o `height` do
+  `.rendimento-grafico-canvas` no CSS é só fallback.
+- **Tabela** (`renderTabelaRendimento`): `#`, piloto, `Pts/aposta`, `Pontos`,
+  `Apostas`, `2 pt`, `1 pt`, `0 pt`; com jogador no filtro ganha a coluna
+  `Média geral` e um `.distancia-badge` (▲/▼, cinza) ao lado do `Pts/aposta`
+  com a diferença para a média geral. Rola horizontalmente dentro de
+  `.rendimento-tabela-wrap`. O CSS da tabela é o mesmo bloco da
+  `.preferencia-tabela` (seletores agrupados em `style.css`).
+- **Mesma inicialização preguiçosa dos gráficos da Temporada** (bug do Chart.js
+  em canvas escondido): `renderRendimento()` sempre monta a tabela mas só cria o
+  `Chart` se a sub-aba estiver visível; `garantirGraficoRendimento()` é chamada
+  ao clicar na sub-aba **Rendimento** e ao clicar na aba principal **Palpites**
+  com essa sub-aba já ativa (`configurarSubAbas`/`configurarAbas`). Estado em
+  `rendimentoEstado = { bets, playerId, linhas }`.
+- Nenhuma mudança em `bolao/site.py` nem nos formatos de `docs/data/*.json` —
+  `bets.json` já tinha tudo (`top6_detail`).
+
 ### Etapa 5 — GitHub Actions ✅
 - **Objetivo:** workflow acionado por `repository_dispatch` que roda o pipeline
   completo (parse → buscar resultado → pontuar → gerar dados → commit).
