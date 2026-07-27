@@ -710,6 +710,38 @@ Geral do Ranking.**
     `Math.abs(diferenca)`. Só aparece quando a linha tem palpite (não nas
     linhas "-" de piloto não apostado pelo filtro ativo).
 
+**Ajuste posterior (ainda Etapa 4): leitura rodada a rodada nos gráficos de
+Ranking/Corridas.**
+- **Tooltip compartilhado:** o `interaction` dos dois gráficos passou de
+  `mode: "nearest"` para `mode: "index"` (`intersect: false`, `axis: "x"`) — o
+  mouse em qualquer altura da faixa da rodada mostra **todos** os jogadores de
+  uma vez, para comparar corrida a corrida.
+- Linhas do tooltip ordenadas por posição (`itemSort`) e numeradas
+  (`1º  Nome — 87 pts`): no gráfico acumulado a numeração é a **posição no
+  ranking da temporada**, com a **variação em relação à rodada anterior**
+  (`▲2`/`▼1`/`=`); no gráfico por corrida é a ordem de pontos **daquela
+  corrida** (sem Δ). Título do tooltip = `R{round} · {corrida}`. As posições vêm
+  de `calcularPosicoesPorRodada` (sobre **todos** os jogadores; critério pontos
+  desc + `player_id` asc, igual ao resto do site) — desligar jogadores nos cards
+  só omite linhas do tooltip, não renumera.
+- **Linha vertical tracejada** na rodada sob o mouse: plugin inline
+  `pluginLinhaRodada`, registrado só nesses dois gráficos (`plugins: []` do
+  `new Chart`), desenhado em `afterDatasetsDraw` a partir de
+  `chart.tooltip.getActiveElements()`.
+- **Toggle "Pontos"/"Posição"** no cabeçalho do gráfico acumulado
+  (`#temporada-modo-acumulado`, `.temporada-modo__btn[data-modo]`;
+  `configurarModoAcumulado`/`aplicarModoAcumulado`): troca o eixo Y entre pontos
+  acumulados e **posição no ranking** (eixo invertido, 1º no topo,
+  `stepSize: 1`) — é o mesmo gráfico, só o `.data` de cada dataset e
+  `options.scales.y` mudam (preserva o `hidden` dos cards de jogador). O `<h3>`
+  acompanha (`#temporada-titulo-acumulado`).
+- **Cuidado:** os arrays em `chart.data.datasets[i].data` são os mesmos objetos
+  de `datasetsAcumulado`, e o toggle os substitui; por isso
+  `construirDadosTemporada` guarda cópias (`pontosAcumulados`/`pontosPorRodada`,
+  `Map` por `player_id`) — é delas que o tooltip lê os pontos, senão em modo
+  "Posição" ele mostraria a posição como se fossem pontos.
+- Nenhuma mudança em `bolao/site.py` nem nos formatos de `docs/data/*.json`.
+
 ### Etapa 5 — GitHub Actions ✅
 - **Objetivo:** workflow acionado por `repository_dispatch` que roda o pipeline
   completo (parse → buscar resultado → pontuar → gerar dados → commit).

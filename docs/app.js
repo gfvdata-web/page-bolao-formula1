@@ -609,6 +609,31 @@ function renderPalpitesJogador(playerId, bets, standings) {
 let graficoTemporadaAcumulado = null;
 let graficoTemporadaPorRodada = null;
 let standingsParaTemporada = null;
+// Estado do toggle "Pontos"/"Posição" do gráfico acumulado (só front-end).
+let modoGraficoAcumulado = "pontos";
+// Séries auxiliares usadas pelos tooltips e pelo modo "Posição".
+let dadosTemporada = null;
+
+// Traço vertical que acompanha o mouse, deixando claro qual rodada está sendo lida.
+const pluginLinhaRodada = {
+  id: "linhaRodada",
+  afterDatasetsDraw(chart) {
+    const ativos = chart.tooltip && chart.tooltip.getActiveElements ? chart.tooltip.getActiveElements() : [];
+    if (!ativos.length) return;
+    const x = ativos[0].element.x;
+    const { top, bottom } = chart.chartArea;
+    const ctx = chart.ctx;
+    ctx.save();
+    ctx.beginPath();
+    ctx.lineWidth = 1;
+    ctx.setLineDash([4, 4]);
+    ctx.strokeStyle = corCss("--texto-fraco");
+    ctx.moveTo(x, top);
+    ctx.lineTo(x, bottom);
+    ctx.stroke();
+    ctx.restore();
+  },
+};
 
 function construirSerieJogador(jogador, rounds, cor) {
   const compensadas = new Set(jogador.compensated_rounds);
@@ -665,6 +690,25 @@ function construirSerieJogador(jogador, rounds, cor) {
   };
 }
 
+// Posição de cada jogador em cada rodada, calculada sobre TODOS os jogadores
+// (independe de quais linhas estão ligadas nos cards). Mesmo critério de
+// desempate do resto do site: pontos desc, depois player_id asc.
+function calcularPosicoesPorRodada(datasets, totalRodadas) {
+  const posicoes = new Map(datasets.map((d) => [d.playerId, []]));
+
+  for (let i = 0; i < totalRodadas; i++) {
+    datasets
+      .map((d) => ({ playerId: d.playerId, valor: d.data[i] }))
+      .filter((e) => e.valor != null)
+      .sort((a, b) => b.valor - a.valor || a.playerId.localeCompare(b.playerId))
+      .forEach((e, indice) => posicoes.get(e.playerId).push(indice + 1));
+    for (const d of datasets) {
+      if (d.data[i] == null) posicoes.get(d.playerId).push(null);
+    }
+  }
+  return posicoes;
+}
+
 function construirDadosTemporada(standings) {
   const rounds = standings.rounds.slice().sort((a, b) => a.round - b.round);
   const datasetsAcumulado = [];
@@ -677,49 +721,162 @@ function construirDadosTemporada(standings) {
     datasetsPorRodada.push(datasetPorRodada);
   });
 
-  return { labels: rounds.map((r) => r.race), datasetsAcumulado, datasetsPorRodada };
+  // Posição no ranking da temporada (pelo acumulado) e ordem de pontos dentro
+  // de cada corrida (pelo por-rodada) — as duas alimentam os tooltips.
+  const posicoesRanking = calcularPosicoesPorRodada(datasetsAcumulado, rounds.length);
+  const posicoesNaRodada = calcularPosicoesPorRodada(datasetsPorRodada, rounds.length);
+
+  // Cópias das séries de pontos: os arrays dentro dos datasets pertencem ao
+  // Chart.js e são trocados pelo toggle Pontos/Posição — os tooltips precisam
+  // dos pontos originais mesmo quando o eixo Y está mostrando posição.
+  const pontosAcumulados = new Map(datasetsAcumulado.map((d) => [d.playerId, d.data.slice()]));
+  const pontosPorRodada = new Map(datasetsPorRodada.map((d) => [d.playerId, d.data.slice()]));
+
+  return {
+    labels: rounds.map((r) => r.race),
+    rounds,
+    datasetsAcumulado,
+    datasetsPorRodada,
+    pontosAcumulados,
+    pontosPorRodada,
+    posicoesRanking,
+    posicoesNaRodada,
+  };
 }
 
-function criarGraficoTemporada(canvasId, labels, datasets, standings, tituloEixoY) {
+function formatarDeltaPosicao(posicao, anterior) {
+  if (posicao == null || anterior == null) return "";
+  const diferenca = anterior - posicao;
+  if (diferenca > 0) return `  ▲${diferenca}`;
+  if (diferenca < 0) return `  ▼${-diferenca}`;
+  return "  =";
+}
+
+// Eixo Y do modo "Posição": 1º no topo, um tique por posição.
+function escalaPosicao(corTexto, corGrade, totalJogadores) {
+  return {
+    reverse: true,
+    min: 1,
+    max: totalJogadores,
+    ticks: { color: corTexto, stepSize: 1, precision: 0 },
+    grid: { color: corGrade },
+    title: { display: true, text: "Posição no ranking", color: corTexto },
+  };
+}
+
+function escalaPontos(corTexto, corGrade, tituloEixoY) {
+  return {
+    beginAtZero: true,
+    ticks: { color: corTexto },
+    grid: { color: corGrade },
+    title: { display: true, text: tituloEixoY, color: corTexto },
+  };
+}
+
+// `tipo`: "acumulado" (posição no ranking da temporada, com Δ entre rodadas) ou
+// "rodada" (ordem de pontos dentro daquela corrida).
+function criarGraficoTemporada(canvasId, labels, datasets, standings, tituloEixoY, tipo) {
   const corTexto = corCss("--texto-fraco");
   const corGrade = corCss("--borda");
   const ctx = document.getElementById(canvasId).getContext("2d");
+  const posicoesDe = (playerId) =>
+    (tipo === "acumulado" ? dadosTemporada.posicoesRanking : dadosTemporada.posicoesNaRodada).get(playerId) || [];
+
   return new Chart(ctx, {
     type: "line",
+    plugins: [pluginLinhaRodada],
     data: { labels, datasets },
     options: {
       responsive: true,
       maintainAspectRatio: false,
       animation: false,
-      interaction: { mode: "nearest", intersect: false },
+      // "index" = passar o mouse em qualquer altura da faixa da rodada mostra
+      // todos os jogadores de uma vez, para comparar rodada a rodada.
+      interaction: { mode: "index", intersect: false, axis: "x" },
       plugins: {
         legend: { display: false },
         tooltip: {
+          usePointStyle: true,
+          bodyFont: { size: 11 },
+          padding: 10,
+          // Sempre na ordem do ranking (ou dos pontos da corrida), não na ordem
+          // dos datasets.
+          itemSort(a, b) {
+            const pa = posicoesDe(a.dataset.playerId)[a.dataIndex] ?? Infinity;
+            const pb = posicoesDe(b.dataset.playerId)[b.dataIndex] ?? Infinity;
+            return pa - pb;
+          },
           callbacks: {
+            title(itens) {
+              if (!itens.length) return "";
+              const rodada = dadosTemporada.rounds[itens[0].dataIndex];
+              return `R${rodada.round} · ${rodada.race}`;
+            },
             label(item) {
-              const numero = standings.rounds.slice().sort((a, b) => a.round - b.round)[item.dataIndex].round;
-              const jogador = standings.players.find((p) => p.player_id === item.dataset.playerId);
-              const compensou = jogador && jogador.compensated_rounds.includes(numero);
-              return `${item.dataset.label}: ${item.formattedValue} pts${compensou ? " (mínima — não apostou)" : ""}`;
+              const rodada = dadosTemporada.rounds[item.dataIndex];
+              const playerId = item.dataset.playerId;
+              const jogador = standings.players.find((p) => p.player_id === playerId);
+              const compensou = jogador && jogador.compensated_rounds.includes(rodada.round);
+              const posicoes = posicoesDe(playerId);
+              const posicao = posicoes[item.dataIndex];
+              // Em "acumulado" o valor exibido é sempre os pontos acumulados,
+              // mesmo quando o eixo Y está mostrando posição.
+              const serie = (
+                tipo === "acumulado" ? dadosTemporada.pontosAcumulados : dadosTemporada.pontosPorRodada
+              ).get(playerId);
+              const pontos = serie ? serie[item.dataIndex] : null;
+              const delta = tipo === "acumulado" ? formatarDeltaPosicao(posicao, posicoes[item.dataIndex - 1]) : "";
+              const prefixo = posicao == null ? "" : `${posicao}º  `;
+              return `${prefixo}${item.dataset.label} — ${pontos ?? "-"} pts${delta}${compensou ? "  (mínima)" : ""}`;
             },
           },
         },
       },
       scales: {
         x: { ticks: { color: corTexto }, grid: { color: corGrade } },
-        y: {
-          beginAtZero: true,
-          ticks: { color: corTexto },
-          grid: { color: corGrade },
-          title: { display: true, text: tituloEixoY, color: corTexto },
-        },
+        y: escalaPontos(corTexto, corGrade, tituloEixoY),
       },
     },
   });
 }
 
+// Alterna o eixo Y do gráfico acumulado entre pontos e posição no ranking.
+// Troca só o `.data` de cada dataset (preserva o `hidden` dos cards de jogador).
+function aplicarModoAcumulado(modo) {
+  modoGraficoAcumulado = modo;
+  const chart = graficoTemporadaAcumulado;
+  if (!chart || !dadosTemporada) return;
+
+  const posicao = modo === "posicao";
+  const origem = posicao ? dadosTemporada.posicoesRanking : dadosTemporada.pontosAcumulados;
+  chart.data.datasets.forEach((dataset) => {
+    dataset.data = (origem.get(dataset.playerId) || []).slice();
+  });
+  const corTexto = corCss("--texto-fraco");
+  const corGrade = corCss("--borda");
+  chart.options.scales.y = posicao
+    ? escalaPosicao(corTexto, corGrade, Math.max(dadosTemporada.datasetsAcumulado.length, 2))
+    : escalaPontos(corTexto, corGrade, "Pontos acumulados");
+  chart.update();
+
+  const titulo = document.getElementById("temporada-titulo-acumulado");
+  if (titulo) titulo.textContent = posicao ? "Posição no ranking" : "Pontuação acumulada";
+  document.querySelectorAll("#temporada-modo-acumulado .temporada-modo__btn").forEach((botao) => {
+    const ativo = botao.dataset.modo === modo;
+    botao.classList.toggle("temporada-modo__btn--ativo", ativo);
+    botao.setAttribute("aria-pressed", ativo ? "true" : "false");
+  });
+}
+
+function configurarModoAcumulado() {
+  document.querySelectorAll("#temporada-modo-acumulado .temporada-modo__btn").forEach((botao) => {
+    botao.addEventListener("click", () => aplicarModoAcumulado(botao.dataset.modo));
+  });
+}
+
 function renderTemporada(standings) {
-  const { labels, datasetsAcumulado, datasetsPorRodada } = construirDadosTemporada(standings);
+  dadosTemporada = construirDadosTemporada(standings);
+  const { labels, datasetsAcumulado, datasetsPorRodada } = dadosTemporada;
 
   const cardsContainer = document.getElementById("temporada-cards");
   cardsContainer.replaceChildren(
@@ -743,11 +900,12 @@ function renderTemporada(standings) {
   if (graficoTemporadaAcumulado) graficoTemporadaAcumulado.destroy();
   if (graficoTemporadaPorRodada) graficoTemporadaPorRodada.destroy();
   graficoTemporadaAcumulado = criarGraficoTemporada(
-    "temporada-grafico-acumulado", labels, datasetsAcumulado, standings, "Pontos acumulados"
+    "temporada-grafico-acumulado", labels, datasetsAcumulado, standings, "Pontos acumulados", "acumulado"
   );
   graficoTemporadaPorRodada = criarGraficoTemporada(
-    "temporada-grafico", labels, datasetsPorRodada, standings, "Pontos na rodada"
+    "temporada-grafico", labels, datasetsPorRodada, standings, "Pontos na rodada", "rodada"
   );
+  if (modoGraficoAcumulado !== "pontos") aplicarModoAcumulado(modoGraficoAcumulado);
 }
 
 // ---------- Preferência piloto ----------
@@ -1026,6 +1184,7 @@ async function main() {
   configurarAbas();
   configurarSubAbas();
   configurarSubAbasRanking();
+  configurarModoAcumulado();
 
   try {
     const standings = await carregarJson("./data/standings.json");

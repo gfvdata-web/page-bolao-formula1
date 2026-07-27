@@ -642,6 +642,42 @@ button.subaba[aria-selected="true"] {
   margin-bottom: 0;
 }
 
+.temporada-grafico-cabecalho {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  margin-bottom: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.temporada-grafico-cabecalho .temporada-grafico-titulo {
+  margin: 0;
+}
+
+.temporada-modo {
+  display: flex;
+  border: 1px solid var(--borda);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.temporada-modo__btn {
+  border: none;
+  background: var(--bg);
+  color: var(--texto-fraco);
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.7rem;
+  cursor: pointer;
+}
+
+.temporada-modo__btn--ativo {
+  background: var(--acento);
+  color: #fff;
+}
+
 .temporada-grafico-titulo {
   margin: 0 0 0.6rem;
   font-size: 0.85rem;
