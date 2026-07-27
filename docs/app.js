@@ -753,11 +753,17 @@ function formatarDeltaPosicao(posicao, anterior) {
 }
 
 // Eixo Y do modo "Posição": 1º no topo, um tique por posição.
+// O limite vai meio tique além das pontas (0.5 / n+0.5) para a linha do 1º e a
+// do último não colarem na borda do gráfico; `afterBuildTicks` garante que
+// mesmo assim só apareçam tiques em posições inteiras.
 function escalaPosicao(corTexto, corGrade, totalJogadores) {
   return {
     reverse: true,
-    min: 1,
-    max: totalJogadores,
+    min: 0.5,
+    max: totalJogadores + 0.5,
+    afterBuildTicks: (eixo) => {
+      eixo.ticks = Array.from({ length: totalJogadores }, (_, i) => ({ value: i + 1 }));
+    },
     ticks: { color: corTexto, stepSize: 1, precision: 0 },
     grid: { color: corGrade },
     title: { display: true, text: "Posição no ranking", color: corTexto },
