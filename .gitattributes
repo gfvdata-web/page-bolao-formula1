@@ -1,0 +1,5 @@
+# Os scripts do Actions rodam em runner Linux: CRLF quebra com um erro
+# obscuro ($'\r': command not found). Fixar LF independente do autocrlf de
+# quem editar no Windows.
+*.sh text eol=lf
+*.yml text eol=lf
