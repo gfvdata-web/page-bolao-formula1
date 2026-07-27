@@ -337,6 +337,40 @@
         "ALO",
         "STR"
       ]
+    },
+    "11": {
+      "round": 11,
+      "race_id": "2026-11",
+      "race": "Budapest",
+      "circuit": "hungaroring",
+      "date": "2026-07-26",
+      "sprint": false,
+      "bonus_driver": "OCO",
+      "min_score": 4,
+      "order": [
+        "NOR",
+        "HAM",
+        "LEC",
+        "ANT",
+        "PIA",
+        "VER",
+        "RUS",
+        "HAD",
+        "LIN",
+        "HUL",
+        "LAW",
+        "GAS",
+        "COL",
+        "BOR",
+        "OCO",
+        "ALO",
+        "BEA",
+        "SAI",
+        "ALB",
+        "STR",
+        "BOT",
+        "PER"
+      ]
     }
   }
 }

@@ -1,0 +1,31 @@
+{
+  "race_id": "2026-11",
+  "season": 2026,
+  "round": 11,
+  "circuit": "hungaroring",
+  "race": "Budapest",
+  "order": [
+    "NOR",
+    "HAM",
+    "LEC",
+    "ANT",
+    "PIA",
+    "VER",
+    "RUS",
+    "HAD",
+    "LIN",
+    "HUL",
+    "LAW",
+    "GAS",
+    "COL",
+    "BOR",
+    "OCO",
+    "ALO",
+    "BEA",
+    "SAI",
+    "ALB",
+    "STR",
+    "BOT",
+    "PER"
+  ]
+}

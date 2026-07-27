@@ -100,41 +100,27 @@
       "sprint": false,
       "bonus_driver": "GAS",
       "min_score": 6
+    },
+    {
+      "round": 11,
+      "race_id": "2026-11",
+      "race": "Budapest",
+      "circuit": "hungaroring",
+      "date": "2026-07-26",
+      "sprint": false,
+      "bonus_driver": "OCO",
+      "min_score": 4
     }
   ],
   "players": [
     {
       "position": 1,
-      "player_id": "vinicius",
-      "name": "Vinícius",
-      "total": 69,
-      "top6_total": 67,
-      "bonus_total": 2,
-      "rounds_played": 10,
-      "avg_points": 6.9,
-      "per_round": {
-        "1": 4,
-        "2": 7,
-        "3": 12,
-        "4": 5,
-        "5": 9,
-        "6": 5,
-        "7": 4,
-        "8": 7,
-        "9": 5,
-        "10": 11
-      },
-      "compensated_rounds": [],
-      "compensation_total": 0
-    },
-    {
-      "position": 2,
       "player_id": "dalla",
       "name": "Dalla",
-      "total": 68,
-      "top6_total": 67,
+      "total": 75,
+      "top6_total": 74,
       "bonus_total": 1,
-      "rounds_played": 10,
+      "rounds_played": 11,
       "avg_points": 6.8,
       "per_round": {
         "1": 4,
@@ -146,20 +132,21 @@
         "7": 4,
         "8": 6,
         "9": 5,
-        "10": 8
+        "10": 8,
+        "11": 7
       },
       "compensated_rounds": [],
       "compensation_total": 0
     },
     {
-      "position": 3,
+      "position": 2,
       "player_id": "ferrari",
       "name": "Ferrari",
-      "total": 66,
-      "top6_total": 64,
-      "bonus_total": 2,
-      "rounds_played": 10,
-      "avg_points": 6.6,
+      "total": 74,
+      "top6_total": 71,
+      "bonus_total": 3,
+      "rounds_played": 11,
+      "avg_points": 6.7,
       "per_round": {
         "1": 7,
         "2": 7,
@@ -170,7 +157,33 @@
         "7": 5,
         "8": 8,
         "9": 7,
-        "10": 7
+        "10": 7,
+        "11": 8
+      },
+      "compensated_rounds": [],
+      "compensation_total": 0
+    },
+    {
+      "position": 3,
+      "player_id": "vinicius",
+      "name": "Vinícius",
+      "total": 74,
+      "top6_total": 72,
+      "bonus_total": 2,
+      "rounds_played": 11,
+      "avg_points": 6.7,
+      "per_round": {
+        "1": 4,
+        "2": 7,
+        "3": 12,
+        "4": 5,
+        "5": 9,
+        "6": 5,
+        "7": 4,
+        "8": 7,
+        "9": 5,
+        "10": 11,
+        "11": 5
       },
       "compensated_rounds": [],
       "compensation_total": 0
@@ -179,10 +192,10 @@
       "position": 4,
       "player_id": "caliman",
       "name": "Caliman",
-      "total": 65,
-      "top6_total": 64,
+      "total": 71,
+      "top6_total": 70,
       "bonus_total": 1,
-      "rounds_played": 10,
+      "rounds_played": 11,
       "avg_points": 6.5,
       "per_round": {
         "1": 4,
@@ -194,7 +207,8 @@
         "7": 4,
         "8": 8,
         "9": 7,
-        "10": 10
+        "10": 10,
+        "11": 6
       },
       "compensated_rounds": [],
       "compensation_total": 0
@@ -203,11 +217,11 @@
       "position": 5,
       "player_id": "igor",
       "name": "Igor",
-      "total": 59,
-      "top6_total": 56,
+      "total": 66,
+      "top6_total": 63,
       "bonus_total": 0,
-      "rounds_played": 9,
-      "avg_points": 6.2,
+      "rounds_played": 10,
+      "avg_points": 6.3,
       "per_round": {
         "1": 4,
         "2": 8,
@@ -217,7 +231,8 @@
         "6": 6,
         "8": 6,
         "9": 6,
-        "10": 7
+        "10": 7,
+        "11": 7
       },
       "compensated_rounds": [
         7
@@ -228,11 +243,11 @@
       "position": 6,
       "player_id": "guilherme",
       "name": "Guilherme",
-      "total": 58,
-      "top6_total": 56,
+      "total": 63,
+      "top6_total": 61,
       "bonus_total": 2,
-      "rounds_played": 10,
-      "avg_points": 5.8,
+      "rounds_played": 11,
+      "avg_points": 5.7,
       "per_round": {
         "1": 4,
         "2": 6,
@@ -243,7 +258,8 @@
         "7": 5,
         "8": 8,
         "9": 6,
-        "10": 8
+        "10": 8,
+        "11": 5
       },
       "compensated_rounds": [],
       "compensation_total": 0
@@ -252,11 +268,11 @@
       "position": 7,
       "player_id": "caio_l",
       "name": "Caio Lopes",
-      "total": 57,
-      "top6_total": 45,
+      "total": 62,
+      "top6_total": 50,
       "bonus_total": 0,
-      "rounds_played": 7,
-      "avg_points": 6.4,
+      "rounds_played": 8,
+      "avg_points": 6.2,
       "per_round": {
         "1": 4,
         "3": 8,
@@ -264,7 +280,8 @@
         "5": 7,
         "6": 5,
         "9": 6,
-        "10": 10
+        "10": 10,
+        "11": 5
       },
       "compensated_rounds": [
         2,
@@ -277,7 +294,7 @@
       "position": 8,
       "player_id": "francez",
       "name": "Francez",
-      "total": 55,
+      "total": 59,
       "top6_total": 44,
       "bonus_total": 0,
       "rounds_played": 7,
@@ -294,15 +311,42 @@
       "compensated_rounds": [
         1,
         6,
-        9
+        9,
+        11
       ],
-      "compensation_total": 11
+      "compensation_total": 15
     },
     {
       "position": 9,
+      "player_id": "filipe",
+      "name": "Filipe",
+      "total": 51,
+      "top6_total": 20,
+      "bonus_total": 0,
+      "rounds_played": 3,
+      "avg_points": 6.7,
+      "per_round": {
+        "9": 6,
+        "10": 8,
+        "11": 6
+      },
+      "compensated_rounds": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "compensation_total": 31
+    },
+    {
+      "position": 10,
       "player_id": "lage",
       "name": "Lage",
-      "total": 47,
+      "total": 51,
       "top6_total": 18,
       "bonus_total": 0,
       "rounds_played": 3,
@@ -319,34 +363,10 @@
         7,
         8,
         9,
-        10
+        10,
+        11
       ],
-      "compensation_total": 29
-    },
-    {
-      "position": 10,
-      "player_id": "filipe",
-      "name": "Filipe",
-      "total": 45,
-      "top6_total": 14,
-      "bonus_total": 0,
-      "rounds_played": 2,
-      "avg_points": 7.0,
-      "per_round": {
-        "9": 6,
-        "10": 8
-      },
-      "compensated_rounds": [
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8
-      ],
-      "compensation_total": 31
+      "compensation_total": 33
     }
   ]
 }
