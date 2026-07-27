@@ -15,9 +15,17 @@ on:
 permissions:
   contents: write
 
+env:
+  # Verificador: intervalo entre consultas à Jolpica e quantas vezes tentar
+  # antes de desistir (30 min x 10 = 5 h de vigília depois do envio do Forms).
+  INTERVALO_SEGUNDOS: 1800
+  MAX_TENTATIVAS: 10
+
 jobs:
   pipeline:
     runs-on: ubuntu-latest
+    # Vigília do verificador (5 h) + folga para os passos normais.
+    timeout-minutes: 330
     steps:
       - uses: actions/checkout@v4
 
@@ -31,32 +39,54 @@ jobs:
           TEXTO: ${{ github.event.client_payload.texto }}
           ROUND: ${{ github.event.client_payload.round }}
         run: |
+          set +e
           if [ -n "$ROUND" ]; then
-            printf '%s' "$TEXTO" | python -m bolao.pipeline run --round "$ROUND"
+            RESUMO=$(printf '%s' "$TEXTO" | python -m bolao.pipeline --json run --round "$ROUND")
           else
-            printf '%s' "$TEXTO" | python -m bolao.pipeline run
+            RESUMO=$(printf '%s' "$TEXTO" | python -m bolao.pipeline --json run)
           fi
+          CODIGO=$?
+          set -e
+          bash .github/scripts/registra-estado.sh "$CODIGO" "$RESUMO"
 
       - name: Roda pipeline (retry manual)
         if: github.event_name == 'workflow_dispatch'
-        run: python -m bolao.pipeline retry "${{ github.event.inputs.round }}"
+        run: |
+          set +e
+          RESUMO=$(python -m bolao.pipeline --json retry "${{ github.event.inputs.round }}")
+          CODIGO=$?
+          set -e
+          bash .github/scripts/registra-estado.sh "$CODIGO" "$RESUMO"
 
       - name: Commit e push dos dados atualizados
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data docs/data
-          if git diff --cached --quiet; then
-            echo "Nada para commitar."
-            exit 0
-          fi
-          ARQ=$(git diff --cached --name-only | grep -E 'messages/[0-9]+\.txt$' | head -n1 || true)
-          RODADA=$(basename "${ARQ:-}" .txt 2>/dev/null || true)
-          MSG="Etapa 5: atualiza dados via Actions"
-          if [ -n "$RODADA" ]; then
-            MSG="$MSG (rodada $RODADA)"
-          fi
-          git commit -m "$MSG
+        run: bash .github/scripts/commit-push.sh "Etapa 5: atualiza dados via Actions (rodada ${RODADA})"
 
-          Co-Authored-By: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>"
-          git push
+      # A rodada ficou gravada mas não pontuada porque a Jolpica ainda não
+      # publicou o quali. Em vez de exigir um retry manual, a própria run fica
+      # de vigília consultando de tempos em tempos até o resultado sair.
+      - name: Verificador — re-tenta até o resultado oficial sair
+        if: env.PENDENTE == '1'
+        run: |
+          for TENTATIVA in $(seq 1 "$MAX_TENTATIVAS"); do
+            echo "Rodada $RODADA sem resultado. Tentativa $TENTATIVA/$MAX_TENTATIVAS em ${INTERVALO_SEGUNDOS}s..."
+            sleep "$INTERVALO_SEGUNDOS"
+
+            set +e
+            python -m bolao.pipeline retry "$RODADA"
+            CODIGO=$?
+            set -e
+
+            if [ "$CODIGO" -eq 0 ]; then
+              echo "Resultado da rodada $RODADA publicado — pontuando e atualizando o site."
+              bash .github/scripts/commit-push.sh "Etapa 5: pontua rodada $RODADA (resultado saiu depois do envio)"
+              exit 0
+            fi
+
+            # 2 = ainda indisponível (continua tentando). Qualquer outro é erro real.
+            if [ "$CODIGO" -ne 2 ]; then
+              exit "$CODIGO"
+            fi
+          done
+
+          echo "::error::Rodada $RODADA continuou sem resultado na Jolpica após $MAX_TENTATIVAS tentativas. Os palpites estão salvos: rode o workflow manualmente (Run workflow -> round=$RODADA) quando o quali aparecer na API."
+          exit 1

@@ -763,6 +763,41 @@ Geral do Ranking.**
   - Sem `requirements.txt` (projeto usa só stdlib) — o workflow só precisa de
     `actions/setup-python`, sem passo de `pip install`.
 
+**Ajuste posterior (ainda Etapa 5): "verificador" — re-tentativa automática
+enquanto a Jolpica não publica o quali.**
+- **Motivo (falha real da rodada 11, Hungaroring):** o Forms foi enviado ~1h15
+  depois do quali, a Jolpica ainda não tinha o resultado, o pipeline gravou só a
+  mensagem e a run terminou **verde** — ninguém percebeu que a rodada não tinha
+  sido pontuada e o site ficou parado. (Na rodada 10/Spa o sintoma foi outro:
+  run **vermelha** por bug de parse. Nos dois casos faltou o pipeline se
+  resolver sozinho.)
+- **Códigos de saída da CLI `bolao.pipeline`** (mesma convenção do
+  `bolao.jolpica`): `0` rodada pontuada · `1` erro real · **`2` mensagem
+  gravada mas quali ainda indisponível**. Antes o caso `2` também saía `0`.
+- **`--json`** (flag global, antes do subcomando): imprime o resumo no stdout e
+  manda o texto legível para o stderr — é como o workflow descobre a rodada
+  quando ela foi resolvida pelo cabeçalho.
+- **Workflow:** o passo que commita roda **antes** do verificador (a mensagem
+  do WhatsApp fica salva na hora, aconteça o que acontecer). Se a CLI saiu `2`,
+  o passo *Verificador* entra num laço: dorme `INTERVALO_SEGUNDOS` (1800 = 30
+  min), chama `pipeline retry <rodada>` e sai do laço commitando assim que
+  conseguir; até `MAX_TENTATIVAS` (10) → **5 h de vigília** dentro da própria
+  run disparada pelo Forms (`timeout-minutes: 330`). Esgotou sem resultado →
+  `::error::` e job **vermelho de propósito**, para o GitHub mandar e-mail.
+- **Por que dentro da run e não um `schedule:` (cron):** cron do GitHub atrasa
+  10–30 min, pode pular execução e é **desativado após 60 dias** sem atividade
+  no repo. Minutos de Actions são gratuitos em repositório público, então
+  dormir dentro do job não custa nada.
+- **Scripts novos em `.github/scripts/`** (chamados com `bash script.sh`, sem
+  depender de bit de execução, que o Windows não versiona):
+  `commit-push.sh` (commit + `git pull --rebase` + push; sai em 0 se não houver
+  mudança — usado pelos dois passos) e `registra-estado.sh` (traduz código de
+  saída + JSON em `RODADA`/`PENDENTE` no `$GITHUB_ENV`).
+- O `workflow_dispatch` (retry manual) continua existindo e **também** liga o
+  verificador se ainda estiver cedo demais.
+- Testes novos em `tests/test_pipeline.py` (classe `TestPipelineCLI`, cobre os
+  códigos 0/1/2 e o `--json`) — total do projeto: **68**.
+
 ### Etapa 6 — Google Forms + Apps Script ✅
 - **Objetivo:** formulário no celular + Apps Script que dispara o
   `repository_dispatch` com o texto colado e a corrida.

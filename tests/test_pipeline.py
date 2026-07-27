@@ -5,6 +5,8 @@ mockada (``fetch_result_if_missing``/``fetch_result``) para os testes
 rodarem offline.
 """
 
+import contextlib
+import io
 import json
 import tempfile
 import unittest
@@ -120,6 +122,74 @@ class TestPipeline(unittest.TestCase):
             resumo = P.run(MSG_1, None, SEASON, self.data, self.docs)
         fetch_mock.assert_not_called()
         self.assertEqual(resumo["resultado"], "ja_existia")
+
+
+class TestPipelineCLI(unittest.TestCase):
+    """Contrato que o workflow do Actions consome: código de saída + --json.
+
+    O "verificador" do `.github/workflows/pipeline.yml` decide se fica de
+    vigília olhando o código 2, e descobre a rodada lendo o JSON do stdout.
+    """
+
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        base = Path(self._tmp.name)
+        self.data = base / "data"
+        self.docs = base / "docs"
+        season = self.data / str(SEASON)
+
+        _write(self.data / "drivers.json", {"aliases": {}})
+        _write(season / "players.json", {"aliases": {}, "names": {}})
+        _write(season / "calendar.json", CALENDAR)
+
+        self.msg_file = base / "mensagem.txt"
+        self.msg_file.write_text(MSG_1, encoding="utf-8")
+
+    def _cli(self, *extra: str) -> tuple[int, str, str]:
+        argv = ["--season", str(SEASON), "--data", str(self.data), "--docs", str(self.docs)]
+        argv.extend(extra)
+        out, err = io.StringIO(), io.StringIO()
+        with contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
+            codigo = P.main(argv)
+        return codigo, out.getvalue(), err.getvalue()
+
+    def test_run_pontuado_sai_com_zero(self):
+        with mock.patch("bolao.pipeline.fetch_result", return_value=RESULT_1):
+            codigo, _, _ = self._cli("run", "--texto-file", str(self.msg_file))
+        self.assertEqual(codigo, 0)
+
+    def test_run_indisponivel_sai_com_dois(self):
+        with mock.patch("bolao.pipeline.fetch_result", side_effect=ResultUnavailable("sem resultado")):
+            codigo, _, _ = self._cli("run", "--texto-file", str(self.msg_file))
+        self.assertEqual(codigo, 2)
+
+    def test_erro_de_parse_sai_com_um(self):
+        ruim = Path(self._tmp.name) / "ruim.txt"
+        ruim.write_text("Bolao qualify Marciolandia\nPiloto VER\n\nJoao\nVER\nP1\n", encoding="utf-8")
+        codigo, _, _ = self._cli("run", "--texto-file", str(ruim))
+        self.assertEqual(codigo, 1)
+
+    def test_json_traz_a_rodada_no_stdout(self):
+        with mock.patch("bolao.pipeline.fetch_result", side_effect=ResultUnavailable("sem resultado")):
+            codigo, out, err = self._cli("--json", "run", "--texto-file", str(self.msg_file))
+
+        self.assertEqual(codigo, 2)
+        resumo = json.loads(out)  # stdout tem só o JSON — o workflow faz json.load nele
+        self.assertEqual(resumo["round"], 1)
+        self.assertEqual(resumo["resultado"], "indisponivel")
+        self.assertIn("Rodada 1", err)  # texto legível continua no log, via stderr
+
+    def test_retry_indisponivel_sai_com_dois_e_depois_zero(self):
+        with mock.patch("bolao.pipeline.fetch_result", side_effect=ResultUnavailable("sem resultado")):
+            self._cli("run", "--texto-file", str(self.msg_file))
+            codigo, _, _ = self._cli("retry", "1")
+        self.assertEqual(codigo, 2)
+
+        # Segunda volta do laço do verificador: o quali saiu.
+        with mock.patch("bolao.pipeline.fetch_result", return_value=RESULT_1):
+            codigo, _, _ = self._cli("retry", "1")
+        self.assertEqual(codigo, 0)
+        self.assertTrue((self.docs / "data" / "standings.json").exists())
 
 
 if __name__ == "__main__":

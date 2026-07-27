@@ -4,12 +4,23 @@ Uso:
     python -m bolao.pipeline run --round 10 < mensagem.txt
     python -m bolao.pipeline run < mensagem.txt      # rodada resolvida pelo cabeçalho
     python -m bolao.pipeline retry 10                # re-tenta buscar resultado + gera site
+    python -m bolao.pipeline --json run < mensagem.txt   # resumo em JSON no stdout
 
 Fluxo (repository_dispatch -> Actions), um comando só (`run`):
     1. grava data/<season>/messages/<round>.txt com o texto recebido
     2. busca o resultado do quali na Jolpica-F1 (pula, sem falhar, se ainda
        estiver indisponível — ver `retry`)
     3. regenera os dados do site (docs/data/*.json)
+
+Códigos de saída da CLI (mesma convenção de ``bolao.jolpica``):
+    0 — rodada pontuada (resultado gravado agora ou já existente)
+    1 — erro (parse, corrida não resolvida, rede, mensagem inexistente)
+    2 — **rodada não pontuada**: o quali ainda não saiu na Jolpica. A mensagem
+        já ficou gravada; é o código que o "verificador" do Actions usa para
+        saber que precisa re-tentar mais tarde.
+
+O ``--json`` (opcional, antes do subcomando) imprime o resumo no stdout e manda
+as mensagens legíveis para o stderr — é assim que o workflow lê a rodada.
 """
 
 import argparse
@@ -102,6 +113,11 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--season", type=int, default=2026)
     p.add_argument("--data", default="data")
     p.add_argument("--docs", default="docs")
+    p.add_argument(
+        "--json",
+        action="store_true",
+        help="imprime o resumo em JSON no stdout (mensagens vão para o stderr)",
+    )
     sub = p.add_subparsers(dest="cmd", required=True)
 
     sp_run = sub.add_parser("run", help="grava o palpite recebido e roda o pipeline")
@@ -131,14 +147,26 @@ def main(argv: list[str] | None = None) -> int:
         print(f"[erro] {exc}", file=sys.stderr)
         return 1
 
-    print(f"Rodada {resumo['round']}: resultado {resumo['resultado']}.")
+    # Com --json o stdout é do resumo (o workflow lê a rodada dali); o texto
+    # legível vai para o stderr, que continua aparecendo no log do Actions.
+    saida = sys.stderr if args.json else sys.stdout
+
+    print(f"Rodada {resumo['round']}: resultado {resumo['resultado']}.", file=saida)
     if resumo["resultado"] == "indisponivel":
         print(
             "Quali ainda sem resultado na Jolpica — re-rode depois com "
-            f"`python -m bolao.pipeline retry {resumo['round']}`."
+            f"`python -m bolao.pipeline retry {resumo['round']}`.",
+            file=saida,
         )
-    print(f"Site regenerado ({len(resumo['site']['rounds'])} rodadas consolidadas).")
-    return 0
+    print(
+        f"Site regenerado ({len(resumo['site']['rounds'])} rodadas consolidadas).",
+        file=saida,
+    )
+
+    if args.json:
+        print(json.dumps(resumo, ensure_ascii=False))
+
+    return 2 if resumo["resultado"] == "indisponivel" else 0
 
 
 if __name__ == "__main__":
