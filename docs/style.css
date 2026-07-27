@@ -942,6 +942,12 @@ button.subaba[aria-selected="true"] {
   white-space: nowrap;
 }
 
+.rendimento-divisor {
+  border: none;
+  border-top: 1px solid var(--borda);
+  margin: 1.5rem 0;
+}
+
 /* Hall of Fame */
 
 .hall-grid {
