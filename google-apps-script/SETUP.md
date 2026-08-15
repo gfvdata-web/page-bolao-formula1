@@ -74,10 +74,13 @@ texto de teste) e enviar. Conferir:
 
 ## 7. Renovação do token (lembrete)
 
-O fine-grained PAT expira em ~1 ano. O GitHub já avisa por e-mail 7 dias antes
-e no dia da expiração; também foi criado um lembrete agendado separado para
-essa data. Quando renovar: gerar um novo token (passo 1) e atualizar só a
-propriedade `GITHUB_TOKEN` (passo 4) — nada mais muda.
+O fine-grained PAT expira em ~1 ano. O GitHub avisa por e-mail, mas na prática
+o aviso pode chegar perto ou depois da expiração real — não confiar só nisso.
+Por isso também existe um lembrete agendado com ~2 semanas de folga antes da
+data de expiração (ver data atual em `CONTEXTO.md`, seção 10). Quando renovar:
+gerar um novo token (passo 1) e atualizar só a propriedade `GITHUB_TOKEN`
+(passo 4) — nada mais muda. Depois, atualizar a data de expiração e o
+lembrete no `CONTEXTO.md`.
 
 ## Solução de problemas
 

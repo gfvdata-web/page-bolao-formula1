@@ -896,9 +896,12 @@ enquanto a Jolpica não publica o quali.**
 - **Autenticação:** fine-grained PAT do GitHub (repo único
   `page-bolao-formula1`, permissão `Contents: Read and write`, expiração de
   366 dias), guardado em `PropertiesService` (Propriedades do script) do
-  Apps Script — nunca no código-fonte nem no repositório. Lembrete de
-  renovação agendado para 2027-06-25 (a própria GitHub também avisa por
-  e-mail antes de expirar).
+  Apps Script — nunca no código-fonte nem no repositório. **Renovado em
+  2026-08-15** (o anterior já tinha expirado — o aviso por e-mail do GitHub
+  chegou perto/depois da expiração, não 7 dias antes como esperado); novo
+  token válido até **2026-12-31**. Lembrete de renovação agendado para
+  2026-12-15 (~2 semanas antes, com folga por não confiar só no aviso do
+  GitHub).
 - **Campo "Rodada" do Forms:** resposta curta, **opcional** — texto livre
   ou vazio; o pipeline já resolve a rodada pelo cabeçalho da mensagem
   quando `round` vem omitido (decisão da Etapa 5).
@@ -937,5 +940,5 @@ enquanto a Jolpica não publica o quali.**
 - ✅ Conta/projeto do Google para o Forms + Apps Script (Etapa 6) — Forms +
   Apps Script criados e configurados, código em `google-apps-script/`.
 - ✅ Token/permissão para o Apps Script disparar o `repository_dispatch`
-  (Etapa 6) — fine-grained PAT gerado e configurado; renovação em ~1 ano
-  (lembrete agendado para 2027-06-25).
+  (Etapa 6) — fine-grained PAT renovado em 2026-08-15, válido até
+  2026-12-31 (lembrete de renovação agendado para 2026-12-15).
