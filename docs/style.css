@@ -144,6 +144,51 @@ main {
   color: var(--texto-fraco);
 }
 
+.ranking-card__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.6rem;
+}
+
+.ranking-card__header h2 {
+  margin: 0;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--texto);
+}
+
+.corrida-detalhe-card__acoes {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-copiar {
+  border: 1px solid var(--borda);
+  background: var(--bg-card);
+  color: var(--texto);
+  border-radius: 6px;
+  padding: 0.35rem 0.65rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn-copiar:hover {
+  border-color: var(--acento);
+  color: var(--acento);
+}
+
+.btn-copiar--copiado {
+  border-color: var(--ok2);
+  color: var(--ok2);
+}
+
 /* Corridas — cards informativos (última contabilizada + próxima) */
 
 .corridas-cards {

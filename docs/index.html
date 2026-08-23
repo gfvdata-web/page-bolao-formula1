@@ -28,11 +28,18 @@
     <div id="subsecao-ranking-geral" class="subsecao" role="tabpanel">
       <div id="corridas-cards" class="corridas-cards"></div>
       <div id="ranking-status" class="status"></div>
+      <div class="ranking-card__header">
+        <h2>Classificação</h2>
+        <button id="btn-copiar-ranking" type="button" class="btn-copiar">📋 Copiar</button>
+      </div>
       <div id="ranking-container"></div>
       <div class="corrida-detalhe-card">
         <div class="corrida-detalhe-card__header">
           <h2>Pontuação da corrida</h2>
-          <select id="select-corrida-detalhe" class="corrida-detalhe-select"></select>
+          <div class="corrida-detalhe-card__acoes">
+            <select id="select-corrida-detalhe" class="corrida-detalhe-select"></select>
+            <button id="btn-copiar-corrida" type="button" class="btn-copiar">📋 Copiar</button>
+          </div>
         </div>
         <div id="corrida-detalhe-tabela-wrap" class="corrida-detalhe-tabela-wrap"></div>
       </div>

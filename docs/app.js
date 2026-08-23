@@ -309,6 +309,109 @@ function renderCorridaDetalhe(roundNumber, standings, bets, results) {
   wrap.replaceChildren(tabela);
 }
 
+// ---------- Ranking / Geral — copiar texto p/ WhatsApp ----------
+
+// Emoji de posição: 1️⃣.. 🔟 fixos (bate com o formato clássico das mensagens);
+// a partir do 11º, concatena os emojis de dígito (1️⃣1️⃣, 1️⃣2️⃣...).
+const EMOJI_POSICAO_FIXA = ["", "1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"];
+const EMOJI_DIGITO = ["0️⃣", "1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣"];
+
+function emojiPosicao(pos) {
+  if (pos <= 10) return EMOJI_POSICAO_FIXA[pos];
+  return String(pos)
+    .split("")
+    .map((d) => EMOJI_DIGITO[Number(d)])
+    .join("");
+}
+
+// Rodada mais antiga em que o jogador tem palpite real registrado (não conta
+// compensação) — usada só pra saber se ele estreou na última rodada.
+function primeiraRodadaApostada(jogador) {
+  const rodadas = Object.keys(jogador.per_round).map(Number);
+  return rodadas.length ? Math.min(...rodadas) : null;
+}
+
+// Texto no formato clássico do WhatsApp (ver CONTEXTO.md) com a classificação
+// da temporada: posição, pontos, variação de posição desde a rodada anterior
+// (🆕 se estreou nela), nº de rodadas apostadas e pontos extra (piloto da
+// rodada). A variação reaproveita `construirDadosTemporada` (mesmo cálculo de
+// posição por rodada usado nos gráficos de Corridas).
+function gerarTextoRanking(standings) {
+  const dados = construirDadosTemporada(standings);
+  const indiceUltima = dados.rounds.length - 1;
+  const ultimaRodada = dados.rounds[indiceUltima];
+
+  const linhas = [`Classificação Bolão ${standings.season}`, ""];
+
+  for (const jogador of standings.players) {
+    const estreouAgora = ultimaRodada && primeiraRodadaApostada(jogador) === ultimaRodada.round;
+    let variacao;
+    if (estreouAgora) {
+      variacao = "🆕";
+    } else {
+      const posicoes = dados.posicoesRanking.get(jogador.player_id) || [];
+      const atual = posicoes[indiceUltima];
+      const anterior = posicoes[indiceUltima - 1];
+      if (atual == null || anterior == null) {
+        variacao = "⏸️";
+      } else {
+        const delta = anterior - atual;
+        if (delta > 0) variacao = `🔼 ${delta}`;
+        else if (delta < 0) variacao = `🔽 ${-delta}`;
+        else variacao = "⏸️";
+      }
+    }
+    linhas.push(
+      `${emojiPosicao(jogador.position)} ${jogador.name} 🅿️ ${jogador.total} ${variacao} 🔄 ${jogador.rounds_played} *️⃣ ${jogador.bonus_total}`
+    );
+  }
+
+  return linhas.join("\n");
+}
+
+// Texto no formato clássico do WhatsApp com a pontuação de uma corrida:
+// nome + pontos, um por linha, na ordem real em que os palpites chegaram
+// naquela rodada (`bet_order`, gerado pelo bolao/site.py a partir da ordem
+// dos blocos no texto original — não a ordem do ranking). Só entra quem
+// realmente apostou na rodada.
+function gerarTextoCorrida(roundNumber, standings) {
+  const roundInfo = standings.rounds.find((r) => r.round === roundNumber);
+  if (!roundInfo) return "";
+  const porId = new Map(standings.players.map((j) => [j.player_id, j]));
+  const linhas = [`Resultado Qualify ${roundInfo.race}`, ""];
+  for (const playerId of roundInfo.bet_order || []) {
+    const jogador = porId.get(playerId);
+    if (!jogador) continue;
+    linhas.push(`${jogador.name} ${jogador.per_round[String(roundNumber)]}`);
+  }
+  return linhas.join("\n");
+}
+
+// Copia pro clipboard e dá feedback visual no botão (fallback com textarea
+// pra navegadores/contextos sem Clipboard API, ex. alguns webviews).
+async function copiarTexto(texto, botao) {
+  try {
+    await navigator.clipboard.writeText(texto);
+  } catch (erro) {
+    const area = document.createElement("textarea");
+    area.value = texto;
+    area.style.position = "fixed";
+    area.style.opacity = "0";
+    document.body.appendChild(area);
+    area.focus();
+    area.select();
+    document.execCommand("copy");
+    document.body.removeChild(area);
+  }
+  const textoOriginal = botao.textContent;
+  botao.textContent = "✅ Copiado!";
+  botao.classList.add("btn-copiar--copiado");
+  setTimeout(() => {
+    botao.textContent = textoOriginal;
+    botao.classList.remove("btn-copiar--copiado");
+  }, 1500);
+}
+
 // ---------- Ranking / Simulador ----------
 
 // Estado vivo da simulação: média editável por jogador (inicia = avg_points
@@ -1649,6 +1752,10 @@ async function main() {
     document.getElementById("ranking-status").textContent = "";
     standingsParaTemporada = standings;
 
+    document.getElementById("btn-copiar-ranking").addEventListener("click", (evento) => {
+      copiarTexto(gerarTextoRanking(standings), evento.currentTarget);
+    });
+
     const calendar = await carregarJson("./data/calendar.json");
     renderCorridas(standings, calendar);
     renderTabelaCorridas(standings);
@@ -1667,6 +1774,10 @@ async function main() {
       selectCorridaDetalhe.value = String(ultimaRodada.round);
       renderCorridaDetalhe(ultimaRodada.round, standings, bets, results);
     }
+
+    document.getElementById("btn-copiar-corrida").addEventListener("click", (evento) => {
+      copiarTexto(gerarTextoCorrida(Number(selectCorridaDetalhe.value), standings), evento.currentTarget);
+    });
 
     const jogadores = popularSelectJogadores(bets);
     document.getElementById("palpites-status").textContent = "";
