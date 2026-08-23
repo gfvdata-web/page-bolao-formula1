@@ -780,6 +780,63 @@ jogador (quanto cada piloto rende para quem aposta nele).**
 - Nenhuma mudança em `bolao/site.py` nem nos formatos de `docs/data/*.json` —
   `bets.json` já tinha tudo (`top6_detail`).
 
+**Ajuste posterior (ainda Etapa 4): botões "Copiar" no formato clássico do
+WhatsApp (Ranking/Geral).**
+- **Motivo:** antes da automação, o usuário divulgava ranking e pontuação por
+  corrida como texto simples no grupo do WhatsApp, num formato próprio (emojis
+  de posição/variação/rotativas). O site ganhou dois botões (`📋 Copiar`) em
+  `#subsecao-ranking-geral` que geram esse texto e copiam pro clipboard (sem
+  alterar as tabelas já existentes).
+- **`bet_order` — novo campo em `standings.json`/`scores/<round>.json`/
+  `results.json` (`rounds[]`), gerado por `bolao/site.py: generate`:** lista de
+  `player_id` na **ordem real em que os blocos apareceram no texto do
+  WhatsApp daquela rodada** (`[bet.player_id for bet in sheet.bets]`, capturada
+  **antes** de `score_sheet` reordenar por pontuação total). Campo aditivo, só
+  usado pelo botão de pontuação da corrida — não muda nenhum campo existente.
+- **Botão "Copiar" do Ranking** (`#btn-copiar-ranking`, ao lado do título
+  "Classificação", acima da tabela): gera (`gerarTextoRanking` em `app.js`)
+  ```
+  Classificação Bolão <season>
+
+  <emoji posição> <nome> 🅿️ <total> <variação> 🔄 <rounds_played> *️⃣ <bonus_total>
+  ...
+  ```
+  um jogador por linha, na ordem já existente de `standings.players` (por
+  posição). **Emoji de posição:** 1️⃣.. 🔟 fixos (1º–10º); a partir do 11º,
+  concatena os emojis de dígito (ex. 1️⃣1️⃣). **Variação** compara a posição do
+  jogador na última rodada consolidada com a rodada anterior — reaproveita
+  `construirDadosTemporada`/`posicoesRanking` (o mesmo cálculo já usado nos
+  gráficos de Corridas, sem duplicar lógica): `🔼 N`/`🔽 N` (subiu/desceu N
+  posições) ou `⏸️` (sem variação); **`🆕`** substitui a variação quando a
+  última rodada consolidada é a **primeira rodada em que o jogador tem palpite
+  real registrado** (`min(per_round)`) — decisão prática por causa da
+  compensação retroativa (ver seção 2: um jogador do ranking recebe pontuação
+  mínima desde a rodada 1, mesmo antes de estrear, então "teve posição
+  calculada antes" nunca é `null` para comparar — o critério de estreia usa a
+  1ª rodada **apostada de fato**, não a 1ª com posição no ranking).
+- **Botão "Copiar" da Pontuação da corrida** (`#btn-copiar-corrida`, dentro de
+  `.corrida-detalhe-card__header`, ao lado do `<select>` de rodada): gera
+  (`gerarTextoCorrida` em `app.js`)
+  ```
+  Resultado Qualify <race>
+
+  <nome> <pontos>
+  ...
+  ```
+  para a rodada selecionada no `<select>` já existente, na ordem de
+  `bet_order` (ordem real de envio, **não** a ordem do ranking). **Só entram
+  jogadores que apostaram naquela rodada** (não usa `bet_order` fora, então
+  quem recebeu compensação por não apostar fica de fora do texto — decisão
+  explícita do usuário, diferente do botão de Ranking que sempre lista todos).
+  `race` usa o mesmo campo já exibido em outros lugares do site (nome da
+  localidade, ex. `"Melbourne"`, não o nome oficial do GP).
+- **`copiarTexto(texto, botao)`** (helper genérico): `navigator.clipboard.
+  writeText`, com fallback via `<textarea>` + `document.execCommand("copy")`
+  pra contextos sem Clipboard API (ex. alguns webviews no celular); dá feedback
+  visual no botão (`✅ Copiado!` por 1.5 s, classe `.btn-copiar--copiado`).
+- Nenhuma mudança em `bolao/parser.py`, `bolao/scoring.py` nem nos formatos já
+  consumidos — `bet_order` é a única adição, aditiva, em `bolao/site.py`.
+
 ### Etapa 5 — GitHub Actions ✅
 - **Objetivo:** workflow acionado por `repository_dispatch` que roda o pipeline
   completo (parse → buscar resultado → pontuar → gerar dados → commit).
