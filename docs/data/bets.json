@@ -508,6 +508,69 @@
           "bonus_real_pos": 15,
           "bonus_points": 0,
           "total": 5
+        },
+        "12": {
+          "round": 12,
+          "race_id": "2026-12",
+          "race": "Zandvoort",
+          "top6": [
+            "ANT",
+            "NOR",
+            "RUS",
+            "VER",
+            "PIA",
+            "LEC"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "ANT",
+              "real": "NOR",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "NOR",
+              "real": "RUS",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "RUS",
+              "real": "ANT",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "VER",
+              "real": "PIA",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 5,
+              "guess": "PIA",
+              "real": "HAM",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "LEC",
+              "real": "LEC",
+              "points": 2,
+              "reason": "exata"
+            }
+          ],
+          "top6_points": 6,
+          "bonus_driver": "VER",
+          "bonus_guess": 4,
+          "bonus_real_pos": 7,
+          "bonus_points": 0,
+          "total": 6
         }
       }
     },
@@ -1207,6 +1270,69 @@
           "bonus_real_pos": 15,
           "bonus_points": 0,
           "total": 6
+        },
+        "12": {
+          "round": 12,
+          "race_id": "2026-12",
+          "race": "Zandvoort",
+          "top6": [
+            "ANT",
+            "NOR",
+            "RUS",
+            "LEC",
+            "PIA",
+            "VER"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "ANT",
+              "real": "NOR",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "NOR",
+              "real": "RUS",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "RUS",
+              "real": "ANT",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "LEC",
+              "real": "PIA",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 5,
+              "guess": "PIA",
+              "real": "HAM",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "VER",
+              "real": "LEC",
+              "points": 0,
+              "reason": "fora"
+            }
+          ],
+          "top6_points": 5,
+          "bonus_driver": "VER",
+          "bonus_guess": 5,
+          "bonus_real_pos": 7,
+          "bonus_points": 0,
+          "total": 5
         }
       }
     },
@@ -1906,6 +2032,69 @@
           "bonus_real_pos": 15,
           "bonus_points": 0,
           "total": 7
+        },
+        "12": {
+          "round": 12,
+          "race_id": "2026-12",
+          "race": "Zandvoort",
+          "top6": [
+            "NOR",
+            "LEC",
+            "ANT",
+            "PIA",
+            "VER",
+            "RUS"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "NOR",
+              "real": "NOR",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 2,
+              "guess": "LEC",
+              "real": "RUS",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "ANT",
+              "real": "ANT",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 4,
+              "guess": "PIA",
+              "real": "PIA",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 5,
+              "guess": "VER",
+              "real": "HAM",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 6,
+              "guess": "RUS",
+              "real": "LEC",
+              "points": 1,
+              "reason": "no top6"
+            }
+          ],
+          "top6_points": 8,
+          "bonus_driver": "VER",
+          "bonus_guess": 6,
+          "bonus_real_pos": 7,
+          "bonus_points": 0,
+          "total": 8
         }
       }
     },
@@ -2605,6 +2794,69 @@
           "bonus_real_pos": 15,
           "bonus_points": 1,
           "total": 8
+        },
+        "12": {
+          "round": 12,
+          "race_id": "2026-12",
+          "race": "Zandvoort",
+          "top6": [
+            "ANT",
+            "VER",
+            "HAM",
+            "RUS",
+            "NOR",
+            "LEC"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "ANT",
+              "real": "NOR",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "VER",
+              "real": "RUS",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 3,
+              "guess": "HAM",
+              "real": "ANT",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "RUS",
+              "real": "PIA",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 5,
+              "guess": "NOR",
+              "real": "HAM",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "LEC",
+              "real": "LEC",
+              "points": 2,
+              "reason": "exata"
+            }
+          ],
+          "top6_points": 6,
+          "bonus_driver": "VER",
+          "bonus_guess": 2,
+          "bonus_real_pos": 7,
+          "bonus_points": 0,
+          "total": 6
         }
       }
     },
@@ -2800,6 +3052,69 @@
           "bonus_real_pos": 15,
           "bonus_points": 0,
           "total": 6
+        },
+        "12": {
+          "round": 12,
+          "race_id": "2026-12",
+          "race": "Zandvoort",
+          "top6": [
+            "ANT",
+            "NOR",
+            "RUS",
+            "VER",
+            "HAM",
+            "LEC"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "ANT",
+              "real": "NOR",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "NOR",
+              "real": "RUS",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "RUS",
+              "real": "ANT",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "VER",
+              "real": "PIA",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 5,
+              "guess": "HAM",
+              "real": "HAM",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 6,
+              "guess": "LEC",
+              "real": "LEC",
+              "points": 2,
+              "reason": "exata"
+            }
+          ],
+          "top6_points": 7,
+          "bonus_driver": "VER",
+          "bonus_guess": 4,
+          "bonus_real_pos": 7,
+          "bonus_points": 0,
+          "total": 7
         }
       }
     },
@@ -3946,6 +4261,69 @@
           "bonus_real_pos": 15,
           "bonus_points": 0,
           "total": 5
+        },
+        "12": {
+          "round": 12,
+          "race_id": "2026-12",
+          "race": "Zandvoort",
+          "top6": [
+            "ANT",
+            "LEC",
+            "VER",
+            "RUS",
+            "NOR",
+            "PIA"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "ANT",
+              "real": "NOR",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "LEC",
+              "real": "RUS",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "VER",
+              "real": "ANT",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 4,
+              "guess": "RUS",
+              "real": "PIA",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 5,
+              "guess": "NOR",
+              "real": "HAM",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "PIA",
+              "real": "LEC",
+              "points": 1,
+              "reason": "no top6"
+            }
+          ],
+          "top6_points": 5,
+          "bonus_driver": "VER",
+          "bonus_guess": 2,
+          "bonus_real_pos": 7,
+          "bonus_points": 0,
+          "total": 5
         }
       }
     },
@@ -4582,6 +4960,69 @@
           "bonus_real_pos": 15,
           "bonus_points": 0,
           "total": 7
+        },
+        "12": {
+          "round": 12,
+          "race_id": "2026-12",
+          "race": "Zandvoort",
+          "top6": [
+            "ANT",
+            "NOR",
+            "RUS",
+            "VER",
+            "LEC",
+            "HAM"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "ANT",
+              "real": "NOR",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "NOR",
+              "real": "RUS",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "RUS",
+              "real": "ANT",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "VER",
+              "real": "PIA",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 5,
+              "guess": "LEC",
+              "real": "HAM",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "HAM",
+              "real": "LEC",
+              "points": 1,
+              "reason": "no top6"
+            }
+          ],
+          "top6_points": 5,
+          "bonus_driver": "VER",
+          "bonus_guess": 3,
+          "bonus_real_pos": 7,
+          "bonus_points": 0,
+          "total": 5
         }
       }
     },
@@ -5476,6 +5917,69 @@
           "bonus_real_pos": 15,
           "bonus_points": 0,
           "total": 5
+        },
+        "12": {
+          "round": 12,
+          "race_id": "2026-12",
+          "race": "Zandvoort",
+          "top6": [
+            "RUS",
+            "PIA",
+            "ANT",
+            "NOR",
+            "LEC",
+            "VER"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "RUS",
+              "real": "NOR",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "PIA",
+              "real": "RUS",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "ANT",
+              "real": "ANT",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 4,
+              "guess": "NOR",
+              "real": "PIA",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 5,
+              "guess": "LEC",
+              "real": "HAM",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "VER",
+              "real": "LEC",
+              "points": 0,
+              "reason": "fora"
+            }
+          ],
+          "top6_points": 6,
+          "bonus_driver": "VER",
+          "bonus_guess": 6,
+          "bonus_real_pos": 7,
+          "bonus_points": 0,
+          "total": 6
         }
       }
     }
