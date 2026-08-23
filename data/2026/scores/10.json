@@ -7,6 +7,17 @@
   "sprint": false,
   "bonus_driver": "GAS",
   "min_score": 6,
+  "bet_order": [
+    "guilherme",
+    "vinicius",
+    "filipe",
+    "caliman",
+    "ferrari",
+    "dalla",
+    "igor",
+    "francez",
+    "caio_l"
+  ],
   "result_order": [
     "ANT",
     "VER",

@@ -7,6 +7,16 @@
   "sprint": false,
   "bonus_driver": "OCO",
   "min_score": 4,
+  "bet_order": [
+    "guilherme",
+    "vinicius",
+    "caliman",
+    "ferrari",
+    "igor",
+    "dalla",
+    "filipe",
+    "caio_l"
+  ],
   "result_order": [
     "NOR",
     "HAM",

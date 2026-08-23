@@ -7,6 +7,14 @@
   "sprint": false,
   "bonus_driver": "SAI",
   "min_score": 3,
+  "bet_order": [
+    "vinicius",
+    "ferrari",
+    "guilherme",
+    "francez",
+    "dalla",
+    "caliman"
+  ],
   "result_order": [
     "RUS",
     "HAM",

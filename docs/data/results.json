@@ -10,6 +10,15 @@
       "sprint": false,
       "bonus_driver": "PIA",
       "min_score": 3,
+      "bet_order": [
+        "guilherme",
+        "vinicius",
+        "dalla",
+        "ferrari",
+        "caio_l",
+        "caliman",
+        "igor"
+      ],
       "order": [
         "RUS",
         "ANT",
@@ -41,6 +50,16 @@
       "sprint": true,
       "bonus_driver": "COL",
       "min_score": 4,
+      "bet_order": [
+        "vinicius",
+        "guilherme",
+        "ferrari",
+        "igor",
+        "dalla",
+        "caliman",
+        "lage",
+        "francez"
+      ],
       "order": [
         "ANT",
         "RUS",
@@ -75,6 +94,17 @@
       "sprint": false,
       "bonus_driver": "BEA",
       "min_score": 4,
+      "bet_order": [
+        "guilherme",
+        "vinicius",
+        "ferrari",
+        "lage",
+        "caliman",
+        "igor",
+        "francez",
+        "dalla",
+        "caio_l"
+      ],
       "order": [
         "ANT",
         "RUS",
@@ -109,6 +139,17 @@
       "sprint": true,
       "bonus_driver": "STR",
       "min_score": 4,
+      "bet_order": [
+        "guilherme",
+        "ferrari",
+        "francez",
+        "vinicius",
+        "dalla",
+        "caliman",
+        "lage",
+        "igor",
+        "caio_l"
+      ],
       "order": [
         "ANT",
         "VER",
@@ -143,6 +184,16 @@
       "sprint": true,
       "bonus_driver": "STR",
       "min_score": 4,
+      "bet_order": [
+        "guilherme",
+        "ferrari",
+        "vinicius",
+        "dalla",
+        "igor",
+        "caliman",
+        "caio_l",
+        "francez"
+      ],
       "order": [
         "RUS",
         "ANT",
@@ -177,6 +228,15 @@
       "sprint": false,
       "bonus_driver": "LEC",
       "min_score": 4,
+      "bet_order": [
+        "guilherme",
+        "ferrari",
+        "dalla",
+        "vinicius",
+        "igor",
+        "caliman",
+        "caio_l"
+      ],
       "order": [
         "ANT",
         "VER",
@@ -211,6 +271,14 @@
       "sprint": false,
       "bonus_driver": "SAI",
       "min_score": 3,
+      "bet_order": [
+        "vinicius",
+        "ferrari",
+        "guilherme",
+        "francez",
+        "dalla",
+        "caliman"
+      ],
       "order": [
         "RUS",
         "HAM",
@@ -245,6 +313,15 @@
       "sprint": false,
       "bonus_driver": "HAD",
       "min_score": 5,
+      "bet_order": [
+        "vinicius",
+        "ferrari",
+        "francez",
+        "guilherme",
+        "caliman",
+        "dalla",
+        "igor"
+      ],
       "order": [
         "RUS",
         "LEC",
@@ -279,6 +356,16 @@
       "sprint": true,
       "bonus_driver": "HAM",
       "min_score": 4,
+      "bet_order": [
+        "guilherme",
+        "dalla",
+        "ferrari",
+        "filipe",
+        "vinicius",
+        "caio_l",
+        "igor",
+        "caliman"
+      ],
       "order": [
         "ANT",
         "LEC",
@@ -313,6 +400,17 @@
       "sprint": false,
       "bonus_driver": "GAS",
       "min_score": 6,
+      "bet_order": [
+        "guilherme",
+        "vinicius",
+        "filipe",
+        "caliman",
+        "ferrari",
+        "dalla",
+        "igor",
+        "francez",
+        "caio_l"
+      ],
       "order": [
         "ANT",
         "VER",
@@ -347,6 +445,16 @@
       "sprint": false,
       "bonus_driver": "OCO",
       "min_score": 4,
+      "bet_order": [
+        "guilherme",
+        "vinicius",
+        "caliman",
+        "ferrari",
+        "igor",
+        "dalla",
+        "filipe",
+        "caio_l"
+      ],
       "order": [
         "NOR",
         "HAM",

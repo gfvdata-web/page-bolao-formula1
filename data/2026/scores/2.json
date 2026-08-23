@@ -7,6 +7,16 @@
   "sprint": true,
   "bonus_driver": "COL",
   "min_score": 4,
+  "bet_order": [
+    "vinicius",
+    "guilherme",
+    "ferrari",
+    "igor",
+    "dalla",
+    "caliman",
+    "lage",
+    "francez"
+  ],
   "result_order": [
     "ANT",
     "RUS",

@@ -7,6 +7,16 @@
   "sprint": true,
   "bonus_driver": "HAM",
   "min_score": 4,
+  "bet_order": [
+    "guilherme",
+    "dalla",
+    "ferrari",
+    "filipe",
+    "vinicius",
+    "caio_l",
+    "igor",
+    "caliman"
+  ],
   "result_order": [
     "ANT",
     "LEC",

@@ -7,6 +7,15 @@
   "sprint": false,
   "bonus_driver": "HAD",
   "min_score": 5,
+  "bet_order": [
+    "vinicius",
+    "ferrari",
+    "francez",
+    "guilherme",
+    "caliman",
+    "dalla",
+    "igor"
+  ],
   "result_order": [
     "RUS",
     "LEC",

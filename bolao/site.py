@@ -159,8 +159,18 @@ def generate(
         # registrada por quem apostou (compensação de quem não apostou).
         min_score = min(s.total for s in scores) - 1 if scores else 0
 
+        # Ordem de envio dos palpites no texto do WhatsApp (antes do score_sheet
+        # reordenar por pontuação) — usada pelo site pra gerar o texto de
+        # "pontuação da corrida" na mesma ordem que os palpites chegaram.
+        bet_order = [bet.player_id for bet in sheet.bets]
+
         round_infos.append(
-            {**_round_meta(race), "bonus_driver": sheet.bonus_driver, "min_score": min_score}
+            {
+                **_round_meta(race),
+                "bonus_driver": sheet.bonus_driver,
+                "min_score": min_score,
+                "bet_order": bet_order,
+            }
         )
         round_scores[rnd] = scores
         round_bonus[rnd] = sheet.bonus_driver
