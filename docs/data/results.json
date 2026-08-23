@@ -371,6 +371,40 @@
         "BOT",
         "PER"
       ]
+    },
+    "12": {
+      "round": 12,
+      "race_id": "2026-12",
+      "race": "Zandvoort",
+      "circuit": "zandvoort",
+      "date": "2026-08-23",
+      "sprint": true,
+      "bonus_driver": "VER",
+      "min_score": 4,
+      "order": [
+        "NOR",
+        "RUS",
+        "ANT",
+        "PIA",
+        "HAM",
+        "LEC",
+        "VER",
+        "LAW",
+        "BOR",
+        "LIN",
+        "GAS",
+        "TSU",
+        "HUL",
+        "COL",
+        "OCO",
+        "ALB",
+        "SAI",
+        "ALO",
+        "STR",
+        "BEA",
+        "BOT",
+        "PER"
+      ]
     }
   }
 }

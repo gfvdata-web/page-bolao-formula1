@@ -1,0 +1,31 @@
+{
+  "race_id": "2026-12",
+  "season": 2026,
+  "round": 12,
+  "circuit": "zandvoort",
+  "race": "Zandvoort",
+  "order": [
+    "NOR",
+    "RUS",
+    "ANT",
+    "PIA",
+    "HAM",
+    "LEC",
+    "VER",
+    "LAW",
+    "BOR",
+    "LIN",
+    "GAS",
+    "TSU",
+    "HUL",
+    "COL",
+    "OCO",
+    "ALB",
+    "SAI",
+    "ALO",
+    "STR",
+    "BEA",
+    "BOT",
+    "PER"
+  ]
+}
