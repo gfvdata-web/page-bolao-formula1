@@ -1987,12 +1987,13 @@ function temaEfetivo() {
   return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 }
 
-function atualizarBotaoTema() {
-  const botao = document.getElementById("btn-tema");
-  const escuro = temaEfetivo() === "dark";
-  botao.textContent = escuro ? "☀️" : "🌙";
-  botao.title = escuro ? "Mudar para tema claro" : "Mudar para tema escuro";
-  botao.setAttribute("aria-pressed", escuro ? "true" : "false");
+function sincronizarSwitchTema() {
+  const efetivo = temaEfetivo();
+  document.querySelectorAll("#tema-switch .tema-switch__btn").forEach((botao) => {
+    const ativo = botao.dataset.tema === efetivo;
+    botao.classList.toggle("tema-switch__btn--ativo", ativo);
+    botao.setAttribute("aria-pressed", ativo ? "true" : "false");
+  });
 }
 
 // Redesenha o que não reage sozinho à troca de tema.
@@ -2031,14 +2032,21 @@ function aplicarTema(tema) {
   } catch (e) {
     /* modo privado / storage bloqueado — segue sem persistir */
   }
-  atualizarBotaoTema();
+  sincronizarSwitchTema();
   rerenderizarGraficos();
 }
 
 function configurarTema() {
-  atualizarBotaoTema();
-  document.getElementById("btn-tema").addEventListener("click", () => {
-    aplicarTema(temaEfetivo() === "dark" ? "light" : "dark");
+  sincronizarSwitchTema();
+  document.querySelectorAll("#tema-switch .tema-switch__btn").forEach((botao) => {
+    botao.addEventListener("click", () => aplicarTema(botao.dataset.tema));
+  });
+  // Sem escolha explícita, acompanha a mudança de tema do sistema.
+  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
+    if (!document.documentElement.getAttribute("data-theme")) {
+      sincronizarSwitchTema();
+      rerenderizarGraficos();
+    }
   });
 }
 

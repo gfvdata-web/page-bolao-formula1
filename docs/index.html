@@ -12,7 +12,14 @@
 <header class="topo">
   <div class="topo__linha">
     <h1>🏁 Bolão F1 2026</h1>
-    <button id="btn-tema" class="btn-tema" type="button" aria-label="Alternar tema claro/escuro">🌙</button>
+    <div class="tema-switch" id="tema-switch" role="group" aria-label="Tema da página">
+      <button type="button" class="tema-switch__btn" data-tema="light" aria-pressed="false">
+        <span aria-hidden="true">☀️</span><span class="tema-switch__label">Claro</span>
+      </button>
+      <button type="button" class="tema-switch__btn" data-tema="dark" aria-pressed="false">
+        <span aria-hidden="true">🌙</span><span class="tema-switch__label">Escuro</span>
+      </button>
+    </div>
   </div>
   <nav class="abas" role="tablist">
     <button class="aba" data-aba="ranking" role="tab" aria-selected="true">Ranking</button>

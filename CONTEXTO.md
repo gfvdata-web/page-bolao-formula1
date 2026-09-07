@@ -857,14 +857,18 @@ largada no quali.**
   `renderPilotos` roda direto no `main()`.
 
 **Ajuste posterior (ainda Etapa 4): switch de tema claro/escuro no topo.**
-- Botão `#btn-tema` (`.btn-tema`, ☀️/🌙) no `.topo__linha` do header. Escolha
+- Segmented switch `#tema-switch` (dois `button.tema-switch__btn`
+  `data-tema="light|dark"`, ☀️ Claro / 🌙 Escuro, mesmo visual do
+  `.temporada-modo`) no `.topo__linha` do header, à direita do `<h1>`; no
+  mobile (`max-width: 480px`) some o rótulo, fica só o ícone. Escolha
   explícita grava `data-theme="light|dark"` no `<html>` + `localStorage["tema"]`;
-  sem escolha, segue `prefers-color-scheme`.
+  sem escolha, segue `prefers-color-scheme` (e acompanha mudança do sistema
+  via `matchMedia(...).addEventListener("change")`).
 - **CSS:** tokens escuros duplicados em dois seletores —
   `@media (prefers-color-scheme: dark) :root:not([data-theme="light"])` e
   `:root[data-theme="dark"]` (o `:root` base continua sendo o claro). Script
   inline no `<head>` (antes do CSS) aplica o `data-theme` salvo sem flash.
-- **`app.js`:** `configurarTema`/`aplicarTema`/`temaEfetivo`/`atualizarBotaoTema`
+- **`app.js`:** `configurarTema`/`aplicarTema`/`temaEfetivo`/`sincronizarSwitchTema`
   + `rerenderizarGraficos()` — CSS reage sozinho, mas Chart.js e o SVG de
   Pilotos leem a cor na hora do desenho, então a troca destrói/recria os
   gráficos (os de Chart.js só os visíveis; o resto volta pela init preguiçosa).
