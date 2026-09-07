@@ -571,6 +571,69 @@
           "bonus_real_pos": 7,
           "bonus_points": 0,
           "total": 6
+        },
+        "13": {
+          "round": 13,
+          "race_id": "2026-13",
+          "race": "Monza",
+          "top6": [
+            "RUS",
+            "ANT",
+            "LEC",
+            "HAM",
+            "NOR",
+            "VER"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "RUS",
+              "real": "GAS",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "ANT",
+              "real": "RUS",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 3,
+              "guess": "LEC",
+              "real": "PIA",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "HAM",
+              "real": "LEC",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 5,
+              "guess": "NOR",
+              "real": "HAM",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 6,
+              "guess": "VER",
+              "real": "VER",
+              "points": 2,
+              "reason": "exata"
+            }
+          ],
+          "top6_points": 5,
+          "bonus_driver": "HAM",
+          "bonus_guess": 4,
+          "bonus_real_pos": 5,
+          "bonus_points": 0,
+          "total": 5
         }
       }
     },
@@ -1333,6 +1396,69 @@
           "bonus_real_pos": 7,
           "bonus_points": 0,
           "total": 5
+        },
+        "13": {
+          "round": 13,
+          "race_id": "2026-13",
+          "race": "Monza",
+          "top6": [
+            "RUS",
+            "LEC",
+            "ANT",
+            "NOR",
+            "HAM",
+            "VER"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "RUS",
+              "real": "GAS",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "LEC",
+              "real": "RUS",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "ANT",
+              "real": "PIA",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 4,
+              "guess": "NOR",
+              "real": "LEC",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 5,
+              "guess": "HAM",
+              "real": "HAM",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 6,
+              "guess": "VER",
+              "real": "VER",
+              "points": 2,
+              "reason": "exata"
+            }
+          ],
+          "top6_points": 6,
+          "bonus_driver": "HAM",
+          "bonus_guess": 4,
+          "bonus_real_pos": 5,
+          "bonus_points": 0,
+          "total": 6
         }
       }
     },
@@ -2095,6 +2221,69 @@
           "bonus_real_pos": 7,
           "bonus_points": 0,
           "total": 8
+        },
+        "13": {
+          "round": 13,
+          "race_id": "2026-13",
+          "race": "Monza",
+          "top6": [
+            "RUS",
+            "LEC",
+            "HAM",
+            "NOR",
+            "VER",
+            "PIA"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "RUS",
+              "real": "GAS",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "LEC",
+              "real": "RUS",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "HAM",
+              "real": "PIA",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "NOR",
+              "real": "LEC",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 5,
+              "guess": "VER",
+              "real": "HAM",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "PIA",
+              "real": "VER",
+              "points": 1,
+              "reason": "no top6"
+            }
+          ],
+          "top6_points": 5,
+          "bonus_driver": "HAM",
+          "bonus_guess": 3,
+          "bonus_real_pos": 5,
+          "bonus_points": 0,
+          "total": 5
         }
       }
     },
@@ -2857,6 +3046,69 @@
           "bonus_real_pos": 7,
           "bonus_points": 0,
           "total": 6
+        },
+        "13": {
+          "round": 13,
+          "race_id": "2026-13",
+          "race": "Monza",
+          "top6": [
+            "RUS",
+            "HAM",
+            "LEC",
+            "NOR",
+            "ANT",
+            "PIA"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "RUS",
+              "real": "GAS",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "HAM",
+              "real": "RUS",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "LEC",
+              "real": "PIA",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "NOR",
+              "real": "LEC",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 5,
+              "guess": "ANT",
+              "real": "HAM",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 6,
+              "guess": "PIA",
+              "real": "VER",
+              "points": 1,
+              "reason": "no top6"
+            }
+          ],
+          "top6_points": 4,
+          "bonus_driver": "HAM",
+          "bonus_guess": 2,
+          "bonus_real_pos": 5,
+          "bonus_points": 0,
+          "total": 4
         }
       }
     },
@@ -3115,6 +3367,69 @@
           "bonus_real_pos": 7,
           "bonus_points": 0,
           "total": 7
+        },
+        "13": {
+          "round": 13,
+          "race_id": "2026-13",
+          "race": "Monza",
+          "top6": [
+            "RUS",
+            "LEC",
+            "NOR",
+            "ANT",
+            "HAM",
+            "VER"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "RUS",
+              "real": "GAS",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "LEC",
+              "real": "RUS",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "NOR",
+              "real": "PIA",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 4,
+              "guess": "ANT",
+              "real": "LEC",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 5,
+              "guess": "HAM",
+              "real": "HAM",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 6,
+              "guess": "VER",
+              "real": "VER",
+              "points": 2,
+              "reason": "exata"
+            }
+          ],
+          "top6_points": 6,
+          "bonus_driver": "HAM",
+          "bonus_guess": 4,
+          "bonus_real_pos": 5,
+          "bonus_points": 0,
+          "total": 6
         }
       }
     },
@@ -4324,6 +4639,69 @@
           "bonus_real_pos": 7,
           "bonus_points": 0,
           "total": 5
+        },
+        "13": {
+          "round": 13,
+          "race_id": "2026-13",
+          "race": "Monza",
+          "top6": [
+            "LEC",
+            "NOR",
+            "HAM",
+            "ANT",
+            "RUS",
+            "VER"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "LEC",
+              "real": "GAS",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "NOR",
+              "real": "RUS",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 3,
+              "guess": "HAM",
+              "real": "PIA",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "ANT",
+              "real": "LEC",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 5,
+              "guess": "RUS",
+              "real": "HAM",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "VER",
+              "real": "VER",
+              "points": 2,
+              "reason": "exata"
+            }
+          ],
+          "top6_points": 5,
+          "bonus_driver": "HAM",
+          "bonus_guess": 4,
+          "bonus_real_pos": 5,
+          "bonus_points": 0,
+          "total": 5
         }
       }
     },
@@ -5021,6 +5399,69 @@
           "bonus_driver": "VER",
           "bonus_guess": 3,
           "bonus_real_pos": 7,
+          "bonus_points": 0,
+          "total": 5
+        },
+        "13": {
+          "round": 13,
+          "race_id": "2026-13",
+          "race": "Monza",
+          "top6": [
+            "RUS",
+            "HAM",
+            "LEC",
+            "ANT",
+            "NOR",
+            "VER"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "RUS",
+              "real": "GAS",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "HAM",
+              "real": "RUS",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "LEC",
+              "real": "PIA",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "ANT",
+              "real": "LEC",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 5,
+              "guess": "NOR",
+              "real": "HAM",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 6,
+              "guess": "VER",
+              "real": "VER",
+              "points": 2,
+              "reason": "exata"
+            }
+          ],
+          "top6_points": 5,
+          "bonus_driver": "HAM",
+          "bonus_guess": 2,
+          "bonus_real_pos": 5,
           "bonus_points": 0,
           "total": 5
         }
@@ -5980,6 +6421,69 @@
           "bonus_real_pos": 7,
           "bonus_points": 0,
           "total": 6
+        },
+        "13": {
+          "round": 13,
+          "race_id": "2026-13",
+          "race": "Monza",
+          "top6": [
+            "RUS",
+            "LEC",
+            "NOR",
+            "HAM",
+            "ANT",
+            "PIA"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "RUS",
+              "real": "GAS",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "LEC",
+              "real": "RUS",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "NOR",
+              "real": "PIA",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 4,
+              "guess": "HAM",
+              "real": "LEC",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 5,
+              "guess": "ANT",
+              "real": "HAM",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 6,
+              "guess": "PIA",
+              "real": "VER",
+              "points": 1,
+              "reason": "no top6"
+            }
+          ],
+          "top6_points": 4,
+          "bonus_driver": "HAM",
+          "bonus_guess": 4,
+          "bonus_real_pos": 5,
+          "bonus_points": 0,
+          "total": 4
         }
       }
     }

@@ -523,6 +523,50 @@
         "BOT",
         "PER"
       ]
+    },
+    "13": {
+      "round": 13,
+      "race_id": "2026-13",
+      "race": "Monza",
+      "circuit": "monza",
+      "date": "2026-09-06",
+      "sprint": false,
+      "bonus_driver": "HAM",
+      "min_score": 3,
+      "bet_order": [
+        "guilherme",
+        "vinicius",
+        "ferrari",
+        "filipe",
+        "dalla",
+        "igor",
+        "caliman",
+        "caio_l"
+      ],
+      "order": [
+        "GAS",
+        "RUS",
+        "PIA",
+        "LEC",
+        "HAM",
+        "VER",
+        "ANT",
+        "COL",
+        "NOR",
+        "LIN",
+        "BOR",
+        "BEA",
+        "HUL",
+        "LAW",
+        "SAI",
+        "OCO",
+        "TSU",
+        "ALB",
+        "BOT",
+        "PER",
+        "ALO",
+        "STR"
+      ]
     }
   }
 }
