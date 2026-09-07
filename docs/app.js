@@ -1762,18 +1762,6 @@ function renderPilotos(results) {
       );
     });
 
-    // Média real (linha vertical forte).
-    svg.appendChild(
-      svgEl("line", {
-        x1: escalaX(piloto.media),
-        y1: cy - meiaAltura - 2,
-        x2: escalaX(piloto.media),
-        y2: cy + meiaAltura + 2,
-        stroke: corTextoForte,
-        "stroke-width": 1.5,
-      })
-    );
-
     svg.appendChild(svgEl("circle", { cx: 11, cy, r: 4, fill: cor }));
     svg.appendChild(
       svgEl("text", { x: 21, y: cy + 3.5, "font-size": 11, "font-weight": 700, fill: corTextoForte }, [
@@ -1788,8 +1776,8 @@ function renderPilotos(results) {
   });
 
   const legenda = el("p", { class: "preferencia-legenda" }, [
-    "Cada linha é um piloto (ordenados pela posição média real crescente). A forma mostra em que posições " +
-      "ele mais larga nos quali já disputados; cada ponto é um quali; a barra vertical escura é a média. " +
+    "Cada linha é um piloto (ordenados pela posição média real crescente, mostrada à direita). A forma " +
+      "mostra em que posições ele mais larga nos quali já disputados; cada ponto é um quali. " +
       "A faixa clara à esquerda é o top6.",
   ]);
 
