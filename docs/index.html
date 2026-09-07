@@ -4,15 +4,20 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bolão F1 2026</title>
+<script>try{var t=localStorage.getItem("tema");if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
 <link rel="stylesheet" href="./style.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 </head>
 <body>
 <header class="topo">
-  <h1>🏁 Bolão F1 2026</h1>
+  <div class="topo__linha">
+    <h1>🏁 Bolão F1 2026</h1>
+    <button id="btn-tema" class="btn-tema" type="button" aria-label="Alternar tema claro/escuro">🌙</button>
+  </div>
   <nav class="abas" role="tablist">
     <button class="aba" data-aba="ranking" role="tab" aria-selected="true">Ranking</button>
     <button class="aba" data-aba="palpites" role="tab" aria-selected="false">Palpites por jogador</button>
+    <button class="aba" data-aba="pilotos" role="tab" aria-selected="false">Pilotos</button>
     <button class="aba" data-aba="hall" role="tab" aria-selected="false">Hall of Fame</button>
   </nav>
 </header>
@@ -144,6 +149,12 @@
       </div>
       <div id="rendimento-jogador-container"></div>
     </div>
+  </section>
+
+  <section id="secao-pilotos" class="secao" hidden role="tabpanel">
+    <div id="pilotos-status" class="status"></div>
+    <h2 class="pilotos-titulo">Posição real de largada no quali</h2>
+    <div id="pilotos-container" class="pilotos-container"></div>
   </section>
 
   <section id="secao-hall" class="secao" hidden role="tabpanel">

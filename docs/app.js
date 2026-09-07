@@ -3,7 +3,7 @@
 // Cor aproximada por equipe 2026, mapeada por código de piloto (3 letras).
 // Puramente decorativo (identifica a equipe no círculo ao lado do código).
 const CORES_PILOTO = {
-  VER: "#3671C6", HAD: "#3671C6", // Red Bull
+  VER: "#3671C6", HAD: "#3671C6", TSU: "#3671C6", // Red Bull
   NOR: "#FF8000", PIA: "#FF8000", // McLaren
   RUS: "#27F4D2", ANT: "#27F4D2", // Mercedes
   LEC: "#E8002D", HAM: "#E8002D", // Ferrari
@@ -48,6 +48,19 @@ function el(tag, props = {}, filhos = []) {
     else if (chave === "html") node.innerHTML = valor;
     else node.setAttribute(chave, valor);
   }
+  for (const filho of filhos) {
+    if (filho == null) continue;
+    node.appendChild(typeof filho === "string" ? document.createTextNode(filho) : filho);
+  }
+  return node;
+}
+
+const SVG_NS = "http://www.w3.org/2000/svg";
+
+// Igual ao `el()`, mas no namespace SVG (createElement não serve para <svg>).
+function svgEl(tag, props = {}, filhos = []) {
+  const node = document.createElementNS(SVG_NS, tag);
+  for (const [chave, valor] of Object.entries(props)) node.setAttribute(chave, valor);
   for (const filho of filhos) {
     if (filho == null) continue;
     node.appendChild(typeof filho === "string" ? document.createTextNode(filho) : filho);
@@ -1562,6 +1575,227 @@ function renderRendimentoPorJogador(codigoPiloto, bets) {
   }
 }
 
+// ---------- Pilotos (distribuição da posição real no quali) ----------
+
+// Junta, por piloto, todas as posições em que ele largou nos quali já disputados
+// (results.json, rounds[].order — índice 0 = P1). `maxGrid` = maior grid visto.
+function coletarPosicoesReais(results) {
+  const porPiloto = new Map(); // codigo -> number[]
+  let maxGrid = 0;
+  for (const rodada of Object.values(results.rounds)) {
+    const order = rodada.order || [];
+    maxGrid = Math.max(maxGrid, order.length);
+    order.forEach((codigo, indice) => {
+      if (!porPiloto.has(codigo)) porPiloto.set(codigo, []);
+      porPiloto.get(codigo).push(indice + 1);
+    });
+  }
+  return { porPiloto, maxGrid };
+}
+
+// Densidade por kernel gaussiano (para o contorno do violino). Amostras poucas
+// e discretas (posições 1..22), então a banda suaviza o histograma.
+function densidadeGaussiana(amostras, xs, banda) {
+  const n = amostras.length;
+  const norm = 1 / (n * banda * Math.sqrt(2 * Math.PI));
+  return xs.map((x) => {
+    let soma = 0;
+    for (const a of amostras) {
+      const u = (x - a) / banda;
+      soma += Math.exp(-0.5 * u * u);
+    }
+    return soma * norm;
+  });
+}
+
+function mediaLista(valores) {
+  return valores.reduce((s, v) => s + v, 0) / valores.length;
+}
+
+function medianaLista(valores) {
+  const ord = valores.slice().sort((a, b) => a - b);
+  const meio = Math.floor(ord.length / 2);
+  return ord.length % 2 ? ord[meio] : (ord[meio - 1] + ord[meio]) / 2;
+}
+
+// Um "violino" horizontal por piloto (uma linha cada), ordenados pela posição
+// média real crescente (quem larga melhor no topo). Cada violino é normalizado
+// para a mesma espessura máxima — a dispersão aparece pela largura da forma no
+// eixo X, não pela altura.
+function renderPilotos(results) {
+  const container = document.getElementById("pilotos-container");
+  const { porPiloto, maxGrid } = coletarPosicoesReais(results);
+
+  const pilotos = [...porPiloto.entries()]
+    .map(([codigo, posicoes]) => ({
+      codigo,
+      posicoes,
+      media: mediaLista(posicoes),
+      mediana: medianaLista(posicoes),
+      melhor: Math.min(...posicoes),
+      pior: Math.max(...posicoes),
+    }))
+    .sort((a, b) => a.media - b.media || a.codigo.localeCompare(b.codigo));
+
+  if (!pilotos.length) {
+    container.replaceChildren(el("p", { class: "status" }, ["Sem resultados de quali ainda."]));
+    return;
+  }
+
+  const margemEsq = 54;
+  const margemDir = 62;
+  const margemTopo = 26;
+  const margemBase = 28;
+  const larguraPlot = 560;
+  const alturaLinha = 30;
+  const larguraTotal = margemEsq + larguraPlot + margemDir;
+  const alturaTotal = margemTopo + pilotos.length * alturaLinha + margemBase;
+
+  const xMin = 0.5;
+  const xMax = maxGrid + 0.5;
+  const escalaX = (pos) => margemEsq + ((pos - xMin) / (xMax - xMin)) * larguraPlot;
+
+  const xs = [];
+  for (let x = xMin; x <= xMax + 1e-9; x += 0.2) xs.push(x);
+  const banda = 1.1;
+
+  const corGrade = corCss("--borda");
+  const corTexto = corCss("--texto-fraco");
+  const corTextoForte = corCss("--texto");
+  const corAcento = corCss("--acento");
+
+  const svg = svgEl("svg", {
+    class: "pilotos-svg",
+    width: larguraTotal,
+    height: alturaTotal,
+    viewBox: `0 0 ${larguraTotal} ${alturaTotal}`,
+    role: "img",
+    "aria-label": "Distribuição da posição real de largada no quali por piloto",
+  });
+
+  // Faixa do top6 (leve destaque de fundo).
+  svg.appendChild(
+    svgEl("rect", {
+      x: escalaX(0.5),
+      y: margemTopo,
+      width: escalaX(6.5) - escalaX(0.5),
+      height: alturaTotal - margemTopo - margemBase,
+      fill: corAcento,
+      opacity: 0.06,
+    })
+  );
+
+  // Gridlines verticais + rótulos P# no topo e na base.
+  for (let p = 1; p <= maxGrid; p++) {
+    const x = escalaX(p);
+    const destaque = p === 1 || p % 5 === 0;
+    svg.appendChild(
+      svgEl("line", {
+        x1: x,
+        y1: margemTopo,
+        x2: x,
+        y2: alturaTotal - margemBase,
+        stroke: corGrade,
+        "stroke-width": destaque ? 1 : 0.5,
+        "stroke-dasharray": destaque ? "0" : "2 3",
+      })
+    );
+    if (destaque) {
+      for (const y of [margemTopo - 9, alturaTotal - margemBase + 16]) {
+        svg.appendChild(
+          svgEl("text", { x, y, "text-anchor": "middle", "font-size": 10, fill: corTexto }, [`P${p}`])
+        );
+      }
+    }
+  }
+
+  pilotos.forEach((piloto, i) => {
+    const cy = margemTopo + i * alturaLinha + alturaLinha / 2;
+    const cor = corPiloto(piloto.codigo);
+    const meiaAltura = alturaLinha * 0.42;
+    // A gaussiana nunca zera de verdade, então limitamos o contorno à janela
+    // onde o piloto realmente largou (± folga) — sem isso o violino vira um
+    // fio de cabelo esticado até o fim do eixo.
+    const janelaMin = Math.max(xMin, piloto.melhor - 1.5);
+    const janelaMax = Math.min(xMax, piloto.pior + 1.5);
+    const xsJanela = xs.filter((x) => x >= janelaMin && x <= janelaMax);
+    const densidades = densidadeGaussiana(piloto.posicoes, xsJanela, banda);
+    const maxDens = Math.max(...densidades) || 1;
+
+    svg.appendChild(
+      svgEl("line", {
+        x1: margemEsq,
+        y1: cy,
+        x2: margemEsq + larguraPlot,
+        y2: cy,
+        stroke: corGrade,
+        "stroke-width": 0.5,
+      })
+    );
+
+    const topo = xsJanela.map(
+      (x, k) => `${escalaX(x).toFixed(1)},${(cy - (densidades[k] / maxDens) * meiaAltura).toFixed(1)}`
+    );
+    const base = xsJanela
+      .map((x, k) => `${escalaX(x).toFixed(1)},${(cy + (densidades[k] / maxDens) * meiaAltura).toFixed(1)}`)
+      .reverse();
+    const violino = svgEl("path", {
+      d: `M ${topo.join(" L ")} L ${base.join(" L ")} Z`,
+      fill: cor,
+      "fill-opacity": 0.35,
+      stroke: cor,
+      "stroke-width": 1,
+    });
+    violino.appendChild(
+      svgEl("title", {}, [
+        `${piloto.codigo} — média P${piloto.media.toFixed(1)} · mediana P${piloto.mediana} · ` +
+          `melhor P${piloto.melhor} · pior P${piloto.pior} · ${piloto.posicoes.length} quali`,
+      ])
+    );
+    svg.appendChild(violino);
+
+    // Cada quali como um ponto (jitter vertical determinístico p/ não empilhar).
+    piloto.posicoes.forEach((pos, k) => {
+      const jitter = (((k % 5) - 2) / 2) * (meiaAltura / 3);
+      svg.appendChild(
+        svgEl("circle", { cx: escalaX(pos), cy: cy + jitter, r: 1.8, fill: cor, "fill-opacity": 0.55 })
+      );
+    });
+
+    // Média real (linha vertical forte).
+    svg.appendChild(
+      svgEl("line", {
+        x1: escalaX(piloto.media),
+        y1: cy - meiaAltura - 2,
+        x2: escalaX(piloto.media),
+        y2: cy + meiaAltura + 2,
+        stroke: corTextoForte,
+        "stroke-width": 1.5,
+      })
+    );
+
+    svg.appendChild(svgEl("circle", { cx: 11, cy, r: 4, fill: cor }));
+    svg.appendChild(
+      svgEl("text", { x: 21, y: cy + 3.5, "font-size": 11, "font-weight": 700, fill: corTextoForte }, [
+        piloto.codigo,
+      ])
+    );
+    svg.appendChild(
+      svgEl("text", { x: margemEsq + larguraPlot + 8, y: cy + 3.5, "font-size": 10.5, fill: corTexto }, [
+        `P${piloto.media.toFixed(1)}`,
+      ])
+    );
+  });
+
+  const legenda = el("p", { class: "preferencia-legenda" }, [
+    "Cada linha é um piloto (ordenados pela posição média real crescente). A forma mostra em que posições " +
+      "ele mais larga nos quali já disputados; cada ponto é um quali; a barra vertical escura é a média. " +
+      "A faixa clara à esquerda é o top6.",
+  ]);
+
+  container.replaceChildren(el("div", { class: "pilotos-scroll" }, [svg]), legenda);
+}
+
 // ---------- Hall of Fame ----------
 
 function nomeHall(hof, id) {
@@ -1677,6 +1911,7 @@ function configurarAbas() {
   const secoes = {
     ranking: document.getElementById("secao-ranking"),
     palpites: document.getElementById("secao-palpites"),
+    pilotos: document.getElementById("secao-pilotos"),
     hall: document.getElementById("secao-hall"),
   };
   botoes.forEach((botao) => {
@@ -1740,7 +1975,75 @@ function configurarSubAbasRanking() {
   });
 }
 
+// ---------- Tema claro/escuro ----------
+
+// Guardadas para re-renderizar os gráficos (canvas/SVG leem a cor do tema na
+// hora do desenho — CSS puro se atualiza sozinho, Chart.js e o SVG não).
+let resultsGlobais = null;
+
+function temaEfetivo() {
+  const attr = document.documentElement.getAttribute("data-theme");
+  if (attr === "dark" || attr === "light") return attr;
+  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+}
+
+function atualizarBotaoTema() {
+  const botao = document.getElementById("btn-tema");
+  const escuro = temaEfetivo() === "dark";
+  botao.textContent = escuro ? "☀️" : "🌙";
+  botao.title = escuro ? "Mudar para tema claro" : "Mudar para tema escuro";
+  botao.setAttribute("aria-pressed", escuro ? "true" : "false");
+}
+
+// Redesenha o que não reage sozinho à troca de tema.
+function rerenderizarGraficos() {
+  if (resultsGlobais) renderPilotos(resultsGlobais);
+
+  const rankingVisivel = !document.getElementById("secao-ranking").hidden;
+  const corridasVisivel =
+    rankingVisivel && !document.getElementById("subsecao-ranking-corridas").hidden;
+
+  // Chart.js: destrói tudo; recria já o que está visível, o resto volta pela
+  // inicialização preguiçosa das abas (garantir*), agora com a cor nova.
+  [
+    graficoTemporadaAcumulado,
+    graficoTemporadaPorRodada,
+    graficoRendimento,
+    graficoRendimentoPorJogador,
+  ].forEach((c) => c && c.destroy());
+  graficoTemporadaAcumulado = null;
+  graficoTemporadaPorRodada = null;
+  graficoRendimento = null;
+  graficoRendimentoPorJogador = null;
+  dadosTemporada = null;
+
+  if (corridasVisivel && standingsParaTemporada) renderTemporada(standingsParaTemporada);
+  if (rendimentoEstado) renderRendimento(rendimentoEstado.playerId, rendimentoEstado.bets);
+  if (rendimentoPorJogadorEstado) {
+    renderRendimentoPorJogador(rendimentoPorJogadorEstado.codigoPiloto, rendimentoPorJogadorEstado.bets);
+  }
+}
+
+function aplicarTema(tema) {
+  document.documentElement.setAttribute("data-theme", tema);
+  try {
+    localStorage.setItem("tema", tema);
+  } catch (e) {
+    /* modo privado / storage bloqueado — segue sem persistir */
+  }
+  atualizarBotaoTema();
+  rerenderizarGraficos();
+}
+
+function configurarTema() {
+  atualizarBotaoTema();
+  document.getElementById("btn-tema").addEventListener("click", () => {
+    aplicarTema(temaEfetivo() === "dark" ? "light" : "dark");
+  });
+}
+
 async function main() {
+  configurarTema();
   configurarAbas();
   configurarSubAbas();
   configurarSubAbasRanking();
@@ -1763,6 +2066,10 @@ async function main() {
 
     const results = await carregarJson("./data/results.json");
     const bets = await carregarJson("./data/bets.json");
+    resultsGlobais = results;
+
+    renderPilotos(results);
+    document.getElementById("pilotos-status").textContent = "";
 
     const roundsDetalhe = popularSelectCorridaDetalhe(standings);
     const selectCorridaDetalhe = document.getElementById("select-corrida-detalhe");
@@ -1824,6 +2131,8 @@ async function main() {
     document.getElementById("palpites-status").classList.add("erro");
     document.getElementById("hall-status").textContent = "Erro ao carregar os dados do bolão.";
     document.getElementById("hall-status").classList.add("erro");
+    document.getElementById("pilotos-status").textContent = "Erro ao carregar os dados do bolão.";
+    document.getElementById("pilotos-status").classList.add("erro");
   }
 }
 

@@ -837,6 +837,39 @@ WhatsApp (Ranking/Geral).**
 - Nenhuma mudança em `bolao/parser.py`, `bolao/scoring.py` nem nos formatos já
   consumidos — `bet_order` é a única adição, aditiva, em `bolao/site.py`.
 
+**Ajuste posterior (ainda Etapa 4): aba "Pilotos" — violino da posição real de
+largada no quali.**
+- **4ª aba principal** `data-aba="pilotos"` (`#secao-pilotos` → `#pilotos-status`
+  + `#pilotos-container`), no mesmo padrão de `configurarAbas()`.
+- **Gráfico de violino horizontal feito à mão em SVG** (sem Chart.js nem lib
+  nova): `renderPilotos(results)` em `app.js`, uma linha por piloto, ordenadas
+  pela **posição média real crescente**. Fonte: só `docs/data/results.json`
+  (`rounds[].order`, índice 0 = P1) — nenhuma mudança em `bolao/site.py`.
+  - Contorno = densidade por kernel gaussiano (`densidadeGaussiana`, banda 1.1),
+    **normalizado por piloto** (mesma espessura máxima em todos — a dispersão
+    aparece pela largura no eixo X). Recortado à janela `[melhor-1.5, pior+1.5]`
+    porque a gaussiana nunca zera e o violino viraria um fio até o fim do eixo.
+  - Cada quali = um ponto (jitter vertical determinístico); barra vertical
+    escura = média; faixa clara à esquerda = top6; eixo P1..maior grid visto.
+  - Helper novo `svgEl()` (namespace SVG, espelha `el()`). `CORES_PILOTO` ganhou
+    `TSU`→Red Bull (Tsunoda entrou na r12; decorativo, como o resto do mapa).
+- SVG não sofre o bug de canvas escondido do Chart.js → sem init preguiçosa,
+  `renderPilotos` roda direto no `main()`.
+
+**Ajuste posterior (ainda Etapa 4): switch de tema claro/escuro no topo.**
+- Botão `#btn-tema` (`.btn-tema`, ☀️/🌙) no `.topo__linha` do header. Escolha
+  explícita grava `data-theme="light|dark"` no `<html>` + `localStorage["tema"]`;
+  sem escolha, segue `prefers-color-scheme`.
+- **CSS:** tokens escuros duplicados em dois seletores —
+  `@media (prefers-color-scheme: dark) :root:not([data-theme="light"])` e
+  `:root[data-theme="dark"]` (o `:root` base continua sendo o claro). Script
+  inline no `<head>` (antes do CSS) aplica o `data-theme` salvo sem flash.
+- **`app.js`:** `configurarTema`/`aplicarTema`/`temaEfetivo`/`atualizarBotaoTema`
+  + `rerenderizarGraficos()` — CSS reage sozinho, mas Chart.js e o SVG de
+  Pilotos leem a cor na hora do desenho, então a troca destrói/recria os
+  gráficos (os de Chart.js só os visíveis; o resto volta pela init preguiçosa).
+  `resultsGlobais` guardado no `main()` para o re-render do SVG.
+
 ### Etapa 5 — GitHub Actions ✅
 - **Objetivo:** workflow acionado por `repository_dispatch` que roda o pipeline
   completo (parse → buscar resultado → pontuar → gerar dados → commit).

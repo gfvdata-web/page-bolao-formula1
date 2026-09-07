@@ -1,5 +1,5 @@
 :root {
-  color-scheme: light dark;
+  color-scheme: light;
   --bg: #f5f6f8;
   --bg-card: #ffffff;
   --texto: #1a1d21;
@@ -15,8 +15,12 @@
   --sombra: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
+/* Tokens do tema escuro. `--tema-escuro` guarda os valores; são aplicados
+   tanto pela preferência do sistema (a menos que o usuário force o claro com
+   data-theme="light") quanto pela escolha explícita data-theme="dark". */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
     --bg: #14161a;
     --bg-card: #1f2227;
     --texto: #eceef1;
@@ -30,6 +34,22 @@
     --ok0-texto: #8b9098;
     --sombra: 0 1px 3px rgba(0, 0, 0, 0.4);
   }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #14161a;
+  --bg-card: #1f2227;
+  --texto: #eceef1;
+  --texto-fraco: #9aa0a8;
+  --borda: #2c3036;
+  --ok2: #3fd17f;
+  --ok2-bg: #17352a;
+  --ok1: #e6bf3c;
+  --ok1-bg: #3a331a;
+  --ok0-bg: #2a2d32;
+  --ok0-texto: #8b9098;
+  --sombra: 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 
 * { box-sizing: border-box; }
@@ -51,8 +71,33 @@ header.topo {
 }
 
 header.topo h1 {
-  margin: 0 0 0.75rem;
+  margin: 0;
   font-size: 1.3rem;
+}
+
+.topo__linha {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.btn-tema {
+  border: 1px solid var(--borda);
+  background: var(--bg-card);
+  border-radius: 999px;
+  width: 2.1rem;
+  height: 2.1rem;
+  line-height: 1;
+  font-size: 1rem;
+  cursor: pointer;
+  flex-shrink: 0;
+  padding: 0;
+}
+
+.btn-tema:hover {
+  border-color: var(--acento);
 }
 
 nav.abas {
@@ -991,6 +1036,31 @@ button.subaba[aria-selected="true"] {
   border: none;
   border-top: 1px solid var(--borda);
   margin: 1.5rem 0;
+}
+
+/* Pilotos (violino da posição real no quali) */
+
+.pilotos-titulo {
+  margin: 0 0 0.8rem;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--texto-fraco);
+}
+
+.pilotos-container {
+  background: var(--bg-card);
+  border-radius: 10px;
+  box-shadow: var(--sombra);
+  padding: 0.8rem;
+}
+
+.pilotos-scroll {
+  overflow-x: auto;
+}
+
+.pilotos-svg {
+  display: block;
 }
 
 /* Hall of Fame */
