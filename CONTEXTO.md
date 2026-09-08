@@ -1509,6 +1509,19 @@ temporadas.
   "DRU é jogador"): tirado de `data/2023/palpites_2023.csv`,
   `players.json` (alias + nome) e `ranking_final.json` (`ordem`);
   `messages/1.txt` + `scores/1.json` + `docs/data/2023/` regenerados.
+- **Sub-aba "Regras" no Ranking (só temporadas passadas):** `data-subaba="regras"`
+  (`hidden` no HTML, revelada em `aplicarModoHistorico`). Conteúdo montado por
+  `renderRegrasHistorico`: formato da temporada (de `FORMATO`) + **esquema
+  visual** da regra 2/1/0 e do piloto da rodada (`esquemaPontuacao`, reusa
+  `chipPiloto`/`badgePonto`), rodada sem palpite (compensação on/off),
+  desempate, "Oficial × Calculada", cobertura (`meta.faltando`) e as decisões
+  de cálculo por ano. O bloco `.regras-pontuacao` da sub-aba Geral fica
+  `hidden` no modo histórico (redundante). Em 2026 nada muda.
+- **`docs/data/regras.json` (novo, escrito à mão, sem gerador — como
+  `hall_of_fame.json`):** `{comum:[...], por_ano:{"<ano>":[...]}}` com as
+  decisões de cálculo de cada temporada (desempate, placar publicado, DRU,
+  R19 Austin, "+1 por palpitar" de 2024, etc.). Carregado em `main()` só no
+  modo histórico.
 - **`rodadasMatriz()` (nova):** em `MODO_HISTORICO` as colunas da matriz vêm do
   **calendário inteiro** (`calendarGlobal`), não só de `standings.rounds`.
   Rodada sem palpite → coluna com cabeçalho `(sem registro)`

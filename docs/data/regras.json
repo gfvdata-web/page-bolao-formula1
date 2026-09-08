@@ -1,0 +1,38 @@
+{
+  "_comment": "Notas de regras/decisoes por temporada, exibidas na sub-aba Regras (so nas temporadas passadas). Escrito a mao, sem gerador Python (como hall_of_fame.json). Resumo do formato e derivado dos dados (standings.format); aqui vao as decisoes de calculo.",
+  "comum": [
+    "Cada piloto do palpite pontua 2/1/0: 2 pts na posicao exata do quali, 1 pt se ele terminou dentro do top real do quali mas em outra posicao, 0 pt se ficou fora.",
+    "So conta o qualifying principal. Fins de semana de Sprint entram pelo quali de sabado; a sessao de Sprint e ignorada.",
+    "O resultado do quali vem da API Jolpica-F1 (grid completo), o mesmo criterio em todos os anos.",
+    "“Oficial” e o placar que o grupo publicou no WhatsApp (o registro da temporada). “Calculada” e o recalculo por estas regras — quando aparece a diferenca entre parenteses, e porque a conta do grupo na epoca divergiu do recalculo."
+  ],
+  "por_ano": {
+    "2021": [
+      "Sem pontuacao minima: quem faltava uma rodada simplesmente nao pontuava.",
+      "Desempate por media: Ferrari e Vinicius fecharam os dois com 96 pts; o grupo pos o Vinicius em 2º porque ele fez 96 em 20 rodadas (4,8) contra 96 em 22 do Ferrari (4,4).",
+      "As rodadas 1–10 nao estao no historico do WhatsApp; entram como um saldo acumulado (pontos + rodadas jogadas), sem detalhe por corrida. O recalculo das rodadas 11–22 bate 100% com o placar do grupo."
+    ],
+    "2022": [
+      "Sem pontuacao minima (compensacao).",
+      "As rodadas 4 (Imola) e 5 (Miami) nao foram recuperadas; os pontos delas entram como um bloco unico a partir do placar publicado.",
+      "Caliman e Dalla empataram em 139 pts; a ordem final segue a classificacao que o grupo publicou."
+    ],
+    "2023": [
+      "Sem pontuacao minima (compensacao). Eleazar e Luciano faltaram meia temporada e nao receberam nada por isso — era a regra da epoca.",
+      "Ordem final pela classificacao publicada pelo grupo (24/11/2023, apos a R21): o recalculo aproxima Igor e Ferrari, mas o grupo tinha o Igor a frente e nao ha placar publicado depois da R21 para reconciliar o fim da temporada.",
+      "O jogador DRU, que apostou uma unica vez, foi removido dos registros."
+    ],
+    "2024": [
+      "O piloto da rodada valia 2 pts (nao 1): na R2/Jeddah o sorteado foi o VER, os 10 jogadores cravaram P1 e ele fez a pole — o placar publicado bate 10/10 com 2 pts e 0/10 com 1 pt.",
+      "Sem pontuacao minima (compensacao).",
+      "O “+1 por palpitar” que aparece no placar do grupo em algumas rodadas nao e regra oficial (o usuario nao reconhece): os dados usam acerto do piloto da rodada = 2 pts, erro = 0.",
+      "A tabela final do grupo nao fecha com o proprio placar por rodada (Caliman 148 na final x 152 nos relatorios). A ordem final usa a tabela publicada; Arthur e Dalla empataram em 162."
+    ],
+    "2025": [
+      "Com pontuacao minima (compensacao): quem nao aposta numa rodada recebe 1 a menos que a menor pontuacao de quem apostou nela. Entra no total, mas nao conta como rodada apostada.",
+      "Rodadas 1–15 vieram de uma planilha; 16–24 do export do WhatsApp.",
+      "A R19 (Austin) entra no ranking so pelo placar publicado — os palpites brutos nao foram recuperados. Isso empata Guilherme e Vinicius em 144; a ordem final (Vinicius em 1º) segue o fechamento do grupo.",
+      "O recalculo bate 100% com o placar do grupo."
+    ]
+  }
+}

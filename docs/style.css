@@ -1645,6 +1645,38 @@ button.subaba[aria-selected="true"] {
 #hist-matriz-titulo { margin: 1.4rem 0 0.6rem; }
 
 .ranking-dif { color: var(--texto-fraco); font-size: 0.82em; }
+
+/* Sub-aba Regras (temporadas passadas) */
+.regras-conteudo { max-width: 760px; }
+.regras-bloco {
+  margin: 0 0 1.1rem;
+  padding: 0.9rem 1rem;
+  background: var(--bg-card);
+  border: 1px solid var(--borda);
+  border-radius: 10px;
+}
+.regras-bloco h3 { margin: 0 0 0.5rem; font-size: 1rem; }
+.regras-bloco ul { margin: 0.3rem 0 0; padding-left: 1.1rem; }
+.regras-bloco li { margin: 0.25rem 0; }
+.regras-bloco p { margin: 0.3rem 0; }
+
+.regras-esquema {
+  margin-top: 0.8rem;
+  padding: 0.7rem 0.8rem;
+  background: var(--bg);
+  border: 1px solid var(--borda);
+  border-radius: 8px;
+}
+.regras-esquema__intro { margin: 0.5rem 0 0.4rem; font-size: 0.9rem; }
+.regras-esquema__intro:first-child { margin-top: 0; }
+.regras-esquema__linha {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.28rem 0;
+  font-size: 0.9rem;
+}
+.regras-esquema__texto { flex: 1; color: var(--texto-fraco); }
 .ranking-nota-calculada {
   margin: 0.5rem 0 0;
   font-size: 0.8rem;

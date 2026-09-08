@@ -2429,6 +2429,7 @@ function configurarSubAbasRanking() {
     geral: document.getElementById("subsecao-ranking-geral"),
     corridas: document.getElementById("subsecao-ranking-corridas"),
     simulador: document.getElementById("subsecao-ranking-simulador"),
+    regras: document.getElementById("subsecao-ranking-regras"),
   };
   botoes.forEach((botao) => {
     botao.addEventListener("click", () => {
@@ -2587,6 +2588,174 @@ function adaptarTextosEstaticos() {
   if (rendBonus) rendBonus.hidden = !FORMATO.bonus;
 }
 
+// Sub-aba "Regras" (só temporadas passadas): formato da temporada + esquema
+// visual da regra 2/1/0 + decisões de cálculo (docs/data/regras.json).
+function blocoRegra(titulo, ...filhos) {
+  return el("section", { class: "regras-bloco" }, [el("h3", {}, [titulo]), ...filhos]);
+}
+
+function linhaEsquema(chip, texto, badge) {
+  return el("div", { class: "regras-esquema__linha" }, [
+    chip,
+    el("span", { class: "regras-esquema__texto" }, [texto]),
+    badge,
+  ]);
+}
+
+function esquemaPontuacao() {
+  const n = FORMATO.top_n;
+  const linhas = [
+    el("p", { class: "regras-esquema__intro" }, [
+      "Exemplo: você apostou ",
+      chipPiloto("HAM"),
+      ` na posição P2 do seu top${n}.`,
+    ]),
+    linhaEsquema(chipPiloto("HAM"), "largou em P2 no quali → posição exata", badgePonto(2)),
+    linhaEsquema(
+      chipPiloto("HAM"),
+      `largou em P5 → outra posição, mas dentro do top${n} real do quali`,
+      badgePonto(1)
+    ),
+    linhaEsquema(chipPiloto("HAM"), `largou em P11 → fora do top${n} real`, badgePonto(0)),
+  ];
+  if (FORMATO.bonus) {
+    linhas.push(
+      el("p", { class: "regras-esquema__intro" }, [
+        "Piloto da rodada (sorteado do grupo): ",
+        chipPiloto("LEC"),
+        ". Todos chutam a posição exata dele no grid inteiro. Você chutou P3.",
+      ]),
+      linhaEsquema(
+        chipPiloto("LEC"),
+        "largou exatamente em P3 → acerto",
+        badgePonto(FORMATO.bonus_points, FORMATO.bonus_points)
+      ),
+      linhaEsquema(chipPiloto("LEC"), "largou em qualquer outra posição", badgePonto(0))
+    );
+  }
+  return el("div", { class: "regras-esquema" }, linhas);
+}
+
+function renderRegrasHistorico(standings, entrada, regrasData) {
+  const alvo = document.getElementById("regras-conteudo");
+  if (!alvo) return;
+  const n = FORMATO.top_n;
+  const bp = FORMATO.bonus_points;
+  const partes = [el("h2", {}, [`Regras da temporada ${TEMPORADA}`])];
+
+  partes.push(
+    blocoRegra(
+      "Formato",
+      el("ul", {}, [
+        el("li", {}, [`Cada jogador aposta um top${n} (P1 a P${n}) em ordem.`]),
+        FORMATO.bonus
+          ? el("li", {}, [
+              `Além do top${n}, um piloto sorteado pelo grupo é o "piloto da rodada": ` +
+                `todos chutam a posição exata dele no grid inteiro, valendo ${bp} pt` +
+                `${bp > 1 ? "s" : ""} no acerto.`,
+            ])
+          : el("li", {}, ["Não havia o palpite do piloto da rodada nesta temporada."]),
+        el("li", {}, [`Máximo por corrida: ${FORMATO.max_points} pts.`]),
+      ]),
+      esquemaPontuacao()
+    )
+  );
+
+  partes.push(
+    blocoRegra(
+      "Rodada sem palpite",
+      FORMATO.compensation
+        ? el("p", {}, [
+            "Quem não aposta numa rodada recebe a pontuação mínima daquela rodada " +
+              "(1 a menos que a menor pontuação de quem apostou nela). Esse valor entra " +
+              "no total do ranking, mas não conta como rodada apostada — por isso a " +
+              "média por corrida não considera essas rodadas.",
+          ])
+        : el("p", {}, [
+            "Não havia pontuação mínima nesta temporada: quem faltava uma rodada " +
+              "simplesmente não pontuava nela.",
+          ])
+    )
+  );
+
+  partes.push(
+    blocoRegra(
+      "Desempate",
+      FORMATO.tiebreak === "media" || TEMPORADA === "2021"
+        ? el("p", {}, [
+            "Por média de pontos por rodada — foi assim que o grupo separou Ferrari e " +
+              "Vinícius, os dois com 96 pts em 2021.",
+          ])
+        : el("p", {}, [
+            "A ordem final segue a classificação que o grupo publicou no WhatsApp no " +
+              "fim da temporada (o critério de desempate do grupo nunca foi escrito).",
+          ])
+    )
+  );
+
+  const temDivergencia = standings.players.some((j) => j.total_calculado !== j.total);
+  partes.push(
+    blocoRegra(
+      "Oficial × Calculada",
+      el("p", {}, [
+        el("strong", {}, ["Oficial"]),
+        " é o placar que o grupo publicou — o registro da temporada. ",
+        el("strong", {}, ["Calculada"]),
+        " é o recálculo por estas regras. ",
+        temDivergencia
+          ? "Nesta temporada os dois divergem; a coluna “Calculada” no ranking mostra a " +
+            "diferença entre parênteses. As divergências vêm de contas do grupo na época " +
+            "(placar publicado às pressas, somas que não fecham) e não de mudança de regra."
+          : "Nesta temporada o recálculo bate 100% com o placar do grupo.",
+      ])
+    )
+  );
+
+  if (entrada && (entrada.faltando || []).length) {
+    partes.push(
+      blocoRegra(
+        "Cobertura",
+        el("p", {}, ["O que falta nos dados desta temporada:"]),
+        el(
+          "ul",
+          {},
+          entrada.faltando.map((f) => el("li", {}, [f]))
+        )
+      )
+    );
+  }
+
+  const notas = (regrasData && regrasData.por_ano && regrasData.por_ano[TEMPORADA]) || [];
+  if (notas.length) {
+    partes.push(
+      blocoRegra(
+        "Decisões desta temporada",
+        el(
+          "ul",
+          {},
+          notas.map((t) => el("li", {}, [t]))
+        )
+      )
+    );
+  }
+
+  const comuns = (regrasData && regrasData.comum) || [];
+  if (comuns.length) {
+    partes.push(
+      blocoRegra(
+        "Regras gerais (todos os anos)",
+        el(
+          "ul",
+          {},
+          comuns.map((t) => el("li", {}, [t]))
+        )
+      )
+    );
+  }
+
+  alvo.replaceChildren(...partes);
+}
+
 // Título / badge / botão voltar / faixa de avisos + esconde o Simulador.
 function aplicarModoHistorico() {
   const titulo = document.getElementById("topo-titulo");
@@ -2630,6 +2799,13 @@ function aplicarModoHistorico() {
       const geral = document.querySelector('#secao-ranking button.subaba[data-subaba="geral"]');
       if (geral) geral.click();
     }
+
+    // Sub-aba "Regras" (só nas temporadas passadas). O bloco resumido de regras
+    // que fica na sub-aba Geral vira redundante — some.
+    const btnRegras = document.querySelector('#secao-ranking button.subaba[data-subaba="regras"]');
+    if (btnRegras) btnRegras.hidden = false;
+    const regrasGeral = document.querySelector("#subsecao-ranking-geral .regras-pontuacao");
+    if (regrasGeral) regrasGeral.hidden = true;
 
     // Temporada finalizada: a leitura corrida-a-corrida ("Pontuação da corrida")
     // dá lugar à matriz de todas as corridas, que sai de Palpites/Histórico para
@@ -2692,6 +2868,11 @@ async function main() {
     renderRanking(standings);
     document.getElementById("ranking-status").textContent = "";
     standingsParaTemporada = standings;
+
+    if (MODO_HISTORICO) {
+      const regrasData = await carregarJson("./data/regras.json").catch(() => null);
+      renderRegrasHistorico(standings, entradaTemporada(), regrasData);
+    }
 
     document.getElementById("btn-copiar-ranking").addEventListener("click", (evento) => {
       copiarTexto(gerarTextoRanking(standings), evento.currentTarget);
