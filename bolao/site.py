@@ -210,6 +210,21 @@ def generate(
     saldo = _load_json(saldo_path).get("players", {}) if saldo_path.exists() else {}
     ranking_players |= set(saldo)
 
+    # Rodadas que existem só como PLACAR publicado no grupo: sabemos quanto
+    # cada jogador fez, mas não de quais pilotos veio. Contam no total e como
+    # rodada disputada; o site sinaliza que não há palpite para mostrar.
+    avulsos_path = season_dir / "pontos_avulsos.json"
+    # Entram no ranking só com "incluir_no_ranking": true — a inclusão muda o
+    # campeonato (em 2025 a R19 empata o 1º lugar), então é decisão explícita,
+    # nunca efeito colateral de o arquivo existir.
+    avulsos = {}
+    if avulsos_path.exists():
+        bruto = _load_json(avulsos_path)
+        if bruto.get("incluir_no_ranking"):
+            avulsos = bruto.get("rounds", {})
+    for bloco in avulsos.values():
+        ranking_players |= set(bloco.get("players", {}))
+
     # --- data/2026/scores/<round>.json (intermediário) ---
     for info in round_infos:
         rnd = info["round"]
@@ -252,6 +267,19 @@ def generate(
                 ac["compensation_total"] += round_min_score[rnd]
                 ac["compensated_rounds"].append(rnd)
 
+    for chave_rnd, bloco in avulsos.items():
+        rnd_av = int(chave_rnd)
+        cobertas = bloco.get("covers") or [rnd_av]
+        for pid, pontos in bloco.get("players", {}).items():
+            ac = acumulado[pid]
+            ac["total"] += pontos
+            ac["per_round"][str(rnd_av)] = pontos
+            ac.setdefault("rounds_sem_palpite", []).extend(cobertas)
+            ac["avulsos_points"] = ac.get("avulsos_points", 0) + pontos
+            # Um bloco pode cobrir mais de uma corrida (ex.: 2022 R4+R5, que só
+            # dá para separar do acumulado como um bloco só).
+            ac["avulsos_extra_rounds"] = ac.get("avulsos_extra_rounds", 0) + len(cobertas) - 1
+
     for pid, bloco in saldo.items():
         ac = acumulado[pid]
         ac["carry_points"] = int(bloco.get("pontos", 0))
@@ -274,11 +302,15 @@ def generate(
     for pos, ac in enumerate(ordenados, 1):
         carry_pts = ac.get("carry_points", 0)
         carry_rnd = ac.get("carry_rounds", 0)
-        rounds_played = len(ac["per_round"]) + carry_rnd
+        rounds_played = (
+            len(ac["per_round"]) + carry_rnd + ac.get("avulsos_extra_rounds", 0)
+        )
         # Média por corrida: só considera o que foi de fato apostado, sem
         # contar a pontuação mínima de compensação. O saldo inicial entra
         # porque são rodadas realmente apostadas (só falta o detalhe delas).
-        pontos_apostados = ac["top6_total"] + ac["bonus_total"] + carry_pts
+        pontos_apostados = (
+            ac["top6_total"] + ac["bonus_total"] + carry_pts + ac.get("avulsos_points", 0)
+        )
         avg_points = round(pontos_apostados / rounds_played, 1) if rounds_played else 0.0
         standings_players.append(
             {
@@ -290,6 +322,8 @@ def generate(
                 "bonus_total": ac["bonus_total"],
                 "carry_points": carry_pts,
                 "carry_rounds": carry_rnd,
+                "avulsos_points": ac.get("avulsos_points", 0),
+                "rounds_sem_palpite": sorted(set(ac.get("rounds_sem_palpite", []))),
                 "rounds_played": rounds_played,
                 "avg_points": avg_points,
                 "per_round": ac["per_round"],

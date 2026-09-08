@@ -1,0 +1,13 @@
+{
+  "_comment": "Etapa 7 — rodadas que existem so como PLACAR publicado no grupo: sabemos quanto cada jogador fez, mas nao de quais pilotos veio. Contam no total e como rodada disputada; o site sinaliza que nao ha palpite. Mesma forma do data/2025/pontos_avulsos.json. Cada valor foi conferido a mao contra as classificacoes acumuladas publicadas.",
+  "incluir_no_ranking": true,
+  "rounds": {
+    "1": {
+      "race": "Sakhir",
+      "fonte": "Dalla nao aparece nem no palpite nem no placar da R1 (04/03/2023 13:59), mas a classificacao acumulada publicada em 19/03/2023 o traz com 12 pts e o placar da R2 dele foi 5 -> a R1 valeu 7. Confirmado por exclusao: as outras 9 rodadas com placar publicado batem 9/9 com o recalculo, e a diferenca do total dele para o grupo e exatamente 7.",
+      "players": {
+        "dalla": 7
+      }
+    }
+  }
+}

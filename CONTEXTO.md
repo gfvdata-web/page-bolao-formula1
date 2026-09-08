@@ -1368,13 +1368,33 @@ de compensação.
 contra 96 em 22 do Ferrari (4,4). Para 2026 o desempate continua indefinido
 (seção 9); o padrão é só a ordem estável por id, que não é critério de verdade.
 
-**Pódios calculados × `hall_of_fame` (depois das regras por temporada):**
+**Rodadas sem palpite mas com placar (`data/<ano>/pontos_avulsos.json`)** —
+decisão do usuário em 2026-09-08: rodada que falta na fonte **não pode custar
+pontos**. Quando dá para arbitrar quanto cada jogador fez pela classificação
+publicada, o valor é registrado (sem saber de quais pilotos veio), conta no
+total e como rodada disputada; o site depois mostra o total completo e
+**sinaliza** que ali não há palpite. Só entra no ranking com
+`"incluir_no_ranking": true` — a inclusão muda campeonato, então é decisão
+explícita, nunca efeito de o arquivo existir.
+
+- **2023 R1** — Dalla `7`. Ele não está no palpite nem no placar da rodada, mas
+  a acumulada de 19/03 o traz com 12 e a R2 dele foi 5. Confirmado por
+  exclusão: as outras 9 rodadas com placar batem 9/9.
+- **2022 R4+R5** — Imola e Miami não existem no export (nem palpite nem
+  placar). Só dá para atribuir como **bloco**, do salto entre as acumuladas de
+  09/04 e 21/05 menos o placar da R6. Para Igor e Rodrigo o bloco cobre também
+  a R6, que eles não jogaram (entrada separada).
+- **2025 R19 (Austin)** — arquivo da sessão que fechou 2025, **fora do ranking**
+  (sem a flag). Incluí-lo empata Guilherme e Vinícius em 144 e desfaz o título
+  do Vinícius: decisão do usuário.
+
+**Pódios calculados × `hall_of_fame`:**
 
 | ano | histórico | calculado | |
 |-----|-----------|-----------|--|
-| 2021 | guilherme, vinicius, ferrari | idem | ✅ |
-| 2022 | caliman, dalla, vinicius | caliman, dalla, **guilherme** | faltam R4/R5 |
-| 2023 | dalla, lage, igor | **lage, dalla**, igor | ver abaixo |
+| 2021 | guilherme, vinicius, ferrari | idem | ✅ (desempate por média) |
+| 2022 | caliman, dalla, vinicius | caliman, dalla, **guilherme** | ver abaixo |
+| 2023 | dalla, lage, igor | idem | ✅ (avulso da R1) |
 | 2024 | arthur, dalla, lage | arthur, dalla, **caliman** | o "+1" descartado |
 | 2025 | vinicius, guilherme, igor | idem | ✅ |
 
@@ -1384,11 +1404,9 @@ pontuação**:
 - **2022** — Vinícius perde o 3º lugar por 3 pts, e as **rodadas 4 (Imola) e 5
   (Miami) não existem no export**. No placar do grupo ele fez 9 pts nelas
   contra 4 do Guilherme, o que devolve a posição. É buraco de fonte.
-- **2023** — Lage 120 × Dalla 116 (o grupo publicou Dalla 117 × Lage 112).
-  Todos os checkpoints intermediários **batem**: as diferenças aparecem e
-  desaparecem em pares (−4/+4, −12/+12), assinatura de tabela repostada, não de
-  drift. A divergência real está no trecho final da temporada, que **não tem
-  placar publicado** para conferir.
+- ~~**2023**~~ — **resolvido**: era só a R1 do Dalla (ver `pontos_avulsos`).
+  Rodada a rodada, Igor bate 10/10, Dalla 9/9 e Lage 9/10 contra o placar
+  publicado; o único furo era a rodada que o Dalla não apostou.
 - **2024** — Caliman bate **exatamente** (148 = 148) e Lage fica 7 abaixo. Nos
   intervalos com checkpoint o grupo dava consistentemente **+1 por rodada** a
   cada jogador (o "+1 por palpitar" que o usuário não reconhece e mandou não

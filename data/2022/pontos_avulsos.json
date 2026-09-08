@@ -1,0 +1,36 @@
+{
+  "_comment": "Etapa 7 — as rodadas 4 (Imola) e 5 (Miami) de 2022 nao existem no export do WhatsApp: nenhum palpite e nenhum placar de rodada. O que sobra e o salto entre duas classificacoes acumuladas, que so da para atribuir como BLOCO (nao da para separar R4 de R5). Registrado na rodada 4 com 'covers' listando as corridas que o bloco cobre.",
+  "incluir_no_ranking": true,
+  "rounds": {
+    "4": {
+      "race": "Imola",
+      "covers": [
+        4,
+        5
+      ],
+      "fonte": "(classificacao de 21/05/2022 19:49, apos a R6) menos (classificacao de 09/04/2022 10:43, apos a R3) menos (placar da R6, publicado em 21/05/2022 16:33). Para igor e rodrigo o bloco cobre tambem a R6, que eles nao jogaram — ver 'covers' proprio.",
+      "players": {
+        "guilherme": 11,
+        "ferrari": 10,
+        "dalla": 8,
+        "francez": 8,
+        "lage": 8,
+        "vinicius": 8,
+        "caliman": 7
+      }
+    },
+    "5": {
+      "race": "Miami",
+      "covers": [
+        4,
+        5,
+        6
+      ],
+      "fonte": "Igor e Rodrigo tambem nao jogaram a R6, entao para eles o mesmo salto cobre R4+R5+R6. Entrada separada para nao contar rodada a mais para quem jogou a R6.",
+      "players": {
+        "igor": 7,
+        "rodrigo": 3
+      }
+    }
+  }
+}
