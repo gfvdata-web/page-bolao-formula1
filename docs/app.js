@@ -742,14 +742,36 @@ function popularHistJogadores(bets, standings) {
   return jogadores;
 }
 
+function atualizarHist() {
+  sincronizarHistChips();
+  renderHistMatriz();
+  if (!MODO_HISTORICO) renderHistPorCorrida();
+}
+
 function alternarHistJogador(playerId) {
   const i = histSelecionados.indexOf(playerId);
   if (i >= 0) histSelecionados.splice(i, 1);
   else histSelecionados.push(playerId);
-  if (!histSelecionados.length) histSelecionados.push(playerId); // nunca vazio
-  sincronizarHistChips();
-  renderHistMatriz();
-  renderHistPorCorrida();
+  if (!histSelecionados.length) histSelecionados.push(playerId); // clique não zera
+  atualizarHist();
+}
+
+// Ordem dos jogadores em `hist-jogadores` como aparece nos chips (alfabética).
+function ordemHistChips() {
+  return [...document.querySelectorAll("#hist-jogadores .hist-jogador-chip")].map(
+    (c) => c.dataset.player
+  );
+}
+
+function configurarHistAcoes() {
+  const box = document.getElementById("hist-jogadores-acoes");
+  if (!box) return;
+  box.querySelectorAll("button").forEach((botao) => {
+    botao.addEventListener("click", () => {
+      histSelecionados = botao.dataset.acao === "todos" ? ordemHistChips() : [];
+      atualizarHist();
+    });
+  });
 }
 
 function sincronizarHistChips() {
@@ -841,6 +863,19 @@ function rodadasMatriz() {
 }
 
 function renderHistMatriz() {
+  const alvo = document.getElementById("hist-matriz");
+  if (!histSelecionados.length) {
+    alvo.replaceChildren(
+      el("tbody", {}, [
+        el("tr", {}, [
+          el("td", { class: "hist-matriz__vazio-aviso" }, [
+            "Selecione ao menos um jogador para ver os palpites.",
+          ]),
+        ]),
+      ])
+    );
+    return;
+  }
   const rodadas = rodadasMatriz();
   const thead = el("thead", {}, [
     el("tr", {}, [
@@ -882,6 +917,12 @@ function renderHistMatriz() {
 
 function renderHistPorCorrida() {
   const primeiro = histSelecionados[0];
+  const nota0 = document.getElementById("hist-porcorrida__nota");
+  if (!primeiro) {
+    document.getElementById("palpites-container").replaceChildren();
+    if (nota0) nota0.textContent = "";
+    return;
+  }
   renderPalpitesJogador(primeiro, histBets, histStandings);
   const nota = document.getElementById("hist-porcorrida__nota");
   if (nota) {
@@ -2825,6 +2866,10 @@ function aplicarModoHistorico() {
       }
       geralSec.insertBefore(historico, regras);
       historico.hidden = false;
+      // "Por corrida" (expandível, rodada a rodada) não faz sentido na visão
+      // histórica — a matriz já cobre a temporada inteira.
+      const porCorrida = document.getElementById("hist-porcorrida");
+      if (porCorrida) porCorrida.hidden = true;
     }
     const btnHist = document.querySelector('#secao-palpites button.subaba[data-subaba="historico"]');
     const btnPref = document.querySelector('#secao-palpites button.subaba[data-subaba="preferencia"]');
@@ -2909,13 +2954,15 @@ async function main() {
     histBets = bets;
     histStandings = standings;
     const jogadoresHist = popularHistJogadores(bets, standings);
+    configurarHistAcoes();
     document.getElementById("palpites-status").textContent = "";
 
     if (jogadoresHist.length) {
-      histSelecionados = [jogadoresHist[0].player_id];
-      sincronizarHistChips();
-      renderHistMatriz();
-      renderHistPorCorrida();
+      // Jogador padrão = líder do ranking (o primeiro de standings.players que
+      // tem palpite), não o primeiro em ordem alfabética.
+      const lider = standings.players.find((p) => bets.players[p.player_id]);
+      histSelecionados = [lider ? lider.player_id : jogadoresHist[0].player_id];
+      atualizarHist();
     }
 
     popularSelectComTodos("select-preferencia-jogador", bets);
