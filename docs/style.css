@@ -1661,19 +1661,28 @@ button.subaba[aria-selected="true"] {
 }
 .jogador-hist-card .corrida-card__extra { font-size: 0.85rem; margin-top: 0.15rem; }
 
+.jogador-hist-card--linha {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+.jogador-hist-card--linha .jogador-hist-card__valor { margin-top: 0; }
+.jogador-hist-card--linha .jogador-medalhas {
+  flex: 1;
+  justify-content: space-around;
+}
 .jogador-medalhas {
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  margin-top: 0.4rem;
-  padding: 0 0.3rem;
 }
 .jogador-medalhas__item {
   display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
+  gap: 0.2rem;
   font-size: 1.05rem;
+  white-space: nowrap;
 }
 .jogador-medalhas__item strong {
   font-size: 1.1rem;

@@ -2806,15 +2806,15 @@ async function renderPaginaJogador(id, hof, standingsPreload, universo) {
   container.replaceChildren();
 
   const cards = el("div", { class: "corridas-cards" }, [
-    jogadorCard(
-      "Medalhas",
-      String(totalMedalhas),
+    el("div", { class: "corrida-card jogador-hist-card jogador-hist-card--linha" }, [
+      el("div", { class: "corrida-card__titulo" }, ["Medalhas"]),
+      el("div", { class: "jogador-hist-card__valor" }, [String(totalMedalhas)]),
       el("div", { class: "jogador-medalhas" }, [
-        el("span", { class: "jogador-medalhas__item" }, ["🥇", el("strong", {}, [String(medalhas.ouro)])]),
-        el("span", { class: "jogador-medalhas__item" }, ["🥈", el("strong", {}, [String(medalhas.prata)])]),
-        el("span", { class: "jogador-medalhas__item" }, ["🥉", el("strong", {}, [String(medalhas.bronze)])]),
-      ])
-    ),
+        el("span", { class: "jogador-medalhas__item" }, [el("strong", {}, [String(medalhas.ouro)]), " 🥇"]),
+        el("span", { class: "jogador-medalhas__item" }, [el("strong", {}, [String(medalhas.prata)]), " 🥈"]),
+        el("span", { class: "jogador-medalhas__item" }, [el("strong", {}, [String(medalhas.bronze)]), " 🥉"]),
+      ]),
+    ]),
     jogadorCard(
       "Temporadas disputadas",
       String(temporadas.length),
