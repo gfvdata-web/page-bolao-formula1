@@ -1613,6 +1613,29 @@ button.subaba[aria-selected="true"] {
   font-variant-numeric: tabular-nums;
 }
 
+/* A tabela ganhou colunas; rola na horizontal em telas estreitas. */
+.hall-ranking-wrap {
+  overflow-x: auto;
+  border-radius: 10px;
+}
+.hall-ranking-tabela th { white-space: nowrap; }
+.hall-ranking-tabela td.hall-acessar-cel {
+  text-align: right;
+  white-space: nowrap;
+}
+.hall-ranking-tabela .hall-acessar { margin-left: 0; }
+
+/* Switch Jogadores / Temporadas (mesmo estilo do switch de Rendimento). */
+.hall-switch { margin-top: 0.2rem; }
+
+.hall-ano-item__jogadores {
+  white-space: nowrap;
+  color: var(--texto-fraco);
+  font-size: 0.8rem;
+  margin-left: auto;
+}
+.hall-ano-item__jogadores + .hall-acessar { margin-left: 0.6rem; }
+
 .hall-anos-lista {
   list-style: none;
   margin: 0;

@@ -2509,21 +2509,30 @@ function construirRankingHall(hof) {
 // medalhas, ordenados pelo somatório de pontos em todas as temporadas (desc).
 function construirTabelaVitorias(hof, universo) {
   const linhas = construirRankingHall(hof);
-  if (!universo) return linhas;
   const jaListados = new Set(linhas.map((l) => l.id));
-  const extras = [...universo.entries()]
-    .filter(([id]) => !jaListados.has(id))
-    .map(([id, dados]) => ({
-      id,
-      nome: dados.nome || nomeHall(hof, id),
-      ouro: 0,
-      prata: 0,
-      bronze: 0,
-      semMedalha: true,
-      pontos: dados.pontos || 0,
-    }))
-    .sort((a, b) => b.pontos - a.pontos || a.nome.localeCompare(b.nome, "pt-BR"));
-  return [...linhas, ...extras];
+  const extras = universo
+    ? [...universo.entries()]
+        .filter(([id]) => !jaListados.has(id))
+        .map(([id, dados]) => ({
+          id,
+          nome: dados.nome || nomeHall(hof, id),
+          ouro: 0,
+          prata: 0,
+          bronze: 0,
+          semMedalha: true,
+          pontos: dados.pontos || 0,
+        }))
+        .sort((a, b) => b.pontos - a.pontos || a.nome.localeCompare(b.nome, "pt-BR"))
+    : [];
+  const todas = [...linhas, ...extras];
+  // Anexa as estatísticas do universo (participações, pontos, % de acerto).
+  for (const linha of todas) {
+    const u = universo && universo.get(linha.id);
+    linha.participacoes = u ? u.anos.length : 0;
+    linha.pontos = u ? u.pontos : linha.pontos || 0;
+    linha.acerto = u && u.acertoDen ? (u.acertoNum / u.acertoDen) * 100 : null;
+  }
+  return todas;
 }
 
 function renderRankingHall(hof, universo) {
@@ -2532,35 +2541,43 @@ function renderRankingHall(hof, universo) {
     el("thead", {}, [
       el("tr", {}, [
         el("th", {}, ["Jogador"]),
-        el("th", {}, [""]),
         el("th", { class: "num" }, ["🥇"]),
         el("th", { class: "num" }, ["🥈"]),
         el("th", { class: "num" }, ["🥉"]),
-        el("th", { class: "num" }, ["Total"]),
+        el("th", { class: "num" }, ["Pódios"]),
+        el("th", { class: "num" }, ["Participações"]),
+        el("th", { class: "num" }, ["Pontos"]),
+        el("th", { class: "num", title: "Pontos feitos ÷ máximo possível nas corridas em que palpitou" }, ["Acerto"]),
+        el("th", {}, [""]),
       ]),
     ]),
   ]);
   const tbody = el("tbody");
   for (const linha of linhas) {
     const total = linha.ouro + linha.prata + linha.bronze;
+    const acerto =
+      linha.acerto == null ? "—" : `${linha.acerto.toFixed(1).replace(".", ",")}%`;
     tbody.appendChild(
       el("tr", { class: linha.semMedalha ? "hall-linha--sem-medalha" : "" }, [
         el("td", {}, [linha.nome]),
-        el("td", {}, [
-          el("a", { class: "hall-acessar", href: `?jogador=${encodeURIComponent(linha.id)}` }, ["Acessar"]),
-        ]),
         el("td", { class: "num" }, [String(linha.ouro)]),
         el("td", { class: "num" }, [String(linha.prata)]),
         el("td", { class: "num" }, [String(linha.bronze)]),
         el("td", { class: "num" }, [String(total)]),
+        el("td", { class: "num" }, [String(linha.participacoes)]),
+        el("td", { class: "num" }, [String(linha.pontos)]),
+        el("td", { class: "num" }, [acerto]),
+        el("td", { class: "hall-acessar-cel" }, [
+          el("a", { class: "hall-acessar", href: `?jogador=${encodeURIComponent(linha.id)}` }, ["Acessar"]),
+        ]),
       ])
     );
   }
   tabela.appendChild(tbody);
-  return tabela;
+  return el("div", { class: "hall-ranking-wrap" }, [tabela]);
 }
 
-function renderListaAnosHall(hof, seasons) {
+function renderListaAnosHall(hof, seasons, standingsPorAno) {
   const medalhas = { ouro: "🥇", prata: "🥈", bronze: "🥉" };
   const anos = hof.anos.slice().sort((a, b) => b.ano - a.ano);
   const disponiveis = new Set((seasons?.temporadas || []).map((t) => String(t.ano)));
@@ -2574,12 +2591,18 @@ function renderListaAnosHall(hof, seasons) {
         : String(ano.ano) === String(TEMPORADA)
         ? el("span", { class: "hall-acessar hall-acessar--ativa" }, ["Você está aqui"])
         : null;
+    const qtdJogadores = standingsPorAno?.get(String(ano.ano))?.players?.length ?? null;
     lista.appendChild(
       el("li", { class: "hall-ano-item" }, [
         el("span", { class: "hall-ano-item__ano" }, [String(ano.ano)]),
         el("span", { class: "hall-ano-item__medalha" }, [`${medalhas.ouro} ${nomeHall(hof, ano.ouro)}`]),
         el("span", { class: "hall-ano-item__medalha" }, [`${medalhas.prata} ${nomeHall(hof, ano.prata)}`]),
         el("span", { class: "hall-ano-item__medalha" }, [`${medalhas.bronze} ${nomeHall(hof, ano.bronze)}`]),
+        qtdJogadores != null
+          ? el("span", { class: "hall-ano-item__jogadores", title: "Jogadores na temporada" }, [
+              `${qtdJogadores} jogadores`,
+            ])
+          : null,
         acessar,
       ])
     );
@@ -2587,14 +2610,39 @@ function renderListaAnosHall(hof, seasons) {
   return lista;
 }
 
-function renderHallOfFame(hof, seasons, universo) {
+let HALL_VISTA = "jogadores"; // "jogadores" | "temporadas"
+
+function renderHallOfFame(hof, seasons, universo, standingsPorAno) {
   const container = document.getElementById("hall-container");
-  container.replaceChildren(
-    el("div", { class: "hall-grid" }, [
-      el("div", { class: "hall-coluna" }, [el("h2", {}, ["Ranking de vitórias"]), renderRankingHall(hof, universo)]),
-      el("div", { class: "hall-coluna" }, [el("h2", {}, ["Pódios por ano"]), renderListaAnosHall(hof, seasons)]),
-    ])
+  const troca = el(
+    "div",
+    { class: "rendimento-modo hall-switch", role: "group", "aria-label": "Ver Hall of Fame por" },
+    [
+      el("button", { type: "button", class: "rendimento-modo__btn", "data-vista": "jogadores", "aria-pressed": "false" }, ["Jogadores"]),
+      el("button", { type: "button", class: "rendimento-modo__btn", "data-vista": "temporadas", "aria-pressed": "false" }, ["Temporadas"]),
+    ]
   );
+  const alvo = el("div", { class: "hall-vista" });
+  const pintar = () => {
+    for (const b of troca.querySelectorAll("button")) {
+      const ativo = b.dataset.vista === HALL_VISTA;
+      b.classList.toggle("rendimento-modo__btn--ativo", ativo);
+      b.setAttribute("aria-pressed", ativo ? "true" : "false");
+    }
+    alvo.replaceChildren(
+      HALL_VISTA === "jogadores"
+        ? renderRankingHall(hof, universo)
+        : renderListaAnosHall(hof, seasons, standingsPorAno)
+    );
+  };
+  for (const b of troca.querySelectorAll("button")) {
+    b.addEventListener("click", () => {
+      HALL_VISTA = b.dataset.vista;
+      pintar();
+    });
+  }
+  container.replaceChildren(troca, alvo);
+  pintar();
 }
 
 // Carrega os standings de todas as temporadas de seasons.json (paralelo).
@@ -2610,15 +2658,27 @@ async function carregarTodasStandings() {
   return mapa;
 }
 
-// id -> { nome, anos:[...] } de todo jogador que já apareceu num standings.
+// id -> { nome, anos:[...], pontos, acertoNum, acertoDen } de todo jogador que
+// já apareceu num standings. `acertoNum/acertoDen` é a base do % de acerto:
+// soma dos pontos feitos vs. soma do máximo possível, contando apenas as
+// corridas em que o jogador de fato palpitou (chaves de `per_round`), com o
+// teto de cada temporada (`format.max_points`).
 function universoJogadores(standingsPorAno) {
   const universo = new Map();
   for (const [ano, st] of standingsPorAno) {
+    const maxPts = Number(st.format?.max_points) || 0;
     for (const p of st.players || []) {
-      if (!universo.has(p.player_id)) universo.set(p.player_id, { nome: p.name, anos: [], pontos: 0 });
+      if (!universo.has(p.player_id))
+        universo.set(p.player_id, { nome: p.name, anos: [], pontos: 0, acertoNum: 0, acertoDen: 0 });
       const reg = universo.get(p.player_id);
       reg.anos.push(ano);
       reg.pontos += Number(p.total ?? p.total_somado ?? 0) || 0;
+      const porRodada = p.per_round || {};
+      const corridas = Object.keys(porRodada).length;
+      if (corridas && maxPts) {
+        for (const v of Object.values(porRodada)) reg.acertoNum += Number(v) || 0;
+        reg.acertoDen += corridas * maxPts;
+      }
     }
   }
   return universo;
@@ -3603,7 +3663,7 @@ async function main() {
       carregarJson("./data/hall_of_fame.json"),
       carregarTodasStandings(),
     ]);
-    renderHallOfFame(hof, SEASONS, universoJogadores(standingsTodas));
+    renderHallOfFame(hof, SEASONS, universoJogadores(standingsTodas), standingsTodas);
     document.getElementById("hall-status").textContent = "";
 
     if (location.hash === "#hall") {
