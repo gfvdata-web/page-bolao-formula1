@@ -735,6 +735,10 @@ Ranking/Corridas.**
   `stepSize: 1`) — é o mesmo gráfico, só o `.data` de cada dataset e
   `options.scales.y` mudam (preserva o `hidden` dos cards de jogador). O `<h3>`
   acompanha (`#temporada-titulo-acumulado`).
+- **Padrão = "Posição"** (`modoGraficoAcumulado = "posicao"` em `app.js`; o
+  `<button data-modo="posicao">` e o `<h3>` já nascem nesse estado no
+  `index.html`). O gráfico abre no modo posição e `renderTemporada` chama
+  `aplicarModoAcumulado` na criação; o toggle "Pontos" volta ao eixo de pontos.
 - **Cuidado:** os arrays em `chart.data.datasets[i].data` são os mesmos objetos
   de `datasetsAcumulado`, e o toggle os substitui; por isso
   `construirDadosTemporada` guarda cópias (`pontosAcumulados`/`pontosPorRodada`,

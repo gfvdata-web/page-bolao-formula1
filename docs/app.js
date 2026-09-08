@@ -890,7 +890,7 @@ let graficoTemporadaAcumulado = null;
 let graficoTemporadaPorRodada = null;
 let standingsParaTemporada = null;
 // Estado do toggle "Pontos"/"Posição" do gráfico acumulado (só front-end).
-let modoGraficoAcumulado = "pontos";
+let modoGraficoAcumulado = "posicao";
 // Séries auxiliares usadas pelos tooltips e pelo modo "Posição".
 let dadosTemporada = null;
 
