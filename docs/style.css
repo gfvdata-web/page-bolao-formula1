@@ -497,6 +497,222 @@ main {
   color: var(--texto-fraco);
 }
 
+/* Histórico — matriz posição × corrida */
+
+.hist-jogadores {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.4rem;
+}
+
+.hist-jogador-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border: 1px solid var(--borda);
+  background: var(--bg-card);
+  color: var(--texto);
+  border-radius: 999px;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.hist-jogador-chip__ponto {
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50%;
+  background: var(--cor-jogador, var(--texto-fraco));
+  flex-shrink: 0;
+}
+
+.hist-jogador-chip[aria-pressed="true"] {
+  border-color: var(--cor-jogador);
+  box-shadow: inset 0 0 0 1px var(--cor-jogador);
+}
+
+.hist-jogadores__dica {
+  margin: 0 0 1rem;
+  font-size: 0.76rem;
+  color: var(--texto-fraco);
+}
+
+.hist-matriz-wrap {
+  overflow-x: auto;
+  background: var(--bg-card);
+  border-radius: 10px;
+  box-shadow: var(--sombra);
+}
+
+.hist-matriz {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.82rem;
+}
+
+.hist-matriz th, .hist-matriz td {
+  padding: 0.4rem 0.5rem;
+  text-align: center;
+  border-bottom: 1px solid var(--borda);
+  white-space: nowrap;
+}
+
+.hist-matriz thead th {
+  position: sticky;
+  top: 0;
+  background: var(--bg-card);
+  z-index: 2;
+  color: var(--texto-fraco);
+  font-weight: 600;
+  font-size: 0.72rem;
+}
+
+.hist-matriz__rlabel {
+  display: block;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.hist-matriz__rcorrida {
+  display: block;
+  font-weight: 400;
+  font-size: 0.66rem;
+  text-transform: none;
+}
+
+.hist-matriz__pos {
+  position: sticky;
+  left: 0;
+  background: var(--bg-card);
+  z-index: 1;
+  color: var(--texto-fraco);
+  font-weight: 700;
+  min-width: 3rem;
+  border-right: 1px solid var(--borda);
+}
+
+.hist-matriz thead .hist-matriz__pos {
+  z-index: 3;
+}
+
+.hist-matriz tbody tr:last-child td,
+.hist-matriz tbody tr:last-child th {
+  border-bottom: none;
+}
+
+.hist-matriz__linha-extra th,
+.hist-matriz__linha-extra td {
+  border-top: 2px solid var(--borda);
+}
+
+.hist-matriz__linha-total th,
+.hist-matriz__linha-total td {
+  border-top: 2px solid var(--borda);
+  font-weight: 700;
+}
+
+.hist-cel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.hist-cel__linha {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+}
+
+.hist-cel__ponto {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.hist-cel__chute {
+  font-size: 0.72rem;
+  color: var(--texto-fraco);
+  font-variant-numeric: tabular-nums;
+}
+
+.hist-cel__vazio {
+  color: var(--texto-fraco);
+  opacity: 0.5;
+}
+
+.hist-cel__total {
+  font-variant-numeric: tabular-nums;
+}
+
+.hist-cel__total--comp {
+  color: var(--texto-fraco);
+  font-style: italic;
+  font-weight: 400;
+}
+
+.hist-legenda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1rem;
+  margin: 0.7rem 0 0;
+  font-size: 0.76rem;
+  color: var(--texto-fraco);
+}
+
+.hist-legenda span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.hist-porcorrida {
+  margin-top: 1.4rem;
+  background: var(--bg-card);
+  border-radius: 10px;
+  box-shadow: var(--sombra);
+  overflow: hidden;
+}
+
+.hist-porcorrida__resumo {
+  padding: 0.8rem 1rem;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.hist-porcorrida__resumo::-webkit-details-marker {
+  display: none;
+}
+
+.hist-porcorrida__resumo::before {
+  content: "\25B6";
+  font-size: 0.7rem;
+  color: var(--texto-fraco);
+  transition: transform 0.15s;
+}
+
+.hist-porcorrida[open] .hist-porcorrida__resumo::before {
+  transform: rotate(90deg);
+}
+
+.hist-porcorrida__corpo {
+  padding: 0 1rem 1rem;
+}
+
+.hist-porcorrida__nota {
+  font-size: 0.78rem;
+  color: var(--texto-fraco);
+  margin: 0 0 0.8rem;
+}
+
 /* Pontuação da corrida (Ranking / Geral) */
 
 .corrida-detalhe-card {
@@ -1172,4 +1388,6 @@ button.subaba[aria-selected="true"] {
 @media (max-width: 480px) {
   main { padding: 0.6rem; }
   .top6-tabela th, .top6-tabela td { padding: 0.25rem 0.3rem; font-size: 0.85rem; }
+  .hist-matriz th, .hist-matriz td { padding: 0.35rem 0.4rem; }
+  .hist-cel__linha { flex-wrap: wrap; }
 }

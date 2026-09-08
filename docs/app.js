@@ -621,15 +621,168 @@ function renderSimulador(standings, calendar) {
   renderTabelaSimulador();
 }
 
-// ---------- Palpites por jogador ----------
+// ---------- Palpites por jogador / Histórico ----------
 
-function popularSelectJogadores(bets) {
-  const select = document.getElementById("select-jogador");
-  const jogadores = Object.values(bets.players).sort((a, b) => a.name.localeCompare(b.name, "pt-BR"));
-  select.replaceChildren(
-    ...jogadores.map((j) => el("option", { value: j.player_id }, [j.name]))
+// Matriz posição × corrida: linhas P1–P6 + piloto da rodada + total; colunas
+// = corridas; célula = palpite de cada jogador selecionado + badge de pontos.
+const HIST_POSICOES = ["P1", "P2", "P3", "P4", "P5", "P6"];
+let histBets = null;
+let histStandings = null;
+let histSelecionados = [];
+let histCores = new Map();
+
+function popularHistJogadores(bets, standings) {
+  const box = document.getElementById("hist-jogadores");
+  const jogadores = Object.values(bets.players).sort((a, b) =>
+    a.name.localeCompare(b.name, "pt-BR")
+  );
+  histCores = new Map(jogadores.map((j, i) => [j.player_id, corJogador(i)]));
+  box.replaceChildren(
+    ...jogadores.map((j) => {
+      const chip = el(
+        "button",
+        {
+          type: "button",
+          class: "hist-jogador-chip",
+          "data-player": j.player_id,
+          "aria-pressed": "false",
+          style: `--cor-jogador:${histCores.get(j.player_id)}`,
+        },
+        [el("span", { class: "hist-jogador-chip__ponto" }), j.name]
+      );
+      chip.addEventListener("click", () => alternarHistJogador(j.player_id));
+      return chip;
+    })
   );
   return jogadores;
+}
+
+function alternarHistJogador(playerId) {
+  const i = histSelecionados.indexOf(playerId);
+  if (i >= 0) histSelecionados.splice(i, 1);
+  else histSelecionados.push(playerId);
+  if (!histSelecionados.length) histSelecionados.push(playerId); // nunca vazio
+  sincronizarHistChips();
+  renderHistMatriz();
+  renderHistPorCorrida();
+}
+
+function sincronizarHistChips() {
+  document.querySelectorAll("#hist-jogadores .hist-jogador-chip").forEach((chip) => {
+    chip.setAttribute(
+      "aria-pressed",
+      histSelecionados.includes(chip.dataset.player) ? "true" : "false"
+    );
+  });
+}
+
+// Badge de pontos no formato curto da matriz (+2 / +1 / 0). Reaproveita as
+// cores de `.ponto-badge`; `max` marca o teto (1 no piloto da rodada) para
+// pintar de verde quem bate o teto — mesma lógica de `badgePonto`.
+function histBadgePonto(pts, max) {
+  const nivel = max == null ? pts : pts >= max ? 2 : pts > 0 ? 1 : 0;
+  return el("span", { class: `ponto-badge ponto-${nivel}` }, [pts > 0 ? `+${pts}` : "0"]);
+}
+
+function histCelula(round, linhaIdx, tipo) {
+  const cel = el("div", { class: "hist-cel" });
+  for (const playerId of histSelecionados) {
+    const jogadorBets = histBets.players[playerId];
+    const rodada = jogadorBets ? jogadorBets.rounds[String(round)] : null;
+    const standing = histStandings.players.find((p) => p.player_id === playerId);
+    const linha = el("div", { class: "hist-cel__linha" });
+    if (histSelecionados.length > 1) {
+      linha.appendChild(
+        el("span", {
+          class: "hist-cel__ponto",
+          style: `background:${histCores.get(playerId)}`,
+        })
+      );
+    }
+    if (tipo === "total") {
+      let pontos = null;
+      let compensada = false;
+      if (rodada) {
+        pontos = rodada.total;
+      } else if (standing && standing.compensated_rounds.includes(round)) {
+        const info = histStandings.rounds.find((r) => r.round === round);
+        pontos = info ? info.min_score : null;
+        compensada = true;
+      }
+      if (pontos == null) {
+        linha.appendChild(el("span", { class: "hist-cel__vazio" }, ["—"]));
+      } else {
+        linha.appendChild(
+          el(
+            "span",
+            { class: compensada ? "hist-cel__total hist-cel__total--comp" : "hist-cel__total" },
+            [`${pontos} pts`]
+          )
+        );
+      }
+    } else if (!rodada) {
+      linha.appendChild(el("span", { class: "hist-cel__vazio" }, ["—"]));
+    } else if (tipo === "extra") {
+      linha.appendChild(chipPiloto(rodada.bonus_driver));
+      linha.appendChild(el("span", { class: "hist-cel__chute" }, [`P${rodada.bonus_guess}`]));
+      linha.appendChild(histBadgePonto(rodada.bonus_points, 1));
+    } else {
+      const detalhe = rodada.top6_detail[linhaIdx];
+      linha.appendChild(chipPiloto(detalhe.guess));
+      linha.appendChild(histBadgePonto(detalhe.points));
+    }
+    cel.appendChild(linha);
+  }
+  return el("td", {}, [cel]);
+}
+
+function renderHistMatriz() {
+  const rodadas = histStandings.rounds.slice().sort((a, b) => a.round - b.round);
+  const thead = el("thead", {}, [
+    el("tr", {}, [
+      el("th", { class: "hist-matriz__pos" }, [""]),
+      ...rodadas.map((r) =>
+        el("th", {}, [
+          el("span", { class: "hist-matriz__rlabel" }, [`R${r.round}`]),
+          el("span", { class: "hist-matriz__rcorrida" }, [r.race]),
+        ])
+      ),
+    ]),
+  ]);
+  const tbody = el("tbody");
+  HIST_POSICOES.forEach((pos, idx) => {
+    tbody.appendChild(
+      el("tr", {}, [
+        el("th", { class: "hist-matriz__pos" }, [pos]),
+        ...rodadas.map((r) => histCelula(r.round, idx, "top6")),
+      ])
+    );
+  });
+  tbody.appendChild(
+    el("tr", { class: "hist-matriz__linha-extra" }, [
+      el("th", { class: "hist-matriz__pos" }, ["Piloto"]),
+      ...rodadas.map((r) => histCelula(r.round, null, "extra")),
+    ])
+  );
+  tbody.appendChild(
+    el("tr", { class: "hist-matriz__linha-total" }, [
+      el("th", { class: "hist-matriz__pos" }, ["Total"]),
+      ...rodadas.map((r) => histCelula(r.round, null, "total")),
+    ])
+  );
+  document.getElementById("hist-matriz").replaceChildren(thead, tbody);
+}
+
+function renderHistPorCorrida() {
+  const primeiro = histSelecionados[0];
+  renderPalpitesJogador(primeiro, histBets, histStandings);
+  const nota = document.getElementById("hist-porcorrida__nota");
+  if (nota) {
+    nota.textContent =
+      histSelecionados.length > 1
+        ? `Mostrando ${histBets.players[primeiro].name} (primeiro jogador selecionado).`
+        : "";
+  }
 }
 
 function cardTop6(rodada) {
@@ -2082,17 +2235,16 @@ async function main() {
       copiarTexto(gerarTextoCorrida(Number(selectCorridaDetalhe.value), standings), evento.currentTarget);
     });
 
-    const jogadores = popularSelectJogadores(bets);
+    histBets = bets;
+    histStandings = standings;
+    const jogadoresHist = popularHistJogadores(bets, standings);
     document.getElementById("palpites-status").textContent = "";
 
-    const select = document.getElementById("select-jogador");
-    select.addEventListener("change", () => {
-      renderPalpitesJogador(select.value, bets, standings);
-    });
-
-    if (jogadores.length) {
-      select.value = jogadores[0].player_id;
-      renderPalpitesJogador(jogadores[0].player_id, bets, standings);
+    if (jogadoresHist.length) {
+      histSelecionados = [jogadoresHist[0].player_id];
+      sincronizarHistChips();
+      renderHistMatriz();
+      renderHistPorCorrida();
     }
 
     popularSelectComTodos("select-preferencia-jogador", bets);

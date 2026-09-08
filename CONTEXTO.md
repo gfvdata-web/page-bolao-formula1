@@ -874,6 +874,30 @@ largada no quali.**
   gráficos (os de Chart.js só os visíveis; o resto volta pela init preguiçosa).
   `resultsGlobais` guardado no `main()` para o re-render do SVG.
 
+**Ajuste posterior (ainda Etapa 4): sub-aba Histórico repensada — matriz
+posição × corrida.**
+- O `<select id="select-jogador">` sumiu. A sub-aba Histórico agora abre com um
+  **strip de chips** (`#hist-jogadores` → `.hist-jogador-chip[data-player]`,
+  `aria-pressed`, bolinha na cor de `corJogador(indice alfabético)`) — clicar
+  liga/desliga o jogador da comparação; `histSelecionados` (array, nunca vazio).
+- **Tabela matriz** (`#hist-matriz` → `renderHistMatriz`): eixo Y = `P1`–`P6` +
+  linha `Piloto` (o palpite do piloto da rodada) + linha `Total` (pontuação da
+  rodada); eixo X = todas as rodadas de `standings.rounds`. Cada célula empilha
+  uma linha por jogador selecionado (com >1 jogador aparece a bolinha de cor):
+  chip do piloto apostado + badge curta `histBadgePonto` (`+2`/`+1`/`0`, mesma
+  paleta `.ponto-badge`; piloto da rodada usa `max: 1` → acerto vira verde). A
+  linha `Total` usa `rodada.total`; se o jogador não apostou mas é compensado
+  (`compensated_rounds`), mostra o `min_score` em itálico/apagado
+  (`.hist-cel__total--comp`); senão `—`. 1ª coluna e cabeçalho `sticky`, rola na
+  horizontal em `.hist-matriz-wrap`.
+- **"Por corrida"** = os cards antigos (`renderPalpitesJogador`, **sem mudança**)
+  dentro de um `<details class="hist-porcorrida">` recolhido por padrão; mostra o
+  **primeiro** jogador selecionado (nota `#hist-porcorrida__nota` quando há mais
+  de um). `renderHistPorCorrida` orquestra os dois.
+- `popularSelectJogadores` foi substituída por `popularHistJogadores`. Nenhuma
+  mudança em `bolao/site.py` nem nos formatos de `docs/data/*.json` — tudo já
+  vinha de `bets.json`/`standings.json`.
+
 ### Etapa 5 — GitHub Actions ✅
 - **Objetivo:** workflow acionado por `repository_dispatch` que roda o pipeline
   completo (parse → buscar resultado → pontuar → gerar dados → commit).

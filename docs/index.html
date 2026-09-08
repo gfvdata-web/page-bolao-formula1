@@ -107,12 +107,25 @@
     </nav>
 
     <div id="subsecao-historico" class="subsecao" role="tabpanel">
-      <div class="filtro-jogador">
-        <label for="select-jogador">Jogador:</label>
-        <select id="select-jogador"></select>
-      </div>
       <div id="palpites-status" class="status"></div>
-      <div id="palpites-container"></div>
+      <div class="hist-jogadores" id="hist-jogadores" role="group" aria-label="Jogadores na tabela"></div>
+      <p class="hist-jogadores__dica">Toque num jogador para incluí-lo ou tirá-lo da comparação.</p>
+      <div class="hist-matriz-wrap">
+        <table class="hist-matriz" id="hist-matriz"></table>
+      </div>
+      <div class="hist-legenda">
+        <span><span class="ponto-badge ponto-2">+2</span> posição exata</span>
+        <span><span class="ponto-badge ponto-1">+1</span> no top6 real, outra posição</span>
+        <span><span class="ponto-badge ponto-0">0</span> fora do top6 real</span>
+        <span><span class="ponto-badge ponto-2">+1</span> piloto da rodada: posição exata</span>
+      </div>
+      <details class="hist-porcorrida" id="hist-porcorrida">
+        <summary class="hist-porcorrida__resumo">Por corrida</summary>
+        <div class="hist-porcorrida__corpo">
+          <p class="hist-porcorrida__nota" id="hist-porcorrida__nota"></p>
+          <div id="palpites-container"></div>
+        </div>
+      </details>
     </div>
 
     <div id="subsecao-preferencia" class="subsecao" hidden role="tabpanel">
