@@ -2660,9 +2660,13 @@ async function carregarTodasStandings() {
 
 // id -> { nome, anos:[...], pontos, acertoNum, acertoDen } de todo jogador que
 // já apareceu num standings. `acertoNum/acertoDen` é a base do % de acerto:
-// soma dos pontos feitos vs. soma do máximo possível, contando apenas as
-// corridas em que o jogador de fato palpitou (chaves de `per_round`), com o
-// teto de cada temporada (`format.max_points`).
+// pontos feitos vs. máximo possível, contando SÓ as corridas em que o jogador
+// palpitou, com o teto de cada temporada (`format.max_points`).
+//   - corridas palpitadas com detalhe = chaves de `per_round`
+//   - `carry_points`/`carry_rounds` = corridas palpitadas de 2021 sem detalhe
+//     por corrida (só o saldo acumulado das rodadas 1–10)
+// Não entram pontos de compensação (rodadas NÃO palpitadas) nem avulsos.
+// Ex.: Bernardo Viana fez 8 pts em 2 corridas de 2021 (teto 10) = 8 / 20 = 40%.
 function universoJogadores(standingsPorAno) {
   const universo = new Map();
   for (const [ano, st] of standingsPorAno) {
@@ -2673,10 +2677,14 @@ function universoJogadores(standingsPorAno) {
       const reg = universo.get(p.player_id);
       reg.anos.push(ano);
       reg.pontos += Number(p.total ?? p.total_somado ?? 0) || 0;
-      const porRodada = p.per_round || {};
-      const corridas = Object.keys(porRodada).length;
+      let feitos = Number(p.carry_points) || 0;
+      let corridas = Number(p.carry_rounds) || 0;
+      for (const v of Object.values(p.per_round || {})) {
+        feitos += Number(v) || 0;
+        corridas++;
+      }
       if (corridas && maxPts) {
-        for (const v of Object.values(porRodada)) reg.acertoNum += Number(v) || 0;
+        reg.acertoNum += feitos;
         reg.acertoDen += corridas * maxPts;
       }
     }
