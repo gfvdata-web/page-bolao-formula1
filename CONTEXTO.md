@@ -1094,6 +1094,9 @@ enquanto a Jolpica não publica o quali.**
   `docs/data/<ano>/` e acessíveis no site via `?ano=YYYY` (seletor pelo card
   "Pódios por ano" — ver sub-etapa 2026-09-08d). Falta a sinalização por rodada
   das corridas sem palpite (`rounds_sem_palpite` etc.).
+- **2026-09-08 (Austin):** palpites da R19/2025 recuperados do grupo e anexados
+  aos CSV de 2025; `pontos_avulsos.json` de 2025 removido. 2025 fecha 24/24
+  rodadas. Ver "R19 Austin — palpites recuperados" mais abaixo.
 
 **Análise do `f12025bolao.xlsx` (fonte dos palpites 2025):**
 - **Aba 1 "Página1"** — 138 palpites, colunas `circuito, nome, p1..p6, pos`
@@ -1190,19 +1193,16 @@ divergência). Site vai de 15 → **23/24 rodadas**; ranking final bate com o
   publicou o placar às pressas 13 dias depois ("não atualizei a pontuação do
   México"), todos ~1–2 pts abaixo do recálculo; R16 Caio (+1); R21 Caliman (o
   grupo somou "+1" à mão).
-- **R19 Austin — só o placar, sem palpites (pedido do usuário "por enquanto"):**
-  Guilherme perdeu dias do histórico do zap e reconstruiu o placar; os palpites
-  brutos não foram recuperados de forma confiável e **não reconciliam** com o
-  recálculo. Placar publicado guardado em `data/2025/pontos_avulsos.json`
-  (+ `results/19.json` da Jolpica). **Ainda não entra no ranking** — falta
-  decidir como o site mostra uma rodada com pontos e sem palpite (mesma classe
-  da decisão da compensação retroativa abaixo).
+- **R19 Austin — palpites recuperados em 2026-09-08:** os 8 blocos vieram do
+  grupo e foram anexados a `palpites_2025.csv`/`rodadas_2025.csv` (piloto da
+  rodada: OCO). `pontos_avulsos.json` de 2025 foi removido; a rodada roda pelo
+  pipeline normal (`messages/19.txt` sintetizado). O placar que o grupo publicara
+  às pressas **não reconcilia** com o recálculo 2/1/0 — o recálculo prevalece.
+  2025 agora é 24/24 rodadas no site.
 
 **Pendências para fechar 2025 (decisão do usuário):**
-- **R19 Austin no ranking:** integrar `pontos_avulsos.json` ao
-  `docs/data/2025/standings.json` (total + rodada jogada + compensação dos
-  ausentes) exige tratar no front uma rodada sem `results`/`bets` — decidir a
-  abordagem.
+- ~~**R19 Austin no ranking**~~ — **resolvido em 2026-09-08** (palpites
+  recuperados, ver acima).
 - ~~**Semântica da compensação retroativa no histórico**~~ — **resolvido em
   2026-09-08**: a compensação **não existia** em 2021–2024 (medido nas
   classificações publicadas, ver "Regras por temporada" abaixo) e foi desligada
@@ -1384,9 +1384,13 @@ explícita, nunca efeito de o arquivo existir.
   placar). Só dá para atribuir como **bloco**, do salto entre as acumuladas de
   09/04 e 21/05 menos o placar da R6. Para Igor e Rodrigo o bloco cobre também
   a R6, que eles não jogaram (entrada separada).
-- **2025 R19 (Austin)** — arquivo da sessão que fechou 2025, **fora do ranking**
-  (sem a flag). Incluí-lo empata Guilherme e Vinícius em 144 e desfaz o título
-  do Vinícius: decisão do usuário.
+- **2025 R19 (Austin)** — **resolvido em 2026-09-08**: os palpites foram
+  recuperados (8 jogadores) e anexados a `palpites_2025.csv`/`rodadas_2025.csv`;
+  `pontos_avulsos.json` de 2025 foi removido e a rodada agora tem
+  `messages/19.txt` como qualquer outra. Recálculo 2/1/0: Dalla 10, Francez 10,
+  Vinícius 9, Ferrari 8, Igor 8, Guilherme 7, Lage 7, Caliman 6 (**não
+  reconcilia** com o placar que o grupo publicara às pressas: 5/6/6/5/5/6/5/7 —
+  o recálculo prevalece, igual às outras rodadas).
 
 **Fechamento do histórico (decisões do usuário em 2026-09-08 — não reabrir):**
 
@@ -1403,8 +1407,9 @@ explícita, nunca efeito de o arquivo existir.
    por critério interno nunca escrito** — e `pontos`, quando presente,
    substitui o total somado (o somado continua visível em `total_somado`).
 3. **Rodada sem palpite conta pelos pontos que dá para inferir** (item 1 acima).
-   A R19 de 2025 (Austin) **entra** no ranking pela pontuação publicada; se os
-   palpites aparecerem depois, viram `messages/19.txt` e o bloco avulso sai.
+   A R19 de 2025 (Austin) foi assim até 2026-09-08, quando os palpites foram
+   recuperados: virou `messages/19.txt` e o bloco avulso saiu (não sobra nenhum
+   `pontos_avulsos.json` em 2025).
 
 Onde cada mecanismo foi preciso:
 
@@ -1414,7 +1419,7 @@ Onde cada mecanismo foi preciso:
 | 2022 | bloco avulso R4+R5 + placar publicado + `ordem` (Caliman e Dalla empatam em 139) |
 | 2023 | avulso da R1 do Dalla + placar publicado + `ordem` (Igor e Ferrari empatam em 118) |
 | 2024 | `pontos` da tabela final: os placares por rodada do grupo **não somam** a tabela final dele (Caliman fecha 148 lá, mas os relatórios por rodada somam 152) — não existe regra por rodada que a reproduza. Arthur e Dalla empatam em 162 e `ordem` dá o título ao Arthur |
-| 2025 | Austin no ranking empata Guilherme e Vinícius em 144; `ordem` dá o título ao Vinícius |
+| 2025 | com Austin (palpites recuperados) Vinícius fecha 148, Guilherme 145; `ordem` fixa os 4 primeiros (Dalla soma 143, mas o grupo registrou Caliman em 4º) |
 
 **Pódios calculados × `hall_of_fame`: os 5 batem.**
 

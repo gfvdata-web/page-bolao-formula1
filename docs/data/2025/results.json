@@ -781,6 +781,48 @@
         "SAI"
       ]
     },
+    "19": {
+      "round": 19,
+      "race_id": "2025-19",
+      "race": "Austin",
+      "circuit": "americas",
+      "date": "2025-10-19",
+      "sprint": true,
+      "bonus_driver": "OCO",
+      "min_score": 5,
+      "bet_order": [
+        "vinicius",
+        "guilherme",
+        "ferrari",
+        "francez",
+        "lage",
+        "igor",
+        "dalla",
+        "caliman"
+      ],
+      "order": [
+        "VER",
+        "NOR",
+        "LEC",
+        "RUS",
+        "HAM",
+        "PIA",
+        "ANT",
+        "BEA",
+        "SAI",
+        "ALO",
+        "HUL",
+        "LAW",
+        "TSU",
+        "GAS",
+        "COL",
+        "BOR",
+        "OCO",
+        "STR",
+        "ALB",
+        "HAD"
+      ]
+    },
     "20": {
       "round": 20,
       "race_id": "2025-20",

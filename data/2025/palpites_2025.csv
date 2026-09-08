@@ -167,6 +167,14 @@ singapore,caio_l,PIA,VER,NOR,LEC,RUS,HAM,P10
 singapore,ferrari,PIA,VER,LEC,NOR,RUS,HAM,P8
 singapore,igor,VER,NOR,PIA,LEC,HAM,RUS,P9
 singapore,lage,VER,PIA,NOR,LEC,RUS,HAM,P12
+americas,vinicius,VER,NOR,PIA,RUS,LEC,HAM,P19
+americas,guilherme,VER,PIA,NOR,LEC,RUS,HAM,P14
+americas,ferrari,VER,PIA,NOR,RUS,LEC,HAM,P16
+americas,francez,VER,NOR,LEC,PIA,HAM,RUS,P15
+americas,lage,PIA,NOR,VER,RUS,LEC,SAI,P16
+americas,igor,VER,PIA,NOR,LEC,HAM,RUS,P13
+americas,dalla,VER,NOR,PIA,RUS,HAM,SAI,P17
+americas,caliman,PIA,VER,NOR,LEC,RUS,HAM,P15
 mexico,vinicius,VER,NOR,LEC,PIA,RUS,HAM,P18
 mexico,francez,VER,NOR,PIA,LEC,HAM,SAI,P16
 mexico,ferrari,PIA,VER,NOR,LEC,RUS,HAM,P17

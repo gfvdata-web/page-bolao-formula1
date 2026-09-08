@@ -1,6 +1,6 @@
 {
   "_comment": "Etapa 7 — fechamento oficial da temporada, como o grupo registrou. 'ordem' fixa a classificacao final (inclui o desempate, que o grupo resolvia por criterio interno nunca escrito). 'pontos', quando presente, substitui o total somado rodada a rodada — o total calculado continua visivel em 'total_somado' no standings.json.",
-  "fonte": "Com a R19 (Austin) contabilizada por pontos avulsos, Guilherme e Vinicius fecham empatados em 144. O grupo registrou Vinicius campeao (docs/data/hall_of_fame.json). Ordem oficial conforme decisao do usuario em 2026-09-08.",
+  "fonte": "Com a R19 (Austin) recalculada pela regra 2/1/0 (palpites recuperados em 2026-09-08 -> messages/19.txt), Vinicius fecha em 148 e Guilherme em 145. O grupo registrou Vinicius campeao (docs/data/hall_of_fame.json). 'ordem' fixa a classificacao oficial dos 4 primeiros conforme decisao do usuario em 2026-09-08 (Dalla soma 143 mas o grupo registrou Caliman em 4o).",
   "ordem": [
     "vinicius",
     "guilherme",

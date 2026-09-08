@@ -24,12 +24,10 @@
         "compensation": true,
         "max_points": 13
       },
-      "rodadas": 23,
+      "rodadas": 24,
       "rodadas_totais": 24,
-      "parcial": true,
-      "faltando": [
-        "Rodada 19 (Austin): sem palpites recuperados"
-      ]
+      "parcial": false,
+      "faltando": []
     },
     {
       "ano": 2024,
