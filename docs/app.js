@@ -2404,16 +2404,24 @@ function construirRankingHall(hof) {
 }
 
 // Tabela do "Ranking de vitórias": medalhistas primeiro (ordem 🥇/🥈/🥉), e
-// depois todos os outros jogadores que já disputaram uma temporada, em ordem
-// alfabética, com 0 medalhas.
+// depois todos os outros jogadores que já disputaram uma temporada, com 0
+// medalhas, ordenados pelo somatório de pontos em todas as temporadas (desc).
 function construirTabelaVitorias(hof, universo) {
   const linhas = construirRankingHall(hof);
   if (!universo) return linhas;
   const jaListados = new Set(linhas.map((l) => l.id));
   const extras = [...universo.entries()]
     .filter(([id]) => !jaListados.has(id))
-    .map(([id, dados]) => ({ id, nome: dados.nome || nomeHall(hof, id), ouro: 0, prata: 0, bronze: 0 }))
-    .sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR"));
+    .map(([id, dados]) => ({
+      id,
+      nome: dados.nome || nomeHall(hof, id),
+      ouro: 0,
+      prata: 0,
+      bronze: 0,
+      semMedalha: true,
+      pontos: dados.pontos || 0,
+    }))
+    .sort((a, b) => b.pontos - a.pontos || a.nome.localeCompare(b.nome, "pt-BR"));
   return [...linhas, ...extras];
 }
 
@@ -2435,7 +2443,7 @@ function renderRankingHall(hof, universo) {
   for (const linha of linhas) {
     const total = linha.ouro + linha.prata + linha.bronze;
     tbody.appendChild(
-      el("tr", {}, [
+      el("tr", { class: linha.semMedalha ? "hall-linha--sem-medalha" : "" }, [
         el("td", {}, [linha.nome]),
         el("td", {}, [
           el("a", { class: "hall-acessar", href: `?jogador=${encodeURIComponent(linha.id)}` }, ["Acessar"]),
@@ -2506,8 +2514,10 @@ function universoJogadores(standingsPorAno) {
   const universo = new Map();
   for (const [ano, st] of standingsPorAno) {
     for (const p of st.players || []) {
-      if (!universo.has(p.player_id)) universo.set(p.player_id, { nome: p.name, anos: [] });
-      universo.get(p.player_id).anos.push(ano);
+      if (!universo.has(p.player_id)) universo.set(p.player_id, { nome: p.name, anos: [], pontos: 0 });
+      const reg = universo.get(p.player_id);
+      reg.anos.push(ano);
+      reg.pontos += Number(p.total ?? p.total_somado ?? 0) || 0;
     }
   }
   return universo;

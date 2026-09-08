@@ -1536,6 +1536,22 @@ button.subaba[aria-selected="true"] {
   border-bottom: none;
 }
 
+/* Jogadores sem nenhuma medalha: fundo levemente mais escuro/sombreado. */
+.hall-ranking-tabela tbody tr.hall-linha--sem-medalha {
+  background: rgba(0, 0, 0, 0.055);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .hall-ranking-tabela tbody tr.hall-linha--sem-medalha {
+    background: rgba(0, 0, 0, 0.28);
+  }
+}
+:root[data-theme="dark"] .hall-ranking-tabela tbody tr.hall-linha--sem-medalha {
+  background: rgba(0, 0, 0, 0.28);
+}
+.hall-ranking-tabela tbody tr.hall-linha--sem-medalha td {
+  color: var(--texto-fraco);
+}
+
 .hall-ranking-tabela td.num, .hall-ranking-tabela th.num {
   text-align: right;
   font-variant-numeric: tabular-nums;
