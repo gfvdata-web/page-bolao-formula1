@@ -1090,10 +1090,10 @@ enquanto a Jolpica não publica o quali.**
 ### Etapa 7 — Histórico 🟡
 - **Objetivo:** importar temporadas anteriores para o site.
 - **Depende de:** Etapas 1–4; formato dos dados antigos a definir.
-- **Em andamento (2026-09-08):** ingestão da temporada **2025** a partir de
-  `f12025bolao.xlsx` (2 abas). Sub-etapa atual = **preparar a base 2025 em
-  `data/2025/` + geração multi-temporada**; o seletor de temporada no site é a
-  sub-etapa seguinte.
+- **Em andamento (2026-09-08):** temporadas 2021–2025 importadas, publicadas em
+  `docs/data/<ano>/` e acessíveis no site via `?ano=YYYY` (seletor pelo card
+  "Pódios por ano" — ver sub-etapa 2026-09-08d). Falta a sinalização por rodada
+  das corridas sem palpite (`rounds_sem_palpite` etc.).
 
 **Análise do `f12025bolao.xlsx` (fonte dos palpites 2025):**
 - **Aba 1 "Página1"** — 138 palpites, colunas `circuito, nome, p1..p6, pos`
@@ -1427,10 +1427,48 @@ Onde cada mecanismo foi preciso:
 | 2025 | vinicius, guilherme, igor | 144, 144, 143 |
 
 **Publicado:** `docs/data/2021..2026/` + `docs/data/seasons.json` com as seis
-temporadas. O front ainda lê `TEMPORADA = "2026"` fixo em `docs/app.js` — o
-seletor de temporada e a sinalização das rodadas sem palpite
-(`rounds_sem_palpite`, `total_recalculado`, `total_somado` no `standings.json`)
-são as próximas sub-etapas, em outras conversas.
+temporadas.
+
+**Sub-etapa 2026-09-08d — seletor de temporada no site (modo histórico).**
+- **Acesso via `?ano=YYYY`** (recarrega a página; sem SPA). Sem `?ano` → a
+  temporada `atual` de `seasons.json` (fixa em `TEMPORADA_ATUAL = 2026` no
+  `bolao/site.py`). `?ano` de um ano válido e anterior → **modo histórico**;
+  `?ano` inválido → redireciona para a URL limpa.
+- **Ponto de entrada:** aba **Hall of Fame → card "Pódios por ano"** ganhou um
+  botão **"Acessar"** por temporada (todas as de `seasons.temporadas` menos a
+  atual). Não há outro seletor visível por enquanto.
+- **Modo histórico (só quando `?ano` ≠ atual):** `<h1>` vira `Bolão F1 <ano>` +
+  badge **HISTÓRICO**, botão **"← Voltar para 2026"** (ambos no `<header>`, logo
+  visíveis em todas as abas), e uma **faixa `#hist-avisos`** abaixo do header
+  listando `seasons.temporadas[].faltando` quando `parcial`. A sub-aba
+  **Simulador** some (botão + seção + `renderSimulador` pulado); os cards de
+  última/próxima corrida (Ranking/Geral) viram **"Rodadas contabilizadas"** +
+  **"Jogadores competindo"**. **2026 fica idêntica ao que era.**
+- **Novos campos gerados por `bolao/site.py` (aditivos):**
+  - `standings.json` → `format` (`{top_n, bonus, bonus_points, compensation,
+    max_points}`, de `season_format()`) e `meta` (`{rodadas, rodadas_totais,
+    parcial, faltando}`).
+  - `seasons.json` mudou de shape: `{atual, temporadas:[{ano, format,
+    rodadas, rodadas_totais, parcial, faltando}]}` (era `{temporadas:[int],
+    atual}`). Agregado varrendo os `docs/data/<ano>/standings.json` irmãos.
+- **Visualizações adaptativas no `docs/app.js`** — estado global `FORMATO`
+  (setado de `standings.format`) e `MODO_HISTORICO`. Onde não há top6 / piloto
+  da rodada / compensação, a linha/coluna/bloco **é omitida** (nunca campo
+  vazio). Pontos tocados: `renderRanking` (coluna "Pontos Extra"),
+  `renderRegras` (novo — remonta `.regras-pontuacao` por temporada),
+  `renderCorridaDetalhe` (`slice(0, top_n)` + linha do bônus condicional),
+  `renderHistMatriz`/`histCelula` (P1..P`top_n`, linha "Piloto" condicional),
+  `cardRodada`/`linhaBonus`/`celBonusPalpite` (teto do bônus = `bonus_points`),
+  `renderPilotos` (faixa do top`top_n`), `posicoesTopN()` (substituiu
+  `HIST_POSICOES`), `adaptarTextosEstaticos()` (troca "top6"/"P1–P6"/"de 2026"
+  nas legendas estáticas). CSS novo: `.hist-badge`, `.hist-voltar`,
+  `.hist-avisos`, `.hall-acessar`, `[hidden]{display:none!important}` (as
+  legendas tinham `display:flex` vencendo o `[hidden]`).
+- Testes: `test_site.py` e `test_historico.py` cobrem `format`/`meta`/novo
+  `seasons.json` — total do projeto: **89**.
+- **Pendência:** a sinalização por rodada (`rounds_sem_palpite`,
+  `total_recalculado`, `total_somado` no `standings.json`) ainda **não** é
+  exibida — segue como sub-etapa seguinte.
 
 ## 9. Pendências / decisões adiadas
 
