@@ -2548,32 +2548,50 @@ function construirTabelaVitorias(hof, universo) {
 const HALL_MEDALHA_EMOJI = { ouro: "🥇", prata: "🥈", bronze: "🥉" };
 const HALL_MEDALHA_NOME = { ouro: "Ouro", prata: "Prata", bronze: "Bronze" };
 
-// Liga um pop-up (o mesmo tooltip flutuante da faixa de calendário) a um
-// elemento: 1ª linha do texto vira título, o resto vira as linhas.
+// Pop-up flutuante do Hall of Fame — mesmo visual dos tooltips dos gráficos /
+// da aba Pilotos (fundo escuro translúcido). 1ª linha do texto = título.
+let _hallDicaEl = null;
+function mostrarHallDica(texto, alvo) {
+  if (!_hallDicaEl) {
+    _hallDicaEl = el("div", { class: "hall-dica", role: "tooltip" });
+    document.body.appendChild(_hallDicaEl);
+  }
+  _hallDicaEl.replaceChildren(
+    ...texto
+      .split("\n")
+      .map((linha, i) =>
+        el("div", { class: i === 0 ? "hall-dica__titulo" : "hall-dica__linha" }, [linha])
+      )
+  );
+  _hallDicaEl.hidden = false;
+  const r = alvo.getBoundingClientRect();
+  const tt = _hallDicaEl.getBoundingClientRect();
+  let left = r.left + r.width / 2 - tt.width / 2 + window.scrollX;
+  left = Math.max(8, Math.min(left, window.scrollX + document.documentElement.clientWidth - tt.width - 8));
+  const acima = r.top - tt.height - 10 >= 0;
+  _hallDicaEl.style.left = `${left}px`;
+  _hallDicaEl.style.top = `${(acima ? r.top - tt.height - 10 : r.bottom + 10) + window.scrollY}px`;
+}
+function esconderHallDica() {
+  if (_hallDicaEl) _hallDicaEl.hidden = true;
+}
+
+// Liga o pop-up a um elemento: 1ª linha do texto vira título, o resto as linhas.
 function ligarDicaHall(node, texto) {
   if (!texto) return node;
   node.classList.add("hall-tem-dica");
   node.setAttribute("tabindex", "0");
-  const mostra = (e) => mostrarFaixaTooltip(texto, e.currentTarget);
+  const mostra = (e) => mostrarHallDica(texto, e.currentTarget);
   node.addEventListener("mouseenter", mostra);
   node.addEventListener("focus", mostra);
-  node.addEventListener("mouseleave", esconderFaixaTooltip);
-  node.addEventListener("blur", esconderFaixaTooltip);
+  node.addEventListener("mouseleave", esconderHallDica);
+  node.addEventListener("blur", esconderHallDica);
   return node;
 }
 
 function renderRankingHall(hof, universo) {
   const linhas = construirTabelaVitorias(hof, universo);
   const fmtPct = (n) => `${n.toFixed(1).replace(".", ",")}%`;
-
-  // Até onde cada "tecido de honra" desce: índice da última linha (na ordem
-  // exibida) que tem aquela medalha.
-  const ultimo = { ouro: -1, prata: -1, bronze: -1 };
-  linhas.forEach((l, i) => {
-    if (l.ouro > 0) ultimo.ouro = i;
-    if (l.prata > 0) ultimo.prata = i;
-    if (l.bronze > 0) ultimo.bronze = i;
-  });
 
   const thMedalha = (medalha) =>
     ligarDicaHall(
@@ -2612,7 +2630,7 @@ function renderRankingHall(hof, universo) {
   ]);
 
   const tbody = el("tbody");
-  linhas.forEach((linha, i) => {
+  for (const linha of linhas) {
     const total = linha.ouro + linha.prata + linha.bronze;
     const acerto = linha.acerto == null ? "—" : fmtPct(linha.acerto);
     const anosDesc = (linha.anos || []).slice().sort((a, b) => b.localeCompare(a));
@@ -2649,15 +2667,13 @@ function renderRankingHall(hof, universo) {
         ].join("\n")
       : null;
 
-    const celMedalha = (medalha, valor) => {
-      const dentro = i <= ultimo[medalha];
-      const classes = ["num"];
-      if (dentro) {
-        classes.push("hall-med", `hall-med--${medalha}`);
-        if (i === ultimo[medalha]) classes.push("hall-med--fim");
-      }
-      return el("td", { class: classes.join(" ") }, [String(valor)]);
-    };
+    // Destaque só em quem realmente ganhou aquela medalha (valor > 0).
+    const celMedalha = (medalha, valor) =>
+      el(
+        "td",
+        { class: valor > 0 ? `num hall-med hall-med--${medalha}` : "num" },
+        [String(valor)]
+      );
 
     tbody.appendChild(
       el("tr", { class: linha.semMedalha ? "hall-linha--sem-medalha" : "" }, [
@@ -2674,7 +2690,7 @@ function renderRankingHall(hof, universo) {
         ]),
       ])
     );
-  });
+  }
   tabela.appendChild(tbody);
   return el("div", { class: "hall-ranking-wrap" }, [tabela]);
 }

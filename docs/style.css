@@ -298,7 +298,7 @@ main {
   object-fit: cover;
   display: block;
 }
-.corridas-flags__item--passada { filter: grayscale(1) brightness(0.55); opacity: 0.5; }
+.corridas-flags__item--passada { filter: grayscale(0.8); opacity: 0.72; }
 .corridas-flags__item:hover,
 .corridas-flags__item:focus-visible {
   transform: scale(1.35);
@@ -1625,53 +1625,52 @@ button.subaba[aria-selected="true"] {
 }
 .hall-ranking-tabela .hall-acessar { margin-left: 0; }
 
-/* Pop-ups (mesmo tooltip flutuante da faixa de calendário). */
+/* Pop-up do Hall of Fame — mesmo visual dos tooltips dos gráficos / da aba
+   Pilotos (fundo escuro translúcido, texto claro). */
 .hall-tem-dica { cursor: help; outline: none; }
 .hall-tem-dica:focus-visible { box-shadow: inset 0 0 0 2px var(--acento); }
+.hall-dica {
+  position: absolute;
+  z-index: 100;
+  pointer-events: none;
+  background: rgba(0, 0, 0, 0.85);
+  color: #fff;
+  border-radius: 6px;
+  padding: 0.5rem 0.65rem;
+  font-size: 0.72rem;
+  line-height: 1.45;
+  max-width: 16rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+}
+.hall-dica__titulo { font-weight: 700; font-size: 0.78rem; margin-bottom: 0.2rem; }
+.hall-dica__linha {
+  color: rgba(255, 255, 255, 0.82);
+  font-variant-numeric: tabular-nums;
+  white-space: pre;
+}
 
-/* "Tecido de honra": faixa translúcida na cor da medalha descendo pela coluna,
-   só até a última linha de quem já ganhou aquela medalha. */
+/* Destaque das medalhas: mesma cor no cabeçalho e nas células de quem ganhou
+   (valor > 0). Sem fade — cor chapada + vincos laterais discretos. */
 .hall-ranking-tabela th.hall-med,
 .hall-ranking-tabela td.hall-med {
   position: relative;
+  font-weight: 700;
 }
-.hall-ranking-tabela td.hall-med { font-weight: 700; }
-.hall-ranking-tabela .hall-med--ouro {
-  background: linear-gradient(90deg,
-    rgba(212, 165, 35, 0.16), rgba(212, 165, 35, 0.4), rgba(212, 165, 35, 0.16));
-}
-.hall-ranking-tabela .hall-med--prata {
-  background: linear-gradient(90deg,
-    rgba(150, 158, 170, 0.2), rgba(150, 158, 170, 0.46), rgba(150, 158, 170, 0.2));
-}
-.hall-ranking-tabela .hall-med--bronze {
-  background: linear-gradient(90deg,
-    rgba(196, 110, 48, 0.16), rgba(196, 110, 48, 0.42), rgba(196, 110, 48, 0.16));
-}
-/* Cabeçalho: o tecido "nasce" mais forte no topo. */
+.hall-ranking-tabela .hall-med--ouro { background: rgba(212, 165, 35, 0.22); }
+.hall-ranking-tabela .hall-med--prata { background: rgba(150, 158, 170, 0.26); }
+.hall-ranking-tabela .hall-med--bronze { background: rgba(196, 110, 48, 0.22); }
 .hall-ranking-tabela th.hall-med { border-radius: 6px 6px 0 0; }
-.hall-ranking-tabela th.hall-med--ouro { background: rgba(212, 165, 35, 0.5); }
-.hall-ranking-tabela th.hall-med--prata { background: rgba(150, 158, 170, 0.55); }
-.hall-ranking-tabela th.hall-med--bronze { background: rgba(196, 110, 48, 0.5); }
-/* Vincos laterais do tecido. */
+.hall-ranking-tabela th.hall-med--ouro { background: rgba(212, 165, 35, 0.38); }
+.hall-ranking-tabela th.hall-med--prata { background: rgba(150, 158, 170, 0.42); }
+.hall-ranking-tabela th.hall-med--bronze { background: rgba(196, 110, 48, 0.38); }
+.hall-ranking-tabela th.hall-med::before,
 .hall-ranking-tabela td.hall-med::before {
   content: "";
   position: absolute;
   inset: 0;
   pointer-events: none;
-  box-shadow: inset 8px 0 8px -8px rgba(0, 0, 0, 0.18),
-    inset -8px 0 8px -8px rgba(0, 0, 0, 0.18);
-}
-/* Ponta do tecido: dissolve antes de terminar a linha. */
-.hall-ranking-tabela td.hall-med--fim::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  pointer-events: none;
-  background: linear-gradient(to bottom, transparent 30%, var(--bg-card) 94%);
+  box-shadow: inset 8px 0 8px -8px rgba(0, 0, 0, 0.16),
+    inset -8px 0 8px -8px rgba(0, 0, 0, 0.16);
 }
 
 /* Switch Jogadores / Temporadas (mesmo estilo do switch de Rendimento). */
