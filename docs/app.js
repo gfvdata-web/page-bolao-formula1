@@ -1306,12 +1306,14 @@ function renderPreferenciaPiloto(playerId, bets, results) {
 let graficoRendimento = null;
 let graficoRendimentoPorJogador = null;
 let rendimentoEstado = null; // { bets, ids, linhas }
-let rendimentoPorJogadorEstado = null; // { bets, ids, linhas }
+let rendimentoPorJogadorEstado = null; // { bets, codigos, linhas }
 
 let rendimentoModo = "piloto"; // "piloto" | "jogador"
 let rendimentoBets = null;
 let rendimentoJogadores = []; // lista ordenada por nome (cor estável por índice)
-let rendimentoSelecao = new Set(); // player_ids marcados; vazio = nenhum
+let rendimentoPilotos = []; // códigos de piloto já apostados (ordem alfabética)
+let rendimentoSelJogadores = new Set(); // filtro do modo "por piloto"
+let rendimentoSelPilotos = new Set(); // filtro do modo "por jogador"
 
 // Ordem estável dos jogadores (por nome), usada para a cor fixa de cada um.
 function ordemJogadores(bets) {
@@ -1328,18 +1330,29 @@ function corRendimentoJogador(playerId) {
   return corJogador(indice < 0 ? 0 : indice);
 }
 
-// Ids ativos no formato que as funções de coleta esperam: "todos" quando todos
-// estão marcados, [] quando nenhum, ou a lista de ids (na ordem estável).
-function rendimentoIdsAtivos() {
-  if (rendimentoSelecao.size === 0) return [];
-  if (rendimentoSelecao.size === rendimentoJogadores.length) return "todos";
-  return rendimentoJogadores.map((j) => j.player_id).filter((id) => rendimentoSelecao.has(id));
+// Cada filtro devolve "todos" (tudo marcado), [] (nada) ou a lista marcada.
+function rendimentoIdsJogadoresAtivos() {
+  if (rendimentoSelJogadores.size === 0) return [];
+  if (rendimentoSelJogadores.size === rendimentoJogadores.length) return "todos";
+  return rendimentoJogadores.map((j) => j.player_id).filter((id) => rendimentoSelJogadores.has(id));
+}
+
+function rendimentoCodigosAtivos() {
+  if (rendimentoSelPilotos.size === 0) return [];
+  if (rendimentoSelPilotos.size === rendimentoPilotos.length) return "todos";
+  return rendimentoPilotos.filter((c) => rendimentoSelPilotos.has(c));
 }
 
 function rendimentoRotuloSelecao(ids) {
   if (ids === "todos") return "todos os jogadores";
   if (ids.length === 1) return nomeJogadorBets(rendimentoBets, ids[0]);
   return `${ids.length} jogadores selecionados`;
+}
+
+function rendimentoRotuloPilotos(codigos) {
+  if (codigos === "todos") return "todos os pilotos";
+  if (codigos.length <= 3) return codigos.join(", ");
+  return `${codigos.length} pilotos selecionados`;
 }
 
 // Quanto cada piloto rende para quem aposta nele: percorre os palpites de top6
@@ -1388,12 +1401,14 @@ function construirLinhasRendimento(bets, ids) {
     .sort((a, b) => b.media - a.media || b.apostas - a.apostas || a.codigo.localeCompare(b.codigo));
 }
 
-// Rendimento de cada jogador no top6 somando TODOS os pilotos que ele apostou.
-function coletarRendimentoPorJogador(bets) {
+// Rendimento de cada jogador no top6, considerando só os pilotos em `codigos`
+// ("todos" = qualquer piloto).
+function coletarRendimentoPorJogador(bets, codigos) {
   const porJogador = new Map(); // playerId -> { apostas, pontos, exatas, dentro, fora }
   for (const jogador of Object.values(bets.players)) {
     for (const rodada of Object.values(jogador.rounds)) {
       for (const detalhe of rodada.top6_detail || []) {
+        if (codigos !== "todos" && !codigos.includes(detalhe.guess)) continue;
         const registro =
           porJogador.get(jogador.player_id) || { apostas: 0, pontos: 0, exatas: 0, dentro: 0, fora: 0 };
         registro.apostas += 1;
@@ -1408,25 +1423,34 @@ function coletarRendimentoPorJogador(bets) {
   return porJogador;
 }
 
-// Modo "por jogador": um jogador por linha (só os selecionados).
-function construirLinhasRendimentoPorJogador(bets, ids) {
-  const porJogador = coletarRendimentoPorJogador(bets);
-  const alvo = ids === "todos" ? [...porJogador.keys()] : ids;
-  return alvo
-    .filter((id) => porJogador.has(id))
-    .map((id) => {
-      const registro = porJogador.get(id);
-      return { playerId: id, ...registro, media: registro.pontos / registro.apostas };
+// Modo "por jogador": TODOS os jogadores aparecem; o filtro escolhe quais
+// pilotos entram na conta. `mediaGeral` = rendimento do jogador somando todos os
+// pilotos (base de comparação quando há filtro de piloto ativo).
+function construirLinhasRendimentoPorJogador(bets, codigos) {
+  const doFiltro = coletarRendimentoPorJogador(bets, codigos);
+  const geral = coletarRendimentoPorJogador(bets, "todos");
+  const vazio = { apostas: 0, pontos: 0, exatas: 0, dentro: 0, fora: 0 };
+
+  return rendimentoJogadores
+    .map((j) => {
+      const registro = doFiltro.get(j.player_id) || vazio;
+      const registroGeral = geral.get(j.player_id);
+      return {
+        playerId: j.player_id,
+        ...registro,
+        media: registro.apostas ? registro.pontos / registro.apostas : 0,
+        mediaGeral: registroGeral && registroGeral.apostas ? registroGeral.pontos / registroGeral.apostas : null,
+      };
     })
     .sort(
       (a, b) =>
+        (a.apostas === 0) - (b.apostas === 0) ||
         b.media - a.media ||
-        b.apostas - a.apostas ||
         nomeJogadorBets(bets, a.playerId).localeCompare(nomeJogadorBets(bets, b.playerId), "pt-BR")
     );
 }
 
-// Sinaliza rendimento acima (▲) ou abaixo (▼) da média geral daquele piloto.
+// Sinaliza rendimento acima (▲) ou abaixo (▼) da média de comparação.
 function badgeRendimentoGeral(media, mediaGeral) {
   const diferenca = media - mediaGeral;
   const seta = diferenca >= 0 ? "▲" : "▼";
@@ -1584,38 +1608,52 @@ function renderRendimento(ids, bets) {
 
 // ----- Modo "por jogador" -----
 
-function renderGraficoRendimentoPorJogador(linhas, bets) {
+function renderGraficoRendimentoPorJogador(linhas, codigos, bets) {
   const canvas = document.getElementById("rendimento-jogador-grafico");
-  canvas.parentElement.style.height = `${Math.max(200, linhas.length * 30 + 56)}px`;
+  const comparando = codigos !== "todos";
+  canvas.parentElement.style.height = `${Math.max(200, linhas.length * (comparando ? 34 : 30) + 56)}px`;
 
   const corTexto = corCss("--texto-fraco");
   const corGrade = corCss("--borda");
+  const datasets = [
+    {
+      label: comparando ? rendimentoRotuloPilotos(codigos) : "Todos os pilotos",
+      data: linhas.map((linha) => linha.media),
+      backgroundColor: linhas.map((linha) => corRendimentoJogador(linha.playerId)),
+      borderWidth: 0,
+    },
+  ];
+  if (comparando) {
+    datasets.push({
+      label: "Média geral (todos os pilotos)",
+      data: linhas.map((linha) => (linha.mediaGeral === null ? 0 : linha.mediaGeral)),
+      backgroundColor: corGrade,
+      borderWidth: 0,
+    });
+  }
 
   if (graficoRendimentoPorJogador) graficoRendimentoPorJogador.destroy();
   graficoRendimentoPorJogador = new Chart(canvas.getContext("2d"), {
     type: "bar",
-    data: {
-      labels: linhas.map((linha) => nomeJogadorBets(bets, linha.playerId)),
-      datasets: [
-        {
-          label: "Pts/aposta no top6",
-          data: linhas.map((linha) => linha.media),
-          backgroundColor: linhas.map((linha) => corRendimentoJogador(linha.playerId)),
-          borderWidth: 0,
-        },
-      ],
-    },
+    data: { labels: linhas.map((linha) => nomeJogadorBets(bets, linha.playerId)), datasets },
     options: {
       indexAxis: "y",
       responsive: true,
       maintainAspectRatio: false,
       animation: false,
       plugins: {
-        legend: { display: false },
+        legend: {
+          display: comparando,
+          labels: { color: corTexto, boxWidth: 12, boxHeight: 8, font: { size: 11 } },
+        },
         tooltip: {
           callbacks: {
             label(item) {
               const linha = linhas[item.dataIndex];
+              if (item.datasetIndex === 1) {
+                return `Média geral: ${linha.mediaGeral === null ? "–" : linha.mediaGeral.toFixed(2)} pts/aposta`;
+              }
+              if (!linha.apostas) return "sem apostas nesse(s) piloto(s)";
               return `${linha.media.toFixed(2)} pts/aposta (${linha.apostas} apostas)`;
             },
           },
@@ -1635,55 +1673,68 @@ function renderGraficoRendimentoPorJogador(linhas, bets) {
   });
 }
 
-function renderTabelaRendimentoPorJogador(linhas, bets) {
+function renderTabelaRendimentoPorJogador(linhas, comparando, bets) {
   const container = document.getElementById("rendimento-jogador-container");
   const cabecalho = [
     el("th", { class: "num" }, ["#"]),
     el("th", {}, ["Jogador"]),
     el("th", { class: "num" }, ["Pts/aposta"]),
+    comparando ? el("th", { class: "num" }, ["Média geral"]) : null,
     el("th", { class: "num" }, ["Pontos"]),
     el("th", { class: "num" }, ["Apostas"]),
     el("th", { class: "num" }, ["2 pt"]),
     el("th", { class: "num" }, ["1 pt"]),
     el("th", { class: "num" }, ["0 pt"]),
-  ];
+  ].filter(Boolean);
 
   const tabela = el("table", { class: "rendimento-tabela" }, [el("thead", {}, [el("tr", {}, cabecalho)])]);
   const tbody = el("tbody");
   linhas.forEach((linha, indice) => {
     tbody.appendChild(
-      el("tr", {}, [
-        el("td", { class: "num rendimento-pos" }, [String(indice + 1)]),
-        el("td", {}, [
-          el("span", { class: "piloto-chip" }, [
-            el("span", {
-              class: "piloto-bolinha",
-              style: `background:${corRendimentoJogador(linha.playerId)}`,
-            }),
-            nomeJogadorBets(bets, linha.playerId),
+      el(
+        "tr",
+        {},
+        [
+          el("td", { class: "num rendimento-pos" }, [String(indice + 1)]),
+          el("td", {}, [
+            el("span", { class: "piloto-chip" }, [
+              el("span", {
+                class: "piloto-bolinha",
+                style: `background:${corRendimentoJogador(linha.playerId)}`,
+              }),
+              nomeJogadorBets(bets, linha.playerId),
+            ]),
           ]),
-        ]),
-        el("td", { class: "num rendimento-media" }, [linha.media.toFixed(2)]),
-        el("td", { class: "num" }, [String(linha.pontos)]),
-        el("td", { class: "num" }, [String(linha.apostas)]),
-        el("td", { class: "num" }, [String(linha.exatas)]),
-        el("td", { class: "num" }, [String(linha.dentro)]),
-        el("td", { class: "num" }, [String(linha.fora)]),
-      ])
+          el("td", { class: "num rendimento-media" }, [
+            linha.apostas ? `${linha.media.toFixed(2)} ` : "– ",
+            ...(comparando && linha.apostas && linha.mediaGeral !== null
+              ? [badgeRendimentoGeral(linha.media, linha.mediaGeral)]
+              : []),
+          ]),
+          comparando
+            ? el("td", { class: "num" }, [linha.mediaGeral === null ? "-" : linha.mediaGeral.toFixed(2)])
+            : null,
+          el("td", { class: "num" }, [String(linha.pontos)]),
+          el("td", { class: "num" }, [String(linha.apostas)]),
+          el("td", { class: "num" }, [String(linha.exatas)]),
+          el("td", { class: "num" }, [String(linha.dentro)]),
+          el("td", { class: "num" }, [String(linha.fora)]),
+        ].filter(Boolean)
+      )
     );
   });
   tabela.appendChild(tbody);
   container.replaceChildren(el("div", { class: "rendimento-tabela-wrap" }, [tabela]));
 }
 
-function renderRendimentoPorJogador(ids, bets) {
+function renderRendimentoPorJogador(codigos, bets) {
   const titulo = document.getElementById("rendimento-jogador-titulo");
   const container = document.getElementById("rendimento-jogador-container");
 
-  if (Array.isArray(ids) && !ids.length) {
-    rendimentoPorJogadorEstado = { bets, ids, linhas: [] };
+  if (Array.isArray(codigos) && !codigos.length) {
+    rendimentoPorJogadorEstado = { bets, codigos, linhas: [] };
     titulo.textContent = "Pontos que cada jogador tira no top6";
-    container.replaceChildren(el("p", { class: "status" }, ["Selecione ao menos um jogador."]));
+    container.replaceChildren(el("p", { class: "status" }, ["Selecione ao menos um piloto."]));
     if (graficoRendimentoPorJogador) {
       graficoRendimentoPorJogador.destroy();
       graficoRendimentoPorJogador = null;
@@ -1691,32 +1742,24 @@ function renderRendimentoPorJogador(ids, bets) {
     return;
   }
 
-  const linhas = construirLinhasRendimentoPorJogador(bets, ids);
-  rendimentoPorJogadorEstado = { bets, ids, linhas };
+  const linhas = construirLinhasRendimentoPorJogador(bets, codigos);
+  const comparando = codigos !== "todos";
+  rendimentoPorJogadorEstado = { bets, codigos, linhas };
 
   titulo.textContent =
-    ids === "todos"
+    codigos === "todos"
       ? "Pontos que cada jogador tira no top6"
-      : `Pontos no top6 — ${rendimentoRotuloSelecao(ids)}`;
+      : `Rendimento no top6 — ${rendimentoRotuloPilotos(codigos)}`;
 
-  if (!linhas.length) {
-    container.replaceChildren(el("p", { class: "status" }, ["Sem palpites de top6 registrados."]));
-    if (graficoRendimentoPorJogador) {
-      graficoRendimentoPorJogador.destroy();
-      graficoRendimentoPorJogador = null;
-    }
-    return;
-  }
-
-  renderTabelaRendimentoPorJogador(linhas, bets);
-  if (rendimentoGraficoVisivel("jogador")) renderGraficoRendimentoPorJogador(linhas, bets);
+  renderTabelaRendimentoPorJogador(linhas, comparando, bets);
+  if (rendimentoGraficoVisivel("jogador")) renderGraficoRendimentoPorJogador(linhas, codigos, bets);
   else if (graficoRendimentoPorJogador) {
     graficoRendimentoPorJogador.destroy();
     graficoRendimentoPorJogador = null;
   }
 }
 
-// ----- Filtro (chips de jogador) + switch de modo -----
+// ----- Filtro (chips) + switch de modo -----
 
 function rendimentoGraficoVisivel(modo) {
   if (document.getElementById("secao-palpites").hidden) return false;
@@ -1724,43 +1767,63 @@ function rendimentoGraficoVisivel(modo) {
   return !document.getElementById(`rendimento-view-${modo}`).hidden;
 }
 
-function popularRendimentoJogadores(bets) {
-  rendimentoJogadores = ordemJogadores(bets);
-  const box = document.getElementById("rendimento-jogadores");
-  box.replaceChildren(
-    ...rendimentoJogadores.map((j) => {
-      const chip = el(
-        "button",
-        {
-          type: "button",
-          class: "rendimento-jogador-chip",
-          "data-player": j.player_id,
-          "aria-pressed": "false",
-          style: `--cor-jogador:${corRendimentoJogador(j.player_id)}`,
-        },
-        [el("span", { class: "rendimento-jogador-chip__ponto" }), j.name]
-      );
-      chip.addEventListener("click", () => {
-        if (rendimentoSelecao.has(j.player_id)) rendimentoSelecao.delete(j.player_id);
-        else rendimentoSelecao.add(j.player_id);
-        atualizarRendimento();
-      });
-      return chip;
-    })
+function chipRendimento(rotulo, cor, dataAttr, valor, selecao) {
+  const chip = el(
+    "button",
+    {
+      type: "button",
+      class: "rendimento-chip",
+      [dataAttr]: valor,
+      "aria-pressed": "false",
+      style: `--cor-chip:${cor}`,
+    },
+    [el("span", { class: "rendimento-chip__ponto" }), rotulo]
   );
+  chip.addEventListener("click", () => {
+    if (selecao.has(valor)) selecao.delete(valor);
+    else selecao.add(valor);
+    atualizarRendimento();
+  });
+  return chip;
+}
+
+// A tira de chips muda de conteúdo conforme o modo: no modo "por piloto" são os
+// jogadores (quem entra na conta); no modo "por jogador" são os pilotos (quais
+// pilotos considerar) e todos os jogadores aparecem no gráfico.
+function popularRendimentoChips() {
+  const box = document.getElementById("rendimento-jogadores");
+  const dica = document.getElementById("rendimento-chips-dica");
+  if (rendimentoModo === "piloto") {
+    box.setAttribute("aria-label", "Jogadores na conta");
+    dica.textContent = "Jogadores incluídos na média de cada piloto:";
+    box.replaceChildren(
+      ...rendimentoJogadores.map((j) =>
+        chipRendimento(j.name, corRendimentoJogador(j.player_id), "data-player", j.player_id, rendimentoSelJogadores)
+      )
+    );
+  } else {
+    box.setAttribute("aria-label", "Pilotos considerados");
+    dica.textContent = "Pilotos considerados (todos os jogadores aparecem no gráfico):";
+    box.replaceChildren(
+      ...rendimentoPilotos.map((c) => chipRendimento(c, corPiloto(c), "data-piloto", c, rendimentoSelPilotos))
+    );
+  }
+  sincronizarRendimentoChips();
 }
 
 function sincronizarRendimentoChips() {
-  document.querySelectorAll("#rendimento-jogadores .rendimento-jogador-chip").forEach((chip) => {
-    chip.setAttribute("aria-pressed", rendimentoSelecao.has(chip.dataset.player) ? "true" : "false");
+  document.querySelectorAll("#rendimento-jogadores .rendimento-chip").forEach((chip) => {
+    const marcado = chip.dataset.player
+      ? rendimentoSelJogadores.has(chip.dataset.player)
+      : rendimentoSelPilotos.has(chip.dataset.piloto);
+    chip.setAttribute("aria-pressed", marcado ? "true" : "false");
   });
 }
 
 function atualizarRendimento() {
   sincronizarRendimentoChips();
-  const ids = rendimentoIdsAtivos();
-  if (rendimentoModo === "piloto") renderRendimento(ids, rendimentoBets);
-  else renderRendimentoPorJogador(ids, rendimentoBets);
+  if (rendimentoModo === "piloto") renderRendimento(rendimentoIdsJogadoresAtivos(), rendimentoBets);
+  else renderRendimentoPorJogador(rendimentoCodigosAtivos(), rendimentoBets);
 }
 
 function configurarRendimento() {
@@ -1783,16 +1846,20 @@ function configurarRendimento() {
         graficoRendimento.destroy();
         graficoRendimento = null;
       }
+      popularRendimentoChips();
       atualizarRendimento();
     });
   });
 
   document.querySelectorAll("#rendimento-jogadores-acoes .rendimento-jogadores__acao").forEach((botao) => {
     botao.addEventListener("click", () => {
-      if (botao.dataset.acao === "todos") {
-        rendimentoJogadores.forEach((j) => rendimentoSelecao.add(j.player_id));
+      const marcarTudo = botao.dataset.acao === "todos";
+      if (rendimentoModo === "piloto") {
+        rendimentoSelJogadores.clear();
+        if (marcarTudo) rendimentoJogadores.forEach((j) => rendimentoSelJogadores.add(j.player_id));
       } else {
-        rendimentoSelecao.clear();
+        rendimentoSelPilotos.clear();
+        if (marcarTudo) rendimentoPilotos.forEach((c) => rendimentoSelPilotos.add(c));
       }
       atualizarRendimento();
     });
@@ -1842,6 +1909,13 @@ function medianaLista(valores) {
   return ord.length % 2 ? ord[meio] : (ord[meio - 1] + ord[meio]) / 2;
 }
 
+// cont[p] = quantas vezes o piloto largou exatamente na posição p.
+function contagemPorPosicao(posicoes, maxGrid) {
+  const cont = new Array(maxGrid + 1).fill(0);
+  for (const p of posicoes) cont[p] += 1;
+  return cont;
+}
+
 // Um "violino" horizontal por piloto (uma linha cada), ordenados pela posição
 // média real crescente (quem larga melhor no topo). Cada violino é normalizado
 // para a mesma espessura máxima — a dispersão aparece pela largura da forma no
@@ -1887,6 +1961,61 @@ function renderPilotos(results) {
   const corTexto = corCss("--texto-fraco");
   const corTextoForte = corCss("--texto");
   const corAcento = corCss("--acento");
+
+  // Popup de contagem por classificação (mesmo estilo dos tooltips dos gráficos).
+  const tooltip = el("div", { class: "pilotos-tooltip" });
+  tooltip.hidden = true;
+
+  function montarTooltip(piloto) {
+    const cont = contagemPorPosicao(piloto.posicoes, maxGrid);
+    const maxC = Math.max(...cont) || 1;
+    const linhas = [];
+    for (let p = 1; p <= maxGrid; p++) {
+      if (!cont[p]) continue;
+      linhas.push(
+        el("div", { class: "pilotos-tooltip__linha" }, [
+          el("span", { class: "pilotos-tooltip__pos" }, [`P${p}`]),
+          el("span", { class: "pilotos-tooltip__barra-wrap" }, [
+            el("span", {
+              class: "pilotos-tooltip__barra",
+              style: `width:${(cont[p] / maxC) * 100}%;background:${corPiloto(piloto.codigo)}`,
+            }),
+          ]),
+          el("span", { class: "pilotos-tooltip__n" }, [String(cont[p])]),
+        ])
+      );
+    }
+    return [
+      el("div", { class: "pilotos-tooltip__titulo" }, [`${piloto.codigo} · ${piloto.posicoes.length} quali`]),
+      el("div", { class: "pilotos-tooltip__sub" }, [
+        `média P${piloto.media.toFixed(1)} · mediana P${piloto.mediana} · melhor P${piloto.melhor} · pior P${piloto.pior}`,
+      ]),
+      ...linhas,
+    ];
+  }
+
+  function posicionarTooltip(evento) {
+    const rect = container.getBoundingClientRect();
+    let x = evento.clientX - rect.left + 14;
+    const y = evento.clientY - rect.top + 14;
+    if (x + tooltip.offsetWidth > container.clientWidth - 4) {
+      x = evento.clientX - rect.left - tooltip.offsetWidth - 14;
+    }
+    tooltip.style.left = `${Math.max(4, x)}px`;
+    tooltip.style.top = `${y}px`;
+  }
+
+  function ligarTooltip(alvo, piloto) {
+    alvo.addEventListener("pointerenter", (evento) => {
+      tooltip.replaceChildren(...montarTooltip(piloto));
+      tooltip.hidden = false;
+      posicionarTooltip(evento);
+    });
+    alvo.addEventListener("pointermove", posicionarTooltip);
+    alvo.addEventListener("pointerleave", () => {
+      tooltip.hidden = true;
+    });
+  }
 
   const svg = svgEl("svg", {
     class: "pilotos-svg",

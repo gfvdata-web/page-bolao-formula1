@@ -1071,9 +1071,50 @@ enquanto a Jolpica não publica o quali.**
   front-end — a Etapa 6 só adiciona `google-apps-script/` como novo
   disparador do evento `novo_palpite` já existente.
 
-### Etapa 7 — Histórico ⬜
+### Etapa 7 — Histórico 🟡
 - **Objetivo:** importar temporadas anteriores para o site.
-- **Depende de:** Etapas 1–4; formato dos dados antigos a definir. **Adiada.**
+- **Depende de:** Etapas 1–4; formato dos dados antigos a definir.
+- **Em andamento (2026-09-08):** ingestão da temporada **2025** a partir de
+  `f12025bolao.xlsx` (2 abas). Sub-etapa atual = **preparar a base 2025 em
+  `data/2025/` + geração multi-temporada**; o seletor de temporada no site é a
+  sub-etapa seguinte.
+
+**Análise do `f12025bolao.xlsx` (fonte dos palpites 2025):**
+- **Aba 1 "Página1"** — 138 palpites, colunas `circuito, nome, p1..p6, pos`
+  (`pos` = chute da posição do piloto da rodada). Cobre **15 corridas**
+  (Austrália → Zandvoort = rodadas 1–15 de 2025). Ordem das linhas = ordem de
+  envio (serve de `bet_order`). Sem palpites duplicados (circuito+jogador).
+- **Aba 2 "Cópia de Página1"** — 1 linha por corrida, colunas `circuito, data,
+  p1..p6 (top6 real do quali PRINCIPAL), pos, quem`. `quem` = piloto da rodada
+  (sorteio do grupo, **só existe aqui**, não na Jolpica). Colunas M/N são um
+  lookup `circuito→quem` redundante (ignorar). Monza (r16) só tem top6, sem
+  `quem`/`pos` e sem palpites → **fora do bolão 2025**.
+- **Conferência do top6 da aba 2 = quali principal** (não sprint): validado em
+  China/Miami/Spa. A coluna `pos` da aba 2 (posição do piloto da rodada) bate
+  com o quali na maioria, mas **diverge em Australia** (`quem=tsu`, aba diz
+  `p17`, quali foi P5) — a fonte canônica da posição real será a **Jolpica**
+  (`order` do `/qualifying`, mesmo critério de 2026), a aba 2 vira conferência.
+- **Erros de digitação no xlsx a tratar:** `austria/Igor` P4 = `LEV` (→ LEC?);
+  `jeddah/Guilherme` top6 = `[NOR,PIA,VER,RUS,LEC,VER]` (VER repetido em P3 e
+  P6); `jeddah/Guilherme` `pos` = `p4` minúsculo (parser tolera). Códigos de
+  piloto vêm em CAIXA/minúscula/Título misturados e `Max`/`Tsu` — o
+  `normalize_driver` já resolve (alias + fallback de 3 letras).
+- **Jogadores (13 grafias → ~12 pessoas):** acentos/caixa se unem sozinhos
+  (`Vinícius`=`vinicius`); **`bernardo` vs `Bernardo Lavôr`** precisa de alias
+  (`bernardo lavor`→id). Roster o ano todo: caliman, cintia, dalla, ferrari,
+  francez, guilherme, igor, lage, vinicius. Parciais: `arthur` (r2,4,5),
+  `bernardo` (r1,2,4,5), `caio` (r15). `cintia`/`bernardo`/`arthur` **não estão**
+  em `data/2026/players.json`.
+
+**Decisões da Etapa 7 (a fechar com o usuário — ver conversa 2026-09-08):**
+- Fonte do resultado do quali 2025 = **Jolpica** (`--season 2025`, grid
+  completo); xlsx aba 2 = conferência + piloto da rodada (`quem`).
+- `messages/<round>.txt` de 2025 serão **sintetizados** do xlsx no formato que
+  `bolao/parser.py` já consome → o pipeline (`parser`→`scoring`→`site.generate`)
+  roda **sem alteração de lógica**. Só `site.generate` muda: saída em
+  `docs/data/<season>/…` (multi-temporada) + `docs/data/seasons.json`.
+- Fonte crua versionada no repo como CSV (`data/2025/…`), **não** dependência de
+  `openpyxl` no projeto/CI.
 
 ## 9. Pendências / decisões adiadas
 
