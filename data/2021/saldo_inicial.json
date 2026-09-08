@@ -1,0 +1,35 @@
+{
+  "_comment": "Saldo das rodadas anteriores a R11 de 2021, que nao tem palpite no historico do WhatsApp. Derivado da classificacao acumulada de 28/08/2021 22:59 (apos R12) menos as rodadas que sabemos recalcular. Entra no ranking como bloco de pontos + rodadas jogadas, sem detalhe por corrida.",
+  "ate_rodada": 10,
+  "fonte": "28/08/2021 22:59 - Guilherne Viana",
+  "players": {
+    "bernardo_v": {
+      "pontos": 8,
+      "rodadas": 2
+    },
+    "caliman": {
+      "pontos": 40,
+      "rodadas": 7
+    },
+    "dalla": {
+      "pontos": 6,
+      "rodadas": 2
+    },
+    "ferrari": {
+      "pontos": 44,
+      "rodadas": 10
+    },
+    "francez": {
+      "pontos": 39,
+      "rodadas": 8
+    },
+    "guilherme": {
+      "pontos": 55,
+      "rodadas": 10
+    },
+    "vinicius": {
+      "pontos": 41,
+      "rodadas": 8
+    }
+  }
+}

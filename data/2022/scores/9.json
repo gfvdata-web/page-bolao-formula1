@@ -1,0 +1,603 @@
+{
+  "round": 9,
+  "race_id": "2022-09",
+  "race": "Montreal",
+  "circuit": "villeneuve",
+  "date": "2022-06-19",
+  "sprint": false,
+  "bonus_driver": "",
+  "min_score": 2,
+  "bet_order": [
+    "vinicius",
+    "ferrari",
+    "caliman",
+    "dalla",
+    "francez",
+    "igor",
+    "lage",
+    "rodrigo",
+    "guilherme"
+  ],
+  "result_order": [
+    "VER",
+    "ALO",
+    "SAI",
+    "HAM",
+    "MAG",
+    "MSC",
+    "OCO",
+    "RUS",
+    "RIC",
+    "ZHO",
+    "BOT",
+    "ALB",
+    "PER",
+    "NOR",
+    "LEC",
+    "GAS",
+    "VET",
+    "STR",
+    "LAT",
+    "TSU"
+  ],
+  "players": [
+    {
+      "player_id": "guilherme",
+      "player_raw": "Guilherme",
+      "name": "Guilherme",
+      "top6": [
+        "VER",
+        "PER",
+        "SAI",
+        "LEC",
+        "ALO",
+        "VET"
+      ],
+      "top6_detail": [
+        {
+          "pos": 1,
+          "guess": "VER",
+          "real": "VER",
+          "points": 2,
+          "reason": "exata"
+        },
+        {
+          "pos": 2,
+          "guess": "PER",
+          "real": "ALO",
+          "points": 0,
+          "reason": "fora"
+        },
+        {
+          "pos": 3,
+          "guess": "SAI",
+          "real": "SAI",
+          "points": 2,
+          "reason": "exata"
+        },
+        {
+          "pos": 4,
+          "guess": "LEC",
+          "real": "HAM",
+          "points": 0,
+          "reason": "fora"
+        },
+        {
+          "pos": 5,
+          "guess": "ALO",
+          "real": "MAG",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 6,
+          "guess": "VET",
+          "real": "MSC",
+          "points": 0,
+          "reason": "fora"
+        }
+      ],
+      "top6_points": 5,
+      "bonus_guess": 0,
+      "bonus_real_pos": null,
+      "bonus_points": 0,
+      "total": 5
+    },
+    {
+      "player_id": "igor",
+      "player_raw": "Igor",
+      "name": "Igor",
+      "top6": [
+        "VER",
+        "LEC",
+        "SAI",
+        "ALO",
+        "PER",
+        "GAS"
+      ],
+      "top6_detail": [
+        {
+          "pos": 1,
+          "guess": "VER",
+          "real": "VER",
+          "points": 2,
+          "reason": "exata"
+        },
+        {
+          "pos": 2,
+          "guess": "LEC",
+          "real": "ALO",
+          "points": 0,
+          "reason": "fora"
+        },
+        {
+          "pos": 3,
+          "guess": "SAI",
+          "real": "SAI",
+          "points": 2,
+          "reason": "exata"
+        },
+        {
+          "pos": 4,
+          "guess": "ALO",
+          "real": "HAM",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 5,
+          "guess": "PER",
+          "real": "MAG",
+          "points": 0,
+          "reason": "fora"
+        },
+        {
+          "pos": 6,
+          "guess": "GAS",
+          "real": "MSC",
+          "points": 0,
+          "reason": "fora"
+        }
+      ],
+      "top6_points": 5,
+      "bonus_guess": 0,
+      "bonus_real_pos": null,
+      "bonus_points": 0,
+      "total": 5
+    },
+    {
+      "player_id": "rodrigo",
+      "player_raw": "Rodrigo",
+      "name": "Rodrigo",
+      "top6": [
+        "VER",
+        "LEC",
+        "SAI",
+        "VET",
+        "ALO",
+        "GAS"
+      ],
+      "top6_detail": [
+        {
+          "pos": 1,
+          "guess": "VER",
+          "real": "VER",
+          "points": 2,
+          "reason": "exata"
+        },
+        {
+          "pos": 2,
+          "guess": "LEC",
+          "real": "ALO",
+          "points": 0,
+          "reason": "fora"
+        },
+        {
+          "pos": 3,
+          "guess": "SAI",
+          "real": "SAI",
+          "points": 2,
+          "reason": "exata"
+        },
+        {
+          "pos": 4,
+          "guess": "VET",
+          "real": "HAM",
+          "points": 0,
+          "reason": "fora"
+        },
+        {
+          "pos": 5,
+          "guess": "ALO",
+          "real": "MAG",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 6,
+          "guess": "GAS",
+          "real": "MSC",
+          "points": 0,
+          "reason": "fora"
+        }
+      ],
+      "top6_points": 5,
+      "bonus_guess": 0,
+      "bonus_real_pos": null,
+      "bonus_points": 0,
+      "total": 5
+    },
+    {
+      "player_id": "caliman",
+      "player_raw": "Caliman",
+      "name": "Caliman",
+      "top6": [
+        "VER",
+        "PER",
+        "LEC",
+        "SAI",
+        "RUS",
+        "ALO"
+      ],
+      "top6_detail": [
+        {
+          "pos": 1,
+          "guess": "VER",
+          "real": "VER",
+          "points": 2,
+          "reason": "exata"
+        },
+        {
+          "pos": 2,
+          "guess": "PER",
+          "real": "ALO",
+          "points": 0,
+          "reason": "fora"
+        },
+        {
+          "pos": 3,
+          "guess": "LEC",
+          "real": "SAI",
+          "points": 0,
+          "reason": "fora"
+        },
+        {
+          "pos": 4,
+          "guess": "SAI",
+          "real": "HAM",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 5,
+          "guess": "RUS",
+          "real": "MAG",
+          "points": 0,
+          "reason": "fora"
+        },
+        {
+          "pos": 6,
+          "guess": "ALO",
+          "real": "MSC",
+          "points": 1,
+          "reason": "no top6"
+        }
+      ],
+      "top6_points": 4,
+      "bonus_guess": 0,
+      "bonus_real_pos": null,
+      "bonus_points": 0,
+      "total": 4
+    },
+    {
+      "player_id": "vinicius",
+      "player_raw": "Vinicius",
+      "name": "Vinícius",
+      "top6": [
+        "VER",
+        "SAI",
+        "LEC",
+        "PER",
+        "ALO",
+        "GAS"
+      ],
+      "top6_detail": [
+        {
+          "pos": 1,
+          "guess": "VER",
+          "real": "VER",
+          "points": 2,
+          "reason": "exata"
+        },
+        {
+          "pos": 2,
+          "guess": "SAI",
+          "real": "ALO",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 3,
+          "guess": "LEC",
+          "real": "SAI",
+          "points": 0,
+          "reason": "fora"
+        },
+        {
+          "pos": 4,
+          "guess": "PER",
+          "real": "HAM",
+          "points": 0,
+          "reason": "fora"
+        },
+        {
+          "pos": 5,
+          "guess": "ALO",
+          "real": "MAG",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 6,
+          "guess": "GAS",
+          "real": "MSC",
+          "points": 0,
+          "reason": "fora"
+        }
+      ],
+      "top6_points": 4,
+      "bonus_guess": 0,
+      "bonus_real_pos": null,
+      "bonus_points": 0,
+      "total": 4
+    },
+    {
+      "player_id": "dalla",
+      "player_raw": "DALLA",
+      "name": "Dalla",
+      "top6": [
+        "VER",
+        "LEC",
+        "PER",
+        "SAI",
+        "RUS",
+        "GAS"
+      ],
+      "top6_detail": [
+        {
+          "pos": 1,
+          "guess": "VER",
+          "real": "VER",
+          "points": 2,
+          "reason": "exata"
+        },
+        {
+          "pos": 2,
+          "guess": "LEC",
+          "real": "ALO",
+          "points": 0,
+          "reason": "fora"
+        },
+        {
+          "pos": 3,
+          "guess": "PER",
+          "real": "SAI",
+          "points": 0,
+          "reason": "fora"
+        },
+        {
+          "pos": 4,
+          "guess": "SAI",
+          "real": "HAM",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 5,
+          "guess": "RUS",
+          "real": "MAG",
+          "points": 0,
+          "reason": "fora"
+        },
+        {
+          "pos": 6,
+          "guess": "GAS",
+          "real": "MSC",
+          "points": 0,
+          "reason": "fora"
+        }
+      ],
+      "top6_points": 3,
+      "bonus_guess": 0,
+      "bonus_real_pos": null,
+      "bonus_points": 0,
+      "total": 3
+    },
+    {
+      "player_id": "ferrari",
+      "player_raw": "Ferrari",
+      "name": "Ferrari",
+      "top6": [
+        "LEC",
+        "PER",
+        "VER",
+        "SAI",
+        "RUS",
+        "ALO"
+      ],
+      "top6_detail": [
+        {
+          "pos": 1,
+          "guess": "LEC",
+          "real": "VER",
+          "points": 0,
+          "reason": "fora"
+        },
+        {
+          "pos": 2,
+          "guess": "PER",
+          "real": "ALO",
+          "points": 0,
+          "reason": "fora"
+        },
+        {
+          "pos": 3,
+          "guess": "VER",
+          "real": "SAI",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 4,
+          "guess": "SAI",
+          "real": "HAM",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 5,
+          "guess": "RUS",
+          "real": "MAG",
+          "points": 0,
+          "reason": "fora"
+        },
+        {
+          "pos": 6,
+          "guess": "ALO",
+          "real": "MSC",
+          "points": 1,
+          "reason": "no top6"
+        }
+      ],
+      "top6_points": 3,
+      "bonus_guess": 0,
+      "bonus_real_pos": null,
+      "bonus_points": 0,
+      "total": 3
+    },
+    {
+      "player_id": "francez",
+      "player_raw": "Francez",
+      "name": "Francez",
+      "top6": [
+        "LEC",
+        "VER",
+        "SAI",
+        "PER",
+        "GAS",
+        "RUS"
+      ],
+      "top6_detail": [
+        {
+          "pos": 1,
+          "guess": "LEC",
+          "real": "VER",
+          "points": 0,
+          "reason": "fora"
+        },
+        {
+          "pos": 2,
+          "guess": "VER",
+          "real": "ALO",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 3,
+          "guess": "SAI",
+          "real": "SAI",
+          "points": 2,
+          "reason": "exata"
+        },
+        {
+          "pos": 4,
+          "guess": "PER",
+          "real": "HAM",
+          "points": 0,
+          "reason": "fora"
+        },
+        {
+          "pos": 5,
+          "guess": "GAS",
+          "real": "MAG",
+          "points": 0,
+          "reason": "fora"
+        },
+        {
+          "pos": 6,
+          "guess": "RUS",
+          "real": "MSC",
+          "points": 0,
+          "reason": "fora"
+        }
+      ],
+      "top6_points": 3,
+      "bonus_guess": 0,
+      "bonus_real_pos": null,
+      "bonus_points": 0,
+      "total": 3
+    },
+    {
+      "player_id": "lage",
+      "player_raw": "Lage",
+      "name": "Lage",
+      "top6": [
+        "VER",
+        "PER",
+        "LEC",
+        "SAI",
+        "RUS",
+        "GAS"
+      ],
+      "top6_detail": [
+        {
+          "pos": 1,
+          "guess": "VER",
+          "real": "VER",
+          "points": 2,
+          "reason": "exata"
+        },
+        {
+          "pos": 2,
+          "guess": "PER",
+          "real": "ALO",
+          "points": 0,
+          "reason": "fora"
+        },
+        {
+          "pos": 3,
+          "guess": "LEC",
+          "real": "SAI",
+          "points": 0,
+          "reason": "fora"
+        },
+        {
+          "pos": 4,
+          "guess": "SAI",
+          "real": "HAM",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 5,
+          "guess": "RUS",
+          "real": "MAG",
+          "points": 0,
+          "reason": "fora"
+        },
+        {
+          "pos": 6,
+          "guess": "GAS",
+          "real": "MSC",
+          "points": 0,
+          "reason": "fora"
+        }
+      ],
+      "top6_points": 3,
+      "bonus_guess": 0,
+      "bonus_real_pos": null,
+      "bonus_points": 0,
+      "total": 3
+    }
+  ]
+}

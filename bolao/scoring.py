@@ -74,7 +74,9 @@ class Result:
 
 def score_bet(bet: Bet, result: Result, bonus_driver: str) -> PlayerScore:
     """Pontua um palpite individual contra o resultado."""
-    real_top6 = result.top6
+    # Referência = as primeiras N posições reais, com N = tamanho do palpite
+    # (6 hoje; 5 na temporada de 2021 — ver bolao.formats).
+    real_top6 = result.order[: len(bet.top6)]
     detalhe: list[Top6Item] = []
     top6_pts = 0
 
@@ -90,7 +92,8 @@ def score_bet(bet: Bet, result: Result, bonus_driver: str) -> PlayerScore:
         top6_pts += pts
         detalhe.append(Top6Item(pos=pos, guess=guess, real=real_aqui, points=pts, reason=motivo))
 
-    real_bonus_pos = result.position_of(bonus_driver)
+    # Temporadas sem piloto da rodada (2021-2023) chegam com bonus_driver vazio.
+    real_bonus_pos = result.position_of(bonus_driver) if bonus_driver else None
     bonus_pts = 1 if real_bonus_pos is not None and real_bonus_pos == bet.bonus_guess else 0
 
     return PlayerScore(

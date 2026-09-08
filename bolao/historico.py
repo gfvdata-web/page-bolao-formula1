@@ -32,6 +32,7 @@ import sys
 from pathlib import Path
 
 from .calendar import RaceNotFound, load_calendar, resolve_race
+from .formats import SeasonFormat, season_format
 from .normalize import normalize_driver, normalize_key, normalize_player
 from .site import load_driver_aliases
 
@@ -50,15 +51,27 @@ def _pos_int(bruto: str) -> int | None:
     return int(digitos) if digitos else None
 
 
-def _mensagem_rodada(circuito: str, quem: str, palpites: list[dict]) -> str:
-    """Monta o texto no formato de ``bolao.parser`` (cabeçalho + blocos)."""
-    linhas = [f"Qualify Bolao {circuito}", f"Piloto {quem}", ""]
+def _mensagem_rodada(
+    circuito: str, quem: str, palpites: list[dict], fmt: SeasonFormat
+) -> str:
+    """Monta o texto no formato de ``bolao.parser`` (cabeçalho + blocos).
+
+    Nas temporadas sem piloto da rodada (2021-2023) o cabeçalho tem só a linha
+    da corrida e cada bloco termina na linha em branco, sem ``P#``.
+    """
+    linhas = [f"Qualify Bolao {circuito}"]
+    if fmt.bonus:
+        linhas.append(f"Piloto {quem or '(nenhum)'}")
+    linhas.append("")
     for p in palpites:
         linhas.append(p["nome"])
-        for i in range(1, 7):
+        for i in range(1, fmt.top_n + 1):
             linhas.append(p[f"p{i}"])
-        pos = _pos_int(p["pos"])
-        linhas.append(f"P{pos}" if pos is not None else p["pos"])
+        if fmt.bonus:
+            pos = _pos_int(p["pos"])
+            # Sem chute (jogador não mandou o P#) vira P0: mantém o bloco no
+            # tamanho esperado e nunca pontua.
+            linhas.append(f"P{pos if pos is not None else 0}")
         linhas.append("")
     return "\n".join(linhas).rstrip() + "\n"
 
@@ -76,6 +89,7 @@ def build(
     data_dir = Path(data_dir)
     season_dir = data_dir / str(season)
 
+    fmt = season_format(season)
     calendar = load_calendar(season_dir / "calendar.json")
     drivers = load_driver_aliases(data_dir, season)
     codigos_validos = set(drivers.values())
@@ -110,41 +124,46 @@ def build(
 
     for rnd in sorted(palpites_por_rodada):
         race = next(r for r in calendar["races"] if r["round"] == rnd)
-        linhas_rodada = quem_por_rodada.get(rnd)
-        if linhas_rodada is None:
-            avisos.append(f"R{rnd} ({race['race']}): sem piloto da rodada em rodadas_{season}.csv — rodada pulada.")
-            continue
-        quem = linhas_rodada["quem"]
+        linhas_rodada = quem_por_rodada.get(rnd, {})
+        quem = linhas_rodada.get("quem", "")
+        if fmt.bonus and not quem:
+            avisos.append(
+                f"R{rnd} ({race['race']}): sem piloto da rodada em "
+                f"rodadas_{season}.csv — pontua so o top{fmt.top_n}."
+            )
         palps = palpites_por_rodada[rnd]
 
         # --- conferência contra o resultado real (Jolpica) ---
         result_path = season_dir / "results" / f"{rnd}.json"
         if result_path.exists():
             order = _load_json(result_path)["order"]
-            # top6 da planilha vs Jolpica
-            plan_top6 = [str(linhas_rodada[f"t{i}"]).upper() for i in range(1, 7)]
-            jol_top6 = [c.upper() for c in order[:6]]
-            if plan_top6 != jol_top6:
-                avisos.append(
-                    f"R{rnd} ({race['race']}): top6 da planilha {plan_top6} "
-                    f"difere da Jolpica {jol_top6} (usando Jolpica)."
-                )
+            # top6 da planilha vs Jolpica (so quando a fonte traz essa coluna;
+            # o import do WhatsApp, Etapa 7, nao tem o grid real na origem).
+            if all(f"t{i}" in linhas_rodada for i in range(1, 7)):
+                plan_top6 = [str(linhas_rodada[f"t{i}"]).upper() for i in range(1, 7)]
+                jol_top6 = [c.upper() for c in order[:6]]
+                if plan_top6 != jol_top6:
+                    avisos.append(
+                        f"R{rnd} ({race['race']}): top6 da planilha {plan_top6} "
+                        f"difere da Jolpica {jol_top6} (usando Jolpica)."
+                    )
             # posição real do piloto da rodada
-            cod_quem = normalize_driver(quem, drivers)
-            pos_jol = order.index(cod_quem) + 1 if cod_quem in order else None
-            pos_plan = _pos_int(linhas_rodada.get("pos_planilha", ""))
-            if pos_jol != pos_plan:
-                avisos.append(
-                    f"R{rnd} ({race['race']}): piloto da rodada {cod_quem} — "
-                    f"planilha diz P{pos_plan}, Jolpica diz "
-                    f"{'P'+str(pos_jol) if pos_jol else 'fora do grid'} (usando Jolpica)."
-                )
+            if quem and "pos_planilha" in linhas_rodada:
+                cod_quem = normalize_driver(quem, drivers)
+                pos_jol = order.index(cod_quem) + 1 if cod_quem in order else None
+                pos_plan = _pos_int(linhas_rodada.get("pos_planilha", ""))
+                if pos_jol != pos_plan:
+                    avisos.append(
+                        f"R{rnd} ({race['race']}): piloto da rodada {cod_quem} — "
+                        f"planilha diz P{pos_plan}, Jolpica diz "
+                        f"{'P'+str(pos_jol) if pos_jol else 'fora do grid'} (usando Jolpica)."
+                    )
         else:
             avisos.append(f"R{rnd} ({race['race']}): sem results/{rnd}.json — não consolida ainda.")
 
         # --- palpites: códigos e jogadores suspeitos ---
         for p in palps:
-            for i in range(1, 7):
+            for i in range(1, fmt.top_n + 1):
                 bruto = p[f"p{i}"]
                 cod = normalize_driver(bruto, drivers)
                 if cod not in codigos_validos:
@@ -152,9 +171,11 @@ def build(
                         f"R{rnd} {p['nome']}: código de piloto desconhecido "
                         f"p{i}={bruto!r} -> {cod} (não está na entry list {season})"
                     )
-            t6 = [normalize_driver(p[f"p{i}"], drivers) for i in range(1, 7)]
-            if len(set(t6)) != 6:
-                avisos.append(f"R{rnd} {p['nome']}: top6 com piloto repetido {t6}")
+            t6 = [normalize_driver(p[f"p{i}"], drivers) for i in range(1, fmt.top_n + 1)]
+            if len(set(t6)) != fmt.top_n:
+                avisos.append(
+                    f"R{rnd} {p['nome']}: top{fmt.top_n} com piloto repetido {t6}"
+                )
             pid = normalize_player(p["nome"], player_aliases)
             if normalize_key(p["nome"]) not in player_aliases:
                 avisos.append(f"R{rnd}: jogador sem alias em players.json: {p['nome']!r} -> id {pid!r}")
@@ -162,7 +183,9 @@ def build(
         if not check_only:
             # cabeçalho usa o nome bruto do circuito da planilha (resolve_race
             # já validou que ele casa com esta rodada).
-            texto = _mensagem_rodada(linhas_rodada["circuito"], quem, palps)
+            texto = _mensagem_rodada(
+                linhas_rodada.get("circuito", race["race"]), quem, palps, fmt
+            )
             messages_dir.mkdir(parents=True, exist_ok=True)
             (messages_dir / f"{rnd}.txt").write_text(texto, encoding="utf-8")
         rounds_ok.append(rnd)

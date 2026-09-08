@@ -72,7 +72,7 @@ _FILLER_BONUS = {
 }
 
 # Palavras de enfeite no começo da linha da corrida ("Bolão Qualify <Corrida>").
-_FILLER_RACE = {"bolao", "qualify", "quali"}
+_FILLER_RACE = {"bolao", "qualify", "quali", "qualy", "apostas", "aposta"}
 
 # Uma linha de chute do bônus é algo como "P8", "P22" ou só "8".
 _GUESS_RE = re.compile(r"^[pP]?\d{1,2}$")
@@ -100,16 +100,26 @@ def _parse_bonus_guess(linha: str, player_raw: str) -> int:
             f"Chute do piloto da rodada inválido para '{player_raw}': {linha!r}"
         )
     pos = int(digitos)
-    if not 1 <= pos <= _MAX_GRID:
+    # P0 = o jogador não chutou a posição do piloto da rodada. Acontece no
+    # histórico (Etapa 7) e nunca casa com uma posição real, então vale 0 pt.
+    if not 0 <= pos <= _MAX_GRID:
         raise ParseError(
-            f"Posição fora de P1..P{_MAX_GRID} para '{player_raw}': {linha!r}"
+            f"Posição fora de P0..P{_MAX_GRID} para '{player_raw}': {linha!r}"
         )
     return pos
 
 
 def _parse_bonus_driver(linha: str, driver_aliases: dict) -> str:
-    """Extrai o código do piloto da rodada da linha ``"Piloto escolhido: X"``."""
+    """Extrai o código do piloto da rodada da linha ``"Piloto escolhido: X"``.
+
+    ``Piloto (nenhum)`` é a marcação explícita de rodada **sem** piloto da
+    rodada — acontece no histórico (Etapa 7: Abu Dhabi 2024 trocou o bônus por
+    "equipe campeã"). Devolve ``""`` e a pontuação do bônus fica zerada para
+    todo mundo. Um cabeçalho vazio de verdade continua sendo erro.
+    """
     partes = [t for t in normalize_key(linha).split() if t not in _FILLER_BONUS]
+    if partes == ["nenhum"]:
+        return ""
     if not partes:
         raise ParseError(f"Cabeçalho do piloto da rodada inválido: {linha!r}")
     return normalize_driver(" ".join(partes), driver_aliases)
@@ -144,7 +154,7 @@ def _resolve_race_line(header_lines: list[str]) -> tuple[str, str]:
 
 
 def _parse_players(
-    corpo: list[str], driver_aliases: dict, player_aliases: dict
+    corpo: list[str], driver_aliases: dict, player_aliases: dict, top_n: int = 6
 ) -> list[Bet]:
     """Agrupa o corpo em jogadores usando a linha ``P#`` como terminador.
 
@@ -159,13 +169,15 @@ def _parse_players(
             continue
         bloco = buffer + [linha]
         buffer = []
-        if len(bloco) != 8:
+        esperado = top_n + 2  # nome + top_n pilotos + linha P#
+        if len(bloco) != esperado:
             raise ParseError(
-                f"Bloco de jogador com {len(bloco)} linhas (esperado 8): {bloco!r}"
+                f"Bloco de jogador com {len(bloco)} linhas "
+                f"(esperado {esperado}): {bloco!r}"
             )
         nome = bloco[0]
-        top6 = [normalize_driver(c, driver_aliases) for c in bloco[1:7]]
-        bonus_guess = _parse_bonus_guess(bloco[7], nome)
+        top6 = [normalize_driver(c, driver_aliases) for c in bloco[1 : 1 + top_n]]
+        bonus_guess = _parse_bonus_guess(bloco[-1], nome)
         bets.append(
             Bet(
                 player_id=normalize_player(nome, player_aliases),
@@ -179,14 +191,74 @@ def _parse_players(
     return bets
 
 
+def _parse_players_sem_bonus(
+    corpo: list[str], driver_aliases: dict, player_aliases: dict, top_n: int
+) -> list[Bet]:
+    """Agrupa o corpo em jogadores usando a **linha em branco** como separador.
+
+    Formato das temporadas anteriores a 2024 (Etapa 7): não havia palpite do
+    piloto da rodada, então não existe a linha ``P#`` para fechar o bloco —
+    cada jogador é ``nome + top_n pilotos``.
+    """
+    bets: list[Bet] = []
+    buffer: list[str] = []
+
+    def fecha() -> None:
+        if not buffer:
+            return
+        if len(buffer) != top_n + 1:
+            raise ParseError(
+                f"Bloco de jogador com {len(buffer)} linhas "
+                f"(esperado {top_n + 1}): {buffer!r}"
+            )
+        nome = buffer[0]
+        bets.append(
+            Bet(
+                player_id=normalize_player(nome, player_aliases),
+                player_raw=nome,
+                top6=[normalize_driver(c, driver_aliases) for c in buffer[1:]],
+                bonus_guess=0,
+            )
+        )
+        buffer.clear()
+
+    for linha in corpo:
+        if linha:
+            buffer.append(linha)
+        else:
+            fecha()
+    fecha()
+    return bets
+
+
 def parse_sheet(
     texto: str,
     driver_aliases: dict | None = None,
     player_aliases: dict | None = None,
+    top_n: int = 6,
+    bonus: bool = True,
 ) -> Sheet:
-    """Parseia a mensagem completa do WhatsApp numa :class:`Sheet`."""
+    """Parseia a mensagem completa do WhatsApp numa :class:`Sheet`.
+
+    ``top_n``/``bonus`` descrevem o formato da temporada (ver
+    ``bolao.formats``). O padrão é o formato atual: top6 + piloto da rodada.
+    """
     driver_aliases = driver_aliases or {}
     player_aliases = player_aliases or {}
+
+    if not bonus:
+        brutas = [l.strip() for l in texto.splitlines()]
+        cheias = [i for i, l in enumerate(brutas) if l]
+        if not cheias:
+            raise ParseError("Mensagem vazia.")
+        i0 = cheias[0]
+        race, header_raw = _resolve_race_line([brutas[i0]])
+        bets = _parse_players_sem_bonus(
+            brutas[i0 + 1 :], driver_aliases, player_aliases, top_n
+        )
+        if not bets:
+            raise ParseError("Nenhum palpite de jogador encontrado.")
+        return Sheet(race=race, header_raw=header_raw, bonus_driver="", bets=bets)
 
     linhas = [l.strip() for l in texto.splitlines() if l.strip()]
     if not linhas:
@@ -209,7 +281,7 @@ def parse_sheet(
     if not corpo:
         raise ParseError("Mensagem sem palpites de jogadores.")
 
-    bets = _parse_players(corpo, driver_aliases, player_aliases)
+    bets = _parse_players(corpo, driver_aliases, player_aliases, top_n)
     if not bets:
         raise ParseError("Nenhum palpite de jogador encontrado.")
 

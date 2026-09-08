@@ -30,6 +30,7 @@ import sys
 from pathlib import Path
 
 from .calendar import load_calendar, resolve_race
+from .formats import season_format
 from .normalize import normalize_key
 from .parser import parse_sheet
 from .scoring import PlayerScore, Result, score_sheet
@@ -134,6 +135,7 @@ def generate(
     season_dir = data_dir / str(season)
     docs_data = docs_dir / "data" / str(season)
 
+    fmt = season_format(season)
     drivers = load_driver_aliases(data_dir, season)
     players_cfg = _load_json(season_dir / "players.json")
     player_aliases = players_cfg.get("aliases", {})
@@ -158,7 +160,9 @@ def generate(
 
     for rnd in rounds:
         texto = (messages_dir / f"{rnd}.txt").read_text(encoding="utf-8")
-        sheet = parse_sheet(texto, drivers, player_aliases)
+        sheet = parse_sheet(
+            texto, drivers, player_aliases, top_n=fmt.top_n, bonus=fmt.bonus
+        )
         race = resolve_race(sheet.race, calendar)
         if race["round"] != rnd:
             raise ValueError(
@@ -197,6 +201,14 @@ def generate(
     # da temporada. Quem não aposta numa rodada recebe a pontuação mínima
     # daquela rodada (compensação), mas isso não conta como rodada apostada.
     ranking_players = {s.player_id for scores in round_scores.values() for s in scores}
+
+    # Saldo inicial (Etapa 7): rodadas anteriores às que temos palpite, cujo
+    # placar só sobrevive nos rankings que o grupo publicou no WhatsApp
+    # (2021 começa na rodada 11 aqui, mas o bolão rodou o ano inteiro). Entra
+    # como um bloco de pontos + rodadas jogadas, sem detalhe por corrida.
+    saldo_path = season_dir / "saldo_inicial.json"
+    saldo = _load_json(saldo_path).get("players", {}) if saldo_path.exists() else {}
+    ranking_players |= set(saldo)
 
     # --- data/2026/scores/<round>.json (intermediário) ---
     for info in round_infos:
@@ -239,15 +251,24 @@ def generate(
             ac["compensation_total"] += round_min_score[rnd]
             ac["compensated_rounds"].append(rnd)
 
+    for pid, bloco in saldo.items():
+        ac = acumulado[pid]
+        ac["carry_points"] = int(bloco.get("pontos", 0))
+        ac["carry_rounds"] = int(bloco.get("rodadas", 0))
+        ac["total"] += ac["carry_points"]
+
     ordenados = sorted(
         acumulado.values(), key=lambda a: (-a["total"], a["player_id"])
     )
     standings_players = []
     for pos, ac in enumerate(ordenados, 1):
-        rounds_played = len(ac["per_round"])
+        carry_pts = ac.get("carry_points", 0)
+        carry_rnd = ac.get("carry_rounds", 0)
+        rounds_played = len(ac["per_round"]) + carry_rnd
         # Média por corrida: só considera o que foi de fato apostado, sem
-        # contar a pontuação mínima de compensação.
-        pontos_apostados = ac["top6_total"] + ac["bonus_total"]
+        # contar a pontuação mínima de compensação. O saldo inicial entra
+        # porque são rodadas realmente apostadas (só falta o detalhe delas).
+        pontos_apostados = ac["top6_total"] + ac["bonus_total"] + carry_pts
         avg_points = round(pontos_apostados / rounds_played, 1) if rounds_played else 0.0
         standings_players.append(
             {
@@ -257,6 +278,8 @@ def generate(
                 "total": ac["total"],
                 "top6_total": ac["top6_total"],
                 "bonus_total": ac["bonus_total"],
+                "carry_points": carry_pts,
+                "carry_rounds": carry_rnd,
                 "rounds_played": rounds_played,
                 "avg_points": avg_points,
                 "per_round": ac["per_round"],

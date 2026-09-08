@@ -42,25 +42,16 @@ from datetime import date, datetime
 from pathlib import Path
 
 from .calendar import load_calendar
+from .formats import FORMATS, SeasonFormat
 
 # --------------------------------------------------------------------------
 # Configuração por temporada
 # --------------------------------------------------------------------------
 
-@dataclass(frozen=True)
-class SeasonFormat:
-    """Como o palpite era escrito naquele ano."""
-
-    top_n: int  # quantos pilotos o jogador apostava
-    bonus: bool  # existia palpite de piloto da rodada?
-
-
+# O formato de cada ano vive em bolao/formats.py (compartilhado com o parser,
+# a pontuação e a síntese das mensagens).
 SEASONS: dict[int, SeasonFormat] = {
-    2021: SeasonFormat(top_n=5, bonus=False),
-    2022: SeasonFormat(top_n=6, bonus=False),
-    2023: SeasonFormat(top_n=6, bonus=False),
-    2024: SeasonFormat(top_n=6, bonus=True),
-    2025: SeasonFormat(top_n=6, bonus=True),
+    ano: fmt for ano, fmt in FORMATS.items() if ano <= 2025
 }
 
 # Apelidos de piloto que só aparecem no WhatsApp antigo (primeiro nome, sigla
@@ -176,7 +167,10 @@ _MARCADORES = re.compile(
 
 
 def _limpa(linha: str) -> str:
-    return _MARCADORES.sub("", linha.replace("‎", "").replace("‏", ""))
+    #   (espaço não-quebrável) aparece em "Checo Perez" e quebra o
+    # reconhecimento do piloto se não virar espaço normal.
+    limpa = linha.replace("‎", "").replace("‏", "").replace(" ", " ")
+    return _MARCADORES.sub("", limpa)
 
 
 @dataclass
@@ -375,17 +369,47 @@ def find_blocks(
     return blocos
 
 
-_BONUS_HEADER = re.compile(r"piloto(?:\s+(?:da\s+rodada|escolhid[oa]|sortead[oa]))?\s*[:\-]?\s*(.+)", re.I)
+# "Piloto da rodada: Sainz", "Piloto Sorteado: Checo Perez", "Piloto Hadjar".
+# O (?=[\s:-]) impede que "pilotos" (plural, em frase solta) case como anúncio.
+_BONUS_HEADER = re.compile(
+    r"piloto(?=[\s:\-])(?:\s*(da\s+rodada|escolhid[oa]|sortead[oa]))?\s*(:)?\s*(.+)",
+    re.I,
+)
 
 
-def bonus_driver(lines: list[str], aliases: dict[str, str]) -> str | None:
-    """Extrai o piloto da rodada do cabeçalho da mensagem (2024+)."""
+def bonus_driver(
+    lines: list[str], aliases: dict[str, str], estrito: bool = False
+) -> str | None:
+    """Extrai o piloto da rodada do cabeçalho da mensagem (2024+).
+
+    A linha vem cheia de enfeite no histórico real: ``Piloto ~Sorteado~:
+    *Bortoleto*🇧🇷``, ``Piloto Sorteado: _Checo Perez_``. Limpa a marcação e o
+    emoji e procura o piloto em qualquer par/palavra do que sobrou.
+    """
     for linha in lines[:6]:
-        m = _BONUS_HEADER.match(chave(linha))
-        if m:
-            codigo = driver_code(m.group(1), aliases)
-            if codigo:
-                return codigo
+        # ~Riscado~ no WhatsApp e correcao ("Piloto Sorteado: ~Drugovich~
+        # Stroll") — o nome riscado foi cancelado e nao pode ganhar do certo.
+        limpo = re.sub(r"~[^~]+~", " ", linha)
+        limpo = re.sub(r"[*_~`]+", " ", limpo)
+        limpo = "".join(c for c in limpo if c.isalpha() or c.isspace() or c in ":-")
+        m = _BONUS_HEADER.match(chave(limpo))
+        if not m:
+            continue
+        # Fora do bloco de palpites, só vale como anúncio se estiver escrito
+        # como anúncio ("Piloto sorteado:", "Piloto da rodada") — senão
+        # qualquer frase com "piloto" e um sobrenome viraria falso positivo.
+        if estrito and not (m.group(1) or m.group(2)):
+            continue
+        resto = m.group(3)
+        codigo = driver_code(resto, aliases)
+        if codigo:
+            return codigo
+        palavras = resto.split()
+        for tamanho in (2, 1):
+            for i in range(len(palavras) - tamanho + 1):
+                codigo = driver_code(" ".join(palavras[i : i + tamanho]), aliases)
+                if codigo:
+                    return codigo
     return None
 
 
@@ -586,14 +610,22 @@ def consolida_rodadas(
     calendar = load_calendar(data_dir / str(season) / "calendar.json")
 
     por_rodada: dict[int, RoundBets] = {}
+    # O piloto da rodada nem sempre vem junto dos palpites: às vezes é anunciado
+    # numa mensagem só de aviso ("Bolão Qualify Interlagos / Piloto Sorteado:
+    # Stroll"). Guarda o anúncio mais recente de cada rodada como reserva.
+    anuncios: dict[int, tuple[datetime, str]] = {}
     for msg in msgs:
         if msg.season != season:
             continue
         blocos = _blocos_da_mensagem(msg, aliases, players, fmt)
-        if len(blocos) < 2:
-            continue
         rnd = resolve_round(msg, calendar)
         if rnd is None:
+            continue
+        if fmt.bonus and len(blocos) < 2 and len(msg.lines) <= 6:
+            piloto = bonus_driver(msg.lines, aliases, estrito=True)
+            if piloto and (rnd not in anuncios or anuncios[rnd][0] < msg.stamp):
+                anuncios[rnd] = (msg.stamp, piloto)
+        if len(blocos) < 2:
             continue
         alvo = por_rodada.setdefault(rnd, RoundBets(season, rnd))
         alvo.mensagens.append(msg)
@@ -614,6 +646,12 @@ def consolida_rodadas(
                             f"piloto da rodada veio de outra mensagem ({m.header()})"
                         )
                         break
+            if alvo.bonus_driver is None and rnd in anuncios:
+                quando, alvo.bonus_driver = anuncios[rnd]
+                alvo.avisos.append(
+                    f"piloto da rodada ({alvo.bonus_driver}) veio do anúncio "
+                    f"avulso de {quando:%d/%m/%Y %H:%M}"
+                )
         for ordem, (pid, bloco) in enumerate(
             _blocos_da_mensagem(principal, aliases, players, fmt)
         ):
@@ -769,6 +807,7 @@ def escreve_csvs(
     nome_corrida = {c["round"]: c["race"] for c in cal["races"]}
     dir_ano = data_dir / str(season)
 
+    aliases_jog, exibicao = carrega_players(data_dir, season)
     palpites = dir_ano / f"palpites_{season}.csv"
     with palpites.open("w", encoding="utf-8", newline="") as f:
         wr = csv.writer(f)
@@ -776,10 +815,20 @@ def escreve_csvs(
         for rnd in sorted(rodadas):
             rb = rodadas[rnd]
             for _pid, reg in sorted(rb.bets.items(), key=lambda kv: kv[1].ordem):
-                pilotos = list(reg.drivers[: fmt.top_n]) + [""] * (6 - fmt.top_n)
-                pilotos = (pilotos + [""] * 6)[:6]
+                # O nome vai bruto (rastreabilidade), menos quando ele não bate
+                # com nenhum alias — aí vai o nome canônico, senão o resto do
+                # pipeline criaria um jogador novo a partir do desabafo colado.
+                nome = reg.name_raw.strip()
+                if chave(nome) not in aliases_jog:
+                    nome = exibicao.get(reg.player_id, reg.player_id)
+                # Bloco curto (o jogador listou menos pilotos que o normal):
+                # completa com ZZZ, um código que nunca casa — assim o palpite
+                # fica do tamanho certo e as posições que faltaram valem 0.
+                pilotos = list(reg.drivers[: fmt.top_n])
+                pilotos += ["ZZZ"] * (fmt.top_n - len(pilotos))
+                pilotos += [""] * (6 - fmt.top_n)
                 wr.writerow(
-                    [nome_corrida.get(rnd, str(rnd)), reg.name_raw.strip(), *pilotos,
+                    [nome_corrida.get(rnd, str(rnd)), nome, *pilotos,
                      f"P{reg.guess}" if reg.guess is not None else ""]
                 )
 
@@ -793,6 +842,236 @@ def escreve_csvs(
                 [corrida["race"], rnd, corrida["date"], rodadas[rnd].bonus_driver or ""]
             )
     return palpites, corridas
+
+
+def _pontos_recalculados(
+    rodadas: dict[int, RoundBets], season: int, data_dir: Path
+) -> dict[int, dict[str, int]]:
+    """Pontuação por rodada recalculada, mesma regra do :mod:`bolao.scoring`."""
+    fmt = SEASONS[season]
+    saida: dict[int, dict[str, int]] = {}
+    for rnd, rb in rodadas.items():
+        caminho = data_dir / str(season) / "results" / f"{rnd}.json"
+        if not caminho.exists():
+            continue
+        order = json.loads(caminho.read_text(encoding="utf-8"))["order"]
+        alvo = order[: fmt.top_n]
+        do_round: dict[str, int] = {}
+        for pid, reg in rb.bets.items():
+            total = 0
+            for i, guess in enumerate(reg.drivers[: fmt.top_n]):
+                if i < len(order) and guess == order[i]:
+                    total += 2
+                elif guess in alvo:
+                    total += 1
+            if (
+                fmt.bonus
+                and reg.guess
+                and rb.bonus_driver
+                and rb.bonus_driver in order
+                and order.index(rb.bonus_driver) + 1 == reg.guess
+            ):
+                total += 1
+            do_round[pid] = total
+        saida[rnd] = do_round
+    return saida
+
+
+def escreve_conferencia(
+    msgs: list[Message],
+    todas: dict[int, dict[int, RoundBets]],
+    data_dir: Path,
+    destino: Path,
+) -> None:
+    """``conferencia.txt``: recálculo × pontuação publicada no grupo.
+
+    É o controle de qualidade do import: se a regra de pontuação e a leitura
+    dos palpites estiverem certas, o recálculo tem que bater com o placar que
+    o próprio grupo divulgou na época.
+    """
+    partes = [
+        _CABECALHO_PRIVACIDADE,
+        "# conferencia — pontuação recalculada vs. a publicada no grupo.\n"
+        "# 'ok' = bate. 'calc!=rep' = diverge (o recálculo é o que vale nos\n"
+        "# dados; a divergência fica registrada aqui para conferência humana).\n",
+    ]
+    for season in sorted(todas):
+        rodadas = todas[season]
+        fmt = SEASONS[season]
+        players, exibicao = carrega_players(data_dir, season)
+        calendar = load_calendar(data_dir / str(season) / "calendar.json")
+        pontos = _pontos_recalculados(rodadas, season, data_dir)
+        saldo_path = data_dir / str(season) / "saldo_inicial.json"
+        saldo = (
+            json.loads(saldo_path.read_text(encoding="utf-8"))["players"]
+            if saldo_path.exists()
+            else {}
+        )
+        partes.append(
+            f"\n\n{'=' * 70}\nTEMPORADA {season} — top{fmt.top_n}"
+            f"{' + piloto da rodada' if fmt.bonus else ' (sem piloto da rodada)'}"
+            f", máx {fmt.max_points} pts/corrida\n{'=' * 70}\n"
+        )
+        acertos = divergencias = 0
+        linhas_por_rodada: list[str] = []
+        linhas_acumuladas: list[str] = []
+        for msg in msgs:
+            if msg.season != season:
+                continue
+            st = parse_standing(msg, players)
+            if not st:
+                continue
+            rnd = resolve_round(msg, calendar)
+            if rnd is None:
+                continue
+            def acumulado_ate(limite: int, pid: str) -> int:
+                return saldo.get(pid, {}).get("pontos", 0) + sum(
+                    v.get(pid, 0) for r, v in pontos.items() if r <= limite
+                )
+
+            def calcula(r: int, pid: str) -> int | None:
+                if st.kind == "rodada":
+                    return pontos.get(r, {}).get(pid)
+                return acumulado_ate(r, pid)
+
+            def batem(r: int) -> int:
+                return sum(calcula(r, i.player_id) == i.points for i in st.lines)
+
+            # A mensagem nem sempre é do fim de semana que a data sugere: o
+            # grupo publicava atrasado, repostava tabela antiga e às vezes
+            # mandava várias rodadas seguidas pra pôr em dia. Procura a rodada
+            # que realmente encaixa; se nenhuma encaixa, mantém a da data e
+            # marca — divergência de verdade tem que aparecer.
+            alvo, nota = rnd, ""
+            candidatas = [r for r in sorted(pontos) if r <= rnd + 1]
+            if candidatas:
+                melhor = max(candidatas, key=batem)
+                if batem(melhor) > batem(rnd) and batem(melhor) >= 0.6 * len(st.lines):
+                    alvo, nota = melhor, f" [reflete R{melhor}]"
+                elif batem(rnd) < 0.6 * len(st.lines):
+                    nota = " [sem encaixe]"
+
+            itens = []
+            for item in st.lines:
+                calc = calcula(alvo, item.player_id)
+                if calc is None:
+                    itens.append(f"{item.player_id}:sem-palpite")
+                    continue
+                if calc == item.points:
+                    acertos += 1
+                    itens.append(f"{item.player_id}:ok")
+                else:
+                    divergencias += 1
+                    itens.append(f"{item.player_id}:{calc}!={item.points}")
+            linha = (
+                f"  R{rnd:2d} {msg.stamp:%d/%m %H:%M}{nota}  " + " ".join(itens) + "\n"
+            )
+            (linhas_por_rodada if st.kind == "rodada" else linhas_acumuladas).append(linha)
+        partes.append(f"\n-- pontuação por rodada --\n")
+        partes.extend(linhas_por_rodada or ["  (nenhuma publicada)\n"])
+        partes.append(f"\n-- classificação acumulada --\n")
+        partes.extend(linhas_acumuladas or ["  (nenhuma publicada)\n"])
+        total = acertos + divergencias
+        pct = (100 * acertos / total) if total else 0
+        partes.append(
+            f"\n  Resumo {season}: {acertos}/{total} conferências batem ({pct:.0f}%).\n"
+        )
+    destino.write_text("".join(partes), encoding="utf-8")
+
+
+def escreve_saldo_inicial(
+    msgs: list[Message],
+    rodadas: dict[int, RoundBets],
+    season: int,
+    data_dir: Path,
+) -> dict | None:
+    """Recupera o placar das rodadas **anteriores** à primeira com palpite.
+
+    O bolão de 2021 rodou o ano inteiro, mas o WhatsApp só tem palpite a partir
+    da rodada 11. O que sobrou das rodadas 1–10 é a **classificação acumulada**
+    que o grupo publicava: subtraindo dela as rodadas que sabemos recalcular,
+    sobra um saldo (pontos + rodadas jogadas) por jogador.
+
+    Devolve ``None`` quando a temporada começa na rodada 1 (nada a recuperar).
+    """
+    if not rodadas or min(rodadas) == 1:
+        return None
+
+    fmt = SEASONS[season]
+    players, _ = carrega_players(data_dir, season)
+    calendar = load_calendar(data_dir / str(season) / "calendar.json")
+
+    # Pontuação por rodada recalculada (mesma regra do bolao.scoring).
+    pontos: dict[int, dict[str, int]] = {}
+    for rnd, rb in rodadas.items():
+        caminho = data_dir / str(season) / "results" / f"{rnd}.json"
+        if not caminho.exists():
+            continue
+        order = json.loads(caminho.read_text(encoding="utf-8"))["order"]
+        alvo = order[: fmt.top_n]
+        do_round: dict[str, int] = {}
+        for pid, reg in rb.bets.items():
+            total = 0
+            for i, guess in enumerate(reg.drivers[: fmt.top_n]):
+                if i < len(order) and guess == order[i]:
+                    total += 2
+                elif guess in alvo:
+                    total += 1
+            if (
+                fmt.bonus
+                and reg.guess
+                and rb.bonus_driver
+                and rb.bonus_driver in order
+                and order.index(rb.bonus_driver) + 1 == reg.guess
+            ):
+                total += 1
+            do_round[pid] = total
+        pontos[rnd] = do_round
+
+    # Primeira classificação acumulada publicada depois da 1ª rodada com palpite.
+    primeira = min(rodadas)
+    escolhida: tuple[int, Message, Standing] | None = None
+    for msg in msgs:
+        if msg.season != season:
+            continue
+        st = parse_standing(msg, players)
+        if not st or st.kind != "acumulada":
+            continue
+        rnd = resolve_round(msg, calendar)
+        if rnd is None or rnd < primeira:
+            continue
+        if escolhida is None or rnd < escolhida[0]:
+            escolhida = (rnd, msg, st)
+    if escolhida is None:
+        return None
+
+    ate, msg, st = escolhida
+    saldo = {}
+    for item in st.lines:
+        conhecidos = {r: p[item.player_id] for r, p in pontos.items()
+                      if r <= ate and item.player_id in p}
+        saldo[item.player_id] = {
+            "pontos": item.points - sum(conhecidos.values()),
+            "rodadas": max(0, (item.races or 0) - len(conhecidos)),
+        }
+
+    dados = {
+        "_comment": (
+            f"Saldo das rodadas anteriores a R{primeira} de {season}, que nao tem "
+            "palpite no historico do WhatsApp. Derivado da classificacao "
+            f"acumulada de {msg.stamp:%d/%m/%Y %H:%M} (apos R{ate}) menos as "
+            "rodadas que sabemos recalcular. Entra no ranking como bloco de "
+            "pontos + rodadas jogadas, sem detalhe por corrida."
+        ),
+        "ate_rodada": primeira - 1,
+        "fonte": msg.header(),
+        "players": dict(sorted(saldo.items())),
+    }
+    destino = data_dir / str(season) / "saldo_inicial.json"
+    destino.write_text(
+        json.dumps(dados, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
+    return dados
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -846,6 +1125,16 @@ def main(argv: list[str] | None = None) -> int:
         if not args.no_csv:
             a, b = escreve_csvs(rodadas, s, data_dir)
             print(f"     {a} / {b}")
+            saldo = escreve_saldo_inicial(msgs, rodadas, s, data_dir)
+            if saldo:
+                resumo = ", ".join(
+                    f"{pid} {v['pontos']}pts/{v['rodadas']}r"
+                    for pid, v in saldo["players"].items()
+                )
+                print(
+                    f"     saldo_inicial.json (rodadas 1-{saldo['ate_rodada']}): {resumo}"
+                )
+    escreve_conferencia(msgs, todas, data_dir, out_dir / "conferencia.txt")
     print(f"palpitesfinais.txt e demais saídas em {out_dir}/")
     return 0
 

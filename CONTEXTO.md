@@ -1244,6 +1244,60 @@ Total: **636 palpites** importados (75 + 150 + 182 + 229) com **21 avisos**
 recuperado de mensagem anterior). **R24 de 2024 (Abu Dhabi) não teve piloto da
 rodada** — ninguém mandou `P#` e o cabeçalho não traz o piloto.
 
+**Base 2021–2024 construída (mesma sub-etapa):**
+
+- **`bolao/formats.py` (novo):** `SeasonFormat(top_n, bonus)` + `FORMATS` por
+  ano — a única fonte da verdade sobre o formato de cada temporada, usada pelo
+  `whatsapp_import`, pelo `parser`, pelo `scoring` (via `parse_sheet`) e pelo
+  `historico`.
+- **`bolao/parser.py`:** `parse_sheet(..., top_n=6, bonus=True)`. Com
+  `bonus=False` os blocos são separados por **linha em branco** (não existe a
+  linha `P#` para fechar). `P0` = "não chutou" e `Piloto (nenhum)` = rodada sem
+  piloto da rodada (Abu Dhabi 2024 trocou o bônus por "equipe campeã"). Sem
+  esses dois marcadores o histórico não passa pelo parser.
+- **`bolao/scoring.py`:** a referência do top passou a ser
+  `result.order[:len(bet.top6)]` (5 em 2021, 6 no resto) e o bônus é 0 quando
+  `bonus_driver` vem vazio. Comportamento de 2025/2026 inalterado.
+- **`bolao/site.py`:** lê o formato do ano e, se existir, o
+  **`data/<ano>/saldo_inicial.json`** — pontos e rodadas de corridas anteriores
+  às que têm palpite. Entram no ranking como `carry_points`/`carry_rounds`
+  (bloco sem detalhe por corrida) e o jogador que **só** tem saldo (Bernardo
+  Viana, 2021) passa a existir no ranking.
+- **`data/2021..2024/`:** `calendar.json`, `drivers.json`, `results/*.json`
+  (Jolpica), `players.json`, `palpites_<ano>.csv`, `rodadas_<ano>.csv`,
+  `messages/*.txt` e `scores/*.json`. `data/2021/saldo_inicial.json` cobre as
+  rodadas 1–10.
+- Testes: `tests/test_whatsapp_import.py` (11) + formatos antigos em
+  `test_parser.py` (5) — total do projeto: **88**.
+
+**As duas versões do total** (decisão do usuário: gravar as duas) já cabem no
+schema do `standings.json`: `total` = com compensação; **bruto** =
+`top6_total + bonus_total + carry_points`.
+
+**Conferência do recálculo contra o placar publicado no grupo**
+(`historico_wpp/conferencia.txt`, gerado junto com o import):
+
+| Ano  | Confere | Leitura |
+|------|---------|---------|
+| 2021 | **141/141 (100%)** | reproduz o campeonato inteiro, incluindo o pódio do `hall_of_fame` |
+| 2023 | 240/270 (89%) | pódio bate (dalla/lage/igor); ordem de 1º/2º difere por ~4 pts |
+| 2022 | 150/266 (56%) | R1–R12 batem quase todas; top2 (caliman/dalla) confere |
+| 2024 | 118/357 (33%) | **R1–R4 têm +1 sistemático para todo mundo** (ver abaixo) |
+
+**Pendência aberta — a "+1" de 2024:** nas rodadas 1 a 4 de 2024 o placar
+publicado dá exatamente **1 ponto a mais** para cada jogador do que a regra
+2/1/0 + bônus produz (em R2 e R4 são 10 de 10 jogadores). A partir de ~R6 isso
+some e o recálculo volta a bater. Nenhuma regra alternativa de bônus testada
+(tolerância ±1, ±2, exata valendo 2, gradual) reproduz o placar — parece um
+ponto de participação usado só no começo daquele ano. **Os dados gravados usam
+a regra 2/1/0 + bônus exato** (a que o usuário confirmou); a divergência fica
+registrada na conferência para decisão futura.
+
+**Divergências menores de cobertura:** 2022 não tem R4 (Imola) nem R5 (Miami)
+no WhatsApp, o que explica o 3º lugar do ranking calculado não bater com o
+`hall_of_fame` (vinicius). Em 2024 a diferença acumulada da "+1" põe caliman à
+frente de lage, invertendo o 3º lugar em relação ao `hall_of_fame`.
+
 ## 9. Pendências / decisões adiadas
 
 - Formato e importação dos **históricos** de anos anteriores.

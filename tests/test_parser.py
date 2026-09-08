@@ -108,5 +108,50 @@ class TestParseErros(unittest.TestCase):
             parse_sheet(texto, DRIVERS)
 
 
+class TestFormatosAntigos(unittest.TestCase):
+    """Etapa 7: 2021 era top5 e 2021-2023 nao tinham piloto da rodada."""
+
+    def test_top6_sem_piloto_da_rodada(self):
+        texto = (
+            "Bolao Qualify Bahrain\n\n"
+            "Joao\nVER\nNOR\nRUS\nHAM\nANT\nPIA\n\n"
+            "Maria\nNOR\nVER\nHAM\nRUS\nPIA\nANT\n"
+        )
+        sheet = parse_sheet(texto, DRIVERS, bonus=False)
+        self.assertEqual(sheet.race, "Bahrain")
+        self.assertEqual(sheet.bonus_driver, "")
+        self.assertEqual(len(sheet.bets), 2)
+        self.assertEqual(sheet.bets[0].top6, ["VER", "NOR", "RUS", "HAM", "ANT", "PIA"])
+        self.assertEqual(sheet.bets[0].bonus_guess, 0)
+
+    def test_top5_de_2021(self):
+        texto = (
+            "Apostas Qualify COTA\n\n"
+            "Joao\nVER\nNOR\nRUS\nHAM\nANT\n\n"
+            "Maria\nNOR\nVER\nHAM\nRUS\nANT\n"
+        )
+        sheet = parse_sheet(texto, DRIVERS, top_n=5, bonus=False)
+        self.assertEqual(sheet.race, "COTA")
+        self.assertEqual(sheet.bets[1].top6, ["NOR", "VER", "HAM", "RUS", "ANT"])
+
+    def test_bloco_curto_sem_bonus_e_erro(self):
+        texto = "Corrida\n\nJoao\nVER\nNOR\nRUS\n"
+        with self.assertRaises(ParseError):
+            parse_sheet(texto, DRIVERS, bonus=False)
+
+    def test_p0_significa_sem_chute(self):
+        texto = "Corrida\nPiloto Hamilton\n\nJoao\nVER\nNOR\nRUS\nHAM\nANT\nPIA\nP0\n"
+        sheet = parse_sheet(texto, DRIVERS)
+        self.assertEqual(sheet.bets[0].bonus_guess, 0)
+
+    def test_piloto_nenhum_e_rodada_sem_bonus(self):
+        texto = (
+            "Corrida\nPiloto (nenhum)\n\n"
+            "Joao\nVER\nNOR\nRUS\nHAM\nANT\nPIA\nP0\n"
+        )
+        sheet = parse_sheet(texto, DRIVERS)
+        self.assertEqual(sheet.bonus_driver, "")
+
+
 if __name__ == "__main__":
     unittest.main()
