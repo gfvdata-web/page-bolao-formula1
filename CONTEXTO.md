@@ -1491,6 +1491,13 @@ temporadas.
   ("Pontuação da corrida" — leitura corrida-a-corrida não serve p/ ano
   fechado) e a sub-aba **Histórico** (Preferência vira o padrão de Palpites).
   Só relocação de DOM — nenhuma função de render mudou de assinatura.
+- **`total_calculado` novo em `standings.json`** (`top6_total + bonus_total +
+  carry + avulsos + compensação`) = total pelo nosso motor, **ignorando as
+  correções do grupo** (`placar_publicado.json` rodada a rodada e
+  `ranking_final.pontos`). Nas temporadas finalizadas com divergência o site
+  mostra as colunas **"Oficial"** e **"Calculada"** (com a diferença entre
+  parênteses) — `renderRanking`/`celCalculada`. 2021 e 2025 batem 100% (coluna
+  não aparece); 2022–2024 divergem.
 - **`avg_points` agora sai do `total`, não do recálculo:**
   `avg_points = (total - compensation_total) / rounds_played`. Antes usava
   `top6_total + bonus_total + carry + avulsos` (o recálculo), que **diverge do

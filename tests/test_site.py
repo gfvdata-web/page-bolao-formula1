@@ -130,6 +130,12 @@ class TestGenerate(unittest.TestCase):
         self.assertEqual(self.standings["rounds"][0]["min_score"], 9)
         self.assertEqual(self.standings["rounds"][1]["min_score"], 9)
 
+    def test_total_calculado_presente(self):
+        for p in self.standings["players"]:
+            self.assertIn("total_calculado", p)
+            # Sem placar publicado no fixture, calculado == oficial.
+            self.assertEqual(p["total_calculado"], p["total"])
+
     def test_standings_expoe_formato_e_meta(self):
         fmt = self.standings["format"]
         self.assertEqual(fmt["top_n"], 6)

@@ -1644,6 +1644,13 @@ button.subaba[aria-selected="true"] {
 
 #hist-matriz-titulo { margin: 1.4rem 0 0.6rem; }
 
+.ranking-dif { color: var(--texto-fraco); font-size: 0.82em; }
+.ranking-nota-calculada {
+  margin: 0.5rem 0 0;
+  font-size: 0.8rem;
+  color: var(--texto-fraco);
+}
+
 .hist-matriz__sem-registro { opacity: 0.55; }
 .hist-matriz__rnota {
   display: block;

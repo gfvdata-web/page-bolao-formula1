@@ -350,12 +350,23 @@ def generate(
         # (o placar publicado pode divergir do recálculo rodada a rodada).
         pontos_avaliados = ac["total"] - ac["compensation_total"]
         avg_points = round(pontos_avaliados / rounds_played, 1) if rounds_played else 0.0
+        # Total pelo nosso motor de pontuação, ignorando as correções do grupo
+        # (`placar_publicado.json` rodada a rodada e `ranking_final.pontos` no
+        # fechamento). `top6_total`/`bonus_total` já são sempre o recálculo.
+        total_calculado = (
+            ac["top6_total"]
+            + ac["bonus_total"]
+            + carry_pts
+            + ac.get("avulsos_points", 0)
+            + ac["compensation_total"]
+        )
         standings_players.append(
             {
                 "position": pos,
                 "player_id": ac["player_id"],
                 "name": names.resolve(ac["player_id"]),
                 "total": ac["total"],
+                "total_calculado": total_calculado,
                 "top6_total": ac["top6_total"],
                 "bonus_total": ac["bonus_total"],
                 "carry_points": carry_pts,

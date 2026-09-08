@@ -114,14 +114,32 @@ function badgePonto(pts, max) {
 
 // ---------- Ranking ----------
 
+// Célula "Calculada": total pelo nosso motor, com a diferença para o oficial
+// quando os dois não batem (temporadas finalizadas).
+function celCalculada(jogador) {
+  const calc = jogador.total_calculado;
+  const dif = calc - jogador.total;
+  const filhos = [String(calc)];
+  if (dif !== 0) {
+    filhos.push(
+      el("span", { class: "ranking-dif" }, [` (${dif > 0 ? "+" : "−"}${Math.abs(dif)})`])
+    );
+  }
+  return el("td", { class: "num" }, filhos);
+}
+
 function renderRanking(standings) {
   const container = document.getElementById("ranking-container");
+  // Nas temporadas finalizadas o placar do grupo (oficial) pode divergir do
+  // recálculo — mostramos as duas colunas para dá pra comparar.
+  const mostrarCalculada = MODO_HISTORICO && standings.players.some((j) => j.total_calculado !== j.total);
   const tabela = el("table", { class: "ranking-tabela" }, [
     el("thead", {}, [
       el("tr", {}, [
         el("th", {}, ["#"]),
         el("th", {}, ["Jogador"]),
-        el("th", { class: "num" }, ["Pontos"]),
+        el("th", { class: "num" }, [mostrarCalculada ? "Oficial" : "Pontos"]),
+        mostrarCalculada ? el("th", { class: "num" }, ["Calculada"]) : null,
         el("th", { class: "num" }, ["Média/Corrida"]),
         FORMATO.bonus ? el("th", { class: "num" }, ["Pontos Extra"]) : null,
         el("th", { class: "num" }, ["Rodadas"]),
@@ -146,6 +164,7 @@ function renderRanking(standings) {
         el("td", { class: "pos-medalha" }, [medalhas[jogador.position] || String(jogador.position)]),
         nomeCell,
         el("td", { class: "num" }, [String(jogador.total)]),
+        mostrarCalculada ? celCalculada(jogador) : null,
         el("td", { class: "num" }, [jogador.avg_points.toFixed(1)]),
         FORMATO.bonus ? el("td", { class: "num" }, [String(jogador.bonus_total)]) : null,
         el("td", { class: "num" }, [String(jogador.rounds_played)]),
@@ -154,6 +173,15 @@ function renderRanking(standings) {
   }
   tabela.appendChild(tbody);
   container.replaceChildren(tabela);
+
+  if (mostrarCalculada) {
+    container.appendChild(
+      el("p", { class: "ranking-nota-calculada" }, [
+        "“Oficial” = placar final publicado pelo grupo. “Calculada” = recálculo " +
+          "pelas regras da temporada; a diferença aparece entre parênteses.",
+      ])
+    );
+  }
 }
 
 // ---------- Ranking / Corridas (última contabilizada + próxima) ----------
