@@ -1097,6 +1097,14 @@ enquanto a Jolpica não publica o quali.**
 - **2026-09-08 (Austin):** palpites da R19/2025 recuperados do grupo e anexados
   aos CSV de 2025; `pontos_avulsos.json` de 2025 removido. 2025 fecha 24/24
   rodadas. Ver "R19 Austin — palpites recuperados" mais abaixo.
+- **2026-09-08 (Hall of Fame — switch + colunas):** a aba Hall of Fame agora
+  tem um switch **Jogadores / Temporadas** (estilo `.rendimento-modo`). Em
+  "Jogadores" o Ranking de vitórias ganhou as colunas **Participações**,
+  **Pontos** (somatório de `total` de todas as temporadas) e **Acerto** (% =
+  pontos feitos ÷ máximo possível, só nas corridas palpitadas, teto por
+  temporada `format.max_points`); o botão Acessar foi para o fim da linha. Em
+  "Temporadas" (antigo "Pódios por ano") cada ano mostra a contagem de
+  jogadores. Base do cálculo em `universoJogadores()` (`acertoNum/acertoDen`).
 - **2026-09-08 (cores por temporada):** em modo histórico as bolinhas/gráficos
   de piloto usam as cores da equipe **daquele ano**, não as de 2026. Novo mapa
   `CORES_PILOTO_ANO` em `docs/app.js` (`{ "2021".."2025": {cod: hex} }`);
