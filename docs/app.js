@@ -287,7 +287,7 @@ function formatarQualiBrasilia(qualiUtcISO) {
     hour: "2-digit",
     minute: "2-digit",
   }).format(data);
-  return `${formatado} (horário de Brasília)`;
+  return formatado;
 }
 
 function cardCorrida(titulo, race, extra) {
