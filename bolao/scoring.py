@@ -41,6 +41,9 @@ class PlayerScore:
     bonus_guess: int
     bonus_real_pos: int | None  # posição real do piloto da rodada (ou None)
     total: int
+    # Quando o placar publicado pelo grupo manda (Etapa 7), `total` passa a ser
+    # o publicado e este campo guarda o que a regra da temporada daria.
+    total_recalculado: int | None = None
 
 
 @dataclass

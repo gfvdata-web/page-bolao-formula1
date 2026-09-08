@@ -893,6 +893,68 @@ def _pontos_recalculados(
     return saida
 
 
+def escreve_placar_publicado(
+    msgs: list[Message], season: int, data_dir: Path
+) -> Path | None:
+    """Grava `data/<season>/placar_publicado.json` — o que o grupo publicou.
+
+    Decisão do usuário (2026-09-08): **o placar publicado no grupo manda**,
+    seja qual for a regra que ele seguiu na época; a recalculação só preenche
+    as rodadas que o grupo não publicou. Este arquivo é a fonte disso, extraída
+    do export uma vez e versionada, para o resto do pipeline não depender do
+    backup do WhatsApp.
+
+    Quando a mesma rodada tem mais de um placar publicado (repostagem, piada,
+    correção), vale o **mais próximo da data do quali** — foi assim que a
+    mensagem de brincadeira de 17/10/2021 parou de sobrescrever a Turquia.
+    """
+    players, _ = carrega_players(data_dir, season)
+    calendar = load_calendar(data_dir / str(season) / "calendar.json")
+    dia_quali = {c["round"]: _dia_quali(c) for c in calendar["races"]}
+
+    melhor: dict[int, tuple[int, Message, dict[str, int]]] = {}
+    for msg in msgs:
+        if msg.season != season:
+            continue
+        st = parse_standing(msg, players)
+        if not st or st.kind != "rodada":
+            continue
+        rnd = resolve_round(msg, calendar, passado=True)
+        if rnd is None:
+            continue
+        distancia = abs((msg.day - dia_quali[rnd]).days)
+        if rnd not in melhor or distancia < melhor[rnd][0]:
+            melhor[rnd] = (
+                distancia,
+                msg,
+                {i.player_id: i.points for i in st.lines},
+            )
+    if not melhor:
+        return None
+
+    dados = {
+        "_comment": (
+            "Pontuacao por rodada como o grupo publicou no WhatsApp. Manda sobre "
+            "a recalculacao (decisao do usuario); rodada que nao esta aqui usa a "
+            "recalculacao. Extraido por bolao.whatsapp_import; quando a rodada "
+            "teve mais de um placar publicado, vale o mais proximo do quali."
+        ),
+        "season": season,
+        "rounds": {
+            str(rnd): {
+                "fonte": msg.header(),
+                "players": placar,
+            }
+            for rnd, (_, msg, placar) in sorted(melhor.items())
+        },
+    }
+    destino = data_dir / str(season) / "placar_publicado.json"
+    destino.write_text(
+        json.dumps(dados, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
+    return destino
+
+
 def escreve_conferencia(
     msgs: list[Message],
     todas: dict[int, dict[int, RoundBets]],
@@ -1141,6 +1203,9 @@ def main(argv: list[str] | None = None) -> int:
         if not args.no_csv:
             a, b = escreve_csvs(rodadas, s, data_dir)
             print(f"     {a} / {b}")
+            placar = escreve_placar_publicado(msgs, s, data_dir)
+            if placar:
+                print(f"     {placar}")
             saldo = escreve_saldo_inicial(msgs, rodadas, s, data_dir)
             if saldo:
                 resumo = ", ".join(

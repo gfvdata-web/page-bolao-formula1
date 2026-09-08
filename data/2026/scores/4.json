@@ -103,7 +103,8 @@
       "bonus_guess": 15,
       "bonus_real_pos": 18,
       "bonus_points": 0,
-      "total": 9
+      "total": 9,
+      "total_recalculado": null
     },
     {
       "player_id": "ferrari",
@@ -165,7 +166,8 @@
       "bonus_guess": 18,
       "bonus_real_pos": 18,
       "bonus_points": 1,
-      "total": 7
+      "total": 7,
+      "total_recalculado": null
     },
     {
       "player_id": "caliman",
@@ -227,7 +229,8 @@
       "bonus_guess": 22,
       "bonus_real_pos": 18,
       "bonus_points": 0,
-      "total": 6
+      "total": 6,
+      "total_recalculado": null
     },
     {
       "player_id": "dalla",
@@ -289,7 +292,8 @@
       "bonus_guess": 20,
       "bonus_real_pos": 18,
       "bonus_points": 0,
-      "total": 6
+      "total": 6,
+      "total_recalculado": null
     },
     {
       "player_id": "lage",
@@ -351,7 +355,8 @@
       "bonus_guess": 19,
       "bonus_real_pos": 18,
       "bonus_points": 0,
-      "total": 6
+      "total": 6,
+      "total_recalculado": null
     },
     {
       "player_id": "caio_l",
@@ -413,7 +418,8 @@
       "bonus_guess": 16,
       "bonus_real_pos": 18,
       "bonus_points": 0,
-      "total": 5
+      "total": 5,
+      "total_recalculado": null
     },
     {
       "player_id": "guilherme",
@@ -475,7 +481,8 @@
       "bonus_guess": 17,
       "bonus_real_pos": 18,
       "bonus_points": 0,
-      "total": 5
+      "total": 5,
+      "total_recalculado": null
     },
     {
       "player_id": "igor",
@@ -537,7 +544,8 @@
       "bonus_guess": 20,
       "bonus_real_pos": 18,
       "bonus_points": 0,
-      "total": 5
+      "total": 5,
+      "total_recalculado": null
     },
     {
       "player_id": "vinicius",
@@ -599,7 +607,8 @@
       "bonus_guess": 22,
       "bonus_real_pos": 18,
       "bonus_points": 0,
-      "total": 5
+      "total": 5,
+      "total_recalculado": null
     }
   ]
 }

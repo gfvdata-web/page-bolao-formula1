@@ -1,0 +1,141 @@
+{
+  "_comment": "Pontuacao por rodada como o grupo publicou no WhatsApp. Manda sobre a recalculacao (decisao do usuario); rodada que nao esta aqui usa a recalculacao. Extraido por bolao.whatsapp_import; quando a rodada teve mais de um placar publicado, vale o mais proximo do quali.",
+  "season": 2023,
+  "rounds": {
+    "1": {
+      "fonte": "04/03/2023 13:59 - Guilherne Viana",
+      "players": {
+        "guilherme": 6,
+        "caliman": 7,
+        "ferrari": 6,
+        "igor": 8,
+        "francez": 6,
+        "vinicius": 8,
+        "eleazar": 6,
+        "lage": 7
+      }
+    },
+    "2": {
+      "fonte": "18/03/2023 15:11 - Guilherne Viana",
+      "players": {
+        "vinicius": 5,
+        "caliman": 7,
+        "guilherme": 4,
+        "ferrari": 5,
+        "lage": 8,
+        "igor": 6,
+        "francez": 6,
+        "dalla": 5,
+        "luciano": 6,
+        "eleazar": 5
+      }
+    },
+    "3": {
+      "fonte": "01/04/2023 07:34 - Guilherne Viana",
+      "players": {
+        "guilherme": 5,
+        "ferrari": 5,
+        "igor": 5,
+        "caliman": 6,
+        "vinicius": 6,
+        "eleazar": 7,
+        "francez": 6,
+        "lage": 5,
+        "luciano": 6,
+        "dalla": 5
+      }
+    },
+    "4": {
+      "fonte": "05/05/2023 16:50 - Guilherne Viana",
+      "players": {
+        "guilherme": 6,
+        "ferrari": 6,
+        "eleazar": 6,
+        "igor": 6,
+        "vinicius": 5,
+        "caliman": 5,
+        "dalla": 7,
+        "lage": 10
+      }
+    },
+    "5": {
+      "fonte": "07/05/2023 09:39 - Guilherne Viana",
+      "players": {
+        "caliman": 3,
+        "vinicius": 4,
+        "ferrari": 4,
+        "francez": 4,
+        "igor": 3,
+        "eleazar": 4,
+        "lage": 3,
+        "guilherme": 4,
+        "dalla": 3
+      }
+    },
+    "6": {
+      "fonte": "27/05/2023 15:34 - Guilherne Viana",
+      "players": {
+        "guilherme": 5,
+        "francez": 6,
+        "lage": 8,
+        "vinicius": 5,
+        "ferrari": 5,
+        "caliman": 6,
+        "eleazar": 6,
+        "dalla": 6,
+        "igor": 7
+      }
+    },
+    "9": {
+      "fonte": "30/06/2023 17:14 - Guilherne Viana",
+      "players": {
+        "ferrari": 7,
+        "vinicius": 6,
+        "caliman": 5,
+        "dalla": 6,
+        "francez": 5,
+        "lage": 6,
+        "igor": 6,
+        "guilherme": 8
+      }
+    },
+    "11": {
+      "fonte": "22/07/2023 10:21 - Guilherne Viana",
+      "players": {
+        "vinicius": 4,
+        "ferrari": 5,
+        "guilherme": 3,
+        "caliman": 4,
+        "lage": 4,
+        "igor": 4,
+        "dalla": 4
+      }
+    },
+    "15": {
+      "fonte": "16/09/2023 13:45 - Guilherne Viana",
+      "players": {
+        "vinicius": 7,
+        "ferrari": 6,
+        "francez": 9,
+        "caliman": 6,
+        "guilherme": 6,
+        "lage": 6,
+        "igor": 6,
+        "dalla": 6
+      }
+    },
+    "21": {
+      "fonte": "24/11/2023 18:26 - Guilherne Viana",
+      "players": {
+        "caliman": 5,
+        "ferrari": 6,
+        "francez": 7,
+        "igor": 7,
+        "guilherme": 7,
+        "vinicius": 6,
+        "lage": 6,
+        "dalla": 9
+      }
+    }
+  }
+}

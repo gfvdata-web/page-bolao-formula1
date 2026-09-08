@@ -89,7 +89,8 @@
       "bonus_guess": 0,
       "bonus_real_pos": null,
       "bonus_points": 0,
-      "total": 2
+      "total": 2,
+      "total_recalculado": null
     },
     {
       "player_id": "ferrari",
@@ -143,7 +144,8 @@
       "bonus_guess": 0,
       "bonus_real_pos": null,
       "bonus_points": 0,
-      "total": 2
+      "total": 2,
+      "total_recalculado": null
     },
     {
       "player_id": "francez",
@@ -197,7 +199,8 @@
       "bonus_guess": 0,
       "bonus_real_pos": null,
       "bonus_points": 0,
-      "total": 2
+      "total": 2,
+      "total_recalculado": null
     },
     {
       "player_id": "guilherme",
@@ -251,7 +254,8 @@
       "bonus_guess": 0,
       "bonus_real_pos": null,
       "bonus_points": 0,
-      "total": 2
+      "total": 2,
+      "total_recalculado": null
     },
     {
       "player_id": "vinicius",
@@ -305,7 +309,8 @@
       "bonus_guess": 0,
       "bonus_real_pos": null,
       "bonus_points": 0,
-      "total": 2
+      "total": 2,
+      "total_recalculado": null
     }
   ]
 }

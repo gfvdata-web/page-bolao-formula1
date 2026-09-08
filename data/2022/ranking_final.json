@@ -1,0 +1,10 @@
+{
+  "_comment": "Etapa 7 — fechamento oficial da temporada, como o grupo registrou. 'ordem' fixa a classificacao final (inclui o desempate, que o grupo resolvia por criterio interno nunca escrito). 'pontos', quando presente, substitui o total somado rodada a rodada — o total calculado continua visivel em 'total_somado' no standings.json.",
+  "fonte": "Ultima classificacao publicada no grupo (18/11/2022 21:50, apos a R21) tinha Caliman 136 a frente de Dalla 134. Com a R22 o recalculo empata os dois em 139 e nenhum criterio objetivo separa — a ordem oficial vale, conforme decisao do usuario em 2026-09-08.",
+  "ordem": [
+    "caliman",
+    "dalla",
+    "vinicius",
+    "guilherme"
+  ]
+}

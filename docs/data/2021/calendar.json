@@ -1,0 +1,203 @@
+{
+  "season": 2021,
+  "races": [
+    {
+      "round": 1,
+      "race_id": "2021-01",
+      "race": "Sakhir",
+      "circuit": "bahrain",
+      "date": "2021-03-28",
+      "qualifying_utc": null,
+      "sprint": false
+    },
+    {
+      "round": 2,
+      "race_id": "2021-02",
+      "race": "Imola",
+      "circuit": "imola",
+      "date": "2021-04-18",
+      "qualifying_utc": null,
+      "sprint": false
+    },
+    {
+      "round": 3,
+      "race_id": "2021-03",
+      "race": "Portimão",
+      "circuit": "portimao",
+      "date": "2021-05-02",
+      "qualifying_utc": null,
+      "sprint": false
+    },
+    {
+      "round": 4,
+      "race_id": "2021-04",
+      "race": "Barcelona",
+      "circuit": "catalunya",
+      "date": "2021-05-09",
+      "qualifying_utc": null,
+      "sprint": false
+    },
+    {
+      "round": 5,
+      "race_id": "2021-05",
+      "race": "Monte Carlo",
+      "circuit": "monaco",
+      "date": "2021-05-23",
+      "qualifying_utc": null,
+      "sprint": false
+    },
+    {
+      "round": 6,
+      "race_id": "2021-06",
+      "race": "Baku",
+      "circuit": "baku",
+      "date": "2021-06-06",
+      "qualifying_utc": null,
+      "sprint": false
+    },
+    {
+      "round": 7,
+      "race_id": "2021-07",
+      "race": "Le Castellet",
+      "circuit": "ricard",
+      "date": "2021-06-20",
+      "qualifying_utc": null,
+      "sprint": false
+    },
+    {
+      "round": 8,
+      "race_id": "2021-08",
+      "race": "Spielberg",
+      "circuit": "red_bull_ring",
+      "date": "2021-06-27",
+      "qualifying_utc": null,
+      "sprint": false
+    },
+    {
+      "round": 9,
+      "race_id": "2021-09",
+      "race": "Spielberg",
+      "circuit": "red_bull_ring",
+      "date": "2021-07-04",
+      "qualifying_utc": null,
+      "sprint": false
+    },
+    {
+      "round": 10,
+      "race_id": "2021-10",
+      "race": "Silverstone",
+      "circuit": "silverstone",
+      "date": "2021-07-18",
+      "qualifying_utc": null,
+      "sprint": true
+    },
+    {
+      "round": 11,
+      "race_id": "2021-11",
+      "race": "Budapest",
+      "circuit": "hungaroring",
+      "date": "2021-08-01",
+      "qualifying_utc": null,
+      "sprint": false
+    },
+    {
+      "round": 12,
+      "race_id": "2021-12",
+      "race": "Spa",
+      "circuit": "spa",
+      "date": "2021-08-29",
+      "qualifying_utc": null,
+      "sprint": false
+    },
+    {
+      "round": 13,
+      "race_id": "2021-13",
+      "race": "Zandvoort",
+      "circuit": "zandvoort",
+      "date": "2021-09-05",
+      "qualifying_utc": null,
+      "sprint": false
+    },
+    {
+      "round": 14,
+      "race_id": "2021-14",
+      "race": "Monza",
+      "circuit": "monza",
+      "date": "2021-09-12",
+      "qualifying_utc": null,
+      "sprint": true
+    },
+    {
+      "round": 15,
+      "race_id": "2021-15",
+      "race": "Sochi",
+      "circuit": "sochi",
+      "date": "2021-09-26",
+      "qualifying_utc": null,
+      "sprint": false
+    },
+    {
+      "round": 16,
+      "race_id": "2021-16",
+      "race": "Istanbul",
+      "circuit": "istanbul",
+      "date": "2021-10-10",
+      "qualifying_utc": null,
+      "sprint": false
+    },
+    {
+      "round": 17,
+      "race_id": "2021-17",
+      "race": "Austin",
+      "circuit": "americas",
+      "date": "2021-10-24",
+      "qualifying_utc": null,
+      "sprint": false
+    },
+    {
+      "round": 18,
+      "race_id": "2021-18",
+      "race": "Mexico City",
+      "circuit": "rodriguez",
+      "date": "2021-11-07",
+      "qualifying_utc": null,
+      "sprint": false
+    },
+    {
+      "round": 19,
+      "race_id": "2021-19",
+      "race": "São Paulo",
+      "circuit": "interlagos",
+      "date": "2021-11-14",
+      "qualifying_utc": null,
+      "sprint": true
+    },
+    {
+      "round": 20,
+      "race_id": "2021-20",
+      "race": "Lusail",
+      "circuit": "losail",
+      "date": "2021-11-21",
+      "qualifying_utc": null,
+      "sprint": false
+    },
+    {
+      "round": 21,
+      "race_id": "2021-21",
+      "race": "Jeddah",
+      "circuit": "jeddah",
+      "date": "2021-12-05",
+      "qualifying_utc": null,
+      "sprint": false
+    },
+    {
+      "round": 22,
+      "race_id": "2021-22",
+      "race": "Abu Dhabi",
+      "circuit": "yas_marina",
+      "date": "2021-12-12",
+      "qualifying_utc": null,
+      "sprint": false
+    }
+  ]
+}

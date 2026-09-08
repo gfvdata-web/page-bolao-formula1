@@ -100,7 +100,8 @@
       "bonus_guess": 17,
       "bonus_real_pos": 15,
       "bonus_points": 0,
-      "total": 7
+      "total": 8,
+      "total_recalculado": 7
     },
     {
       "player_id": "cintia",
@@ -162,131 +163,8 @@
       "bonus_guess": 13,
       "bonus_real_pos": 15,
       "bonus_points": 0,
-      "total": 7
-    },
-    {
-      "player_id": "ferrari",
-      "player_raw": "Ferrari",
-      "name": "Ferrari",
-      "top6": [
-        "VER",
-        "LEC",
-        "SAI",
-        "NOR",
-        "PER",
-        "RUS"
-      ],
-      "top6_detail": [
-        {
-          "pos": 1,
-          "guess": "VER",
-          "real": "VER",
-          "points": 2,
-          "reason": "exata"
-        },
-        {
-          "pos": 2,
-          "guess": "LEC",
-          "real": "SAI",
-          "points": 1,
-          "reason": "no top6"
-        },
-        {
-          "pos": 3,
-          "guess": "SAI",
-          "real": "PER",
-          "points": 1,
-          "reason": "no top6"
-        },
-        {
-          "pos": 4,
-          "guess": "NOR",
-          "real": "NOR",
-          "points": 2,
-          "reason": "exata"
-        },
-        {
-          "pos": 5,
-          "guess": "PER",
-          "real": "LEC",
-          "points": 1,
-          "reason": "no top6"
-        },
-        {
-          "pos": 6,
-          "guess": "RUS",
-          "real": "PIA",
-          "points": 0,
-          "reason": "fora"
-        }
-      ],
-      "top6_points": 7,
-      "bonus_guess": 0,
-      "bonus_real_pos": 15,
-      "bonus_points": 0,
-      "total": 7
-    },
-    {
-      "player_id": "francez",
-      "player_raw": "Francez",
-      "name": "Francez",
-      "top6": [
-        "VER",
-        "PER",
-        "LEC",
-        "RUS",
-        "SAI",
-        "HAM"
-      ],
-      "top6_detail": [
-        {
-          "pos": 1,
-          "guess": "VER",
-          "real": "VER",
-          "points": 2,
-          "reason": "exata"
-        },
-        {
-          "pos": 2,
-          "guess": "PER",
-          "real": "SAI",
-          "points": 1,
-          "reason": "no top6"
-        },
-        {
-          "pos": 3,
-          "guess": "LEC",
-          "real": "PER",
-          "points": 1,
-          "reason": "no top6"
-        },
-        {
-          "pos": 4,
-          "guess": "RUS",
-          "real": "NOR",
-          "points": 0,
-          "reason": "fora"
-        },
-        {
-          "pos": 5,
-          "guess": "SAI",
-          "real": "LEC",
-          "points": 1,
-          "reason": "no top6"
-        },
-        {
-          "pos": 6,
-          "guess": "HAM",
-          "real": "PIA",
-          "points": 0,
-          "reason": "fora"
-        }
-      ],
-      "top6_points": 5,
-      "bonus_guess": 15,
-      "bonus_real_pos": 15,
-      "bonus_points": 2,
-      "total": 7
+      "total": 8,
+      "total_recalculado": 7
     },
     {
       "player_id": "guilherme",
@@ -348,7 +226,8 @@
       "bonus_guess": 17,
       "bonus_real_pos": 15,
       "bonus_points": 0,
-      "total": 7
+      "total": 8,
+      "total_recalculado": 7
     },
     {
       "player_id": "dalla",
@@ -410,7 +289,134 @@
       "bonus_guess": 14,
       "bonus_real_pos": 15,
       "bonus_points": 0,
-      "total": 6
+      "total": 7,
+      "total_recalculado": 6
+    },
+    {
+      "player_id": "ferrari",
+      "player_raw": "Ferrari",
+      "name": "Ferrari",
+      "top6": [
+        "VER",
+        "LEC",
+        "SAI",
+        "NOR",
+        "PER",
+        "RUS"
+      ],
+      "top6_detail": [
+        {
+          "pos": 1,
+          "guess": "VER",
+          "real": "VER",
+          "points": 2,
+          "reason": "exata"
+        },
+        {
+          "pos": 2,
+          "guess": "LEC",
+          "real": "SAI",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 3,
+          "guess": "SAI",
+          "real": "PER",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 4,
+          "guess": "NOR",
+          "real": "NOR",
+          "points": 2,
+          "reason": "exata"
+        },
+        {
+          "pos": 5,
+          "guess": "PER",
+          "real": "LEC",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 6,
+          "guess": "RUS",
+          "real": "PIA",
+          "points": 0,
+          "reason": "fora"
+        }
+      ],
+      "top6_points": 7,
+      "bonus_guess": 0,
+      "bonus_real_pos": 15,
+      "bonus_points": 0,
+      "total": 7,
+      "total_recalculado": 7
+    },
+    {
+      "player_id": "francez",
+      "player_raw": "Francez",
+      "name": "Francez",
+      "top6": [
+        "VER",
+        "PER",
+        "LEC",
+        "RUS",
+        "SAI",
+        "HAM"
+      ],
+      "top6_detail": [
+        {
+          "pos": 1,
+          "guess": "VER",
+          "real": "VER",
+          "points": 2,
+          "reason": "exata"
+        },
+        {
+          "pos": 2,
+          "guess": "PER",
+          "real": "SAI",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 3,
+          "guess": "LEC",
+          "real": "PER",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 4,
+          "guess": "RUS",
+          "real": "NOR",
+          "points": 0,
+          "reason": "fora"
+        },
+        {
+          "pos": 5,
+          "guess": "SAI",
+          "real": "LEC",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 6,
+          "guess": "HAM",
+          "real": "PIA",
+          "points": 0,
+          "reason": "fora"
+        }
+      ],
+      "top6_points": 5,
+      "bonus_guess": 15,
+      "bonus_real_pos": 15,
+      "bonus_points": 2,
+      "total": 7,
+      "total_recalculado": 7
     },
     {
       "player_id": "igor",
@@ -472,7 +478,8 @@
       "bonus_guess": 16,
       "bonus_real_pos": 15,
       "bonus_points": 0,
-      "total": 6
+      "total": 7,
+      "total_recalculado": 6
     },
     {
       "player_id": "caliman",
@@ -534,7 +541,8 @@
       "bonus_guess": 16,
       "bonus_real_pos": 15,
       "bonus_points": 0,
-      "total": 5
+      "total": 6,
+      "total_recalculado": 5
     },
     {
       "player_id": "vinicius",
@@ -596,7 +604,8 @@
       "bonus_guess": 18,
       "bonus_real_pos": 15,
       "bonus_points": 0,
-      "total": 4
+      "total": 4,
+      "total_recalculado": 4
     }
   ]
 }

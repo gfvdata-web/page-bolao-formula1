@@ -1,0 +1,221 @@
+{
+  "season": 2024,
+  "races": [
+    {
+      "round": 1,
+      "race_id": "2024-01",
+      "race": "Sakhir",
+      "circuit": "bahrain",
+      "date": "2024-03-02",
+      "qualifying_utc": "2024-03-01T16:00:00Z",
+      "sprint": false
+    },
+    {
+      "round": 2,
+      "race_id": "2024-02",
+      "race": "Jeddah",
+      "circuit": "jeddah",
+      "date": "2024-03-09",
+      "qualifying_utc": "2024-03-08T17:00:00Z",
+      "sprint": false
+    },
+    {
+      "round": 3,
+      "race_id": "2024-03",
+      "race": "Melbourne",
+      "circuit": "albert_park",
+      "date": "2024-03-24",
+      "qualifying_utc": "2024-03-23T05:00:00Z",
+      "sprint": false
+    },
+    {
+      "round": 4,
+      "race_id": "2024-04",
+      "race": "Suzuka",
+      "circuit": "suzuka",
+      "date": "2024-04-07",
+      "qualifying_utc": "2024-04-06T06:00:00Z",
+      "sprint": false
+    },
+    {
+      "round": 5,
+      "race_id": "2024-05",
+      "race": "Shanghai",
+      "circuit": "shanghai",
+      "date": "2024-04-21",
+      "qualifying_utc": "2024-04-20T07:00:00Z",
+      "sprint": true
+    },
+    {
+      "round": 6,
+      "race_id": "2024-06",
+      "race": "Miami",
+      "circuit": "miami",
+      "date": "2024-05-05",
+      "qualifying_utc": "2024-05-04T20:00:00Z",
+      "sprint": true
+    },
+    {
+      "round": 7,
+      "race_id": "2024-07",
+      "race": "Imola",
+      "circuit": "imola",
+      "date": "2024-05-19",
+      "qualifying_utc": "2024-05-18T14:00:00Z",
+      "sprint": false
+    },
+    {
+      "round": 8,
+      "race_id": "2024-08",
+      "race": "Monte Carlo",
+      "circuit": "monaco",
+      "date": "2024-05-26",
+      "qualifying_utc": "2024-05-25T14:00:00Z",
+      "sprint": false
+    },
+    {
+      "round": 9,
+      "race_id": "2024-09",
+      "race": "Montreal",
+      "circuit": "villeneuve",
+      "date": "2024-06-09",
+      "qualifying_utc": "2024-06-08T20:00:00Z",
+      "sprint": false
+    },
+    {
+      "round": 10,
+      "race_id": "2024-10",
+      "race": "Barcelona",
+      "circuit": "catalunya",
+      "date": "2024-06-23",
+      "qualifying_utc": "2024-06-22T14:00:00Z",
+      "sprint": false
+    },
+    {
+      "round": 11,
+      "race_id": "2024-11",
+      "race": "Spielberg",
+      "circuit": "red_bull_ring",
+      "date": "2024-06-30",
+      "qualifying_utc": "2024-06-29T14:00:00Z",
+      "sprint": true
+    },
+    {
+      "round": 12,
+      "race_id": "2024-12",
+      "race": "Silverstone",
+      "circuit": "silverstone",
+      "date": "2024-07-07",
+      "qualifying_utc": "2024-07-06T14:00:00Z",
+      "sprint": false
+    },
+    {
+      "round": 13,
+      "race_id": "2024-13",
+      "race": "Budapest",
+      "circuit": "hungaroring",
+      "date": "2024-07-21",
+      "qualifying_utc": "2024-07-20T14:00:00Z",
+      "sprint": false
+    },
+    {
+      "round": 14,
+      "race_id": "2024-14",
+      "race": "Spa",
+      "circuit": "spa",
+      "date": "2024-07-28",
+      "qualifying_utc": "2024-07-27T14:00:00Z",
+      "sprint": false
+    },
+    {
+      "round": 15,
+      "race_id": "2024-15",
+      "race": "Zandvoort",
+      "circuit": "zandvoort",
+      "date": "2024-08-25",
+      "qualifying_utc": "2024-08-24T13:00:00Z",
+      "sprint": false
+    },
+    {
+      "round": 16,
+      "race_id": "2024-16",
+      "race": "Monza",
+      "circuit": "monza",
+      "date": "2024-09-01",
+      "qualifying_utc": "2024-08-31T14:00:00Z",
+      "sprint": false
+    },
+    {
+      "round": 17,
+      "race_id": "2024-17",
+      "race": "Baku",
+      "circuit": "baku",
+      "date": "2024-09-15",
+      "qualifying_utc": "2024-09-14T12:00:00Z",
+      "sprint": false
+    },
+    {
+      "round": 18,
+      "race_id": "2024-18",
+      "race": "Marina Bay",
+      "circuit": "marina_bay",
+      "date": "2024-09-22",
+      "qualifying_utc": "2024-09-21T13:00:00Z",
+      "sprint": false
+    },
+    {
+      "round": 19,
+      "race_id": "2024-19",
+      "race": "Austin",
+      "circuit": "americas",
+      "date": "2024-10-20",
+      "qualifying_utc": "2024-10-19T22:00:00Z",
+      "sprint": true
+    },
+    {
+      "round": 20,
+      "race_id": "2024-20",
+      "race": "Mexico City",
+      "circuit": "rodriguez",
+      "date": "2024-10-27",
+      "qualifying_utc": "2024-10-26T21:00:00Z",
+      "sprint": false
+    },
+    {
+      "round": 21,
+      "race_id": "2024-21",
+      "race": "São Paulo",
+      "circuit": "interlagos",
+      "date": "2024-11-03",
+      "qualifying_utc": "2024-11-02T18:00:00Z",
+      "sprint": true
+    },
+    {
+      "round": 22,
+      "race_id": "2024-22",
+      "race": "Las Vegas",
+      "circuit": "vegas",
+      "date": "2024-11-23",
+      "qualifying_utc": "2024-11-22T06:00:00Z",
+      "sprint": false
+    },
+    {
+      "round": 23,
+      "race_id": "2024-23",
+      "race": "Lusail",
+      "circuit": "losail",
+      "date": "2024-12-01",
+      "qualifying_utc": "2024-11-30T18:00:00Z",
+      "sprint": true
+    },
+    {
+      "round": 24,
+      "race_id": "2024-24",
+      "race": "Abu Dhabi",
+      "circuit": "yas_marina",
+      "date": "2024-12-08",
+      "qualifying_utc": "2024-12-07T14:00:00Z",
+      "sprint": false
+    }
+  ]
+}

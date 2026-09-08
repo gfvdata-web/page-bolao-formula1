@@ -1,0 +1,203 @@
+{
+  "season": 2023,
+  "races": [
+    {
+      "round": 1,
+      "race_id": "2023-01",
+      "race": "Sakhir",
+      "circuit": "bahrain",
+      "date": "2023-03-05",
+      "qualifying_utc": "2023-03-04T15:00:00Z",
+      "sprint": false
+    },
+    {
+      "round": 2,
+      "race_id": "2023-02",
+      "race": "Jeddah",
+      "circuit": "jeddah",
+      "date": "2023-03-19",
+      "qualifying_utc": "2023-03-18T17:00:00Z",
+      "sprint": false
+    },
+    {
+      "round": 3,
+      "race_id": "2023-03",
+      "race": "Melbourne",
+      "circuit": "albert_park",
+      "date": "2023-04-02",
+      "qualifying_utc": "2023-04-01T05:00:00Z",
+      "sprint": false
+    },
+    {
+      "round": 4,
+      "race_id": "2023-04",
+      "race": "Baku",
+      "circuit": "baku",
+      "date": "2023-04-30",
+      "qualifying_utc": "2023-04-28T13:00:00Z",
+      "sprint": true
+    },
+    {
+      "round": 5,
+      "race_id": "2023-05",
+      "race": "Miami",
+      "circuit": "miami",
+      "date": "2023-05-07",
+      "qualifying_utc": "2023-05-06T20:00:00Z",
+      "sprint": false
+    },
+    {
+      "round": 6,
+      "race_id": "2023-06",
+      "race": "Monte Carlo",
+      "circuit": "monaco",
+      "date": "2023-05-28",
+      "qualifying_utc": "2023-05-27T14:00:00Z",
+      "sprint": false
+    },
+    {
+      "round": 7,
+      "race_id": "2023-07",
+      "race": "Barcelona",
+      "circuit": "catalunya",
+      "date": "2023-06-04",
+      "qualifying_utc": "2023-06-03T14:00:00Z",
+      "sprint": false
+    },
+    {
+      "round": 8,
+      "race_id": "2023-08",
+      "race": "Montreal",
+      "circuit": "villeneuve",
+      "date": "2023-06-18",
+      "qualifying_utc": "2023-06-17T20:00:00Z",
+      "sprint": false
+    },
+    {
+      "round": 9,
+      "race_id": "2023-09",
+      "race": "Spielberg",
+      "circuit": "red_bull_ring",
+      "date": "2023-07-02",
+      "qualifying_utc": "2023-06-30T15:00:00Z",
+      "sprint": true
+    },
+    {
+      "round": 10,
+      "race_id": "2023-10",
+      "race": "Silverstone",
+      "circuit": "silverstone",
+      "date": "2023-07-09",
+      "qualifying_utc": "2023-07-08T14:00:00Z",
+      "sprint": false
+    },
+    {
+      "round": 11,
+      "race_id": "2023-11",
+      "race": "Budapest",
+      "circuit": "hungaroring",
+      "date": "2023-07-23",
+      "qualifying_utc": "2023-07-22T14:00:00Z",
+      "sprint": false
+    },
+    {
+      "round": 12,
+      "race_id": "2023-12",
+      "race": "Spa",
+      "circuit": "spa",
+      "date": "2023-07-30",
+      "qualifying_utc": "2023-07-28T15:00:00Z",
+      "sprint": true
+    },
+    {
+      "round": 13,
+      "race_id": "2023-13",
+      "race": "Zandvoort",
+      "circuit": "zandvoort",
+      "date": "2023-08-27",
+      "qualifying_utc": "2023-08-26T13:00:00Z",
+      "sprint": false
+    },
+    {
+      "round": 14,
+      "race_id": "2023-14",
+      "race": "Monza",
+      "circuit": "monza",
+      "date": "2023-09-03",
+      "qualifying_utc": "2023-09-02T14:00:00Z",
+      "sprint": false
+    },
+    {
+      "round": 15,
+      "race_id": "2023-15",
+      "race": "Marina Bay",
+      "circuit": "marina_bay",
+      "date": "2023-09-17",
+      "qualifying_utc": "2023-09-16T13:00:00Z",
+      "sprint": false
+    },
+    {
+      "round": 16,
+      "race_id": "2023-16",
+      "race": "Suzuka",
+      "circuit": "suzuka",
+      "date": "2023-09-24",
+      "qualifying_utc": "2023-09-23T06:00:00Z",
+      "sprint": false
+    },
+    {
+      "round": 17,
+      "race_id": "2023-17",
+      "race": "Lusail",
+      "circuit": "losail",
+      "date": "2023-10-08",
+      "qualifying_utc": "2023-10-06T17:00:00Z",
+      "sprint": true
+    },
+    {
+      "round": 18,
+      "race_id": "2023-18",
+      "race": "Austin",
+      "circuit": "americas",
+      "date": "2023-10-22",
+      "qualifying_utc": "2023-10-20T21:00:00Z",
+      "sprint": true
+    },
+    {
+      "round": 19,
+      "race_id": "2023-19",
+      "race": "Mexico City",
+      "circuit": "rodriguez",
+      "date": "2023-10-29",
+      "qualifying_utc": "2023-10-28T21:00:00Z",
+      "sprint": false
+    },
+    {
+      "round": 20,
+      "race_id": "2023-20",
+      "race": "São Paulo",
+      "circuit": "interlagos",
+      "date": "2023-11-05",
+      "qualifying_utc": "2023-11-03T18:00:00Z",
+      "sprint": true
+    },
+    {
+      "round": 21,
+      "race_id": "2023-21",
+      "race": "Las Vegas",
+      "circuit": "vegas",
+      "date": "2023-11-19",
+      "qualifying_utc": "2023-11-17T08:00:00Z",
+      "sprint": false
+    },
+    {
+      "round": 22,
+      "race_id": "2023-22",
+      "race": "Abu Dhabi",
+      "circuit": "yas_marina",
+      "date": "2023-11-26",
+      "qualifying_utc": "2023-11-25T14:00:00Z",
+      "sprint": false
+    }
+  ]
+}

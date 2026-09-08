@@ -1,0 +1,184 @@
+{
+  "_comment": "Pontuacao por rodada como o grupo publicou no WhatsApp. Manda sobre a recalculacao (decisao do usuario); rodada que nao esta aqui usa a recalculacao. Extraido por bolao.whatsapp_import; quando a rodada teve mais de um placar publicado, vale o mais proximo do quali.",
+  "season": 2022,
+  "rounds": {
+    "1": {
+      "fonte": "19/03/2022 13:04 - Guilherne Viana",
+      "players": {
+        "guilherme": 4,
+        "ferrari": 5,
+        "caliman": 7,
+        "vinicius": 6,
+        "francez": 4,
+        "igor": 4,
+        "dalla": 5,
+        "rodrigo": 6,
+        "lage": 1
+      }
+    },
+    "2": {
+      "fonte": "26/03/2022 17:01 - Guilherne Viana",
+      "players": {
+        "ferrari": 4,
+        "vinicius": 7,
+        "guilherme": 6,
+        "caliman": 5,
+        "dalla": 8,
+        "francez": 5,
+        "rodrigo": 4,
+        "igor": 5,
+        "lage": 4
+      }
+    },
+    "3": {
+      "fonte": "09/04/2022 10:34 - Guilherne Viana",
+      "players": {
+        "ferrari": 5,
+        "guilherme": 6,
+        "caliman": 7,
+        "rodrigo": 5,
+        "vinicius": 5,
+        "lage": 4,
+        "igor": 7,
+        "dalla": 6,
+        "francez": 5
+      }
+    },
+    "6": {
+      "fonte": "21/05/2022 16:33 - Guilherne Viana",
+      "players": {
+        "guilherme": 7,
+        "vinicius": 6,
+        "ferrari": 10,
+        "caliman": 10,
+        "dalla": 10,
+        "francez": 8,
+        "lage": 10
+      }
+    },
+    "7": {
+      "fonte": "28/05/2022 12:27 - Guilherne Viana",
+      "players": {
+        "caliman": 10,
+        "ferrari": 7,
+        "vinicius": 9,
+        "guilherme": 8,
+        "dalla": 10,
+        "lage": 7
+      }
+    },
+    "8": {
+      "fonte": "12/06/2022 10:44 - Guilherne Viana",
+      "players": {
+        "caliman": 10,
+        "guilherme": 7,
+        "francez": 5,
+        "igor": 9,
+        "vinicius": 8,
+        "ferrari": 8,
+        "dalla": 8,
+        "lage": 6
+      }
+    },
+    "9": {
+      "fonte": "21/06/2022 19:32 - Guilherne Viana",
+      "players": {
+        "vinicius": 4,
+        "ferrari": 2,
+        "caliman": 4,
+        "dalla": 3,
+        "francez": 3,
+        "igor": 5,
+        "lage": 3,
+        "rodrigo": 5,
+        "guilherme": 5
+      }
+    },
+    "11": {
+      "fonte": "08/07/2022 15:44 - Guilherne Viana",
+      "players": {
+        "guilherme": 6,
+        "ferrari": 6,
+        "igor": 7,
+        "dalla": 6,
+        "vinicius": 6,
+        "caliman": 5
+      }
+    },
+    "12": {
+      "fonte": "23/07/2022 13:52 - Guilherne Viana",
+      "players": {
+        "guilherme": 8,
+        "francez": 5,
+        "caliman": 10,
+        "igor": 7,
+        "ferrari": 8,
+        "vinicius": 9,
+        "lage": 7,
+        "dalla": 9
+      }
+    },
+    "14": {
+      "fonte": "02/09/2022 14:13 - Guilherne Viana",
+      "players": {
+        "vinicius": 6,
+        "igor": 5,
+        "caliman": 4,
+        "francez": 3,
+        "ferrari": 2,
+        "guilherme": 3,
+        "dalla": 3,
+        "lage": 4
+      }
+    },
+    "15": {
+      "fonte": "03/09/2022 11:17 - Guilherne Viana",
+      "players": {
+        "ferrari": 7,
+        "caliman": 8,
+        "guilherme": 9,
+        "dalla": 9,
+        "igor": 8,
+        "lage": 6,
+        "francez": 12
+      }
+    },
+    "16": {
+      "fonte": "10/09/2022 14:58 - Guilherne Viana",
+      "players": {
+        "guilherme": 7,
+        "ferrari": 8,
+        "francez": 7,
+        "caliman": 6,
+        "vinicius": 9,
+        "igor": 4,
+        "dalla": 8,
+        "lage": 7
+      }
+    },
+    "20": {
+      "fonte": "30/10/2022 12:59 - Guilherne Viana",
+      "players": {
+        "vinicius": 5,
+        "ferrari": 5,
+        "francez": 4,
+        "igor": 5,
+        "caliman": 5,
+        "guilherme": 4,
+        "dalla": 5
+      }
+    },
+    "21": {
+      "fonte": "18/11/2022 21:46 - Guilherne Viana",
+      "players": {
+        "guilherme": 3,
+        "caliman": 3,
+        "ferrari": 4,
+        "vinicius": 3,
+        "igor": 3,
+        "dalla": 2,
+        "francez": 3
+      }
+    }
+  }
+}

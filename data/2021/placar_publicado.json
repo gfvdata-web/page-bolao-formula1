@@ -1,0 +1,110 @@
+{
+  "_comment": "Pontuacao por rodada como o grupo publicou no WhatsApp. Manda sobre a recalculacao (decisao do usuario); rodada que nao esta aqui usa a recalculacao. Extraido por bolao.whatsapp_import; quando a rodada teve mais de um placar publicado, vale o mais proximo do quali.",
+  "season": 2021,
+  "rounds": {
+    "12": {
+      "fonte": "28/08/2021 22:55 - Guilherne Viana",
+      "players": {
+        "guilherme": 2,
+        "ferrari": 2,
+        "caliman": 3,
+        "vinicius": 3,
+        "dalla": 2
+      }
+    },
+    "13": {
+      "fonte": "04/09/2021 12:00 - Guilherne Viana",
+      "players": {
+        "ferrari": 6,
+        "francez": 5,
+        "guilherme": 6,
+        "vinicius": 4,
+        "dalla": 6,
+        "caliman": 6
+      }
+    },
+    "16": {
+      "fonte": "09/10/2021 10:22 - Guilherne Viana",
+      "players": {
+        "guilherme": 7,
+        "ferrari": 6,
+        "igor": 6,
+        "dalla": 6,
+        "francez": 5,
+        "vinicius": 5
+      }
+    },
+    "17": {
+      "fonte": "23/10/2021 19:16 - Guilherne Viana",
+      "players": {
+        "guilherme": 5,
+        "caliman": 5,
+        "francez": 6,
+        "ferrari": 3,
+        "igor": 4,
+        "dalla": 5,
+        "vinicius": 6
+      }
+    },
+    "18": {
+      "fonte": "06/11/2021 20:29 - Guilherne Viana",
+      "players": {
+        "dalla": 7,
+        "francez": 4,
+        "ferrari": 6,
+        "vinicius": 6,
+        "igor": 4,
+        "caliman": 5,
+        "guilherme": 6
+      }
+    },
+    "19": {
+      "fonte": "13/11/2021 00:34 - Guilherne Viana",
+      "players": {
+        "ferrari": 6,
+        "francez": 3,
+        "guilherme": 4,
+        "dalla": 5,
+        "igor": 5,
+        "vinicius": 6,
+        "caliman": 4
+      }
+    },
+    "20": {
+      "fonte": "20/11/2021 12:06 - Guilherne Viana",
+      "players": {
+        "guilherme": 4,
+        "ferrari": 7,
+        "francez": 6,
+        "vinicius": 5,
+        "dalla": 6,
+        "igor": 6,
+        "caliman": 6
+      }
+    },
+    "21": {
+      "fonte": "05/12/2021 10:07 - Guilherne Viana",
+      "players": {
+        "vinicius": 4,
+        "francez": 5,
+        "ferrari": 4,
+        "caliman": 5,
+        "dalla": 4,
+        "guilherme": 8,
+        "igor": 4
+      }
+    },
+    "22": {
+      "fonte": "11/12/2021 16:10 - Guilherne Viana",
+      "players": {
+        "dalla": 6,
+        "igor": 5,
+        "francez": 5,
+        "vinicius": 4,
+        "guilherme": 4,
+        "caliman": 3,
+        "ferrari": 2
+      }
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "_comment": "Etapa 7 — fechamento oficial da temporada, como o grupo registrou. 'ordem' fixa a classificacao final (inclui o desempate, que o grupo resolvia por criterio interno nunca escrito). 'pontos', quando presente, substitui o total somado rodada a rodada — o total calculado continua visivel em 'total_somado' no standings.json.",
+  "fonte": "Classificacao publicada em 07/12/2024 17:46, apos a R24. Em 2024 os placares por rodada publicados pelo grupo NAO somam esta tabela (ex.: Caliman fecha em 148 aqui, mas os relatorios por rodada dele somam 152), entao nao existe regra por rodada que a reproduza. Arthur e Dalla empatam em 162 e o grupo registrou Arthur campeao.",
+  "pontos": {
+    "arthur": 162,
+    "dalla": 162,
+    "lage": 150,
+    "caliman": 148,
+    "igor": 147,
+    "vinicius": 147,
+    "ferrari": 140,
+    "guilherme": 139,
+    "francez": 135,
+    "cintia": 105
+  },
+  "ordem": [
+    "arthur",
+    "dalla",
+    "lage",
+    "caliman",
+    "igor",
+    "vinicius",
+    "ferrari",
+    "guilherme",
+    "francez",
+    "cintia"
+  ]
+}

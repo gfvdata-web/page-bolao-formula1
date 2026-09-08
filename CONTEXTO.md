@@ -1388,30 +1388,49 @@ explícita, nunca efeito de o arquivo existir.
   (sem a flag). Incluí-lo empata Guilherme e Vinícius em 144 e desfaz o título
   do Vinícius: decisão do usuário.
 
-**Pódios calculados × `hall_of_fame`:**
+**Fechamento do histórico (decisões do usuário em 2026-09-08 — não reabrir):**
 
-| ano | histórico | calculado | |
-|-----|-----------|-----------|--|
-| 2021 | guilherme, vinicius, ferrari | idem | ✅ (desempate por média) |
-| 2022 | caliman, dalla, vinicius | caliman, dalla, **guilherme** | ver abaixo |
-| 2023 | dalla, lage, igor | idem | ✅ (avulso da R1) |
-| 2024 | arthur, dalla, lage | arthur, dalla, **caliman** | o "+1" descartado |
-| 2025 | vinicius, guilherme, igor | idem | ✅ |
+1. **O placar publicado no grupo manda**, seja qual for a regra que ele seguiu
+   na época. `data/<ano>/placar_publicado.json` (extraído do export por
+   `bolao.whatsapp_import`, versionado) tem a pontuação por rodada como o grupo
+   divulgou; `bolao.site` usa esse valor e guarda o que a regra da temporada
+   daria em `total_recalculado`. Rodada que o grupo não publicou continua vindo
+   da recalculação. Quando a mesma rodada tem mais de um placar publicado vale
+   o **mais próximo da data do quali** (foi assim que a mensagem de brincadeira
+   de 17/10/2021 parou de sobrescrever a Turquia).
+2. **`data/<ano>/ranking_final.json`** guarda o fechamento oficial: `ordem`
+   fixa a classificação final — inclusive o **desempate, que o grupo resolvia
+   por critério interno nunca escrito** — e `pontos`, quando presente,
+   substitui o total somado (o somado continua visível em `total_somado`).
+3. **Rodada sem palpite conta pelos pontos que dá para inferir** (item 1 acima).
+   A R19 de 2025 (Austin) **entra** no ranking pela pontuação publicada; se os
+   palpites aparecerem depois, viram `messages/19.txt` e o bloco avulso sai.
 
-As três divergências estão explicadas e **nenhuma é erro da regra de
-pontuação**:
+Onde cada mecanismo foi preciso:
 
-- **2022** — Vinícius perde o 3º lugar por 3 pts, e as **rodadas 4 (Imola) e 5
-  (Miami) não existem no export**. No placar do grupo ele fez 9 pts nelas
-  contra 4 do Guilherme, o que devolve a posição. É buraco de fonte.
-- ~~**2023**~~ — **resolvido**: era só a R1 do Dalla (ver `pontos_avulsos`).
-  Rodada a rodada, Igor bate 10/10, Dalla 9/9 e Lage 9/10 contra o placar
-  publicado; o único furo era a rodada que o Dalla não apostou.
-- **2024** — Caliman bate **exatamente** (148 = 148) e Lage fica 7 abaixo. Nos
-  intervalos com checkpoint o grupo dava consistentemente **+1 por rodada** a
-  cada jogador (o "+1 por palpitar" que o usuário não reconhece e mandou não
-  registrar como regra). A tabela final do grupo é inconsistente com o próprio
-  placar corrente deles — não dá para reproduzir sem inventar regra.
+| ano | por quê |
+|-----|---------|
+| 2021 | desempate por média (Ferrari e Vinícius fecharam os dois com 96) |
+| 2022 | bloco avulso R4+R5 + placar publicado + `ordem` (Caliman e Dalla empatam em 139) |
+| 2023 | avulso da R1 do Dalla + placar publicado + `ordem` (Igor e Ferrari empatam em 118) |
+| 2024 | `pontos` da tabela final: os placares por rodada do grupo **não somam** a tabela final dele (Caliman fecha 148 lá, mas os relatórios por rodada somam 152) — não existe regra por rodada que a reproduza. Arthur e Dalla empatam em 162 e `ordem` dá o título ao Arthur |
+| 2025 | Austin no ranking empata Guilherme e Vinícius em 144; `ordem` dá o título ao Vinícius |
+
+**Pódios calculados × `hall_of_fame`: os 5 batem.**
+
+| ano | pódio | pontos |
+|-----|-------|--------|
+| 2021 | guilherme, vinicius, ferrari | 111, 96, 96 |
+| 2022 | caliman, dalla, vinicius | 139, 139, 132 |
+| 2023 | dalla, lage, igor | 126, 121, 118 |
+| 2024 | arthur, dalla, lage | 162, 162, 150 |
+| 2025 | vinicius, guilherme, igor | 144, 144, 143 |
+
+**Publicado:** `docs/data/2021..2026/` + `docs/data/seasons.json` com as seis
+temporadas. O front ainda lê `TEMPORADA = "2026"` fixo em `docs/app.js` — o
+seletor de temporada e a sinalização das rodadas sem palpite
+(`rounds_sem_palpite`, `total_recalculado`, `total_somado` no `standings.json`)
+são as próximas sub-etapas, em outras conversas.
 
 ## 9. Pendências / decisões adiadas
 

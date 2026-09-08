@@ -1,0 +1,17 @@
+{
+  "_comment": "Etapa 7 — fechamento oficial da temporada, como o grupo registrou. 'ordem' fixa a classificacao final (inclui o desempate, que o grupo resolvia por criterio interno nunca escrito). 'pontos', quando presente, substitui o total somado rodada a rodada — o total calculado continua visivel em 'total_somado' no standings.json.",
+  "fonte": "Classificacao publicada em 24/11/2023 18:29, apos a R21 (faltava so Abu Dhabi). Usada aqui so para a ORDEM: o recalculo empata Igor e Ferrari em 118 e o grupo tinha Igor a frente (110 x 105). Os pontos seguem sendo os calculados.",
+  "ordem": [
+    "dalla",
+    "lage",
+    "igor",
+    "vinicius",
+    "guilherme",
+    "ferrari",
+    "caliman",
+    "francez",
+    "eleazar",
+    "luciano",
+    "dru"
+  ]
+}

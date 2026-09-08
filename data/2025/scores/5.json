@@ -103,7 +103,8 @@
       "bonus_guess": 4,
       "bonus_real_pos": 1,
       "bonus_points": 0,
-      "total": 6
+      "total": 6,
+      "total_recalculado": null
     },
     {
       "player_id": "igor",
@@ -165,7 +166,8 @@
       "bonus_guess": 3,
       "bonus_real_pos": 1,
       "bonus_points": 0,
-      "total": 6
+      "total": 6,
+      "total_recalculado": null
     },
     {
       "player_id": "vinicius",
@@ -227,7 +229,8 @@
       "bonus_guess": 3,
       "bonus_real_pos": 1,
       "bonus_points": 0,
-      "total": 6
+      "total": 6,
+      "total_recalculado": null
     },
     {
       "player_id": "arthur",
@@ -289,7 +292,8 @@
       "bonus_guess": 5,
       "bonus_real_pos": 1,
       "bonus_points": 0,
-      "total": 5
+      "total": 5,
+      "total_recalculado": null
     },
     {
       "player_id": "bernardo",
@@ -351,7 +355,8 @@
       "bonus_guess": 4,
       "bonus_real_pos": 1,
       "bonus_points": 0,
-      "total": 5
+      "total": 5,
+      "total_recalculado": null
     },
     {
       "player_id": "cintia",
@@ -413,7 +418,8 @@
       "bonus_guess": 3,
       "bonus_real_pos": 1,
       "bonus_points": 0,
-      "total": 5
+      "total": 5,
+      "total_recalculado": null
     },
     {
       "player_id": "dalla",
@@ -475,7 +481,8 @@
       "bonus_guess": 3,
       "bonus_real_pos": 1,
       "bonus_points": 0,
-      "total": 5
+      "total": 5,
+      "total_recalculado": null
     },
     {
       "player_id": "caliman",
@@ -537,7 +544,8 @@
       "bonus_guess": 3,
       "bonus_real_pos": 1,
       "bonus_points": 0,
-      "total": 4
+      "total": 4,
+      "total_recalculado": null
     },
     {
       "player_id": "ferrari",
@@ -599,7 +607,8 @@
       "bonus_guess": 3,
       "bonus_real_pos": 1,
       "bonus_points": 0,
-      "total": 4
+      "total": 4,
+      "total_recalculado": null
     },
     {
       "player_id": "francez",
@@ -661,7 +670,8 @@
       "bonus_guess": 2,
       "bonus_real_pos": 1,
       "bonus_points": 0,
-      "total": 4
+      "total": 4,
+      "total_recalculado": null
     },
     {
       "player_id": "lage",
@@ -723,7 +733,8 @@
       "bonus_guess": 3,
       "bonus_real_pos": 1,
       "bonus_points": 0,
-      "total": 4
+      "total": 4,
+      "total_recalculado": null
     }
   ]
 }

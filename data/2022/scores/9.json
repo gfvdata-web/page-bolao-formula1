@@ -6,7 +6,7 @@
   "date": "2022-06-19",
   "sprint": false,
   "bonus_driver": "",
-  "min_score": 2,
+  "min_score": 1,
   "bet_order": [
     "vinicius",
     "ferrari",
@@ -101,7 +101,8 @@
       "bonus_guess": 0,
       "bonus_real_pos": null,
       "bonus_points": 0,
-      "total": 5
+      "total": 5,
+      "total_recalculado": 5
     },
     {
       "player_id": "igor",
@@ -163,7 +164,8 @@
       "bonus_guess": 0,
       "bonus_real_pos": null,
       "bonus_points": 0,
-      "total": 5
+      "total": 5,
+      "total_recalculado": 5
     },
     {
       "player_id": "rodrigo",
@@ -225,7 +227,8 @@
       "bonus_guess": 0,
       "bonus_real_pos": null,
       "bonus_points": 0,
-      "total": 5
+      "total": 5,
+      "total_recalculado": 5
     },
     {
       "player_id": "caliman",
@@ -287,7 +290,8 @@
       "bonus_guess": 0,
       "bonus_real_pos": null,
       "bonus_points": 0,
-      "total": 4
+      "total": 4,
+      "total_recalculado": 4
     },
     {
       "player_id": "vinicius",
@@ -349,7 +353,8 @@
       "bonus_guess": 0,
       "bonus_real_pos": null,
       "bonus_points": 0,
-      "total": 4
+      "total": 4,
+      "total_recalculado": 4
     },
     {
       "player_id": "dalla",
@@ -411,69 +416,8 @@
       "bonus_guess": 0,
       "bonus_real_pos": null,
       "bonus_points": 0,
-      "total": 3
-    },
-    {
-      "player_id": "ferrari",
-      "player_raw": "Ferrari",
-      "name": "Ferrari",
-      "top6": [
-        "LEC",
-        "PER",
-        "VER",
-        "SAI",
-        "RUS",
-        "ALO"
-      ],
-      "top6_detail": [
-        {
-          "pos": 1,
-          "guess": "LEC",
-          "real": "VER",
-          "points": 0,
-          "reason": "fora"
-        },
-        {
-          "pos": 2,
-          "guess": "PER",
-          "real": "ALO",
-          "points": 0,
-          "reason": "fora"
-        },
-        {
-          "pos": 3,
-          "guess": "VER",
-          "real": "SAI",
-          "points": 1,
-          "reason": "no top6"
-        },
-        {
-          "pos": 4,
-          "guess": "SAI",
-          "real": "HAM",
-          "points": 1,
-          "reason": "no top6"
-        },
-        {
-          "pos": 5,
-          "guess": "RUS",
-          "real": "MAG",
-          "points": 0,
-          "reason": "fora"
-        },
-        {
-          "pos": 6,
-          "guess": "ALO",
-          "real": "MSC",
-          "points": 1,
-          "reason": "no top6"
-        }
-      ],
-      "top6_points": 3,
-      "bonus_guess": 0,
-      "bonus_real_pos": null,
-      "bonus_points": 0,
-      "total": 3
+      "total": 3,
+      "total_recalculado": 3
     },
     {
       "player_id": "francez",
@@ -535,7 +479,8 @@
       "bonus_guess": 0,
       "bonus_real_pos": null,
       "bonus_points": 0,
-      "total": 3
+      "total": 3,
+      "total_recalculado": 3
     },
     {
       "player_id": "lage",
@@ -597,7 +542,71 @@
       "bonus_guess": 0,
       "bonus_real_pos": null,
       "bonus_points": 0,
-      "total": 3
+      "total": 3,
+      "total_recalculado": 3
+    },
+    {
+      "player_id": "ferrari",
+      "player_raw": "Ferrari",
+      "name": "Ferrari",
+      "top6": [
+        "LEC",
+        "PER",
+        "VER",
+        "SAI",
+        "RUS",
+        "ALO"
+      ],
+      "top6_detail": [
+        {
+          "pos": 1,
+          "guess": "LEC",
+          "real": "VER",
+          "points": 0,
+          "reason": "fora"
+        },
+        {
+          "pos": 2,
+          "guess": "PER",
+          "real": "ALO",
+          "points": 0,
+          "reason": "fora"
+        },
+        {
+          "pos": 3,
+          "guess": "VER",
+          "real": "SAI",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 4,
+          "guess": "SAI",
+          "real": "HAM",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 5,
+          "guess": "RUS",
+          "real": "MAG",
+          "points": 0,
+          "reason": "fora"
+        },
+        {
+          "pos": 6,
+          "guess": "ALO",
+          "real": "MSC",
+          "points": 1,
+          "reason": "no top6"
+        }
+      ],
+      "top6_points": 3,
+      "bonus_guess": 0,
+      "bonus_real_pos": null,
+      "bonus_points": 0,
+      "total": 2,
+      "total_recalculado": 3
     }
   ]
 }

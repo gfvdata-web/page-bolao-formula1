@@ -86,6 +86,9 @@ def _score_to_dict(s: PlayerScore, name: str) -> dict:
         "bonus_real_pos": s.bonus_real_pos,
         "bonus_points": s.bonus_points,
         "total": s.total,
+        # Presente só quando o placar publicado pelo grupo diverge da regra da
+        # temporada — o site pode mostrar a diferença em vez de escondê-la.
+        "total_recalculado": s.total_recalculado,
     }
 
 
@@ -145,6 +148,14 @@ def generate(
     messages_dir = season_dir / "messages"
     results_dir = season_dir / "results"
 
+    # O placar que o grupo publicou manda sobre a recalculação (decisão do
+    # usuário): ele é o registro da temporada, seja qual for a conta que o
+    # grupo fez na época. A recalculação preenche as rodadas sem placar.
+    placar_path = season_dir / "placar_publicado.json"
+    placar_pub = (
+        _load_json(placar_path).get("rounds", {}) if placar_path.exists() else {}
+    )
+
     # Rodadas com mensagem + resultado, em ordem crescente de rodada.
     rounds: list[int] = sorted(
         int(p.stem)
@@ -171,6 +182,13 @@ def generate(
             )
         result = Result.from_dict(_load_json(results_dir / f"{rnd}.json"))
         scores = score_sheet(sheet, result, fmt.bonus_points)
+
+        publicado = placar_pub.get(str(rnd), {}).get("players", {})
+        for s in scores:
+            if s.player_id in publicado:
+                s.total_recalculado = s.total
+                s.total = publicado[s.player_id]
+        scores.sort(key=lambda s: (-s.total, s.player_id))
 
         for s in scores:
             names.observe(s.player_id, s.player_raw)
@@ -297,7 +315,22 @@ def generate(
         chave = lambda a: (-a["total"], -_media(a), a["player_id"])
     else:
         chave = lambda a: (-a["total"], a["player_id"])
+    # Ranking final publicado pelo grupo: `pontos` substitui o total somado e
+    # `ordem` fixa a classificação oficial (inclusive o desempate, que o grupo
+    # resolvia por critério interno não registrado). Ver data/<ano>/.
+    final_path = season_dir / "ranking_final.json"
+    final = _load_json(final_path) if final_path.exists() else {}
+    pontos_oficiais = final.get("pontos", {})
+    ordem_oficial = final.get("ordem", [])
+    for pid, pontos in pontos_oficiais.items():
+        if pid in acumulado:
+            acumulado[pid]["total_somado"] = acumulado[pid]["total"]
+            acumulado[pid]["total"] = pontos
+
     ordenados = sorted(acumulado.values(), key=chave)
+    if ordem_oficial:
+        posicao = {pid: i for i, pid in enumerate(ordem_oficial)}
+        ordenados.sort(key=lambda a: (posicao.get(a["player_id"], len(posicao)),))
     standings_players = []
     for pos, ac in enumerate(ordenados, 1):
         carry_pts = ac.get("carry_points", 0)
@@ -323,6 +356,7 @@ def generate(
                 "carry_points": carry_pts,
                 "carry_rounds": carry_rnd,
                 "avulsos_points": ac.get("avulsos_points", 0),
+                "total_somado": ac.get("total_somado", ac["total"]),
                 "rounds_sem_palpite": sorted(set(ac.get("rounds_sem_palpite", []))),
                 "rounds_played": rounds_played,
                 "avg_points": avg_points,

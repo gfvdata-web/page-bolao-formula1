@@ -1,5 +1,6 @@
 {
-  "_comment": "Etapa 7 — pontuacao de rodadas de 2025 que existem so como PLACAR publicado no grupo, sem os palpites brutos. Guardado aqui para nao se perder; ainda NAO entra no ranking do site (decisao pendente na secao 8 do CONTEXTO.md — precisa definir como o site mostra uma rodada com pontos e sem palpite, mesma classe da decisao da compensacao retroativa). A fonte canonica do grid e data/2025/results/<round>.json (Jolpica).",
+  "_comment": "Etapa 7 — pontuacao de rodadas de 2025 que existem so como PLACAR publicado no grupo, sem os palpites brutos. Guardado aqui para nao se perder; ENTRA no ranking desde 2026-09-08 (decisao do usuario): rodada que falta na fonte nao pode custar pontos, entao a pontuacao publicada conta mesmo sem os palpites. Se os palpites aparecerem depois, viram messages/19.txt e este bloco sai. A fonte canonica do grid e data/2025/results/<round>.json (Jolpica).",
+  "incluir_no_ranking": true,
   "rounds": {
     "19": {
       "race": "Austin",
