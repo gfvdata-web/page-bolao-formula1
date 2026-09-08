@@ -7,11 +7,12 @@ Top6 (máx 12 pts) — para cada um dos 6 pilotos apostados, em ordem:
   * dentro do top6 real, outra posição .. 1 pt
   * fora do top6 real ................... 0 pt
 
-Piloto da rodada (máx 1 pt):
+Piloto da rodada (máx 1 pt; **2 pts em 2024**, ver ``bolao.formats``):
   * posição exata no grid (P1..P20) ..... 1 pt
   * caso contrário ...................... 0 pt
 
-Total máximo por corrida: 13 pts.
+Total máximo por corrida: 13 pts (14 em 2024; 10 em 2021, que era top5 e não
+tinha piloto da rodada).
 """
 
 from dataclasses import dataclass
@@ -72,8 +73,14 @@ class Result:
         return cls(race=dados.get("race", ""), order=list(order))
 
 
-def score_bet(bet: Bet, result: Result, bonus_driver: str) -> PlayerScore:
-    """Pontua um palpite individual contra o resultado."""
+def score_bet(
+    bet: Bet, result: Result, bonus_driver: str, bonus_points: int = 1
+) -> PlayerScore:
+    """Pontua um palpite individual contra o resultado.
+
+    ``bonus_points`` é quanto vale acertar a posição do piloto da rodada: 1 hoje,
+    mas 2 em 2024 (ver ``bolao.formats``).
+    """
     # Referência = as primeiras N posições reais, com N = tamanho do palpite
     # (6 hoje; 5 na temporada de 2021 — ver bolao.formats).
     real_top6 = result.order[: len(bet.top6)]
@@ -94,7 +101,8 @@ def score_bet(bet: Bet, result: Result, bonus_driver: str) -> PlayerScore:
 
     # Temporadas sem piloto da rodada (2021-2023) chegam com bonus_driver vazio.
     real_bonus_pos = result.position_of(bonus_driver) if bonus_driver else None
-    bonus_pts = 1 if real_bonus_pos is not None and real_bonus_pos == bet.bonus_guess else 0
+    acertou = real_bonus_pos is not None and real_bonus_pos == bet.bonus_guess
+    bonus_pts = bonus_points if acertou else 0
 
     return PlayerScore(
         player_id=bet.player_id,
@@ -108,8 +116,12 @@ def score_bet(bet: Bet, result: Result, bonus_driver: str) -> PlayerScore:
     )
 
 
-def score_sheet(sheet: Sheet, result: Result) -> list[PlayerScore]:
+def score_sheet(
+    sheet: Sheet, result: Result, bonus_points: int = 1
+) -> list[PlayerScore]:
     """Pontua todos os jogadores de uma mensagem, ordenados por total desc."""
-    scores = [score_bet(bet, result, sheet.bonus_driver) for bet in sheet.bets]
+    scores = [
+        score_bet(bet, result, sheet.bonus_driver, bonus_points) for bet in sheet.bets
+    ]
     scores.sort(key=lambda s: (-s.total, s.player_id))
     return scores

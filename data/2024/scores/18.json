@@ -100,8 +100,8 @@
       "top6_points": 5,
       "bonus_guess": 1,
       "bonus_real_pos": 1,
-      "bonus_points": 1,
-      "total": 6
+      "bonus_points": 2,
+      "total": 7
     },
     {
       "player_id": "igor",
@@ -162,8 +162,8 @@
       "top6_points": 5,
       "bonus_guess": 1,
       "bonus_real_pos": 1,
-      "bonus_points": 1,
-      "total": 6
+      "bonus_points": 2,
+      "total": 7
     },
     {
       "player_id": "caliman",
@@ -224,8 +224,8 @@
       "top6_points": 4,
       "bonus_guess": 1,
       "bonus_real_pos": 1,
-      "bonus_points": 1,
-      "total": 5
+      "bonus_points": 2,
+      "total": 6
     },
     {
       "player_id": "ferrari",
@@ -286,8 +286,8 @@
       "top6_points": 4,
       "bonus_guess": 1,
       "bonus_real_pos": 1,
-      "bonus_points": 1,
-      "total": 5
+      "bonus_points": 2,
+      "total": 6
     },
     {
       "player_id": "francez",

@@ -42,6 +42,68 @@
   ],
   "players": [
     {
+      "player_id": "caliman",
+      "player_raw": "Caliman",
+      "name": "Caliman",
+      "top6": [
+        "NOR",
+        "HAM",
+        "VER",
+        "PIA",
+        "LEC",
+        "RUS"
+      ],
+      "top6_detail": [
+        {
+          "pos": 1,
+          "guess": "NOR",
+          "real": "NOR",
+          "points": 2,
+          "reason": "exata"
+        },
+        {
+          "pos": 2,
+          "guess": "HAM",
+          "real": "PIA",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 3,
+          "guess": "VER",
+          "real": "RUS",
+          "points": 0,
+          "reason": "fora"
+        },
+        {
+          "pos": 4,
+          "guess": "PIA",
+          "real": "LEC",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 5,
+          "guess": "LEC",
+          "real": "SAI",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 6,
+          "guess": "RUS",
+          "real": "HAM",
+          "points": 1,
+          "reason": "no top6"
+        }
+      ],
+      "top6_points": 6,
+      "bonus_guess": 13,
+      "bonus_real_pos": 13,
+      "bonus_points": 2,
+      "total": 8
+    },
+    {
       "player_id": "arthur",
       "player_raw": "Arthur",
       "name": "Arthur",
@@ -104,28 +166,28 @@
       "total": 7
     },
     {
-      "player_id": "caliman",
-      "player_raw": "Caliman",
-      "name": "Caliman",
+      "player_id": "ferrari",
+      "player_raw": "Ferrari",
+      "name": "Ferrari",
       "top6": [
+        "LEC",
         "NOR",
-        "HAM",
         "VER",
         "PIA",
-        "LEC",
-        "RUS"
+        "HAM",
+        "SAI"
       ],
       "top6_detail": [
         {
           "pos": 1,
-          "guess": "NOR",
+          "guess": "LEC",
           "real": "NOR",
-          "points": 2,
-          "reason": "exata"
+          "points": 1,
+          "reason": "no top6"
         },
         {
           "pos": 2,
-          "guess": "HAM",
+          "guess": "NOR",
           "real": "PIA",
           "points": 1,
           "reason": "no top6"
@@ -146,23 +208,23 @@
         },
         {
           "pos": 5,
-          "guess": "LEC",
+          "guess": "HAM",
           "real": "SAI",
           "points": 1,
           "reason": "no top6"
         },
         {
           "pos": 6,
-          "guess": "RUS",
+          "guess": "SAI",
           "real": "HAM",
           "points": 1,
           "reason": "no top6"
         }
       ],
-      "top6_points": 6,
+      "top6_points": 5,
       "bonus_guess": 13,
       "bonus_real_pos": 13,
-      "bonus_points": 1,
+      "bonus_points": 2,
       "total": 7
     },
     {
@@ -411,68 +473,6 @@
       "bonus_guess": 17,
       "bonus_real_pos": 13,
       "bonus_points": 0,
-      "total": 6
-    },
-    {
-      "player_id": "ferrari",
-      "player_raw": "Ferrari",
-      "name": "Ferrari",
-      "top6": [
-        "LEC",
-        "NOR",
-        "VER",
-        "PIA",
-        "HAM",
-        "SAI"
-      ],
-      "top6_detail": [
-        {
-          "pos": 1,
-          "guess": "LEC",
-          "real": "NOR",
-          "points": 1,
-          "reason": "no top6"
-        },
-        {
-          "pos": 2,
-          "guess": "NOR",
-          "real": "PIA",
-          "points": 1,
-          "reason": "no top6"
-        },
-        {
-          "pos": 3,
-          "guess": "VER",
-          "real": "RUS",
-          "points": 0,
-          "reason": "fora"
-        },
-        {
-          "pos": 4,
-          "guess": "PIA",
-          "real": "LEC",
-          "points": 1,
-          "reason": "no top6"
-        },
-        {
-          "pos": 5,
-          "guess": "HAM",
-          "real": "SAI",
-          "points": 1,
-          "reason": "no top6"
-        },
-        {
-          "pos": 6,
-          "guess": "SAI",
-          "real": "HAM",
-          "points": 1,
-          "reason": "no top6"
-        }
-      ],
-      "top6_points": 5,
-      "bonus_guess": 13,
-      "bonus_real_pos": 13,
-      "bonus_points": 1,
       "total": 6
     },
     {

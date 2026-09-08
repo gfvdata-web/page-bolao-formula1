@@ -14,19 +14,21 @@ from pathlib import Path
 from bolao.historico import build
 from bolao.site import generate
 
-SEASON = 2024
+# Temporada no formato atual (top6 + piloto da rodada valendo 1 pt).
+# 2024 nao serve aqui: naquele ano o bonus valia 2 (ver bolao.formats).
+SEASON = 2026
 
 CALENDAR = {
     "season": SEASON,
     "races": [
         {
-            "race_id": "2024-01", "season": SEASON, "round": 1,
-            "circuit": "testland", "race": "Testland", "date": "2024-03-01",
+            "race_id": "2026-01", "season": SEASON, "round": 1,
+            "circuit": "testland", "race": "Testland", "date": "2026-03-01",
             "sprint": False, "aliases": ["testland", "testonia"],
         },
         {
-            "race_id": "2024-02", "season": SEASON, "round": 2,
-            "circuit": "otherville", "race": "Otherville", "date": "2024-03-08",
+            "race_id": "2026-02", "season": SEASON, "round": 2,
+            "circuit": "otherville", "race": "Otherville", "date": "2026-03-08",
             "sprint": False, "aliases": ["otherville"],
         },
     ],

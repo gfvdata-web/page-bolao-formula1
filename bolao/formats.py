@@ -18,10 +18,11 @@ class SeasonFormat:
 
     top_n: int  # quantos pilotos o jogador aposta (P1..Pn)
     bonus: bool  # existe palpite da posição do piloto da rodada?
+    bonus_points: int = 1  # quanto vale acertar a posição exata dele
 
     @property
     def max_points(self) -> int:
-        return self.top_n * 2 + (1 if self.bonus else 0)
+        return self.top_n * 2 + (self.bonus_points if self.bonus else 0)
 
 
 # Temporada -> formato. Anos não listados usam o formato atual.
@@ -29,7 +30,10 @@ FORMATS: dict[int, SeasonFormat] = {
     2021: SeasonFormat(top_n=5, bonus=False),  # máx 10
     2022: SeasonFormat(top_n=6, bonus=False),  # máx 12
     2023: SeasonFormat(top_n=6, bonus=False),  # máx 12
-    2024: SeasonFormat(top_n=6, bonus=True),  # máx 13
+    # 2024 pagava 2 pts no acerto do piloto da rodada (máx 14). Confirmado
+    # pela R2 (Jeddah): o sorteado foi o VER, os 10 jogadores cravaram P1 e ele
+    # fez a pole — o placar publicado bate 10/10 com 2 pts e 0/10 com 1 pt.
+    2024: SeasonFormat(top_n=6, bonus=True, bonus_points=2),  # máx 14
     2025: SeasonFormat(top_n=6, bonus=True),
     2026: SeasonFormat(top_n=6, bonus=True),
 }

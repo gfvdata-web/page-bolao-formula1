@@ -1225,7 +1225,7 @@ mesmo formato que 2025 já usa.
 | 2021 | 5   | não existia      | 10          |
 | 2022 | 6   | não existia      | 12          |
 | 2023 | 6   | não existia      | 12          |
-| 2024 | 6   | sim (desde R1)   | 13          |
+| 2024 | 6   | sim (desde R1)   | **14** (bônus vale 2) |
 | 2025 | 6   | sim              | 13          |
 
 A regra 2/1/0 (exata / dentro do top N real / fora) vale em **todos** os anos —
@@ -1302,26 +1302,43 @@ schema do `standings.json`: `total` = com compensação; **bruto** =
 **Conferência do recálculo contra o placar publicado no grupo**
 (`historico_wpp/conferencia.txt`, gerado junto com o import):
 
-| Ano  | Confere | Leitura |
-|------|---------|---------|
-| 2021 | **141/141 (100%)** | reproduz o campeonato inteiro, incluindo o pódio do `hall_of_fame` |
-| 2023 | 240/270 (89%) | pódio bate (dalla/lage/igor); ordem de 1º/2º difere por ~4 pts |
-| 2022 | 150/266 (56%) | R1–R12 batem quase todas; top2 (caliman/dalla) confere |
-| 2024 | 118/357 (33%) | **R1–R4 têm +1 sistemático para todo mundo** (ver abaixo) |
+| Ano  | Confere | O que explica o resto |
+|------|---------|-----------------------|
+| 2021 | **154/154 (100%)** | nada a explicar: reproduz a temporada inteira, incluindo o pódio do `hall_of_fame` |
+| 2023 | 240/262 (92%) | as pontuações **por rodada** batem quase todas (5 linhas de ±1). No acumulado, o único divergente sistemático é o **dalla**, sempre exatamente **+7** — ele não apostou na R1 e o grupo lhe deu 7 pts de compensação daquela rodada |
+| 2022 | 146/266 (55%) | 7 das 13 rodadas publicadas batem 100%, o resto por ±1–2. O rombo é todo no acumulado, e é **uniforme (~8 a 16 pts para todos, a partir da R6)**: são as **rodadas 4 (Imola) e 5 (Miami)**, que não existem no export — a média de 2022 é 6,2 pts/palpite, ou seja ~12 pts por jogador |
+| 2024 | 109/355 (31%) | ver abaixo |
 
-**Pendência aberta — a "+1" de 2024:** nas rodadas 1 a 4 de 2024 o placar
-publicado dá exatamente **1 ponto a mais** para cada jogador do que a regra
-2/1/0 + bônus produz (em R2 e R4 são 10 de 10 jogadores). A partir de ~R6 isso
-some e o recálculo volta a bater. Nenhuma regra alternativa de bônus testada
-(tolerância ±1, ±2, exata valendo 2, gradual) reproduz o placar — parece um
-ponto de participação usado só no começo daquele ano. **Os dados gravados usam
-a regra 2/1/0 + bônus exato** (a que o usuário confirmou); a divergência fica
-registrada na conferência para decisão futura.
+Ou seja: **2022 e 2023 não têm problema de pontuação** — 2022 tem buraco de
+cobertura (2 corridas) e 2023 tem uma compensação que o recálculo não conhece.
 
-**Divergências menores de cobertura:** 2022 não tem R4 (Imola) nem R5 (Miami)
-no WhatsApp, o que explica o 3º lugar do ranking calculado não bater com o
-`hall_of_fame` (vinicius). Em 2024 a diferença acumulada da "+1" põe caliman à
-frente de lage, invertendo o 3º lugar em relação ao `hall_of_fame`.
+**2024 — o piloto da rodada valia 2 pontos** (decidido com o usuário em
+2026-09-08, aplicado em `bolao/formats.py`). Prova: na **R2 (Jeddah)** o
+sorteado foi o VER, os **10 jogadores cravaram P1** e ele fez a pole — o placar
+publicado bate **10/10 com 2 pts e 0/10 com 1 pt**.
+
+**Pendência aberta — o "+1 por palpitar" no começo de 2024.** Mesmo com o bônus
+valendo 2, as rodadas 1 a 5 continuam com **1 ponto a mais para cada jogador
+que mandou um chute, mesmo errando**. Testando pares (acerto, erro) contra as
+pontuações publicadas:
+
+| regra do bônus | linhas que batem | rodadas exatas |
+|----------------|------------------|----------------|
+| acerto 1, erro 0 | 49/114 (43%) | 0/12 |
+| acerto 2, erro 0 (**em uso**) | 55/114 (48%) | 1/12 |
+| **acerto 2, erro 1 até a R5; depois 1 e 0** | **91/114 (80%)** | 3/12 |
+
+Com a terceira regra, R2/R4/R5 fecham 10/10, R1 8/10, R3 8/9 e R7 8/10. Não foi
+adotada porque muda o **3º lugar de 2024** (o recálculo dá `caliman`, o
+`hall_of_fame` diz `lage`) e a decisão é do usuário. Os dados gravados usam
+acerto = 2, erro = 0.
+
+**Correções de atribuição de rodada (2026-09-08):** `resolve_round` ganhou
+`passado=True` — mensagem de **pontuação/classificação** só pode falar de
+corrida já disputada. Sem isso, os placares do fim de 2024 caíam na corrida
+seguinte. E `_dia_quali` passou a usar a **véspera** da corrida quando o
+calendário não traz `qualifying_utc` (é o caso de 2021 inteiro na Jolpica) —
+essa correção sozinha levou 2021 de 92% para **100%**.
 
 ## 9. Pendências / decisões adiadas
 

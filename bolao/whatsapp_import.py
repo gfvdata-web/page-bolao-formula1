@@ -38,7 +38,7 @@ import re
 import sys
 import unicodedata
 from dataclasses import dataclass, field
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from pathlib import Path
 
 from .calendar import load_calendar
@@ -528,21 +528,37 @@ def parece_header(linha: str) -> bool:
 
 
 def _dia_quali(corrida: dict) -> date:
-    bruto = corrida.get("qualifying_utc") or corrida.get("date")
-    return datetime.fromisoformat(bruto.replace("Z", "+00:00")).date()
+    """Dia do quali. O calendario de 2021 da Jolpica nao traz horario de
+    sessao: sem ``qualifying_utc``, usa a vespera da corrida (o quali e no
+    sabado). Sem esse ajuste, um placar publicado no dia do quali parece ser
+    de uma corrida que ainda nao aconteceu."""
+    bruto = corrida.get("qualifying_utc")
+    if bruto:
+        return datetime.fromisoformat(bruto.replace("Z", "+00:00")).date()
+    return datetime.fromisoformat(corrida["date"]).date() - timedelta(days=1)
 
 
-def resolve_round(msg: Message, calendar: dict, janela: int = 6) -> int | None:
+def resolve_round(
+    msg: Message, calendar: dict, janela: int = 6, passado: bool = False
+) -> int | None:
     """Descobre a rodada pela data da mensagem (janela de ±``janela`` dias).
 
     As mensagens de palpite circulam entre a véspera e o dia seguinte ao quali,
     e as cópias continuam depois — a proximidade da data resolve sem depender
     do cabeçalho, que nem sempre existe (2022 não tinha).
+
+    Com ``passado=True`` só considera qualis que **já aconteceram**: é o caso
+    das mensagens de pontuação e classificação, que só podem falar de corrida
+    já disputada. Sem isso, um placar publicado na semana da corrida seguinte
+    é atribuído à corrida errada (aconteceu no fim de 2024).
     """
     melhor, menor = None, None
     for corrida in calendar["races"]:
-        delta = abs((msg.day - _dia_quali(corrida)).days)
-        if delta <= janela and (menor is None or delta < menor):
+        dias = (msg.day - _dia_quali(corrida)).days
+        if passado and dias < 0:
+            continue
+        delta = abs(dias)
+        if (passado or delta <= janela) and (menor is None or delta < menor):
             melhor, menor = corrida["round"], delta
     return melhor
 
@@ -777,7 +793,7 @@ def escreve_classificacoes(
             st = parse_standing(msg, players)
             if not st:
                 continue
-            rnd = resolve_round(msg, cal)
+            rnd = resolve_round(msg, cal, passado=True)
             partes.append(
                 f"\n--- [{st.kind}] {msg.header()}"
                 f"{f' (rodada ~{rnd})' if rnd else ''}"
@@ -921,7 +937,7 @@ def escreve_conferencia(
             st = parse_standing(msg, players)
             if not st:
                 continue
-            rnd = resolve_round(msg, calendar)
+            rnd = resolve_round(msg, calendar, passado=True)
             if rnd is None:
                 continue
             def acumulado_ate(limite: int, pid: str) -> int:
@@ -1037,7 +1053,7 @@ def escreve_saldo_inicial(
         st = parse_standing(msg, players)
         if not st or st.kind != "acumulada":
             continue
-        rnd = resolve_round(msg, calendar)
+        rnd = resolve_round(msg, calendar, passado=True)
         if rnd is None or rnd < primeira:
             continue
         if escolhida is None or rnd < escolhida[0]:

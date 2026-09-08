@@ -170,7 +170,7 @@ def generate(
                 f"({race['race']}); confira o cabeçalho ou o nome do arquivo."
             )
         result = Result.from_dict(_load_json(results_dir / f"{rnd}.json"))
-        scores = score_sheet(sheet, result)
+        scores = score_sheet(sheet, result, fmt.bonus_points)
 
         for s in scores:
             names.observe(s.player_id, s.player_raw)
