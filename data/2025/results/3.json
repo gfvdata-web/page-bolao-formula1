@@ -1,0 +1,29 @@
+{
+  "race_id": "2025-03",
+  "season": 2025,
+  "round": 3,
+  "circuit": "suzuka",
+  "race": "Suzuka",
+  "order": [
+    "VER",
+    "NOR",
+    "PIA",
+    "LEC",
+    "RUS",
+    "ANT",
+    "HAD",
+    "HAM",
+    "ALB",
+    "BEA",
+    "GAS",
+    "SAI",
+    "ALO",
+    "LAW",
+    "TSU",
+    "HUL",
+    "BOR",
+    "OCO",
+    "DOO",
+    "STR"
+  ]
+}

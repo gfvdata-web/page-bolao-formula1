@@ -35,10 +35,21 @@ function corCss(variavel) {
   return getComputedStyle(document.documentElement).getPropertyValue(variavel).trim();
 }
 
+// Temporada exibida. Os dados do site agora vivem em ./data/<ano>/ (uma pasta
+// por temporada); ./data/seasons.json lista as disponíveis e ./data/hall_of_fame.json
+// é comum a todas. O seletor visível de temporada entra numa etapa seguinte —
+// por enquanto fixo na temporada corrente.
+const TEMPORADA = "2026";
+
 async function carregarJson(caminho) {
   const resp = await fetch(caminho);
   if (!resp.ok) throw new Error(`Falha ao buscar ${caminho}: ${resp.status}`);
   return resp.json();
+}
+
+// Caminho de um JSON de dados da temporada ativa (ex.: caminhoDados("standings")).
+function caminhoDados(nome) {
+  return `./data/${TEMPORADA}/${nome}.json`;
 }
 
 function el(tag, props = {}, filhos = []) {
@@ -2405,7 +2416,7 @@ async function main() {
   configurarModoAcumulado();
 
   try {
-    const standings = await carregarJson("./data/standings.json");
+    const standings = await carregarJson(caminhoDados("standings"));
     renderRanking(standings);
     document.getElementById("ranking-status").textContent = "";
     standingsParaTemporada = standings;
@@ -2414,13 +2425,13 @@ async function main() {
       copiarTexto(gerarTextoRanking(standings), evento.currentTarget);
     });
 
-    const calendar = await carregarJson("./data/calendar.json");
+    const calendar = await carregarJson(caminhoDados("calendar"));
     renderCorridas(standings, calendar);
     renderTabelaCorridas(standings);
     renderSimulador(standings, calendar);
 
-    const results = await carregarJson("./data/results.json");
-    const bets = await carregarJson("./data/bets.json");
+    const results = await carregarJson(caminhoDados("results"));
+    const bets = await carregarJson(caminhoDados("bets"));
     resultsGlobais = results;
 
     renderPilotos(results);

@@ -1,0 +1,29 @@
+{
+  "race_id": "2025-14",
+  "season": 2025,
+  "round": 14,
+  "circuit": "hungaroring",
+  "race": "Budapest",
+  "order": [
+    "LEC",
+    "PIA",
+    "NOR",
+    "RUS",
+    "ALO",
+    "STR",
+    "BOR",
+    "VER",
+    "LAW",
+    "HAD",
+    "BEA",
+    "HAM",
+    "SAI",
+    "COL",
+    "ANT",
+    "TSU",
+    "GAS",
+    "OCO",
+    "HUL",
+    "ALB"
+  ]
+}

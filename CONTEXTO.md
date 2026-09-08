@@ -1118,15 +1118,67 @@ enquanto a Jolpica não publica o quali.**
   `bernardo` (r1,2,4,5), `caio` (r15). `cintia`/`bernardo`/`arthur` **não estão**
   em `data/2026/players.json`.
 
-**Decisões da Etapa 7 (a fechar com o usuário — ver conversa 2026-09-08):**
+**Decisões da Etapa 7 (fechadas com o usuário em 2026-09-08 — não reabrir):**
+- **Identidade de jogador entre temporadas:** reusar o `player_id` de 2026
+  quando é a mesma pessoa (`caio`→`caio_l`); ids novos para quem não joga em
+  2026 (`cintia`, `bernardo`, `arthur` — este bate com o id do `hall_of_fame`).
 - Fonte do resultado do quali 2025 = **Jolpica** (`--season 2025`, grid
   completo); xlsx aba 2 = conferência + piloto da rodada (`quem`).
-- `messages/<round>.txt` de 2025 serão **sintetizados** do xlsx no formato que
-  `bolao/parser.py` já consome → o pipeline (`parser`→`scoring`→`site.generate`)
-  roda **sem alteração de lógica**. Só `site.generate` muda: saída em
-  `docs/data/<season>/…` (multi-temporada) + `docs/data/seasons.json`.
-- Fonte crua versionada no repo como CSV (`data/2025/…`), **não** dependência de
-  `openpyxl` no projeto/CI.
+- `messages/<round>.txt` de 2025 são **sintetizados** do xlsx no formato que
+  `bolao/parser.py` já consome → `parser`→`scoring`→`site.generate` rodam **sem
+  alteração de lógica**.
+- Fonte crua versionada no repo como CSV (`data/2025/palpites_2025.csv`,
+  `rodadas_2025.csv`), **sem** dependência de `openpyxl` no projeto/CI.
+- **Migração `docs/data/` agora:** 2026 saiu de `docs/data/*.json` para
+  `docs/data/2026/*.json`; 2025 em `docs/data/2025/`. O seletor visível de
+  temporada é a **sub-etapa seguinte**.
+
+**Entregue nesta sub-etapa (2026-09-08) — base 2025 + geração multi-temporada:**
+- **`bolao/site.py`:**
+  - `load_driver_aliases(data_dir, season)` — `data/drivers.json` (camada base
+    de apelidos manuais: `max`→VER, `kimi`→ANT, typos) + overlay opcional de
+    `data/<season>/drivers.json` (entry list real do ano, da Jolpica).
+  - `generate()` grava em `docs/data/<season>/` (era `docs/data/`) e escreve
+    `docs/data/seasons.json` `{temporadas:[...desc], atual}` varrendo as pastas
+    irmãs com `standings.json` (gerar uma temporada não apaga o índice das
+    outras). `docs/data/hall_of_fame.json` continua na raiz (comum a todas).
+- **`bolao/historico.py` (novo, Etapa 7):** `build(season, data_dir, check_only)`
+  + CLI `python -m bolao.historico build --season 2025 [--check-only]`. Lê os
+  CSVs + `calendar.json` + `results/<round>.json`, resolve `circuito→rodada` por
+  `resolve_race`, sintetiza `data/<season>/messages/<round>.txt` e imprime um
+  **relatório de conferência** (top6 planilha × Jolpica; posição real do piloto
+  da rodada planilha × Jolpica; código de piloto fora da entry list; top6 com
+  piloto repetido; jogador sem alias). Depende de `bolao.site` (Etapa 7 ⊃ 3).
+- **`data/2025/`:** `calendar.json`, `drivers.json`, `results/1..15.json` (da
+  Jolpica); `players.json`; `palpites_2025.csv` + `rodadas_2025.csv` (do xlsx);
+  `messages/1..15.txt` + `scores/1..15.json` (gerados).
+- **`docs/app.js`:** `const TEMPORADA = "2026"` + `caminhoDados(nome)` →
+  `./data/2026/<nome>.json`. **Cuidado:** já existe `let dadosTemporada` (dados
+  dos gráficos da aba Ranking/Corridas) — o helper novo teve que se chamar
+  `caminhoDados`. `hall_of_fame.json` continua em `./data/`.
+- Testes: `tests/test_historico.py` (4) + ajuste de caminho em
+  `test_site.py`/`test_pipeline.py` — total do projeto: **72**.
+- **Validado:** site abre com 2025 e 2026 (trocando `TEMPORADA`) sem nenhuma
+  mudança nos renderizadores; ranking, cards de corrida, compensação, gráficos.
+
+**Conferência do xlsx 2025 (`python -m bolao.historico build --season 2025`):**
+- **Top6 da planilha == Jolpica nas 15 rodadas** (dado limpo).
+- 3 avisos: (1) R1/Melbourne — piloto da rodada TSU: planilha diz P17, quali foi
+  P5 (usa Jolpica); (2) R5/Jeddah/Guilherme — top6 com `VER` repetido (P3 e P6),
+  preservado como veio → P6 conta 0; (3) R11/Áustria/Igor — `LEV` no P4 (typo de
+  `LEC`?), preservado → conta 0. **Correções pontuais, se quiseres, editam o
+  CSV** e re-rodam `historico build` + `site build`.
+
+**Pendências para fechar 2025 (decisão do usuário):**
+- **Rodadas 16→fim:** o usuário vai mandar os dados que faltam. Com 15/24
+  rodadas o ranking 2025 aqui **não fecha o campeonato** — o `hall_of_fame`
+  (🥇 vinicius 🥈 guilherme 🥉 igor) é da temporada inteira; o parcial atual dá
+  🥇 igor 🥈 vinicius 🥉 guilherme.
+- **Semântica da compensação retroativa no histórico:** aplicar as regras de
+  2026 (seção 2) a uma temporada fechada dá a jogadores que entraram no meio do
+  ano (`bernardo` +41, `arthur` +44, `caio` +50) pontuação mínima de todas as
+  rodadas anteriores à estreia. Definir se o histórico usa a mesma regra ou só
+  pontos brutos / a regra original de 2025.
 
 ## 9. Pendências / decisões adiadas
 

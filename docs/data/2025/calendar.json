@@ -1,0 +1,221 @@
+{
+  "season": 2025,
+  "races": [
+    {
+      "round": 1,
+      "race_id": "2025-01",
+      "race": "Melbourne",
+      "circuit": "albert_park",
+      "date": "2025-03-16",
+      "qualifying_utc": "2025-03-15T05:00:00Z",
+      "sprint": false
+    },
+    {
+      "round": 2,
+      "race_id": "2025-02",
+      "race": "Shanghai",
+      "circuit": "shanghai",
+      "date": "2025-03-23",
+      "qualifying_utc": "2025-03-22T07:00:00Z",
+      "sprint": true
+    },
+    {
+      "round": 3,
+      "race_id": "2025-03",
+      "race": "Suzuka",
+      "circuit": "suzuka",
+      "date": "2025-04-06",
+      "qualifying_utc": "2025-04-05T06:00:00Z",
+      "sprint": false
+    },
+    {
+      "round": 4,
+      "race_id": "2025-04",
+      "race": "Sakhir",
+      "circuit": "bahrain",
+      "date": "2025-04-13",
+      "qualifying_utc": "2025-04-12T16:00:00Z",
+      "sprint": false
+    },
+    {
+      "round": 5,
+      "race_id": "2025-05",
+      "race": "Jeddah",
+      "circuit": "jeddah",
+      "date": "2025-04-20",
+      "qualifying_utc": "2025-04-19T17:00:00Z",
+      "sprint": false
+    },
+    {
+      "round": 6,
+      "race_id": "2025-06",
+      "race": "Miami",
+      "circuit": "miami",
+      "date": "2025-05-04",
+      "qualifying_utc": "2025-05-03T20:00:00Z",
+      "sprint": true
+    },
+    {
+      "round": 7,
+      "race_id": "2025-07",
+      "race": "Imola",
+      "circuit": "imola",
+      "date": "2025-05-18",
+      "qualifying_utc": "2025-05-17T14:00:00Z",
+      "sprint": false
+    },
+    {
+      "round": 8,
+      "race_id": "2025-08",
+      "race": "Monte Carlo",
+      "circuit": "monaco",
+      "date": "2025-05-25",
+      "qualifying_utc": "2025-05-24T14:00:00Z",
+      "sprint": false
+    },
+    {
+      "round": 9,
+      "race_id": "2025-09",
+      "race": "Barcelona",
+      "circuit": "catalunya",
+      "date": "2025-06-01",
+      "qualifying_utc": "2025-05-31T14:00:00Z",
+      "sprint": false
+    },
+    {
+      "round": 10,
+      "race_id": "2025-10",
+      "race": "Montreal",
+      "circuit": "villeneuve",
+      "date": "2025-06-15",
+      "qualifying_utc": "2025-06-14T20:00:00Z",
+      "sprint": false
+    },
+    {
+      "round": 11,
+      "race_id": "2025-11",
+      "race": "Spielberg",
+      "circuit": "red_bull_ring",
+      "date": "2025-06-29",
+      "qualifying_utc": "2025-06-28T14:00:00Z",
+      "sprint": false
+    },
+    {
+      "round": 12,
+      "race_id": "2025-12",
+      "race": "Silverstone",
+      "circuit": "silverstone",
+      "date": "2025-07-06",
+      "qualifying_utc": "2025-07-05T14:00:00Z",
+      "sprint": false
+    },
+    {
+      "round": 13,
+      "race_id": "2025-13",
+      "race": "Spa",
+      "circuit": "spa",
+      "date": "2025-07-27",
+      "qualifying_utc": "2025-07-26T14:00:00Z",
+      "sprint": true
+    },
+    {
+      "round": 14,
+      "race_id": "2025-14",
+      "race": "Budapest",
+      "circuit": "hungaroring",
+      "date": "2025-08-03",
+      "qualifying_utc": "2025-08-02T14:00:00Z",
+      "sprint": false
+    },
+    {
+      "round": 15,
+      "race_id": "2025-15",
+      "race": "Zandvoort",
+      "circuit": "zandvoort",
+      "date": "2025-08-31",
+      "qualifying_utc": "2025-08-30T13:00:00Z",
+      "sprint": false
+    },
+    {
+      "round": 16,
+      "race_id": "2025-16",
+      "race": "Monza",
+      "circuit": "monza",
+      "date": "2025-09-07",
+      "qualifying_utc": "2025-09-06T14:00:00Z",
+      "sprint": false
+    },
+    {
+      "round": 17,
+      "race_id": "2025-17",
+      "race": "Baku",
+      "circuit": "baku",
+      "date": "2025-09-21",
+      "qualifying_utc": "2025-09-20T12:00:00Z",
+      "sprint": false
+    },
+    {
+      "round": 18,
+      "race_id": "2025-18",
+      "race": "Marina Bay",
+      "circuit": "marina_bay",
+      "date": "2025-10-05",
+      "qualifying_utc": "2025-10-04T13:00:00Z",
+      "sprint": false
+    },
+    {
+      "round": 19,
+      "race_id": "2025-19",
+      "race": "Austin",
+      "circuit": "americas",
+      "date": "2025-10-19",
+      "qualifying_utc": "2025-10-18T21:00:00Z",
+      "sprint": true
+    },
+    {
+      "round": 20,
+      "race_id": "2025-20",
+      "race": "Mexico City",
+      "circuit": "rodriguez",
+      "date": "2025-10-26",
+      "qualifying_utc": "2025-10-25T21:00:00Z",
+      "sprint": false
+    },
+    {
+      "round": 21,
+      "race_id": "2025-21",
+      "race": "São Paulo",
+      "circuit": "interlagos",
+      "date": "2025-11-09",
+      "qualifying_utc": "2025-11-08T18:00:00Z",
+      "sprint": true
+    },
+    {
+      "round": 22,
+      "race_id": "2025-22",
+      "race": "Las Vegas",
+      "circuit": "vegas",
+      "date": "2025-11-23",
+      "qualifying_utc": "2025-11-22T04:00:00Z",
+      "sprint": false
+    },
+    {
+      "round": 23,
+      "race_id": "2025-23",
+      "race": "Lusail",
+      "circuit": "losail",
+      "date": "2025-11-30",
+      "qualifying_utc": "2025-11-29T18:00:00Z",
+      "sprint": true
+    },
+    {
+      "round": 24,
+      "race_id": "2025-24",
+      "race": "Abu Dhabi",
+      "circuit": "yas_marina",
+      "date": "2025-12-07",
+      "qualifying_utc": "2025-12-06T14:00:00Z",
+      "sprint": false
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+circuito,data,quem,pos_planilha,t1,t2,t3,t4,t5,t6
+australia,2025-03-15,tsu,p17,nor,pia,ver,rus,tsu,alb
+china,2025-03-22,str,p14,pia,rus,nor,ver,ham,lec
+suzuka,2025-04-05,sai,p12,ver,nor,pia,lec,rus,ant
+bahrain,2025-04-12,alo,p13,pia,rus,lec,ant,gas,nor
+jeddah,2025-04-19,ver,p1,ver,pia,rus,lec,ant,sai
+miami,2025-05-03,doo,p14,ver,nor,ant,pia,rus,sai
+imola,2025-05-17,ant,p13,pia,ver,rus,nor,alo,sai
+monaco,2025-05-24,lec,p2,nor,lec,pia,ham,ver,had
+barcelona,2025-05-31,alo,p10,pia,nor,ver,rus,ham,ant
+canada,2025-06-14,ham,p5,rus,ver,pia,ant,ham,alo
+austria,2025-06-28,hul,p20,nor,lec,pia,ham,rus,law
+silverstone,2025-07-05,rus,p4,ver,pia,nor,rus,ham,lec
+belgium,2025-07-26,hul,p14,nor,pia,lec,ver,alb,rus
+hungaroring,2025-08-02,oco,p18,lec,pia,nor,rus,alo,str
+zandvoort,2025-08-30,ver,p3,pia,nor,ver,had,rus,lec

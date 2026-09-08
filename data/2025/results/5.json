@@ -1,0 +1,29 @@
+{
+  "race_id": "2025-05",
+  "season": 2025,
+  "round": 5,
+  "circuit": "jeddah",
+  "race": "Jeddah",
+  "order": [
+    "VER",
+    "PIA",
+    "RUS",
+    "LEC",
+    "ANT",
+    "SAI",
+    "HAM",
+    "TSU",
+    "GAS",
+    "NOR",
+    "ALB",
+    "LAW",
+    "ALO",
+    "HAD",
+    "BEA",
+    "STR",
+    "DOO",
+    "HUL",
+    "OCO",
+    "BOR"
+  ]
+}

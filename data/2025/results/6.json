@@ -1,0 +1,29 @@
+{
+  "race_id": "2025-06",
+  "season": 2025,
+  "round": 6,
+  "circuit": "miami",
+  "race": "Miami",
+  "order": [
+    "VER",
+    "NOR",
+    "ANT",
+    "PIA",
+    "RUS",
+    "SAI",
+    "ALB",
+    "LEC",
+    "OCO",
+    "TSU",
+    "HAD",
+    "HAM",
+    "BOR",
+    "DOO",
+    "LAW",
+    "HUL",
+    "ALO",
+    "GAS",
+    "STR",
+    "BEA"
+  ]
+}

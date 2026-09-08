@@ -1,0 +1,29 @@
+{
+  "race_id": "2025-13",
+  "season": 2025,
+  "round": 13,
+  "circuit": "spa",
+  "race": "Spa",
+  "order": [
+    "NOR",
+    "PIA",
+    "LEC",
+    "VER",
+    "ALB",
+    "RUS",
+    "TSU",
+    "HAD",
+    "LAW",
+    "BOR",
+    "OCO",
+    "BEA",
+    "GAS",
+    "HUL",
+    "SAI",
+    "HAM",
+    "COL",
+    "ANT",
+    "ALO",
+    "STR"
+  ]
+}

@@ -85,13 +85,13 @@ class TestGenerate(unittest.TestCase):
 
         self.resumo = generate(self.data, self.docs, SEASON)
         self.standings = json.loads(
-            (self.docs / "data" / "standings.json").read_text(encoding="utf-8")
+            (self.docs / "data" / str(SEASON) / "standings.json").read_text(encoding="utf-8")
         )
         self.bets = json.loads(
-            (self.docs / "data" / "bets.json").read_text(encoding="utf-8")
+            (self.docs / "data" / str(SEASON) / "bets.json").read_text(encoding="utf-8")
         )
         self.results = json.loads(
-            (self.docs / "data" / "results.json").read_text(encoding="utf-8")
+            (self.docs / "data" / str(SEASON) / "results.json").read_text(encoding="utf-8")
         )
 
     def tearDown(self):

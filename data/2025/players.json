@@ -1,0 +1,34 @@
+{
+  "_comment": "Temporada 2025. Mesmo formato de data/2026/players.json. Ids canonicos reaproveitam os de 2026 quando e a mesma pessoa (permite cruzar temporadas no site). 'cintia', 'bernardo' e 'arthur' sao jogadores sem registro em 2026 (ids novos; 'arthur' bate com o id ja usado em docs/data/hall_of_fame.json). 'bernardo lavor' e a grafia completa vista a partir da rodada 2.",
+  "aliases": {
+    "guilherme": "guilherme",
+    "dalla": "dalla",
+    "vinicius": "vinicius",
+    "caio": "caio_l",
+    "caio l": "caio_l",
+    "caio lopes": "caio_l",
+    "ferrari": "ferrari",
+    "francez": "francez",
+    "caliman": "caliman",
+    "igor": "igor",
+    "lage": "lage",
+    "cintia": "cintia",
+    "bernardo": "bernardo",
+    "bernardo lavor": "bernardo",
+    "arthur": "arthur"
+  },
+  "names": {
+    "guilherme": "Guilherme",
+    "dalla": "Dalla",
+    "vinicius": "Vinícius",
+    "caio_l": "Caio Lopes",
+    "ferrari": "Ferrari",
+    "francez": "Francez",
+    "caliman": "Caliman",
+    "igor": "Igor",
+    "lage": "Lage",
+    "cintia": "Cintia",
+    "bernardo": "Bernardo Lavôr",
+    "arthur": "Arthur"
+  }
+}

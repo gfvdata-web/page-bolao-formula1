@@ -85,7 +85,7 @@ class TestPipeline(unittest.TestCase):
         msg_path = self.data / str(SEASON) / "messages" / "1.txt"
         self.assertEqual(msg_path.read_text(encoding="utf-8"), MSG_1)
         self.assertTrue((self.data / str(SEASON) / "results" / "1.json").exists())
-        self.assertTrue((self.docs / "data" / "standings.json").exists())
+        self.assertTrue((self.docs / "data" / str(SEASON) / "standings.json").exists())
 
     def test_run_com_round_explicito_ignora_cabecalho(self):
         with mock.patch("bolao.pipeline.fetch_result", return_value=RESULT_1):
@@ -189,7 +189,7 @@ class TestPipelineCLI(unittest.TestCase):
         with mock.patch("bolao.pipeline.fetch_result", return_value=RESULT_1):
             codigo, _, _ = self._cli("retry", "1")
         self.assertEqual(codigo, 0)
-        self.assertTrue((self.docs / "data" / "standings.json").exists())
+        self.assertTrue((self.docs / "data" / str(SEASON) / "standings.json").exists())
 
 
 if __name__ == "__main__":

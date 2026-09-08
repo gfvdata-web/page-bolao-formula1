@@ -1,0 +1,29 @@
+{
+  "race_id": "2025-08",
+  "season": 2025,
+  "round": 8,
+  "circuit": "monaco",
+  "race": "Monte Carlo",
+  "order": [
+    "NOR",
+    "LEC",
+    "PIA",
+    "HAM",
+    "VER",
+    "HAD",
+    "ALO",
+    "OCO",
+    "LAW",
+    "ALB",
+    "SAI",
+    "TSU",
+    "HUL",
+    "RUS",
+    "ANT",
+    "BOR",
+    "BEA",
+    "GAS",
+    "STR",
+    "COL"
+  ]
+}

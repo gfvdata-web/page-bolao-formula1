@@ -46,6 +46,22 @@ def _dump_json(caminho: Path, dados) -> None:
     )
 
 
+def load_driver_aliases(data_dir: str | Path, season: int) -> dict:
+    """Mapa de apelidos de piloto para a temporada.
+
+    ``data/drivers.json`` é a camada base (apelidos manuais e grafias — ex.
+    ``max``→VER, ``kimi``→ANT). ``data/<season>/drivers.json``, quando existe
+    (gerado da entry list real daquele ano pela Jolpica), é sobreposto por cima
+    — assim cada temporada usa a sua grade sem perder os apelidos manuais.
+    """
+    data_dir = Path(data_dir)
+    aliases = dict(_load_json(data_dir / "drivers.json")["aliases"])
+    season_file = data_dir / str(season) / "drivers.json"
+    if season_file.exists():
+        aliases.update(_load_json(season_file)["aliases"])
+    return aliases
+
+
 def _detail_to_dict(item) -> dict:
     return {
         "pos": item.pos,
@@ -116,9 +132,9 @@ def generate(
     data_dir = Path(data_dir)
     docs_dir = Path(docs_dir)
     season_dir = data_dir / str(season)
-    docs_data = docs_dir / "data"
+    docs_data = docs_dir / "data" / str(season)
 
-    drivers = _load_json(data_dir / "drivers.json")["aliases"]
+    drivers = load_driver_aliases(data_dir, season)
     players_cfg = _load_json(season_dir / "players.json")
     player_aliases = players_cfg.get("aliases", {})
     names = _NameResolver(players_cfg.get("names", {}))
@@ -317,6 +333,22 @@ def generate(
         ],
     }
     _dump_json(docs_data / "calendar.json", calendar_doc)
+
+    # --- docs/data/seasons.json (índice das temporadas disponíveis) ---
+    # Varre as pastas irmãs com standings.json — assim gerar uma temporada não
+    # apaga as outras do índice. O seletor de temporada do site lê este arquivo.
+    temporadas = sorted(
+        (
+            int(p.parent.name)
+            for p in (docs_dir / "data").glob("*/standings.json")
+            if p.parent.name.isdigit()
+        ),
+        reverse=True,
+    )
+    _dump_json(
+        docs_dir / "data" / "seasons.json",
+        {"temporadas": temporadas, "atual": temporadas[0] if temporadas else season},
+    )
 
     return {
         "rounds": [info["round"] for info in round_infos],

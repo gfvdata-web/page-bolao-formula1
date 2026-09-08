@@ -1,0 +1,29 @@
+{
+  "race_id": "2025-02",
+  "season": 2025,
+  "round": 2,
+  "circuit": "shanghai",
+  "race": "Shanghai",
+  "order": [
+    "PIA",
+    "RUS",
+    "NOR",
+    "VER",
+    "HAM",
+    "LEC",
+    "HAD",
+    "ANT",
+    "TSU",
+    "ALB",
+    "OCO",
+    "HUL",
+    "ALO",
+    "STR",
+    "SAI",
+    "GAS",
+    "BEA",
+    "DOO",
+    "BOR",
+    "LAW"
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "race_id": "2025-01",
+  "season": 2025,
+  "round": 1,
+  "circuit": "albert_park",
+  "race": "Melbourne",
+  "order": [
+    "NOR",
+    "PIA",
+    "VER",
+    "RUS",
+    "TSU",
+    "ALB",
+    "LEC",
+    "HAM",
+    "GAS",
+    "SAI",
+    "HAD",
+    "ALO",
+    "STR",
+    "DOO",
+    "BOR",
+    "ANT",
+    "HUL",
+    "LAW",
+    "OCO",
+    "BEA"
+  ]
+}
