@@ -1577,3 +1577,61 @@ button.subaba[aria-selected="true"] {
   .hist-matriz th, .hist-matriz td { padding: 0.35rem 0.4rem; }
   .hist-cel__linha { flex-wrap: wrap; }
 }
+
+/* ---------- Modo histórico (temporadas anteriores) ---------- */
+[hidden] { display: none !important; }
+
+.hist-badge {
+  display: inline-block;
+  margin-left: 0.5rem;
+  padding: 0.12rem 0.5rem;
+  border-radius: 999px;
+  background: var(--acento);
+  color: #fff;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  vertical-align: middle;
+}
+
+.hist-voltar {
+  flex-shrink: 0;
+  margin-right: auto;
+  border: 1px solid var(--borda);
+  border-radius: 999px;
+  background: var(--bg-card);
+  color: var(--texto);
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.32rem 0.7rem;
+  cursor: pointer;
+}
+.hist-voltar:hover { border-color: var(--acento); color: var(--acento); }
+
+.hist-avisos {
+  margin: 0.6rem;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--borda);
+  border-left: 3px solid var(--acento);
+  border-radius: 6px;
+  background: var(--bg-card);
+  font-size: 0.85rem;
+  color: var(--texto-fraco);
+}
+.hist-avisos strong { color: var(--texto); }
+.hist-avisos ul { margin: 0.3rem 0 0; padding-left: 1.1rem; }
+
+.hall-acessar {
+  margin-left: auto;
+  align-self: center;
+  padding: 0.2rem 0.7rem;
+  border: 1px solid var(--acento);
+  border-radius: 999px;
+  color: var(--acento);
+  text-decoration: none;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.hall-acessar:hover { background: var(--acento); color: #fff; }

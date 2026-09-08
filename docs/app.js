@@ -35,11 +35,27 @@ function corCss(variavel) {
   return getComputedStyle(document.documentElement).getPropertyValue(variavel).trim();
 }
 
-// Temporada exibida. Os dados do site agora vivem em ./data/<ano>/ (uma pasta
-// por temporada); ./data/seasons.json lista as disponíveis e ./data/hall_of_fame.json
-// é comum a todas. O seletor visível de temporada entra numa etapa seguinte —
-// por enquanto fixo na temporada corrente.
-const TEMPORADA = "2026";
+// Temporada exibida. Os dados do site vivem em ./data/<ano>/ (uma pasta por
+// temporada); ./data/seasons.json lista as disponíveis + o formato de cada uma,
+// e ./data/hall_of_fame.json é comum a todas.
+//
+// Sem ?ano na URL → temporada corrente (seasons.atual). Com ?ano=YYYY de uma
+// temporada anterior → "modo histórico": título vira o ano + badge HISTÓRICO,
+// botão "voltar", sub-aba Simulador some, e as visualizações se adaptam ao
+// formato daquele ano (FORMATO: top5 vs top6, com/sem piloto da rodada, etc.).
+let TEMPORADA = "2026";
+let SEASONS = null;
+let FORMATO = { top_n: 6, bonus: true, bonus_points: 1, compensation: true, max_points: 13 };
+let MODO_HISTORICO = false;
+
+function anoPedido() {
+  const p = new URLSearchParams(location.search).get("ano");
+  return p && /^\d{4}$/.test(p) ? p : null;
+}
+
+function entradaTemporada(ano = TEMPORADA) {
+  return (SEASONS?.temporadas || []).find((t) => String(t.ano) === String(ano));
+}
 
 async function carregarJson(caminho) {
   const resp = await fetch(caminho);
@@ -106,7 +122,7 @@ function renderRanking(standings) {
         el("th", {}, ["Jogador"]),
         el("th", { class: "num" }, ["Pontos"]),
         el("th", { class: "num" }, ["Média/Corrida"]),
-        el("th", { class: "num" }, ["Pontos Extra"]),
+        FORMATO.bonus ? el("th", { class: "num" }, ["Pontos Extra"]) : null,
         el("th", { class: "num" }, ["Rodadas"]),
       ]),
     ]),
@@ -130,7 +146,7 @@ function renderRanking(standings) {
         nomeCell,
         el("td", { class: "num" }, [String(jogador.total)]),
         el("td", { class: "num" }, [jogador.avg_points.toFixed(1)]),
-        el("td", { class: "num" }, [String(jogador.bonus_total)]),
+        FORMATO.bonus ? el("td", { class: "num" }, [String(jogador.bonus_total)]) : null,
         el("td", { class: "num" }, [String(jogador.rounds_played)]),
       ])
     );
@@ -169,8 +185,29 @@ function cardCorrida(titulo, race, extra) {
   ]);
 }
 
+function cardInfo(titulo, valor, extra) {
+  return el("div", { class: "corrida-card" }, [
+    el("div", { class: "corrida-card__titulo" }, [titulo]),
+    el("div", { class: "corrida-card__corrida" }, [valor]),
+    extra ? el("div", { class: "corrida-card__extra" }, [extra]) : null,
+  ]);
+}
+
 function renderCorridas(standings, calendar) {
   const container = document.getElementById("corridas-cards");
+
+  if (MODO_HISTORICO) {
+    const entrada = entradaTemporada() || {};
+    const totalTxt = entrada.rodadas_totais
+      ? `de ${entrada.rodadas_totais} no calendário`
+      : "";
+    container.replaceChildren(
+      cardInfo("Rodadas contabilizadas", String(standings.rounds.length), totalTxt),
+      cardInfo("Jogadores competindo", String(standings.players.length), "no ranking da temporada")
+    );
+    return;
+  }
+
   const rounds = standings.rounds.slice().sort((a, b) => a.round - b.round);
   const ultima = rounds[rounds.length - 1];
   const consolidadas = new Set(rounds.map((r) => r.round));
@@ -248,7 +285,7 @@ function celPalpite(guess, points) {
 function celBonusPalpite(pos, points) {
   return el("div", { class: "corrida-detalhe-cel" }, [
     el("span", { class: "corrida-detalhe-cel__pos" }, [`P${pos}`]),
-    badgePonto(points, 1),
+    badgePonto(points, FORMATO.bonus_points),
   ]);
 }
 
@@ -274,12 +311,14 @@ function renderCorridaDetalhe(roundNumber, standings, bets, results) {
     return;
   }
 
-  const realTop6 = resultado.order.slice(0, 6);
+  const realTop6 = resultado.order.slice(0, FORMATO.top_n);
   const bonusDriver = roundInfo.bonus_driver;
   const bonusRealPos = resultado.order.indexOf(bonusDriver) + 1;
 
   const totalRodadaJogador = (jogador) =>
-    jogador.compensated_rounds.includes(roundNumber) ? roundInfo.min_score : jogador.per_round[roundNumber];
+    jogador.compensated_rounds.includes(roundNumber)
+      ? roundInfo.min_score
+      : jogador.per_round[roundNumber] ?? null;
 
   const tabela = el("table", { class: "corrida-detalhe-tabela" }, [
     el("thead", {}, [
@@ -289,7 +328,9 @@ function renderCorridaDetalhe(roundNumber, standings, bets, results) {
         ...standings.players.map((j) =>
           el("th", { title: j.name }, [
             el("span", { class: "corrida-detalhe-th__nome" }, [j.name.split(" ")[0]]),
-            el("span", { class: "corrida-detalhe-th__total" }, [`${totalRodadaJogador(j)} pts`]),
+            el("span", { class: "corrida-detalhe-th__total" }, [
+              totalRodadaJogador(j) == null ? "–" : `${totalRodadaJogador(j)} pts`,
+            ]),
           ])
         ),
       ]),
@@ -314,20 +355,22 @@ function renderCorridaDetalhe(roundNumber, standings, bets, results) {
     );
   });
 
-  tbody.appendChild(
-    el("tr", {}, [
-      el("td", { class: "corrida-detalhe-rotulo" }, [
-        el("span", {}, ["Piloto"]),
-        chipPiloto(bonusDriver),
-      ]),
-      el("td", {}, [`P${bonusRealPos}`]),
-      ...standings.players.map((jogador) => {
-        const rodada = bets.players[jogador.player_id]?.rounds[roundNumber];
-        if (!rodada) return el("td", {}, [celVazia()]);
-        return el("td", {}, [celBonusPalpite(rodada.bonus_guess, rodada.bonus_points)]);
-      }),
-    ])
-  );
+  if (FORMATO.bonus) {
+    tbody.appendChild(
+      el("tr", {}, [
+        el("td", { class: "corrida-detalhe-rotulo" }, [
+          el("span", {}, ["Piloto"]),
+          chipPiloto(bonusDriver),
+        ]),
+        el("td", {}, [`P${bonusRealPos}`]),
+        ...standings.players.map((jogador) => {
+          const rodada = bets.players[jogador.player_id]?.rounds[roundNumber];
+          if (!rodada) return el("td", {}, [celVazia()]);
+          return el("td", {}, [celBonusPalpite(rodada.bonus_guess, rodada.bonus_points)]);
+        }),
+      ])
+    );
+  }
 
   tabela.appendChild(tbody);
   wrap.replaceChildren(tabela);
@@ -636,7 +679,9 @@ function renderSimulador(standings, calendar) {
 
 // Matriz posição × corrida: linhas P1–P6 + piloto da rodada + total; colunas
 // = corridas; célula = palpite de cada jogador selecionado + badge de pontos.
-const HIST_POSICOES = ["P1", "P2", "P3", "P4", "P5", "P6"];
+function posicoesTopN() {
+  return Array.from({ length: FORMATO.top_n }, (_, i) => `P${i + 1}`);
+}
 let histBets = null;
 let histStandings = null;
 let histSelecionados = [];
@@ -736,7 +781,7 @@ function histCelula(round, linhaIdx, tipo) {
     } else if (tipo === "extra") {
       linha.appendChild(chipPiloto(rodada.bonus_driver));
       linha.appendChild(el("span", { class: "hist-cel__chute" }, [`P${rodada.bonus_guess}`]));
-      linha.appendChild(histBadgePonto(rodada.bonus_points, 1));
+      linha.appendChild(histBadgePonto(rodada.bonus_points, FORMATO.bonus_points));
     } else {
       const detalhe = rodada.top6_detail[linhaIdx];
       linha.appendChild(chipPiloto(detalhe.guess));
@@ -761,7 +806,7 @@ function renderHistMatriz() {
     ]),
   ]);
   const tbody = el("tbody");
-  HIST_POSICOES.forEach((pos, idx) => {
+  posicoesTopN().forEach((pos, idx) => {
     tbody.appendChild(
       el("tr", {}, [
         el("th", { class: "hist-matriz__pos" }, [pos]),
@@ -769,12 +814,14 @@ function renderHistMatriz() {
       ])
     );
   });
-  tbody.appendChild(
-    el("tr", { class: "hist-matriz__linha-extra" }, [
-      el("th", { class: "hist-matriz__pos" }, ["Piloto"]),
-      ...rodadas.map((r) => histCelula(r.round, null, "extra")),
-    ])
-  );
+  if (FORMATO.bonus) {
+    tbody.appendChild(
+      el("tr", { class: "hist-matriz__linha-extra" }, [
+        el("th", { class: "hist-matriz__pos" }, ["Piloto"]),
+        ...rodadas.map((r) => histCelula(r.round, null, "extra")),
+      ])
+    );
+  }
   tbody.appendChild(
     el("tr", { class: "hist-matriz__linha-total" }, [
       el("th", { class: "hist-matriz__pos" }, ["Total"]),
@@ -827,7 +874,7 @@ function linhaBonus(rodada) {
     el("span", { class: "bonus-linha__label" }, ["Piloto da rodada:"]),
     chipPiloto(rodada.bonus_driver),
     el("span", { class: "bonus-linha__label" }, [`· chute P${rodada.bonus_guess} · real P${rodada.bonus_real_pos} ·`]),
-    badgePonto(rodada.bonus_points, 1),
+    badgePonto(rodada.bonus_points, FORMATO.bonus_points),
   ]);
 }
 
@@ -840,7 +887,7 @@ function cardRodada(rodada, data) {
       ]),
       el("div", { class: "rodada-card__total" }, [`${rodada.total} pts`]),
     ]),
-    el("div", { class: "rodada-card__body" }, [cardTop6(rodada), linhaBonus(rodada)]),
+    el("div", { class: "rodada-card__body" }, FORMATO.bonus ? [cardTop6(rodada), linhaBonus(rodada)] : [cardTop6(rodada)]),
   ]);
 }
 
@@ -2037,12 +2084,12 @@ function renderPilotos(results) {
     "aria-label": "Distribuição da posição real de largada no quali por piloto",
   });
 
-  // Faixa do top6 (leve destaque de fundo).
+  // Faixa do topN (leve destaque de fundo).
   svg.appendChild(
     svgEl("rect", {
       x: escalaX(0.5),
       y: margemTopo,
-      width: escalaX(6.5) - escalaX(0.5),
+      width: escalaX(FORMATO.top_n + 0.5) - escalaX(0.5),
       height: alturaTotal - margemTopo - margemBase,
       fill: corAcento,
       opacity: 0.06,
@@ -2148,7 +2195,7 @@ function renderPilotos(results) {
   const legenda = el("p", { class: "preferencia-legenda" }, [
     "Cada linha é um piloto (ordenados pela posição média real crescente, mostrada à direita). A forma " +
       "mostra em que posições ele mais larga nos quali já disputados; cada ponto é um quali. " +
-      "A faixa clara à esquerda é o top6. Passe o mouse numa linha para ver a contagem por posição.",
+      `A faixa clara à esquerda é o top${FORMATO.top_n}. Passe o mouse numa linha para ver a contagem por posição.`,
   ]);
 
   container.replaceChildren(el("div", { class: "pilotos-scroll" }, [svg]), tooltip, legenda);
@@ -2204,29 +2251,36 @@ function renderRankingHall(hof) {
   return tabela;
 }
 
-function renderListaAnosHall(hof) {
+function renderListaAnosHall(hof, seasons) {
   const medalhas = { ouro: "🥇", prata: "🥈", bronze: "🥉" };
   const anos = hof.anos.slice().sort((a, b) => b.ano - a.ano);
+  const disponiveis = new Set((seasons?.temporadas || []).map((t) => String(t.ano)));
+  const atual = String(seasons?.atual ?? "");
   const lista = el("ul", { class: "hall-anos-lista" });
   for (const ano of anos) {
+    const acessar =
+      disponiveis.has(String(ano.ano)) && String(ano.ano) !== atual
+        ? el("a", { class: "hall-acessar", href: `?ano=${ano.ano}` }, ["Acessar"])
+        : null;
     lista.appendChild(
       el("li", { class: "hall-ano-item" }, [
         el("span", { class: "hall-ano-item__ano" }, [String(ano.ano)]),
         el("span", { class: "hall-ano-item__medalha" }, [`${medalhas.ouro} ${nomeHall(hof, ano.ouro)}`]),
         el("span", { class: "hall-ano-item__medalha" }, [`${medalhas.prata} ${nomeHall(hof, ano.prata)}`]),
         el("span", { class: "hall-ano-item__medalha" }, [`${medalhas.bronze} ${nomeHall(hof, ano.bronze)}`]),
+        acessar,
       ])
     );
   }
   return lista;
 }
 
-function renderHallOfFame(hof) {
+function renderHallOfFame(hof, seasons) {
   const container = document.getElementById("hall-container");
   container.replaceChildren(
     el("div", { class: "hall-grid" }, [
       el("div", { class: "hall-coluna" }, [el("h2", {}, ["Ranking de vitórias"]), renderRankingHall(hof)]),
-      el("div", { class: "hall-coluna" }, [el("h2", {}, ["Pódios por ano"]), renderListaAnosHall(hof)]),
+      el("div", { class: "hall-coluna" }, [el("h2", {}, ["Pódios por ano"]), renderListaAnosHall(hof, seasons)]),
     ])
   );
 }
@@ -2408,6 +2462,120 @@ function configurarTema() {
   });
 }
 
+// Regras de pontuação (bloco em Ranking/Geral) montadas a partir de FORMATO —
+// o texto muda por temporada (top5 vs top6, com/sem piloto da rodada, etc.).
+function renderRegras() {
+  const ul = document.getElementById("regras-lista");
+  if (!ul) return;
+  const n = FORMATO.top_n;
+  const bp = FORMATO.bonus_points;
+  const itens = [
+    el("li", {}, [
+      el("strong", {}, [`Top${n}`]),
+      ` (máx. ${n * 2} pts): cada piloto apostado vale 2 pts na posição exata, ` +
+        `1 pt se estiver no top${n} real em outra posição, 0 pt se estiver fora do top${n} real.`,
+    ]),
+  ];
+  if (FORMATO.bonus) {
+    itens.push(
+      el("li", {}, [
+        el("strong", {}, ["Piloto da rodada"]),
+        ` (máx. ${bp} pt${bp > 1 ? "s" : ""}): ${bp} pt${bp > 1 ? "s" : ""} por acertar a ` +
+          `posição exata dele no grid inteiro; 0 pt caso contrário.`,
+      ]),
+      el("li", {}, [
+        el("strong", {}, ["Total por corrida:"]),
+        ` máximo ${FORMATO.max_points} pts (${n * 2} do top${n} + ${bp} do piloto da rodada).`,
+      ])
+    );
+  } else {
+    itens.push(
+      el("li", {}, [el("strong", {}, ["Total por corrida:"]), ` máximo ${FORMATO.max_points} pts.`])
+    );
+  }
+  if (FORMATO.compensation) {
+    itens.push(
+      el("li", {}, [
+        el("strong", {}, ["Pontuação mínima:"]),
+        " quem não aposta numa rodada recebe a pontuação mínima daquela rodada " +
+          "(1 a menos que a menor pontuação de quem apostou nela).",
+      ])
+    );
+  }
+  ul.replaceChildren(...itens);
+}
+
+// Ajusta os textos estáticos das legendas quando a temporada não é top6/2026.
+function adaptarTextosEstaticos() {
+  const n = FORMATO.top_n;
+  const seletores = [
+    ".hist-legenda",
+    "#subsecao-preferencia .secao-intro",
+    "#subsecao-preferencia .legenda-bloco",
+    "#subsecao-rendimento .secao-intro",
+  ];
+  if (n !== 6 || TEMPORADA !== "2026") {
+    for (const sel of seletores) {
+      document.querySelectorAll(sel).forEach((elm) => {
+        elm.innerHTML = elm.innerHTML
+          .replace(/top6/g, `top${n}`)
+          .replace(/P1[–-]P6/g, `P1–P${n}`)
+          .replace(/qualis de 2026/g, `qualis de ${TEMPORADA}`);
+      });
+    }
+  }
+  const legBonus = document.getElementById("hist-legenda-bonus");
+  if (legBonus) legBonus.hidden = !FORMATO.bonus;
+  const rendBonus = document.getElementById("rendimento-intro-bonus");
+  if (rendBonus) rendBonus.hidden = !FORMATO.bonus;
+}
+
+// Título / badge / botão voltar / faixa de avisos + esconde o Simulador.
+function aplicarModoHistorico() {
+  const titulo = document.getElementById("topo-titulo");
+  const badge = document.getElementById("hist-badge");
+  if (titulo && titulo.firstChild) titulo.firstChild.textContent = `🏁 Bolão F1 ${TEMPORADA} `;
+  document.title = `Bolão F1 ${TEMPORADA}`;
+  if (badge) badge.hidden = !MODO_HISTORICO;
+
+  const atual = String(SEASONS?.atual ?? "2026");
+  const voltar = document.getElementById("btn-voltar-atual");
+  if (voltar) {
+    voltar.hidden = !MODO_HISTORICO;
+    voltar.textContent = `← Voltar para ${atual}`;
+    voltar.addEventListener("click", () => {
+      location.href = location.pathname;
+    });
+  }
+
+  const avisos = document.getElementById("hist-avisos");
+  const entrada = entradaTemporada();
+  if (avisos && MODO_HISTORICO && entrada && entrada.parcial && (entrada.faltando || []).length) {
+    avisos.replaceChildren(
+      el("strong", {}, ["Temporada com dados incompletos:"]),
+      el(
+        "ul",
+        {},
+        entrada.faltando.map((f) => el("li", {}, [f]))
+      )
+    );
+    avisos.hidden = false;
+  } else if (avisos) {
+    avisos.hidden = true;
+  }
+
+  if (MODO_HISTORICO) {
+    const btnSim = document.querySelector('#secao-ranking button.subaba[data-subaba="simulador"]');
+    const secSim = document.getElementById("subsecao-ranking-simulador");
+    if (btnSim) btnSim.hidden = true;
+    if (secSim) secSim.hidden = true;
+    if (btnSim && btnSim.getAttribute("aria-selected") === "true") {
+      const geral = document.querySelector('#secao-ranking button.subaba[data-subaba="geral"]');
+      if (geral) geral.click();
+    }
+  }
+}
+
 async function main() {
   configurarTema();
   configurarAbas();
@@ -2416,7 +2584,26 @@ async function main() {
   configurarModoAcumulado();
 
   try {
+    SEASONS = await carregarJson("./data/seasons.json");
+    const atual = String(SEASONS.atual);
+    const anos = SEASONS.temporadas.map((t) => String(t.ano));
+    const pedido = anoPedido();
+    if (pedido && pedido !== atual && !anos.includes(pedido)) {
+      location.replace(location.pathname);
+      return;
+    }
+    if (pedido && pedido !== atual && anos.includes(pedido)) {
+      TEMPORADA = pedido;
+      MODO_HISTORICO = true;
+    } else {
+      TEMPORADA = atual;
+    }
+
     const standings = await carregarJson(caminhoDados("standings"));
+    FORMATO = standings.format || FORMATO;
+    aplicarModoHistorico();
+    renderRegras();
+    adaptarTextosEstaticos();
     renderRanking(standings);
     document.getElementById("ranking-status").textContent = "";
     standingsParaTemporada = standings;
@@ -2428,7 +2615,7 @@ async function main() {
     const calendar = await carregarJson(caminhoDados("calendar"));
     renderCorridas(standings, calendar);
     renderTabelaCorridas(standings);
-    renderSimulador(standings, calendar);
+    if (!MODO_HISTORICO) renderSimulador(standings, calendar);
 
     const results = await carregarJson(caminhoDados("results"));
     const bets = await carregarJson(caminhoDados("bets"));
@@ -2481,7 +2668,7 @@ async function main() {
     atualizarRendimento();
 
     const hof = await carregarJson("./data/hall_of_fame.json");
-    renderHallOfFame(hof);
+    renderHallOfFame(hof, SEASONS);
     document.getElementById("hall-status").textContent = "";
   } catch (erro) {
     console.error(erro);
