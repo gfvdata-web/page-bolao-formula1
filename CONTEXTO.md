@@ -1203,11 +1203,13 @@ divergência). Site vai de 15 → **23/24 rodadas**; ranking final bate com o
   `docs/data/2025/standings.json` (total + rodada jogada + compensação dos
   ausentes) exige tratar no front uma rodada sem `results`/`bets` — decidir a
   abordagem.
-- **Semântica da compensação retroativa no histórico:** aplicar as regras de
-  2026 (seção 2) a uma temporada fechada dá a jogadores que entraram no meio do
-  ano (`bernardo` +41, `arthur` +44, `caio` +50) pontuação mínima de todas as
-  rodadas anteriores à estreia. Definir se o histórico usa a mesma regra ou só
-  pontos brutos / a regra original de 2025.
+- ~~**Semântica da compensação retroativa no histórico**~~ — **resolvido em
+  2026-09-08**: a compensação **não existia** em 2021–2024 (medido nas
+  classificações publicadas, ver "Regras por temporada" abaixo) e foi desligada
+  nessas temporadas. **2025 continua com compensação ligada** — a evidência no
+  export desta conversa é fraca (3 casos sem ganho contra 1 com) e o pódio de
+  2025 bate dos dois jeitos, então a decisão fica com o usuário / com a sessão
+  que fechou 2025.
 
 **Sub-etapa 2026-09-08b — histórico 2021–2024 (export do WhatsApp):**
 
@@ -1337,6 +1339,61 @@ corrida já disputada. Sem isso, os placares do fim de 2024 caíam na corrida
 seguinte. E `_dia_quali` passou a usar a **véspera** da corrida quando o
 calendário não traz `qualifying_utc` (é o caso de 2021 inteiro na Jolpica) —
 essa correção sozinha levou 2021 de 92% para **100%**.
+
+**Regras por temporada (decisão do usuário em 2026-09-08 — não reabrir):** as
+regras do bolão mudaram ao longo dos anos e **cada temporada usa as suas**. Uma
+regra só entra num ano se o padrão aparecer nas pontuações que o grupo
+publicou. Tudo vive em `bolao/formats.py` (`SeasonFormat`).
+
+| ano | top | piloto da rodada | máx | compensação | desempate |
+|-----|-----|------------------|-----|-------------|-----------|
+| 2021 | 5 | não existia | 10 | **não** | **média** |
+| 2022 | 6 | não existia | 12 | **não** | — |
+| 2023 | 6 | não existia | 12 | **não** | — |
+| 2024 | 6 | sim, vale **2 pts** | 14 | **não** | — |
+| 2025 | 6 | sim, 1 pt | 13 | sim | — |
+| 2026 | 6 | sim, 1 pt | 13 | sim | — |
+
+**Como a compensação foi medida (não foi arbitrada):** pegando duas
+classificações acumuladas publicadas em sequência e olhando o salto de cada
+jogador, quem faltou rodada **ficou parado** — 10 casos em 2021, 14 em 2022, 12
+em 2023 e 5 em 2024, contra 1, 5, 3 e 1 casos de ganho (esses explicáveis por
+rodada ausente na fonte). Eleazar e Luciano faltaram meia temporada de 2023 sem
+ganhar nada; Lage faltou a R3 de 2024 e não ganhou nada. Isso também tira do
+ranking a distorção do `dru`, que apostou **uma vez** em 2023 e ganhava 62 pts
+de compensação.
+
+**Desempate por média só em 2021:** Ferrari e Vinícius fecharam os dois com
+**96 pontos** e o grupo pôs o Vinícius em 2º — ele fez 96 em 20 rodadas (4,8)
+contra 96 em 22 do Ferrari (4,4). Para 2026 o desempate continua indefinido
+(seção 9); o padrão é só a ordem estável por id, que não é critério de verdade.
+
+**Pódios calculados × `hall_of_fame` (depois das regras por temporada):**
+
+| ano | histórico | calculado | |
+|-----|-----------|-----------|--|
+| 2021 | guilherme, vinicius, ferrari | idem | ✅ |
+| 2022 | caliman, dalla, vinicius | caliman, dalla, **guilherme** | faltam R4/R5 |
+| 2023 | dalla, lage, igor | **lage, dalla**, igor | ver abaixo |
+| 2024 | arthur, dalla, lage | arthur, dalla, **caliman** | o "+1" descartado |
+| 2025 | vinicius, guilherme, igor | idem | ✅ |
+
+As três divergências estão explicadas e **nenhuma é erro da regra de
+pontuação**:
+
+- **2022** — Vinícius perde o 3º lugar por 3 pts, e as **rodadas 4 (Imola) e 5
+  (Miami) não existem no export**. No placar do grupo ele fez 9 pts nelas
+  contra 4 do Guilherme, o que devolve a posição. É buraco de fonte.
+- **2023** — Lage 120 × Dalla 116 (o grupo publicou Dalla 117 × Lage 112).
+  Todos os checkpoints intermediários **batem**: as diferenças aparecem e
+  desaparecem em pares (−4/+4, −12/+12), assinatura de tabela repostada, não de
+  drift. A divergência real está no trecho final da temporada, que **não tem
+  placar publicado** para conferir.
+- **2024** — Caliman bate **exatamente** (148 = 148) e Lage fica 7 abaixo. Nos
+  intervalos com checkpoint o grupo dava consistentemente **+1 por rodada** a
+  cada jogador (o "+1 por palpitar" que o usuário não reconhece e mandou não
+  registrar como regra). A tabela final do grupo é inconsistente com o próprio
+  placar corrente deles — não dá para reproduzir sem inventar regra.
 
 ## 9. Pendências / decisões adiadas
 

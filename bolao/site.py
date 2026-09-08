@@ -245,11 +245,12 @@ def generate(
             ac["top6_total"] += s.top6_points
             ac["bonus_total"] += s.bonus_points
             ac["per_round"][str(rnd)] = s.total
-        for pid in ranking_players - apostaram:
-            ac = acumulado[pid]
-            ac["total"] += round_min_score[rnd]
-            ac["compensation_total"] += round_min_score[rnd]
-            ac["compensated_rounds"].append(rnd)
+        if fmt.compensation:
+            for pid in ranking_players - apostaram:
+                ac = acumulado[pid]
+                ac["total"] += round_min_score[rnd]
+                ac["compensation_total"] += round_min_score[rnd]
+                ac["compensated_rounds"].append(rnd)
 
     for pid, bloco in saldo.items():
         ac = acumulado[pid]
@@ -257,9 +258,18 @@ def generate(
         ac["carry_rounds"] = int(bloco.get("rodadas", 0))
         ac["total"] += ac["carry_points"]
 
-    ordenados = sorted(
-        acumulado.values(), key=lambda a: (-a["total"], a["player_id"])
-    )
+    def _media(ac: dict) -> float:
+        rodadas = len(ac["per_round"]) + ac.get("carry_rounds", 0)
+        pontos = ac["top6_total"] + ac["bonus_total"] + ac.get("carry_points", 0)
+        return pontos / rodadas if rodadas else 0.0
+
+    # Desempate: por padrão só a ordem estável do id (o critério "de verdade"
+    # nunca foi definido para 2026 — ver seção 9). 2021 desempatava por média.
+    if fmt.tiebreak == "media":
+        chave = lambda a: (-a["total"], -_media(a), a["player_id"])
+    else:
+        chave = lambda a: (-a["total"], a["player_id"])
+    ordenados = sorted(acumulado.values(), key=chave)
     standings_players = []
     for pos, ac in enumerate(ordenados, 1):
         carry_pts = ac.get("carry_points", 0)
