@@ -9,7 +9,7 @@
       "date": "2023-03-05",
       "sprint": false,
       "bonus_driver": "",
-      "min_score": 1,
+      "min_score": 5,
       "bet_order": [
         "guilherme",
         "caliman",
@@ -18,8 +18,7 @@
         "francez",
         "vinicius",
         "eleazar",
-        "lage",
-        "dru"
+        "lage"
       ],
       "order": [
         "VER",

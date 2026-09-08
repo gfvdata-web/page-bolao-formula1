@@ -1253,7 +1253,8 @@ quem faltou rodadas, ou seja, compensação).
   — nunca aparecem juntos numa mesma mensagem).
 - O `Bernardo` dos rankings de 2021 é **Bernardo Viana** (`bernardo_v`), pessoa
   diferente do `Bernardo Lavôr` (`bernardo`) que jogou em 2025.
-- `DRU` (2023, Bahrein) **é jogador**; `Leo`, `Lex`, `Vest`, `MASSA 2008` e
+- `DRU` (2023, Bahrein) apostou uma única vez e foi **removido** dos registros
+  a pedido do usuário (2026-09-08d); `Leo`, `Lex`, `Vest`, `MASSA 2008` e
   afins são ruído/piada e são descartados.
 - `gui`→`guilherme`, `rod`→`rodrigo`.
 
@@ -1490,6 +1491,17 @@ temporadas.
   ("Pontuação da corrida" — leitura corrida-a-corrida não serve p/ ano
   fechado) e a sub-aba **Histórico** (Preferência vira o padrão de Palpites).
   Só relocação de DOM — nenhuma função de render mudou de assinatura.
+- **`avg_points` agora sai do `total`, não do recálculo:**
+  `avg_points = (total - compensation_total) / rounds_played`. Antes usava
+  `top6_total + bonus_total + carry + avulsos` (o recálculo), que **diverge do
+  `total`** quando `placar_publicado.json` corrige a pontuação por rodada — daí
+  Caliman e Dalla, ambos com 139 pts em 2022, apareciam com médias 6,5 e 6,4.
+  Agora dois jogadores com o mesmo `total` e as mesmas `rounds_played` mostram
+  a mesma média (2021/2025/2026 não mudaram; 2022–2024 sim).
+- **Jogador `dru` removido de 2023** (decisão do usuário — reverte a nota antiga
+  "DRU é jogador"): tirado de `data/2023/palpites_2023.csv`,
+  `players.json` (alias + nome) e `ranking_final.json` (`ordem`);
+  `messages/1.txt` + `scores/1.json` + `docs/data/2023/` regenerados.
 - **`rodadasMatriz()` (nova):** em `MODO_HISTORICO` as colunas da matriz vêm do
   **calendário inteiro** (`calendarGlobal`), não só de `standings.rounds`.
   Rodada sem palpite → coluna com cabeçalho `(sem registro)`

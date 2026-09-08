@@ -342,13 +342,14 @@ def generate(
         rounds_played = (
             len(ac["per_round"]) + carry_rnd + ac.get("avulsos_extra_rounds", 0)
         )
-        # Média por corrida: só considera o que foi de fato apostado, sem
-        # contar a pontuação mínima de compensação. O saldo inicial entra
-        # porque são rodadas realmente apostadas (só falta o detalhe delas).
-        pontos_apostados = (
-            ac["top6_total"] + ac["bonus_total"] + carry_pts + ac.get("avulsos_points", 0)
-        )
-        avg_points = round(pontos_apostados / rounds_played, 1) if rounds_played else 0.0
+        # Média por corrida: os mesmos pontos que aparecem na coluna "Pontos"
+        # (o total oficial da temporada), menos a pontuação mínima de
+        # compensação (que não foi de fato apostada), divididos pelas rodadas
+        # realmente apostadas. Usar o `total` — e não o recálculo top6+bônus —
+        # garante que dois jogadores com o mesmo total mostrem a mesma média
+        # (o placar publicado pode divergir do recálculo rodada a rodada).
+        pontos_avaliados = ac["total"] - ac["compensation_total"]
+        avg_points = round(pontos_avaliados / rounds_played, 1) if rounds_played else 0.0
         standings_players.append(
             {
                 "position": pos,
