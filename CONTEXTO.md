@@ -1505,6 +1505,15 @@ temporadas.
   mostra as colunas **"Oficial"** e **"Calculada"** (com a diferença entre
   parênteses) — `renderRanking`/`celCalculada`. 2021 e 2025 batem 100% (coluna
   não aparece); 2022–2024 divergem.
+- **2026-09-08 — coluna "Calculada" removida (decisão do usuário: "o que vale é
+  a oficial").** O ranking das temporadas passadas mostra só **Pontos** (=
+  total oficial) + Média/Corrida (= `avg_points` = total oficial / rodadas
+  jogadas). Saíram do `docs/app.js`: `celCalculada`, o header "Oficial", a
+  coluna "Calculada", a nota `.ranking-nota-calculada` e o bloco de regras
+  "Oficial × Calculada" (virou bloco "Pontuação"). `regras.json.comum` teve o
+  item Oficial/Calculada reescrito. O campo `total_calculado` **continua** em
+  `standings.json` (gerado por `site.py`), só não é mais exibido. CSS
+  `.ranking-dif`/`.ranking-nota-calculada` ficaram órfãos (inofensivos).
 - **`avg_points` agora sai do `total`, não do recálculo:**
   `avg_points = (total - compensation_total) / rounds_played`. Antes usava
   `top6_total + bonus_total + carry + avulsos` (o recálculo), que **diverge do

@@ -4,7 +4,7 @@
     "Cada piloto do palpite pontua 2/1/0: 2 pts na posicao exata do quali, 1 pt se ele terminou dentro do top real do quali mas em outra posicao, 0 pt se ficou fora.",
     "So conta o qualifying principal. Fins de semana de Sprint entram pelo quali de sabado; a sessao de Sprint e ignorada.",
     "O resultado do quali vem da API Jolpica-F1 (grid completo), o mesmo criterio em todos os anos.",
-    "“Oficial” e o placar que o grupo publicou no WhatsApp (o registro da temporada). “Calculada” e o recalculo por estas regras — quando aparece a diferenca entre parenteses, e porque a conta do grupo na epoca divergiu do recalculo."
+    "O que vale e o placar que o grupo publicou no WhatsApp — o registro oficial da temporada. A media por corrida e esse total oficial dividido pelas rodadas jogadas."
   ],
   "por_ano": {
     "2021": [
