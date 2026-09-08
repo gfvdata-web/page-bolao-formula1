@@ -2258,9 +2258,12 @@ function renderListaAnosHall(hof, seasons) {
   const atual = String(seasons?.atual ?? "");
   const lista = el("ul", { class: "hall-anos-lista" });
   for (const ano of anos) {
+    const jaAtiva = String(ano.ano) === atual || String(ano.ano) === String(TEMPORADA);
     const acessar =
-      disponiveis.has(String(ano.ano)) && String(ano.ano) !== atual
+      disponiveis.has(String(ano.ano)) && !jaAtiva
         ? el("a", { class: "hall-acessar", href: `?ano=${ano.ano}` }, ["Acessar"])
+        : String(ano.ano) === String(TEMPORADA)
+        ? el("span", { class: "hall-acessar hall-acessar--ativa" }, ["Você está aqui"])
         : null;
     lista.appendChild(
       el("li", { class: "hall-ano-item" }, [

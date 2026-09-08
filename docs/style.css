@@ -1635,3 +1635,9 @@ button.subaba[aria-selected="true"] {
   white-space: nowrap;
 }
 .hall-acessar:hover { background: var(--acento); color: #fff; }
+.hall-acessar--ativa {
+  border-color: var(--borda);
+  color: var(--texto-fraco);
+  cursor: default;
+}
+.hall-acessar--ativa:hover { background: transparent; color: var(--texto-fraco); }
