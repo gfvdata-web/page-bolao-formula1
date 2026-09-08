@@ -1,0 +1,29 @@
+{
+  "race_id": "2025-22",
+  "season": 2025,
+  "round": 22,
+  "circuit": "vegas",
+  "race": "Las Vegas",
+  "order": [
+    "NOR",
+    "VER",
+    "SAI",
+    "RUS",
+    "PIA",
+    "LAW",
+    "ALO",
+    "HAD",
+    "LEC",
+    "GAS",
+    "HUL",
+    "STR",
+    "OCO",
+    "BEA",
+    "COL",
+    "ALB",
+    "ANT",
+    "BOR",
+    "TSU",
+    "HAM"
+  ]
+}

@@ -137,3 +137,75 @@ zandvoort,Caliman,NOR,PIA,LEC,VER,RUS,HAM,P5
 zandvoort,Igor,PIA,VER,NOR,RUS,LEC,HAM,P2
 zandvoort,Dalla,NOR,PIA,RUS,VER,LEC,ALB,P3
 zandvoort,Cintia,NOR,VER,PIA,RUS,LEC,ANT,P2
+monza,guilherme,PIA,LEC,NOR,VER,HAM,RUS,P4
+monza,francez,VER,PIA,NOR,HAM,LEC,SAI,P4
+monza,caio_l,NOR,PIA,VER,LEC,HAM,RUS,P5
+monza,vinicius,VER,NOR,PIA,LEC,HAM,SAI,P5
+monza,ferrari,LEC,HAM,PIA,VER,NOR,RUS,P2
+monza,lage,NOR,PIA,VER,LEC,SAI,HAM,P7
+monza,igor,NOR,PIA,VER,LEC,HAM,RUS,P6
+monza,caliman,NOR,PIA,LEC,VER,RUS,HAM,P5
+monza,dalla,NOR,PIA,LEC,VER,RUS,HAM,P5
+monza,cintia,NOR,LEC,PIA,VER,RUS,HAM,P6
+baku,guilherme,NOR,LEC,PIA,VER,RUS,HAM,P7
+baku,igor,PIA,VER,NOR,LEC,RUS,HAM,P8
+baku,ferrari,NOR,LEC,PIA,HAM,VER,RUS,P9
+baku,francez,NOR,VER,PIA,LEC,HAM,RUS,P7
+baku,vinicius,LEC,NOR,VER,PIA,HAM,RUS,P8
+baku,dalla,NOR,LEC,PIA,VER,RUS,HAM,P9
+baku,lage,PIA,NOR,VER,LEC,HAM,RUS,P10
+baku,caliman,PIA,NOR,VER,LEC,RUS,HAM,P8
+baku,cintia,NOR,VER,LEC,PIA,HAM,RUS,P8
+baku,caio_l,VER,NOR,PIA,LEC,RUS,HAM,P7
+singapore,guilherme,VER,PIA,NOR,LEC,RUS,SAI,P11
+singapore,dalla,LEC,VER,NOR,RUS,PIA,HAM,P9
+singapore,francez,PIA,VER,NOR,LEC,RUS,HAM,P10
+singapore,vinicius,PIA,VER,NOR,LEC,HAM,ALO,P12
+singapore,caliman,PIA,VER,NOR,LEC,RUS,HAM,P9
+singapore,cintia,VER,NOR,PIA,RUS,ANT,HAD,P7
+singapore,caio_l,PIA,VER,NOR,LEC,RUS,HAM,P10
+singapore,ferrari,PIA,VER,LEC,NOR,RUS,HAM,P8
+singapore,igor,VER,NOR,PIA,LEC,HAM,RUS,P9
+singapore,lage,VER,PIA,NOR,LEC,RUS,HAM,P12
+mexico,vinicius,VER,NOR,LEC,PIA,RUS,HAM,P18
+mexico,francez,VER,NOR,PIA,LEC,HAM,SAI,P16
+mexico,ferrari,PIA,VER,NOR,LEC,RUS,HAM,P17
+mexico,lage,VER,PIA,NOR,RUS,LEC,SAI,P17
+mexico,caliman,VER,NOR,PIA,RUS,LEC,HAM,P18
+mexico,dalla,VER,NOR,LEC,RUS,PIA,HAM,P19
+mexico,caio_l,VER,NOR,RUS,PIA,ANT,LEC,P18
+mexico,guilherme,VER,NOR,PIA,RUS,LEC,HAM,P18
+mexico,igor,VER,NOR,PIA,LEC,HAM,RUS,P19
+interlagos,vinicius,NOR,VER,PIA,RUS,ANT,LEC,P9
+interlagos,guilherme,NOR,RUS,VER,PIA,ANT,LEC,P10
+interlagos,ferrari,VER,NOR,RUS,ANT,PIA,LEC,P14
+interlagos,francez,NOR,VER,ANT,PIA,RUS,LEC,P7
+interlagos,igor,NOR,PIA,VER,ANT,RUS,LEC,P12
+interlagos,dalla,VER,NOR,RUS,PIA,ANT,LEC,P12
+interlagos,caio_l,NOR,RUS,VER,ANT,PIA,LEC,P14
+interlagos,caliman,NOR,VER,PIA,RUS,ANT,LEC,P8
+interlagos,lage,NOR,RUS,VER,PIA,LEC,ANT,P13
+vegas,guilherme,NOR,VER,PIA,LEC,RUS,ANT,P12
+vegas,ferrari,NOR,PIA,VER,LEC,HAM,RUS,P9
+vegas,francez,VER,NOR,PIA,LEC,RUS,HAM,P10
+vegas,caliman,VER,NOR,LEC,RUS,HAM,PIA,P17
+vegas,caio_l,NOR,VER,PIA,RUS,LEC,ANT,P11
+vegas,dalla,VER,NOR,RUS,PIA,LEC,HAM,P16
+vegas,vinicius,VER,NOR,LEC,PIA,RUS,HAM,P14
+qatar,guilherme,NOR,PIA,VER,RUS,ANT,LEC,P8
+qatar,ferrari,PIA,NOR,VER,ANT,RUS,LEC,P9
+qatar,caliman,PIA,NOR,VER,RUS,LEC,ANT,P7
+qatar,francez,VER,NOR,PIA,LEC,RUS,HAM,P10
+qatar,caio_l,PIA,NOR,VER,RUS,LEC,ANT,P10
+qatar,vinicius,PIA,NOR,VER,RUS,LEC,ANT,P7
+qatar,igor,PIA,NOR,VER,LEC,RUS,HAM,P9
+qatar,dalla,PIA,NOR,VER,RUS,ANT,LEC,P9
+qatar,lage,PIA,NOR,VER,RUS,LEC,SAI,P9
+abu dhabi,vinicius,NOR,VER,PIA,RUS,LEC,ANT,P16
+abu dhabi,ferrari,PIA,VER,NOR,RUS,LEC,ANT,P15
+abu dhabi,caliman,NOR,VER,PIA,RUS,ANT,LEC,P14
+abu dhabi,francez,VER,PIA,LEC,NOR,RUS,ANT,P15
+abu dhabi,dalla,NOR,VER,RUS,PIA,LEC,ANT,P17
+abu dhabi,igor,VER,NOR,PIA,LEC,RUS,ANT,P14
+abu dhabi,lage,VER,PIA,NOR,RUS,LEC,ANT,P16
+abu dhabi,guilherme,NOR,VER,PIA,RUS,LEC,ANT,P14

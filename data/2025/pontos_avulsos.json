@@ -1,0 +1,21 @@
+{
+  "_comment": "Etapa 7 — pontuacao de rodadas de 2025 que existem so como PLACAR publicado no grupo, sem os palpites brutos. Guardado aqui para nao se perder; ainda NAO entra no ranking do site (decisao pendente na secao 8 do CONTEXTO.md — precisa definir como o site mostra uma rodada com pontos e sem palpite, mesma classe da decisao da compensacao retroativa). A fonte canonica do grid e data/2025/results/<round>.json (Jolpica).",
+  "rounds": {
+    "19": {
+      "race": "Austin",
+      "circuit": "americas",
+      "bonus_driver": "OCO",
+      "fonte": "Mensagem 'Resultados Qualify Cota' de Guilherme Guimaraes no grupo (25/10/2025 10:10). Guilherme tinha perdido dias do historico do WhatsApp (msg de 19/10/2025 14:55) e reconstruiu o placar; os palpites brutos desta rodada nao foram recuperados de forma confiavel. Os pontos abaixo sao os publicados pelo grupo e NAO reconciliam com o recalculo pela regra 2/1/0 sobre o quali da Jolpica — usar com ressalva.",
+      "players": {
+        "vinicius": 5,
+        "guilherme": 6,
+        "ferrari": 6,
+        "francez": 5,
+        "lage": 5,
+        "igor": 6,
+        "dalla": 5,
+        "caliman": 7
+      }
+    }
+  }
+}

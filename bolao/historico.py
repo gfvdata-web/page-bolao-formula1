@@ -137,9 +137,10 @@ def build(
         result_path = season_dir / "results" / f"{rnd}.json"
         if result_path.exists():
             order = _load_json(result_path)["order"]
-            # top6 da planilha vs Jolpica (so quando a fonte traz essa coluna;
-            # o import do WhatsApp, Etapa 7, nao tem o grid real na origem).
-            if all(f"t{i}" in linhas_rodada for i in range(1, 7)):
+            # top6 da planilha vs Jolpica (so quando a fonte traz essa coluna
+            # preenchida; o import do WhatsApp, Etapa 7, e as rodadas 2025
+            # vindas do grupo nao tem o grid real na origem — coluna vazia).
+            if all(linhas_rodada.get(f"t{i}") for i in range(1, 7)):
                 plan_top6 = [str(linhas_rodada[f"t{i}"]).upper() for i in range(1, 7)]
                 jol_top6 = [c.upper() for c in order[:6]]
                 if plan_top6 != jol_top6:
@@ -148,7 +149,7 @@ def build(
                         f"difere da Jolpica {jol_top6} (usando Jolpica)."
                     )
             # posição real do piloto da rodada
-            if quem and "pos_planilha" in linhas_rodada:
+            if quem and linhas_rodada.get("pos_planilha"):
                 cod_quem = normalize_driver(quem, drivers)
                 pos_jol = order.index(cod_quem) + 1 if cod_quem in order else None
                 pos_plan = _pos_int(linhas_rodada.get("pos_planilha", ""))

@@ -1,0 +1,29 @@
+{
+  "race_id": "2025-20",
+  "season": 2025,
+  "round": 20,
+  "circuit": "rodriguez",
+  "race": "Mexico City",
+  "order": [
+    "NOR",
+    "LEC",
+    "HAM",
+    "RUS",
+    "VER",
+    "ANT",
+    "SAI",
+    "PIA",
+    "HAD",
+    "BEA",
+    "TSU",
+    "OCO",
+    "HUL",
+    "ALO",
+    "LAW",
+    "BOR",
+    "ALB",
+    "GAS",
+    "STR",
+    "COL"
+  ]
+}

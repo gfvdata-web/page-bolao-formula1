@@ -520,6 +520,447 @@
           "bonus_real_pos": 3,
           "bonus_points": 0,
           "total": 5
+        },
+        "16": {
+          "round": 16,
+          "race_id": "2025-16",
+          "race": "Monza",
+          "top6": [
+            "NOR",
+            "PIA",
+            "VER",
+            "LEC",
+            "HAM",
+            "RUS"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "NOR",
+              "real": "VER",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "PIA",
+              "real": "NOR",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "VER",
+              "real": "PIA",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "LEC",
+              "real": "LEC",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 5,
+              "guess": "HAM",
+              "real": "HAM",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 6,
+              "guess": "RUS",
+              "real": "RUS",
+              "points": 2,
+              "reason": "exata"
+            }
+          ],
+          "top6_points": 9,
+          "bonus_driver": "HAM",
+          "bonus_guess": 5,
+          "bonus_real_pos": 5,
+          "bonus_points": 1,
+          "total": 10
+        },
+        "17": {
+          "round": 17,
+          "race_id": "2025-17",
+          "race": "Baku",
+          "top6": [
+            "VER",
+            "NOR",
+            "PIA",
+            "LEC",
+            "RUS",
+            "HAM"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "VER",
+              "real": "VER",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 2,
+              "guess": "NOR",
+              "real": "SAI",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 3,
+              "guess": "PIA",
+              "real": "LAW",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 4,
+              "guess": "LEC",
+              "real": "ANT",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 5,
+              "guess": "RUS",
+              "real": "RUS",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 6,
+              "guess": "HAM",
+              "real": "TSU",
+              "points": 0,
+              "reason": "fora"
+            }
+          ],
+          "top6_points": 4,
+          "bonus_driver": "ALB",
+          "bonus_guess": 7,
+          "bonus_real_pos": 19,
+          "bonus_points": 0,
+          "total": 4
+        },
+        "18": {
+          "round": 18,
+          "race_id": "2025-18",
+          "race": "Marina Bay",
+          "top6": [
+            "PIA",
+            "VER",
+            "NOR",
+            "LEC",
+            "RUS",
+            "HAM"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "PIA",
+              "real": "RUS",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "VER",
+              "real": "VER",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 3,
+              "guess": "NOR",
+              "real": "PIA",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "LEC",
+              "real": "ANT",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 5,
+              "guess": "RUS",
+              "real": "NOR",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "HAM",
+              "real": "HAM",
+              "points": 2,
+              "reason": "exata"
+            }
+          ],
+          "top6_points": 7,
+          "bonus_driver": "ALB",
+          "bonus_guess": 10,
+          "bonus_real_pos": 19,
+          "bonus_points": 0,
+          "total": 7
+        },
+        "20": {
+          "round": 20,
+          "race_id": "2025-20",
+          "race": "Mexico City",
+          "top6": [
+            "VER",
+            "NOR",
+            "RUS",
+            "PIA",
+            "ANT",
+            "LEC"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "VER",
+              "real": "NOR",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "NOR",
+              "real": "LEC",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "RUS",
+              "real": "HAM",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "PIA",
+              "real": "RUS",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 5,
+              "guess": "ANT",
+              "real": "VER",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "LEC",
+              "real": "ANT",
+              "points": 1,
+              "reason": "no top6"
+            }
+          ],
+          "top6_points": 5,
+          "bonus_driver": "COL",
+          "bonus_guess": 18,
+          "bonus_real_pos": 20,
+          "bonus_points": 0,
+          "total": 5
+        },
+        "21": {
+          "round": 21,
+          "race_id": "2025-21",
+          "race": "São Paulo",
+          "top6": [
+            "NOR",
+            "RUS",
+            "VER",
+            "ANT",
+            "PIA",
+            "LEC"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "NOR",
+              "real": "NOR",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 2,
+              "guess": "RUS",
+              "real": "ANT",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "VER",
+              "real": "LEC",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 4,
+              "guess": "ANT",
+              "real": "PIA",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 5,
+              "guess": "PIA",
+              "real": "HAD",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "LEC",
+              "real": "RUS",
+              "points": 1,
+              "reason": "no top6"
+            }
+          ],
+          "top6_points": 6,
+          "bonus_driver": "BOR",
+          "bonus_guess": 14,
+          "bonus_real_pos": null,
+          "bonus_points": 0,
+          "total": 6
+        },
+        "22": {
+          "round": 22,
+          "race_id": "2025-22",
+          "race": "Las Vegas",
+          "top6": [
+            "NOR",
+            "VER",
+            "PIA",
+            "RUS",
+            "LEC",
+            "ANT"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "NOR",
+              "real": "NOR",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 2,
+              "guess": "VER",
+              "real": "VER",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 3,
+              "guess": "PIA",
+              "real": "SAI",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "RUS",
+              "real": "RUS",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 5,
+              "guess": "LEC",
+              "real": "PIA",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 6,
+              "guess": "ANT",
+              "real": "LAW",
+              "points": 0,
+              "reason": "fora"
+            }
+          ],
+          "top6_points": 7,
+          "bonus_driver": "OCO",
+          "bonus_guess": 11,
+          "bonus_real_pos": 13,
+          "bonus_points": 0,
+          "total": 7
+        },
+        "23": {
+          "round": 23,
+          "race_id": "2025-23",
+          "race": "Lusail",
+          "top6": [
+            "PIA",
+            "NOR",
+            "VER",
+            "RUS",
+            "LEC",
+            "ANT"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "PIA",
+              "real": "PIA",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 2,
+              "guess": "NOR",
+              "real": "NOR",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 3,
+              "guess": "VER",
+              "real": "VER",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 4,
+              "guess": "RUS",
+              "real": "RUS",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 5,
+              "guess": "LEC",
+              "real": "ANT",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 6,
+              "guess": "ANT",
+              "real": "HAD",
+              "points": 1,
+              "reason": "no top6"
+            }
+          ],
+          "top6_points": 9,
+          "bonus_driver": "ALO",
+          "bonus_guess": 10,
+          "bonus_real_pos": 8,
+          "bonus_points": 0,
+          "total": 9
         }
       }
     },
@@ -1408,6 +1849,510 @@
           "bonus_real_pos": 3,
           "bonus_points": 0,
           "total": 6
+        },
+        "16": {
+          "round": 16,
+          "race_id": "2025-16",
+          "race": "Monza",
+          "top6": [
+            "NOR",
+            "PIA",
+            "LEC",
+            "VER",
+            "RUS",
+            "HAM"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "NOR",
+              "real": "VER",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "PIA",
+              "real": "NOR",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "LEC",
+              "real": "PIA",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "VER",
+              "real": "LEC",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 5,
+              "guess": "RUS",
+              "real": "HAM",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "HAM",
+              "real": "RUS",
+              "points": 1,
+              "reason": "no top6"
+            }
+          ],
+          "top6_points": 6,
+          "bonus_driver": "HAM",
+          "bonus_guess": 5,
+          "bonus_real_pos": 5,
+          "bonus_points": 1,
+          "total": 7
+        },
+        "17": {
+          "round": 17,
+          "race_id": "2025-17",
+          "race": "Baku",
+          "top6": [
+            "PIA",
+            "NOR",
+            "VER",
+            "LEC",
+            "RUS",
+            "HAM"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "PIA",
+              "real": "VER",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 2,
+              "guess": "NOR",
+              "real": "SAI",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 3,
+              "guess": "VER",
+              "real": "LAW",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "LEC",
+              "real": "ANT",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 5,
+              "guess": "RUS",
+              "real": "RUS",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 6,
+              "guess": "HAM",
+              "real": "TSU",
+              "points": 0,
+              "reason": "fora"
+            }
+          ],
+          "top6_points": 3,
+          "bonus_driver": "ALB",
+          "bonus_guess": 8,
+          "bonus_real_pos": 19,
+          "bonus_points": 0,
+          "total": 3
+        },
+        "18": {
+          "round": 18,
+          "race_id": "2025-18",
+          "race": "Marina Bay",
+          "top6": [
+            "PIA",
+            "VER",
+            "NOR",
+            "LEC",
+            "RUS",
+            "HAM"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "PIA",
+              "real": "RUS",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "VER",
+              "real": "VER",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 3,
+              "guess": "NOR",
+              "real": "PIA",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "LEC",
+              "real": "ANT",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 5,
+              "guess": "RUS",
+              "real": "NOR",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "HAM",
+              "real": "HAM",
+              "points": 2,
+              "reason": "exata"
+            }
+          ],
+          "top6_points": 7,
+          "bonus_driver": "ALB",
+          "bonus_guess": 9,
+          "bonus_real_pos": 19,
+          "bonus_points": 0,
+          "total": 7
+        },
+        "20": {
+          "round": 20,
+          "race_id": "2025-20",
+          "race": "Mexico City",
+          "top6": [
+            "VER",
+            "NOR",
+            "PIA",
+            "RUS",
+            "LEC",
+            "HAM"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "VER",
+              "real": "NOR",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "NOR",
+              "real": "LEC",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "PIA",
+              "real": "HAM",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 4,
+              "guess": "RUS",
+              "real": "RUS",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 5,
+              "guess": "LEC",
+              "real": "VER",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "HAM",
+              "real": "ANT",
+              "points": 1,
+              "reason": "no top6"
+            }
+          ],
+          "top6_points": 6,
+          "bonus_driver": "COL",
+          "bonus_guess": 18,
+          "bonus_real_pos": 20,
+          "bonus_points": 0,
+          "total": 6
+        },
+        "21": {
+          "round": 21,
+          "race_id": "2025-21",
+          "race": "São Paulo",
+          "top6": [
+            "NOR",
+            "VER",
+            "PIA",
+            "RUS",
+            "ANT",
+            "LEC"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "NOR",
+              "real": "NOR",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 2,
+              "guess": "VER",
+              "real": "ANT",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 3,
+              "guess": "PIA",
+              "real": "LEC",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "RUS",
+              "real": "PIA",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 5,
+              "guess": "ANT",
+              "real": "HAD",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "LEC",
+              "real": "RUS",
+              "points": 1,
+              "reason": "no top6"
+            }
+          ],
+          "top6_points": 6,
+          "bonus_driver": "BOR",
+          "bonus_guess": 8,
+          "bonus_real_pos": null,
+          "bonus_points": 0,
+          "total": 6
+        },
+        "22": {
+          "round": 22,
+          "race_id": "2025-22",
+          "race": "Las Vegas",
+          "top6": [
+            "VER",
+            "NOR",
+            "LEC",
+            "RUS",
+            "HAM",
+            "PIA"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "VER",
+              "real": "NOR",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "NOR",
+              "real": "VER",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "LEC",
+              "real": "SAI",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 4,
+              "guess": "RUS",
+              "real": "RUS",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 5,
+              "guess": "HAM",
+              "real": "PIA",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 6,
+              "guess": "PIA",
+              "real": "LAW",
+              "points": 1,
+              "reason": "no top6"
+            }
+          ],
+          "top6_points": 5,
+          "bonus_driver": "OCO",
+          "bonus_guess": 17,
+          "bonus_real_pos": 13,
+          "bonus_points": 0,
+          "total": 5
+        },
+        "23": {
+          "round": 23,
+          "race_id": "2025-23",
+          "race": "Lusail",
+          "top6": [
+            "PIA",
+            "NOR",
+            "VER",
+            "RUS",
+            "LEC",
+            "ANT"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "PIA",
+              "real": "PIA",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 2,
+              "guess": "NOR",
+              "real": "NOR",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 3,
+              "guess": "VER",
+              "real": "VER",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 4,
+              "guess": "RUS",
+              "real": "RUS",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 5,
+              "guess": "LEC",
+              "real": "ANT",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 6,
+              "guess": "ANT",
+              "real": "HAD",
+              "points": 1,
+              "reason": "no top6"
+            }
+          ],
+          "top6_points": 9,
+          "bonus_driver": "ALO",
+          "bonus_guess": 7,
+          "bonus_real_pos": 8,
+          "bonus_points": 0,
+          "total": 9
+        },
+        "24": {
+          "round": 24,
+          "race_id": "2025-24",
+          "race": "Abu Dhabi",
+          "top6": [
+            "NOR",
+            "VER",
+            "PIA",
+            "RUS",
+            "ANT",
+            "LEC"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "NOR",
+              "real": "VER",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "VER",
+              "real": "NOR",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "PIA",
+              "real": "PIA",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 4,
+              "guess": "RUS",
+              "real": "RUS",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 5,
+              "guess": "ANT",
+              "real": "LEC",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 6,
+              "guess": "LEC",
+              "real": "ALO",
+              "points": 1,
+              "reason": "no top6"
+            }
+          ],
+          "top6_points": 7,
+          "bonus_driver": "STR",
+          "bonus_guess": 14,
+          "bonus_real_pos": 15,
+          "bonus_points": 0,
+          "total": 7
         }
       }
     },
@@ -2296,6 +3241,195 @@
           "bonus_real_pos": 3,
           "bonus_points": 0,
           "total": 5
+        },
+        "16": {
+          "round": 16,
+          "race_id": "2025-16",
+          "race": "Monza",
+          "top6": [
+            "NOR",
+            "LEC",
+            "PIA",
+            "VER",
+            "RUS",
+            "HAM"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "NOR",
+              "real": "VER",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "LEC",
+              "real": "NOR",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "PIA",
+              "real": "PIA",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 4,
+              "guess": "VER",
+              "real": "LEC",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 5,
+              "guess": "RUS",
+              "real": "HAM",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "HAM",
+              "real": "RUS",
+              "points": 1,
+              "reason": "no top6"
+            }
+          ],
+          "top6_points": 7,
+          "bonus_driver": "HAM",
+          "bonus_guess": 6,
+          "bonus_real_pos": 5,
+          "bonus_points": 0,
+          "total": 7
+        },
+        "17": {
+          "round": 17,
+          "race_id": "2025-17",
+          "race": "Baku",
+          "top6": [
+            "NOR",
+            "VER",
+            "LEC",
+            "PIA",
+            "HAM",
+            "RUS"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "NOR",
+              "real": "VER",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 2,
+              "guess": "VER",
+              "real": "SAI",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "LEC",
+              "real": "LAW",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 4,
+              "guess": "PIA",
+              "real": "ANT",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 5,
+              "guess": "HAM",
+              "real": "RUS",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 6,
+              "guess": "RUS",
+              "real": "TSU",
+              "points": 1,
+              "reason": "no top6"
+            }
+          ],
+          "top6_points": 2,
+          "bonus_driver": "ALB",
+          "bonus_guess": 8,
+          "bonus_real_pos": 19,
+          "bonus_points": 0,
+          "total": 2
+        },
+        "18": {
+          "round": 18,
+          "race_id": "2025-18",
+          "race": "Marina Bay",
+          "top6": [
+            "VER",
+            "NOR",
+            "PIA",
+            "RUS",
+            "ANT",
+            "HAD"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "VER",
+              "real": "RUS",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "NOR",
+              "real": "VER",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "PIA",
+              "real": "PIA",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 4,
+              "guess": "RUS",
+              "real": "ANT",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 5,
+              "guess": "ANT",
+              "real": "NOR",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "HAD",
+              "real": "HAM",
+              "points": 0,
+              "reason": "fora"
+            }
+          ],
+          "top6_points": 6,
+          "bonus_driver": "ALB",
+          "bonus_guess": 7,
+          "bonus_real_pos": 19,
+          "bonus_points": 0,
+          "total": 6
         }
       }
     },
@@ -3246,6 +4380,510 @@
           "bonus_guess": 3,
           "bonus_real_pos": 3,
           "bonus_points": 1,
+          "total": 6
+        },
+        "16": {
+          "round": 16,
+          "race_id": "2025-16",
+          "race": "Monza",
+          "top6": [
+            "NOR",
+            "PIA",
+            "LEC",
+            "VER",
+            "RUS",
+            "HAM"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "NOR",
+              "real": "VER",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "PIA",
+              "real": "NOR",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "LEC",
+              "real": "PIA",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "VER",
+              "real": "LEC",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 5,
+              "guess": "RUS",
+              "real": "HAM",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "HAM",
+              "real": "RUS",
+              "points": 1,
+              "reason": "no top6"
+            }
+          ],
+          "top6_points": 6,
+          "bonus_driver": "HAM",
+          "bonus_guess": 5,
+          "bonus_real_pos": 5,
+          "bonus_points": 1,
+          "total": 7
+        },
+        "17": {
+          "round": 17,
+          "race_id": "2025-17",
+          "race": "Baku",
+          "top6": [
+            "NOR",
+            "LEC",
+            "PIA",
+            "VER",
+            "RUS",
+            "HAM"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "NOR",
+              "real": "VER",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 2,
+              "guess": "LEC",
+              "real": "SAI",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 3,
+              "guess": "PIA",
+              "real": "LAW",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 4,
+              "guess": "VER",
+              "real": "ANT",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 5,
+              "guess": "RUS",
+              "real": "RUS",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 6,
+              "guess": "HAM",
+              "real": "TSU",
+              "points": 0,
+              "reason": "fora"
+            }
+          ],
+          "top6_points": 3,
+          "bonus_driver": "ALB",
+          "bonus_guess": 9,
+          "bonus_real_pos": 19,
+          "bonus_points": 0,
+          "total": 3
+        },
+        "18": {
+          "round": 18,
+          "race_id": "2025-18",
+          "race": "Marina Bay",
+          "top6": [
+            "LEC",
+            "VER",
+            "NOR",
+            "RUS",
+            "PIA",
+            "HAM"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "LEC",
+              "real": "RUS",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 2,
+              "guess": "VER",
+              "real": "VER",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 3,
+              "guess": "NOR",
+              "real": "PIA",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "RUS",
+              "real": "ANT",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 5,
+              "guess": "PIA",
+              "real": "NOR",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "HAM",
+              "real": "HAM",
+              "points": 2,
+              "reason": "exata"
+            }
+          ],
+          "top6_points": 7,
+          "bonus_driver": "ALB",
+          "bonus_guess": 9,
+          "bonus_real_pos": 19,
+          "bonus_points": 0,
+          "total": 7
+        },
+        "20": {
+          "round": 20,
+          "race_id": "2025-20",
+          "race": "Mexico City",
+          "top6": [
+            "VER",
+            "NOR",
+            "LEC",
+            "RUS",
+            "PIA",
+            "HAM"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "VER",
+              "real": "NOR",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "NOR",
+              "real": "LEC",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "LEC",
+              "real": "HAM",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "RUS",
+              "real": "RUS",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 5,
+              "guess": "PIA",
+              "real": "VER",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 6,
+              "guess": "HAM",
+              "real": "ANT",
+              "points": 1,
+              "reason": "no top6"
+            }
+          ],
+          "top6_points": 6,
+          "bonus_driver": "COL",
+          "bonus_guess": 19,
+          "bonus_real_pos": 20,
+          "bonus_points": 0,
+          "total": 6
+        },
+        "21": {
+          "round": 21,
+          "race_id": "2025-21",
+          "race": "São Paulo",
+          "top6": [
+            "VER",
+            "NOR",
+            "RUS",
+            "PIA",
+            "ANT",
+            "LEC"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "VER",
+              "real": "NOR",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 2,
+              "guess": "NOR",
+              "real": "ANT",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "RUS",
+              "real": "LEC",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "PIA",
+              "real": "PIA",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 5,
+              "guess": "ANT",
+              "real": "HAD",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "LEC",
+              "real": "RUS",
+              "points": 1,
+              "reason": "no top6"
+            }
+          ],
+          "top6_points": 6,
+          "bonus_driver": "BOR",
+          "bonus_guess": 12,
+          "bonus_real_pos": null,
+          "bonus_points": 0,
+          "total": 6
+        },
+        "22": {
+          "round": 22,
+          "race_id": "2025-22",
+          "race": "Las Vegas",
+          "top6": [
+            "VER",
+            "NOR",
+            "RUS",
+            "PIA",
+            "LEC",
+            "HAM"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "VER",
+              "real": "NOR",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "NOR",
+              "real": "VER",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "RUS",
+              "real": "SAI",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "PIA",
+              "real": "RUS",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 5,
+              "guess": "LEC",
+              "real": "PIA",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 6,
+              "guess": "HAM",
+              "real": "LAW",
+              "points": 0,
+              "reason": "fora"
+            }
+          ],
+          "top6_points": 4,
+          "bonus_driver": "OCO",
+          "bonus_guess": 16,
+          "bonus_real_pos": 13,
+          "bonus_points": 0,
+          "total": 4
+        },
+        "23": {
+          "round": 23,
+          "race_id": "2025-23",
+          "race": "Lusail",
+          "top6": [
+            "PIA",
+            "NOR",
+            "VER",
+            "RUS",
+            "ANT",
+            "LEC"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "PIA",
+              "real": "PIA",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 2,
+              "guess": "NOR",
+              "real": "NOR",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 3,
+              "guess": "VER",
+              "real": "VER",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 4,
+              "guess": "RUS",
+              "real": "RUS",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 5,
+              "guess": "ANT",
+              "real": "ANT",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 6,
+              "guess": "LEC",
+              "real": "HAD",
+              "points": 0,
+              "reason": "fora"
+            }
+          ],
+          "top6_points": 10,
+          "bonus_driver": "ALO",
+          "bonus_guess": 9,
+          "bonus_real_pos": 8,
+          "bonus_points": 0,
+          "total": 10
+        },
+        "24": {
+          "round": 24,
+          "race_id": "2025-24",
+          "race": "Abu Dhabi",
+          "top6": [
+            "NOR",
+            "VER",
+            "RUS",
+            "PIA",
+            "LEC",
+            "ANT"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "NOR",
+              "real": "VER",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "VER",
+              "real": "NOR",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "RUS",
+              "real": "PIA",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "PIA",
+              "real": "RUS",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 5,
+              "guess": "LEC",
+              "real": "LEC",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 6,
+              "guess": "ANT",
+              "real": "ALO",
+              "points": 0,
+              "reason": "fora"
+            }
+          ],
+          "top6_points": 6,
+          "bonus_driver": "STR",
+          "bonus_guess": 17,
+          "bonus_real_pos": 15,
+          "bonus_points": 0,
           "total": 6
         }
       }
@@ -4198,6 +5836,510 @@
           "bonus_real_pos": 3,
           "bonus_points": 0,
           "total": 6
+        },
+        "16": {
+          "round": 16,
+          "race_id": "2025-16",
+          "race": "Monza",
+          "top6": [
+            "LEC",
+            "HAM",
+            "PIA",
+            "VER",
+            "NOR",
+            "RUS"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "LEC",
+              "real": "VER",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "HAM",
+              "real": "NOR",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "PIA",
+              "real": "PIA",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 4,
+              "guess": "VER",
+              "real": "LEC",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 5,
+              "guess": "NOR",
+              "real": "HAM",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "RUS",
+              "real": "RUS",
+              "points": 2,
+              "reason": "exata"
+            }
+          ],
+          "top6_points": 8,
+          "bonus_driver": "HAM",
+          "bonus_guess": 2,
+          "bonus_real_pos": 5,
+          "bonus_points": 0,
+          "total": 8
+        },
+        "17": {
+          "round": 17,
+          "race_id": "2025-17",
+          "race": "Baku",
+          "top6": [
+            "NOR",
+            "LEC",
+            "PIA",
+            "HAM",
+            "VER",
+            "RUS"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "NOR",
+              "real": "VER",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 2,
+              "guess": "LEC",
+              "real": "SAI",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 3,
+              "guess": "PIA",
+              "real": "LAW",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 4,
+              "guess": "HAM",
+              "real": "ANT",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 5,
+              "guess": "VER",
+              "real": "RUS",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "RUS",
+              "real": "TSU",
+              "points": 1,
+              "reason": "no top6"
+            }
+          ],
+          "top6_points": 2,
+          "bonus_driver": "ALB",
+          "bonus_guess": 9,
+          "bonus_real_pos": 19,
+          "bonus_points": 0,
+          "total": 2
+        },
+        "18": {
+          "round": 18,
+          "race_id": "2025-18",
+          "race": "Marina Bay",
+          "top6": [
+            "PIA",
+            "VER",
+            "LEC",
+            "NOR",
+            "RUS",
+            "HAM"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "PIA",
+              "real": "RUS",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "VER",
+              "real": "VER",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 3,
+              "guess": "LEC",
+              "real": "PIA",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 4,
+              "guess": "NOR",
+              "real": "ANT",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 5,
+              "guess": "RUS",
+              "real": "NOR",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "HAM",
+              "real": "HAM",
+              "points": 2,
+              "reason": "exata"
+            }
+          ],
+          "top6_points": 7,
+          "bonus_driver": "ALB",
+          "bonus_guess": 8,
+          "bonus_real_pos": 19,
+          "bonus_points": 0,
+          "total": 7
+        },
+        "20": {
+          "round": 20,
+          "race_id": "2025-20",
+          "race": "Mexico City",
+          "top6": [
+            "PIA",
+            "VER",
+            "NOR",
+            "LEC",
+            "RUS",
+            "HAM"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "PIA",
+              "real": "NOR",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 2,
+              "guess": "VER",
+              "real": "LEC",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "NOR",
+              "real": "HAM",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "LEC",
+              "real": "RUS",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 5,
+              "guess": "RUS",
+              "real": "VER",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "HAM",
+              "real": "ANT",
+              "points": 1,
+              "reason": "no top6"
+            }
+          ],
+          "top6_points": 5,
+          "bonus_driver": "COL",
+          "bonus_guess": 17,
+          "bonus_real_pos": 20,
+          "bonus_points": 0,
+          "total": 5
+        },
+        "21": {
+          "round": 21,
+          "race_id": "2025-21",
+          "race": "São Paulo",
+          "top6": [
+            "VER",
+            "NOR",
+            "RUS",
+            "ANT",
+            "PIA",
+            "LEC"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "VER",
+              "real": "NOR",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 2,
+              "guess": "NOR",
+              "real": "ANT",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "RUS",
+              "real": "LEC",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "ANT",
+              "real": "PIA",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 5,
+              "guess": "PIA",
+              "real": "HAD",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "LEC",
+              "real": "RUS",
+              "points": 1,
+              "reason": "no top6"
+            }
+          ],
+          "top6_points": 5,
+          "bonus_driver": "BOR",
+          "bonus_guess": 14,
+          "bonus_real_pos": null,
+          "bonus_points": 0,
+          "total": 5
+        },
+        "22": {
+          "round": 22,
+          "race_id": "2025-22",
+          "race": "Las Vegas",
+          "top6": [
+            "NOR",
+            "PIA",
+            "VER",
+            "LEC",
+            "HAM",
+            "RUS"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "NOR",
+              "real": "NOR",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 2,
+              "guess": "PIA",
+              "real": "VER",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "VER",
+              "real": "SAI",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "LEC",
+              "real": "RUS",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 5,
+              "guess": "HAM",
+              "real": "PIA",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 6,
+              "guess": "RUS",
+              "real": "LAW",
+              "points": 1,
+              "reason": "no top6"
+            }
+          ],
+          "top6_points": 5,
+          "bonus_driver": "OCO",
+          "bonus_guess": 9,
+          "bonus_real_pos": 13,
+          "bonus_points": 0,
+          "total": 5
+        },
+        "23": {
+          "round": 23,
+          "race_id": "2025-23",
+          "race": "Lusail",
+          "top6": [
+            "PIA",
+            "NOR",
+            "VER",
+            "ANT",
+            "RUS",
+            "LEC"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "PIA",
+              "real": "PIA",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 2,
+              "guess": "NOR",
+              "real": "NOR",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 3,
+              "guess": "VER",
+              "real": "VER",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 4,
+              "guess": "ANT",
+              "real": "RUS",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 5,
+              "guess": "RUS",
+              "real": "ANT",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "LEC",
+              "real": "HAD",
+              "points": 0,
+              "reason": "fora"
+            }
+          ],
+          "top6_points": 8,
+          "bonus_driver": "ALO",
+          "bonus_guess": 9,
+          "bonus_real_pos": 8,
+          "bonus_points": 0,
+          "total": 8
+        },
+        "24": {
+          "round": 24,
+          "race_id": "2025-24",
+          "race": "Abu Dhabi",
+          "top6": [
+            "PIA",
+            "VER",
+            "NOR",
+            "RUS",
+            "LEC",
+            "ANT"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "PIA",
+              "real": "VER",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "VER",
+              "real": "NOR",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "NOR",
+              "real": "PIA",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "RUS",
+              "real": "RUS",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 5,
+              "guess": "LEC",
+              "real": "LEC",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 6,
+              "guess": "ANT",
+              "real": "ALO",
+              "points": 0,
+              "reason": "fora"
+            }
+          ],
+          "top6_points": 7,
+          "bonus_driver": "STR",
+          "bonus_guess": 15,
+          "bonus_real_pos": 15,
+          "bonus_points": 1,
+          "total": 8
         }
       }
     },
@@ -5023,6 +7165,510 @@
           "bonus_real_pos": 3,
           "bonus_points": 0,
           "total": 5
+        },
+        "16": {
+          "round": 16,
+          "race_id": "2025-16",
+          "race": "Monza",
+          "top6": [
+            "VER",
+            "PIA",
+            "NOR",
+            "HAM",
+            "LEC",
+            "SAI"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "VER",
+              "real": "VER",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 2,
+              "guess": "PIA",
+              "real": "NOR",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "NOR",
+              "real": "PIA",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "HAM",
+              "real": "LEC",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 5,
+              "guess": "LEC",
+              "real": "HAM",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "SAI",
+              "real": "RUS",
+              "points": 0,
+              "reason": "fora"
+            }
+          ],
+          "top6_points": 6,
+          "bonus_driver": "HAM",
+          "bonus_guess": 4,
+          "bonus_real_pos": 5,
+          "bonus_points": 0,
+          "total": 6
+        },
+        "17": {
+          "round": 17,
+          "race_id": "2025-17",
+          "race": "Baku",
+          "top6": [
+            "NOR",
+            "VER",
+            "PIA",
+            "LEC",
+            "HAM",
+            "RUS"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "NOR",
+              "real": "VER",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 2,
+              "guess": "VER",
+              "real": "SAI",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "PIA",
+              "real": "LAW",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 4,
+              "guess": "LEC",
+              "real": "ANT",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 5,
+              "guess": "HAM",
+              "real": "RUS",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 6,
+              "guess": "RUS",
+              "real": "TSU",
+              "points": 1,
+              "reason": "no top6"
+            }
+          ],
+          "top6_points": 2,
+          "bonus_driver": "ALB",
+          "bonus_guess": 7,
+          "bonus_real_pos": 19,
+          "bonus_points": 0,
+          "total": 2
+        },
+        "18": {
+          "round": 18,
+          "race_id": "2025-18",
+          "race": "Marina Bay",
+          "top6": [
+            "PIA",
+            "VER",
+            "NOR",
+            "LEC",
+            "RUS",
+            "HAM"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "PIA",
+              "real": "RUS",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "VER",
+              "real": "VER",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 3,
+              "guess": "NOR",
+              "real": "PIA",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "LEC",
+              "real": "ANT",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 5,
+              "guess": "RUS",
+              "real": "NOR",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "HAM",
+              "real": "HAM",
+              "points": 2,
+              "reason": "exata"
+            }
+          ],
+          "top6_points": 7,
+          "bonus_driver": "ALB",
+          "bonus_guess": 10,
+          "bonus_real_pos": 19,
+          "bonus_points": 0,
+          "total": 7
+        },
+        "20": {
+          "round": 20,
+          "race_id": "2025-20",
+          "race": "Mexico City",
+          "top6": [
+            "VER",
+            "NOR",
+            "PIA",
+            "LEC",
+            "HAM",
+            "SAI"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "VER",
+              "real": "NOR",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "NOR",
+              "real": "LEC",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "PIA",
+              "real": "HAM",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 4,
+              "guess": "LEC",
+              "real": "RUS",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 5,
+              "guess": "HAM",
+              "real": "VER",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "SAI",
+              "real": "ANT",
+              "points": 0,
+              "reason": "fora"
+            }
+          ],
+          "top6_points": 4,
+          "bonus_driver": "COL",
+          "bonus_guess": 16,
+          "bonus_real_pos": 20,
+          "bonus_points": 0,
+          "total": 4
+        },
+        "21": {
+          "round": 21,
+          "race_id": "2025-21",
+          "race": "São Paulo",
+          "top6": [
+            "NOR",
+            "VER",
+            "ANT",
+            "PIA",
+            "RUS",
+            "LEC"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "NOR",
+              "real": "NOR",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 2,
+              "guess": "VER",
+              "real": "ANT",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 3,
+              "guess": "ANT",
+              "real": "LEC",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "PIA",
+              "real": "PIA",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 5,
+              "guess": "RUS",
+              "real": "HAD",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "LEC",
+              "real": "RUS",
+              "points": 1,
+              "reason": "no top6"
+            }
+          ],
+          "top6_points": 7,
+          "bonus_driver": "BOR",
+          "bonus_guess": 7,
+          "bonus_real_pos": null,
+          "bonus_points": 0,
+          "total": 7
+        },
+        "22": {
+          "round": 22,
+          "race_id": "2025-22",
+          "race": "Las Vegas",
+          "top6": [
+            "VER",
+            "NOR",
+            "PIA",
+            "LEC",
+            "RUS",
+            "HAM"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "VER",
+              "real": "NOR",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "NOR",
+              "real": "VER",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "PIA",
+              "real": "SAI",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "LEC",
+              "real": "RUS",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 5,
+              "guess": "RUS",
+              "real": "PIA",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "HAM",
+              "real": "LAW",
+              "points": 0,
+              "reason": "fora"
+            }
+          ],
+          "top6_points": 4,
+          "bonus_driver": "OCO",
+          "bonus_guess": 10,
+          "bonus_real_pos": 13,
+          "bonus_points": 0,
+          "total": 4
+        },
+        "23": {
+          "round": 23,
+          "race_id": "2025-23",
+          "race": "Lusail",
+          "top6": [
+            "VER",
+            "NOR",
+            "PIA",
+            "LEC",
+            "RUS",
+            "HAM"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "VER",
+              "real": "PIA",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "NOR",
+              "real": "NOR",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 3,
+              "guess": "PIA",
+              "real": "VER",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "LEC",
+              "real": "RUS",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 5,
+              "guess": "RUS",
+              "real": "ANT",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "HAM",
+              "real": "HAD",
+              "points": 0,
+              "reason": "fora"
+            }
+          ],
+          "top6_points": 5,
+          "bonus_driver": "ALO",
+          "bonus_guess": 10,
+          "bonus_real_pos": 8,
+          "bonus_points": 0,
+          "total": 5
+        },
+        "24": {
+          "round": 24,
+          "race_id": "2025-24",
+          "race": "Abu Dhabi",
+          "top6": [
+            "VER",
+            "PIA",
+            "LEC",
+            "NOR",
+            "RUS",
+            "ANT"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "VER",
+              "real": "VER",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 2,
+              "guess": "PIA",
+              "real": "NOR",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "LEC",
+              "real": "PIA",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "NOR",
+              "real": "RUS",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 5,
+              "guess": "RUS",
+              "real": "LEC",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "ANT",
+              "real": "ALO",
+              "points": 0,
+              "reason": "fora"
+            }
+          ],
+          "top6_points": 6,
+          "bonus_driver": "STR",
+          "bonus_guess": 15,
+          "bonus_real_pos": 15,
+          "bonus_points": 1,
+          "total": 7
         }
       }
     },
@@ -5974,6 +8620,510 @@
           "bonus_real_pos": 3,
           "bonus_points": 0,
           "total": 6
+        },
+        "16": {
+          "round": 16,
+          "race_id": "2025-16",
+          "race": "Monza",
+          "top6": [
+            "PIA",
+            "LEC",
+            "NOR",
+            "VER",
+            "HAM",
+            "RUS"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "PIA",
+              "real": "VER",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "LEC",
+              "real": "NOR",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "NOR",
+              "real": "PIA",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "VER",
+              "real": "LEC",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 5,
+              "guess": "HAM",
+              "real": "HAM",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 6,
+              "guess": "RUS",
+              "real": "RUS",
+              "points": 2,
+              "reason": "exata"
+            }
+          ],
+          "top6_points": 8,
+          "bonus_driver": "HAM",
+          "bonus_guess": 4,
+          "bonus_real_pos": 5,
+          "bonus_points": 0,
+          "total": 8
+        },
+        "17": {
+          "round": 17,
+          "race_id": "2025-17",
+          "race": "Baku",
+          "top6": [
+            "NOR",
+            "LEC",
+            "PIA",
+            "VER",
+            "RUS",
+            "HAM"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "NOR",
+              "real": "VER",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 2,
+              "guess": "LEC",
+              "real": "SAI",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 3,
+              "guess": "PIA",
+              "real": "LAW",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 4,
+              "guess": "VER",
+              "real": "ANT",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 5,
+              "guess": "RUS",
+              "real": "RUS",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 6,
+              "guess": "HAM",
+              "real": "TSU",
+              "points": 0,
+              "reason": "fora"
+            }
+          ],
+          "top6_points": 3,
+          "bonus_driver": "ALB",
+          "bonus_guess": 7,
+          "bonus_real_pos": 19,
+          "bonus_points": 0,
+          "total": 3
+        },
+        "18": {
+          "round": 18,
+          "race_id": "2025-18",
+          "race": "Marina Bay",
+          "top6": [
+            "VER",
+            "PIA",
+            "NOR",
+            "LEC",
+            "RUS",
+            "SAI"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "VER",
+              "real": "RUS",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "PIA",
+              "real": "VER",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "NOR",
+              "real": "PIA",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "LEC",
+              "real": "ANT",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 5,
+              "guess": "RUS",
+              "real": "NOR",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "SAI",
+              "real": "HAM",
+              "points": 0,
+              "reason": "fora"
+            }
+          ],
+          "top6_points": 4,
+          "bonus_driver": "ALB",
+          "bonus_guess": 11,
+          "bonus_real_pos": 19,
+          "bonus_points": 0,
+          "total": 4
+        },
+        "20": {
+          "round": 20,
+          "race_id": "2025-20",
+          "race": "Mexico City",
+          "top6": [
+            "VER",
+            "NOR",
+            "PIA",
+            "RUS",
+            "LEC",
+            "HAM"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "VER",
+              "real": "NOR",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "NOR",
+              "real": "LEC",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "PIA",
+              "real": "HAM",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 4,
+              "guess": "RUS",
+              "real": "RUS",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 5,
+              "guess": "LEC",
+              "real": "VER",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "HAM",
+              "real": "ANT",
+              "points": 1,
+              "reason": "no top6"
+            }
+          ],
+          "top6_points": 6,
+          "bonus_driver": "COL",
+          "bonus_guess": 18,
+          "bonus_real_pos": 20,
+          "bonus_points": 0,
+          "total": 6
+        },
+        "21": {
+          "round": 21,
+          "race_id": "2025-21",
+          "race": "São Paulo",
+          "top6": [
+            "NOR",
+            "RUS",
+            "VER",
+            "PIA",
+            "ANT",
+            "LEC"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "NOR",
+              "real": "NOR",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 2,
+              "guess": "RUS",
+              "real": "ANT",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "VER",
+              "real": "LEC",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 4,
+              "guess": "PIA",
+              "real": "PIA",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 5,
+              "guess": "ANT",
+              "real": "HAD",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "LEC",
+              "real": "RUS",
+              "points": 1,
+              "reason": "no top6"
+            }
+          ],
+          "top6_points": 7,
+          "bonus_driver": "BOR",
+          "bonus_guess": 10,
+          "bonus_real_pos": null,
+          "bonus_points": 0,
+          "total": 7
+        },
+        "22": {
+          "round": 22,
+          "race_id": "2025-22",
+          "race": "Las Vegas",
+          "top6": [
+            "NOR",
+            "VER",
+            "PIA",
+            "LEC",
+            "RUS",
+            "ANT"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "NOR",
+              "real": "NOR",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 2,
+              "guess": "VER",
+              "real": "VER",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 3,
+              "guess": "PIA",
+              "real": "SAI",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "LEC",
+              "real": "RUS",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 5,
+              "guess": "RUS",
+              "real": "PIA",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "ANT",
+              "real": "LAW",
+              "points": 0,
+              "reason": "fora"
+            }
+          ],
+          "top6_points": 6,
+          "bonus_driver": "OCO",
+          "bonus_guess": 12,
+          "bonus_real_pos": 13,
+          "bonus_points": 0,
+          "total": 6
+        },
+        "23": {
+          "round": 23,
+          "race_id": "2025-23",
+          "race": "Lusail",
+          "top6": [
+            "NOR",
+            "PIA",
+            "VER",
+            "RUS",
+            "ANT",
+            "LEC"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "NOR",
+              "real": "PIA",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "PIA",
+              "real": "NOR",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "VER",
+              "real": "VER",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 4,
+              "guess": "RUS",
+              "real": "RUS",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 5,
+              "guess": "ANT",
+              "real": "ANT",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 6,
+              "guess": "LEC",
+              "real": "HAD",
+              "points": 0,
+              "reason": "fora"
+            }
+          ],
+          "top6_points": 8,
+          "bonus_driver": "ALO",
+          "bonus_guess": 8,
+          "bonus_real_pos": 8,
+          "bonus_points": 1,
+          "total": 9
+        },
+        "24": {
+          "round": 24,
+          "race_id": "2025-24",
+          "race": "Abu Dhabi",
+          "top6": [
+            "NOR",
+            "VER",
+            "PIA",
+            "RUS",
+            "LEC",
+            "ANT"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "NOR",
+              "real": "VER",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "VER",
+              "real": "NOR",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "PIA",
+              "real": "PIA",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 4,
+              "guess": "RUS",
+              "real": "RUS",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 5,
+              "guess": "LEC",
+              "real": "LEC",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 6,
+              "guess": "ANT",
+              "real": "ALO",
+              "points": 0,
+              "reason": "fora"
+            }
+          ],
+          "top6_points": 8,
+          "bonus_driver": "STR",
+          "bonus_guess": 14,
+          "bonus_real_pos": 15,
+          "bonus_points": 0,
+          "total": 8
         }
       }
     },
@@ -6925,6 +10075,447 @@
           "bonus_real_pos": 3,
           "bonus_points": 0,
           "total": 6
+        },
+        "16": {
+          "round": 16,
+          "race_id": "2025-16",
+          "race": "Monza",
+          "top6": [
+            "NOR",
+            "PIA",
+            "VER",
+            "LEC",
+            "HAM",
+            "RUS"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "NOR",
+              "real": "VER",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "PIA",
+              "real": "NOR",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "VER",
+              "real": "PIA",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "LEC",
+              "real": "LEC",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 5,
+              "guess": "HAM",
+              "real": "HAM",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 6,
+              "guess": "RUS",
+              "real": "RUS",
+              "points": 2,
+              "reason": "exata"
+            }
+          ],
+          "top6_points": 9,
+          "bonus_driver": "HAM",
+          "bonus_guess": 6,
+          "bonus_real_pos": 5,
+          "bonus_points": 0,
+          "total": 9
+        },
+        "17": {
+          "round": 17,
+          "race_id": "2025-17",
+          "race": "Baku",
+          "top6": [
+            "PIA",
+            "VER",
+            "NOR",
+            "LEC",
+            "RUS",
+            "HAM"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "PIA",
+              "real": "VER",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 2,
+              "guess": "VER",
+              "real": "SAI",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "NOR",
+              "real": "LAW",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 4,
+              "guess": "LEC",
+              "real": "ANT",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 5,
+              "guess": "RUS",
+              "real": "RUS",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 6,
+              "guess": "HAM",
+              "real": "TSU",
+              "points": 0,
+              "reason": "fora"
+            }
+          ],
+          "top6_points": 3,
+          "bonus_driver": "ALB",
+          "bonus_guess": 8,
+          "bonus_real_pos": 19,
+          "bonus_points": 0,
+          "total": 3
+        },
+        "18": {
+          "round": 18,
+          "race_id": "2025-18",
+          "race": "Marina Bay",
+          "top6": [
+            "VER",
+            "NOR",
+            "PIA",
+            "LEC",
+            "HAM",
+            "RUS"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "VER",
+              "real": "RUS",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "NOR",
+              "real": "VER",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "PIA",
+              "real": "PIA",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 4,
+              "guess": "LEC",
+              "real": "ANT",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 5,
+              "guess": "HAM",
+              "real": "NOR",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "RUS",
+              "real": "HAM",
+              "points": 1,
+              "reason": "no top6"
+            }
+          ],
+          "top6_points": 6,
+          "bonus_driver": "ALB",
+          "bonus_guess": 9,
+          "bonus_real_pos": 19,
+          "bonus_points": 0,
+          "total": 6
+        },
+        "20": {
+          "round": 20,
+          "race_id": "2025-20",
+          "race": "Mexico City",
+          "top6": [
+            "VER",
+            "NOR",
+            "PIA",
+            "LEC",
+            "HAM",
+            "RUS"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "VER",
+              "real": "NOR",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "NOR",
+              "real": "LEC",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "PIA",
+              "real": "HAM",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 4,
+              "guess": "LEC",
+              "real": "RUS",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 5,
+              "guess": "HAM",
+              "real": "VER",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "RUS",
+              "real": "ANT",
+              "points": 1,
+              "reason": "no top6"
+            }
+          ],
+          "top6_points": 5,
+          "bonus_driver": "COL",
+          "bonus_guess": 19,
+          "bonus_real_pos": 20,
+          "bonus_points": 0,
+          "total": 5
+        },
+        "21": {
+          "round": 21,
+          "race_id": "2025-21",
+          "race": "São Paulo",
+          "top6": [
+            "NOR",
+            "PIA",
+            "VER",
+            "ANT",
+            "RUS",
+            "LEC"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "NOR",
+              "real": "NOR",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 2,
+              "guess": "PIA",
+              "real": "ANT",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "VER",
+              "real": "LEC",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 4,
+              "guess": "ANT",
+              "real": "PIA",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 5,
+              "guess": "RUS",
+              "real": "HAD",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "LEC",
+              "real": "RUS",
+              "points": 1,
+              "reason": "no top6"
+            }
+          ],
+          "top6_points": 6,
+          "bonus_driver": "BOR",
+          "bonus_guess": 12,
+          "bonus_real_pos": null,
+          "bonus_points": 0,
+          "total": 6
+        },
+        "23": {
+          "round": 23,
+          "race_id": "2025-23",
+          "race": "Lusail",
+          "top6": [
+            "PIA",
+            "NOR",
+            "VER",
+            "LEC",
+            "RUS",
+            "HAM"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "PIA",
+              "real": "PIA",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 2,
+              "guess": "NOR",
+              "real": "NOR",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 3,
+              "guess": "VER",
+              "real": "VER",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 4,
+              "guess": "LEC",
+              "real": "RUS",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 5,
+              "guess": "RUS",
+              "real": "ANT",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "HAM",
+              "real": "HAD",
+              "points": 0,
+              "reason": "fora"
+            }
+          ],
+          "top6_points": 7,
+          "bonus_driver": "ALO",
+          "bonus_guess": 9,
+          "bonus_real_pos": 8,
+          "bonus_points": 0,
+          "total": 7
+        },
+        "24": {
+          "round": 24,
+          "race_id": "2025-24",
+          "race": "Abu Dhabi",
+          "top6": [
+            "VER",
+            "NOR",
+            "PIA",
+            "LEC",
+            "RUS",
+            "ANT"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "VER",
+              "real": "VER",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 2,
+              "guess": "NOR",
+              "real": "NOR",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 3,
+              "guess": "PIA",
+              "real": "PIA",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 4,
+              "guess": "LEC",
+              "real": "RUS",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 5,
+              "guess": "RUS",
+              "real": "LEC",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "ANT",
+              "real": "ALO",
+              "points": 0,
+              "reason": "fora"
+            }
+          ],
+          "top6_points": 8,
+          "bonus_driver": "STR",
+          "bonus_guess": 14,
+          "bonus_real_pos": 15,
+          "bonus_points": 0,
+          "total": 8
         }
       }
     },
@@ -7813,6 +11404,447 @@
           "bonus_real_pos": 3,
           "bonus_points": 1,
           "total": 7
+        },
+        "16": {
+          "round": 16,
+          "race_id": "2025-16",
+          "race": "Monza",
+          "top6": [
+            "NOR",
+            "PIA",
+            "VER",
+            "LEC",
+            "SAI",
+            "HAM"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "NOR",
+              "real": "VER",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "PIA",
+              "real": "NOR",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "VER",
+              "real": "PIA",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "LEC",
+              "real": "LEC",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 5,
+              "guess": "SAI",
+              "real": "HAM",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 6,
+              "guess": "HAM",
+              "real": "RUS",
+              "points": 1,
+              "reason": "no top6"
+            }
+          ],
+          "top6_points": 6,
+          "bonus_driver": "HAM",
+          "bonus_guess": 7,
+          "bonus_real_pos": 5,
+          "bonus_points": 0,
+          "total": 6
+        },
+        "17": {
+          "round": 17,
+          "race_id": "2025-17",
+          "race": "Baku",
+          "top6": [
+            "PIA",
+            "NOR",
+            "VER",
+            "LEC",
+            "HAM",
+            "RUS"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "PIA",
+              "real": "VER",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 2,
+              "guess": "NOR",
+              "real": "SAI",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 3,
+              "guess": "VER",
+              "real": "LAW",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "LEC",
+              "real": "ANT",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 5,
+              "guess": "HAM",
+              "real": "RUS",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 6,
+              "guess": "RUS",
+              "real": "TSU",
+              "points": 1,
+              "reason": "no top6"
+            }
+          ],
+          "top6_points": 2,
+          "bonus_driver": "ALB",
+          "bonus_guess": 10,
+          "bonus_real_pos": 19,
+          "bonus_points": 0,
+          "total": 2
+        },
+        "18": {
+          "round": 18,
+          "race_id": "2025-18",
+          "race": "Marina Bay",
+          "top6": [
+            "VER",
+            "PIA",
+            "NOR",
+            "LEC",
+            "RUS",
+            "HAM"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "VER",
+              "real": "RUS",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "PIA",
+              "real": "VER",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "NOR",
+              "real": "PIA",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "LEC",
+              "real": "ANT",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 5,
+              "guess": "RUS",
+              "real": "NOR",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "HAM",
+              "real": "HAM",
+              "points": 2,
+              "reason": "exata"
+            }
+          ],
+          "top6_points": 6,
+          "bonus_driver": "ALB",
+          "bonus_guess": 12,
+          "bonus_real_pos": 19,
+          "bonus_points": 0,
+          "total": 6
+        },
+        "20": {
+          "round": 20,
+          "race_id": "2025-20",
+          "race": "Mexico City",
+          "top6": [
+            "VER",
+            "PIA",
+            "NOR",
+            "RUS",
+            "LEC",
+            "SAI"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "VER",
+              "real": "NOR",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "PIA",
+              "real": "LEC",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 3,
+              "guess": "NOR",
+              "real": "HAM",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "RUS",
+              "real": "RUS",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 5,
+              "guess": "LEC",
+              "real": "VER",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "SAI",
+              "real": "ANT",
+              "points": 0,
+              "reason": "fora"
+            }
+          ],
+          "top6_points": 5,
+          "bonus_driver": "COL",
+          "bonus_guess": 17,
+          "bonus_real_pos": 20,
+          "bonus_points": 0,
+          "total": 5
+        },
+        "21": {
+          "round": 21,
+          "race_id": "2025-21",
+          "race": "São Paulo",
+          "top6": [
+            "NOR",
+            "RUS",
+            "VER",
+            "PIA",
+            "LEC",
+            "ANT"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "NOR",
+              "real": "NOR",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 2,
+              "guess": "RUS",
+              "real": "ANT",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "VER",
+              "real": "LEC",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 4,
+              "guess": "PIA",
+              "real": "PIA",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 5,
+              "guess": "LEC",
+              "real": "HAD",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "ANT",
+              "real": "RUS",
+              "points": 1,
+              "reason": "no top6"
+            }
+          ],
+          "top6_points": 7,
+          "bonus_driver": "BOR",
+          "bonus_guess": 13,
+          "bonus_real_pos": null,
+          "bonus_points": 0,
+          "total": 7
+        },
+        "23": {
+          "round": 23,
+          "race_id": "2025-23",
+          "race": "Lusail",
+          "top6": [
+            "PIA",
+            "NOR",
+            "VER",
+            "RUS",
+            "LEC",
+            "SAI"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "PIA",
+              "real": "PIA",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 2,
+              "guess": "NOR",
+              "real": "NOR",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 3,
+              "guess": "VER",
+              "real": "VER",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 4,
+              "guess": "RUS",
+              "real": "RUS",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 5,
+              "guess": "LEC",
+              "real": "ANT",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 6,
+              "guess": "SAI",
+              "real": "HAD",
+              "points": 0,
+              "reason": "fora"
+            }
+          ],
+          "top6_points": 8,
+          "bonus_driver": "ALO",
+          "bonus_guess": 9,
+          "bonus_real_pos": 8,
+          "bonus_points": 0,
+          "total": 8
+        },
+        "24": {
+          "round": 24,
+          "race_id": "2025-24",
+          "race": "Abu Dhabi",
+          "top6": [
+            "VER",
+            "PIA",
+            "NOR",
+            "RUS",
+            "LEC",
+            "ANT"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "VER",
+              "real": "VER",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 2,
+              "guess": "PIA",
+              "real": "NOR",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "NOR",
+              "real": "PIA",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "RUS",
+              "real": "RUS",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 5,
+              "guess": "LEC",
+              "real": "LEC",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 6,
+              "guess": "ANT",
+              "real": "ALO",
+              "points": 0,
+              "reason": "fora"
+            }
+          ],
+          "top6_points": 8,
+          "bonus_driver": "STR",
+          "bonus_guess": 16,
+          "bonus_real_pos": 15,
+          "bonus_points": 0,
+          "total": 8
         }
       }
     },
@@ -8764,6 +12796,510 @@
           "bonus_real_pos": 3,
           "bonus_points": 1,
           "total": 9
+        },
+        "16": {
+          "round": 16,
+          "race_id": "2025-16",
+          "race": "Monza",
+          "top6": [
+            "VER",
+            "NOR",
+            "PIA",
+            "LEC",
+            "HAM",
+            "SAI"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "VER",
+              "real": "VER",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 2,
+              "guess": "NOR",
+              "real": "NOR",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 3,
+              "guess": "PIA",
+              "real": "PIA",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 4,
+              "guess": "LEC",
+              "real": "LEC",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 5,
+              "guess": "HAM",
+              "real": "HAM",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 6,
+              "guess": "SAI",
+              "real": "RUS",
+              "points": 0,
+              "reason": "fora"
+            }
+          ],
+          "top6_points": 10,
+          "bonus_driver": "HAM",
+          "bonus_guess": 5,
+          "bonus_real_pos": 5,
+          "bonus_points": 1,
+          "total": 11
+        },
+        "17": {
+          "round": 17,
+          "race_id": "2025-17",
+          "race": "Baku",
+          "top6": [
+            "LEC",
+            "NOR",
+            "VER",
+            "PIA",
+            "HAM",
+            "RUS"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "LEC",
+              "real": "VER",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 2,
+              "guess": "NOR",
+              "real": "SAI",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 3,
+              "guess": "VER",
+              "real": "LAW",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "PIA",
+              "real": "ANT",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 5,
+              "guess": "HAM",
+              "real": "RUS",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 6,
+              "guess": "RUS",
+              "real": "TSU",
+              "points": 1,
+              "reason": "no top6"
+            }
+          ],
+          "top6_points": 2,
+          "bonus_driver": "ALB",
+          "bonus_guess": 8,
+          "bonus_real_pos": 19,
+          "bonus_points": 0,
+          "total": 2
+        },
+        "18": {
+          "round": 18,
+          "race_id": "2025-18",
+          "race": "Marina Bay",
+          "top6": [
+            "PIA",
+            "VER",
+            "NOR",
+            "LEC",
+            "HAM",
+            "ALO"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "PIA",
+              "real": "RUS",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "VER",
+              "real": "VER",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 3,
+              "guess": "NOR",
+              "real": "PIA",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "LEC",
+              "real": "ANT",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 5,
+              "guess": "HAM",
+              "real": "NOR",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "ALO",
+              "real": "HAM",
+              "points": 0,
+              "reason": "fora"
+            }
+          ],
+          "top6_points": 5,
+          "bonus_driver": "ALB",
+          "bonus_guess": 12,
+          "bonus_real_pos": 19,
+          "bonus_points": 0,
+          "total": 5
+        },
+        "20": {
+          "round": 20,
+          "race_id": "2025-20",
+          "race": "Mexico City",
+          "top6": [
+            "VER",
+            "NOR",
+            "LEC",
+            "PIA",
+            "RUS",
+            "HAM"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "VER",
+              "real": "NOR",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "NOR",
+              "real": "LEC",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "LEC",
+              "real": "HAM",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "PIA",
+              "real": "RUS",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 5,
+              "guess": "RUS",
+              "real": "VER",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "HAM",
+              "real": "ANT",
+              "points": 1,
+              "reason": "no top6"
+            }
+          ],
+          "top6_points": 5,
+          "bonus_driver": "COL",
+          "bonus_guess": 18,
+          "bonus_real_pos": 20,
+          "bonus_points": 0,
+          "total": 5
+        },
+        "21": {
+          "round": 21,
+          "race_id": "2025-21",
+          "race": "São Paulo",
+          "top6": [
+            "NOR",
+            "VER",
+            "PIA",
+            "RUS",
+            "ANT",
+            "LEC"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "NOR",
+              "real": "NOR",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 2,
+              "guess": "VER",
+              "real": "ANT",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 3,
+              "guess": "PIA",
+              "real": "LEC",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "RUS",
+              "real": "PIA",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 5,
+              "guess": "ANT",
+              "real": "HAD",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "LEC",
+              "real": "RUS",
+              "points": 1,
+              "reason": "no top6"
+            }
+          ],
+          "top6_points": 6,
+          "bonus_driver": "BOR",
+          "bonus_guess": 9,
+          "bonus_real_pos": null,
+          "bonus_points": 0,
+          "total": 6
+        },
+        "22": {
+          "round": 22,
+          "race_id": "2025-22",
+          "race": "Las Vegas",
+          "top6": [
+            "VER",
+            "NOR",
+            "LEC",
+            "PIA",
+            "RUS",
+            "HAM"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "VER",
+              "real": "NOR",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "NOR",
+              "real": "VER",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "LEC",
+              "real": "SAI",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 4,
+              "guess": "PIA",
+              "real": "RUS",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 5,
+              "guess": "RUS",
+              "real": "PIA",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "HAM",
+              "real": "LAW",
+              "points": 0,
+              "reason": "fora"
+            }
+          ],
+          "top6_points": 4,
+          "bonus_driver": "OCO",
+          "bonus_guess": 14,
+          "bonus_real_pos": 13,
+          "bonus_points": 0,
+          "total": 4
+        },
+        "23": {
+          "round": 23,
+          "race_id": "2025-23",
+          "race": "Lusail",
+          "top6": [
+            "PIA",
+            "NOR",
+            "VER",
+            "RUS",
+            "LEC",
+            "ANT"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "PIA",
+              "real": "PIA",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 2,
+              "guess": "NOR",
+              "real": "NOR",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 3,
+              "guess": "VER",
+              "real": "VER",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 4,
+              "guess": "RUS",
+              "real": "RUS",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 5,
+              "guess": "LEC",
+              "real": "ANT",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 6,
+              "guess": "ANT",
+              "real": "HAD",
+              "points": 1,
+              "reason": "no top6"
+            }
+          ],
+          "top6_points": 9,
+          "bonus_driver": "ALO",
+          "bonus_guess": 7,
+          "bonus_real_pos": 8,
+          "bonus_points": 0,
+          "total": 9
+        },
+        "24": {
+          "round": 24,
+          "race_id": "2025-24",
+          "race": "Abu Dhabi",
+          "top6": [
+            "NOR",
+            "VER",
+            "PIA",
+            "RUS",
+            "LEC",
+            "ANT"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "NOR",
+              "real": "VER",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "VER",
+              "real": "NOR",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "PIA",
+              "real": "PIA",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 4,
+              "guess": "RUS",
+              "real": "RUS",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 5,
+              "guess": "LEC",
+              "real": "LEC",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 6,
+              "guess": "ANT",
+              "real": "ALO",
+              "points": 0,
+              "reason": "fora"
+            }
+          ],
+          "top6_points": 8,
+          "bonus_driver": "STR",
+          "bonus_guess": 16,
+          "bonus_real_pos": 15,
+          "bonus_points": 0,
+          "total": 8
         }
       }
     }

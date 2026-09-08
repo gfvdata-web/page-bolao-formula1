@@ -1173,11 +1173,36 @@ enquanto a Jolpica não publica o quali.**
   `LEC`?), preservado → conta 0. **Correções pontuais, se quiseres, editam o
   CSV** e re-rodam `historico build` + `site build`.
 
+**Sub-etapa 2026-09-08c — rodadas 16–24 de 2025 (export do WhatsApp):**
+Fonte: `backupguimsgs.txt` (mesmo tipo de export do grupo). Importadas **8
+rodadas** (16 Monza, 17 Baku, 18 Singapura, 20 México, 21 Interlagos, 22 Las
+Vegas, 23 Qatar, 24 Abu Dhabi) via `bolao.whatsapp_import.consolida_rodadas`
+→ linhas anexadas em `data/2025/palpites_2025.csv` / `rodadas_2025.csv` (as
+colunas de conferência `pos_planilha,t1..t6` ficam **vazias** nessas rodadas;
+`historico.py` passou a tratar coluna vazia como "sem cross-check", não como
+divergência). Site vai de 15 → **23/24 rodadas**; ranking final bate com o
+`hall_of_fame` (🥇 vinícius 139 · 🥈 guilherme 138 · 🥉 igor 137).
+- Correções pontuais na leitura do WhatsApp (typos/emoji que o parser derrubou):
+  R21 Lage `ATN`→`ANT` + `P13`; R21 Francez `P 7 😵‍💫`→`P7`; R22 Caio `VES`→`VER`
+  (bloco tinha sumido); R24 Francez (bloco com emoji no meio, tinha sumido).
+- **Divergências recálculo × placar publicado no grupo** (o recálculo pela
+  Jolpica é o que vale nos dados, igual às outras rodadas): R20 México — o grupo
+  publicou o placar às pressas 13 dias depois ("não atualizei a pontuação do
+  México"), todos ~1–2 pts abaixo do recálculo; R16 Caio (+1); R21 Caliman (o
+  grupo somou "+1" à mão).
+- **R19 Austin — só o placar, sem palpites (pedido do usuário "por enquanto"):**
+  Guilherme perdeu dias do histórico do zap e reconstruiu o placar; os palpites
+  brutos não foram recuperados de forma confiável e **não reconciliam** com o
+  recálculo. Placar publicado guardado em `data/2025/pontos_avulsos.json`
+  (+ `results/19.json` da Jolpica). **Ainda não entra no ranking** — falta
+  decidir como o site mostra uma rodada com pontos e sem palpite (mesma classe
+  da decisão da compensação retroativa abaixo).
+
 **Pendências para fechar 2025 (decisão do usuário):**
-- **Rodadas 16→fim:** o usuário vai mandar os dados que faltam. Com 15/24
-  rodadas o ranking 2025 aqui **não fecha o campeonato** — o `hall_of_fame`
-  (🥇 vinicius 🥈 guilherme 🥉 igor) é da temporada inteira; o parcial atual dá
-  🥇 igor 🥈 vinicius 🥉 guilherme.
+- **R19 Austin no ranking:** integrar `pontos_avulsos.json` ao
+  `docs/data/2025/standings.json` (total + rodada jogada + compensação dos
+  ausentes) exige tratar no front uma rodada sem `results`/`bets` — decidir a
+  abordagem.
 - **Semântica da compensação retroativa no histórico:** aplicar as regras de
   2026 (seção 2) a uma temporada fechada dá a jogadores que entraram no meio do
   ano (`bernardo` +41, `arthur` +44, `caio` +50) pontuação mínima de todas as
