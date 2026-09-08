@@ -849,10 +849,18 @@ largada no quali.**
     **normalizado por piloto** (mesma espessura máxima em todos — a dispersão
     aparece pela largura no eixo X). Recortado à janela `[melhor-1.5, pior+1.5]`
     porque a gaussiana nunca zera e o violino viraria um fio até o fim do eixo.
-  - Cada quali = um ponto (jitter vertical determinístico); barra vertical
-    escura = média; faixa clara à esquerda = top6; eixo P1..maior grid visto.
+  - Cada quali = um ponto (jitter vertical determinístico); faixa clara à
+    esquerda = top6; eixo P1..maior grid visto. **Sem barra de média** (só o
+    sombreado + os pontos — pedido do usuário); a média fica só no número à
+    direita da linha.
   - Helper novo `svgEl()` (namespace SVG, espelha `el()`). `CORES_PILOTO` ganhou
     `TSU`→Red Bull (Tsunoda entrou na r12; decorativo, como o resto do mapa).
+  - **Popup ao passar o mouse numa linha** (`.pilotos-tooltip`, HTML absoluto
+    dentro de `#pilotos-container` que tem `position: relative`): mostra a
+    contagem por posição do piloto como mini-histograma de barras (mesmo visual
+    escuro dos tooltips do Chart.js), + média/mediana/melhor/pior. Alvo = um
+    `<rect fill="transparent">` por linha; eventos `pointerenter/move/leave`
+    (`ligarTooltip`), então funciona também no toque.
 - SVG não sofre o bug de canvas escondido do Chart.js → sem init preguiçosa,
   `renderPilotos` roda direto no `main()`.
 
