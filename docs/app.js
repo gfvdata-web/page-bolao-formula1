@@ -182,32 +182,14 @@ function badgePonto(pts, max) {
 
 // ---------- Ranking ----------
 
-// Célula "Calculada": total pelo nosso motor, com a diferença para o oficial
-// quando os dois não batem (temporadas finalizadas).
-function celCalculada(jogador) {
-  const calc = jogador.total_calculado;
-  const dif = calc - jogador.total;
-  const filhos = [String(calc)];
-  if (dif !== 0) {
-    filhos.push(
-      el("span", { class: "ranking-dif" }, [` (${dif > 0 ? "+" : "−"}${Math.abs(dif)})`])
-    );
-  }
-  return el("td", { class: "num" }, filhos);
-}
-
 function renderRanking(standings) {
   const container = document.getElementById("ranking-container");
-  // Nas temporadas finalizadas o placar do grupo (oficial) pode divergir do
-  // recálculo — mostramos as duas colunas para dá pra comparar.
-  const mostrarCalculada = MODO_HISTORICO && standings.players.some((j) => j.total_calculado !== j.total);
   const tabela = el("table", { class: "ranking-tabela" }, [
     el("thead", {}, [
       el("tr", {}, [
         el("th", {}, ["#"]),
         el("th", {}, ["Jogador"]),
-        el("th", { class: "num" }, [mostrarCalculada ? "Oficial" : "Pontos"]),
-        mostrarCalculada ? el("th", { class: "num" }, ["Calculada"]) : null,
+        el("th", { class: "num" }, ["Pontos"]),
         el("th", { class: "num" }, ["Média/Corrida"]),
         FORMATO.bonus ? el("th", { class: "num" }, ["Pontos Extra"]) : null,
         el("th", { class: "num" }, ["Rodadas"]),
@@ -232,7 +214,6 @@ function renderRanking(standings) {
         el("td", { class: "pos-medalha" }, [medalhas[jogador.position] || String(jogador.position)]),
         nomeCell,
         el("td", { class: "num" }, [String(jogador.total)]),
-        mostrarCalculada ? celCalculada(jogador) : null,
         el("td", { class: "num" }, [jogador.avg_points.toFixed(1)]),
         FORMATO.bonus ? el("td", { class: "num" }, [String(jogador.bonus_total)]) : null,
         el("td", { class: "num" }, [String(jogador.rounds_played)]),
@@ -241,15 +222,6 @@ function renderRanking(standings) {
   }
   tabela.appendChild(tbody);
   container.replaceChildren(tabela);
-
-  if (mostrarCalculada) {
-    container.appendChild(
-      el("p", { class: "ranking-nota-calculada" }, [
-        "“Oficial” = placar final publicado pelo grupo. “Calculada” = recálculo " +
-          "pelas regras da temporada; a diferença aparece entre parênteses.",
-      ])
-    );
-  }
 }
 
 // ---------- Ranking / Corridas (última contabilizada + próxima) ----------
@@ -2393,20 +2365,27 @@ function renderRankingHall(hof) {
     el("thead", {}, [
       el("tr", {}, [
         el("th", {}, ["Jogador"]),
+        el("th", {}, [""]),
         el("th", { class: "num" }, ["🥇"]),
         el("th", { class: "num" }, ["🥈"]),
         el("th", { class: "num" }, ["🥉"]),
+        el("th", { class: "num" }, ["Total"]),
       ]),
     ]),
   ]);
   const tbody = el("tbody");
   for (const linha of linhas) {
+    const total = linha.ouro + linha.prata + linha.bronze;
     tbody.appendChild(
       el("tr", {}, [
         el("td", {}, [linha.nome]),
+        el("td", {}, [
+          el("a", { class: "hall-acessar", href: `?jogador=${encodeURIComponent(linha.id)}` }, ["Acessar"]),
+        ]),
         el("td", { class: "num" }, [String(linha.ouro)]),
         el("td", { class: "num" }, [String(linha.prata)]),
         el("td", { class: "num" }, [String(linha.bronze)]),
+        el("td", { class: "num" }, [String(total)]),
       ])
     );
   }
@@ -2449,6 +2428,290 @@ function renderHallOfFame(hof, seasons) {
       el("div", { class: "hall-coluna" }, [el("h2", {}, ["Pódios por ano"]), renderListaAnosHall(hof, seasons)]),
     ])
   );
+}
+
+// ---------- Página do jogador (histórico entre temporadas) ----------
+
+let MODO_JOGADOR = false;
+
+function jogadorPedido() {
+  const p = new URLSearchParams(location.search).get("jogador");
+  return p ? p.trim() : null;
+}
+
+// Agrega os palpites de top6 de um jogador em todas as temporadas por piloto:
+// quantas vezes apostou nele e quantos pontos o top6 rendeu com esse chute.
+// Retorna { geral: Map<cod,{vezes,pontos}>, porAno: Map<ano, Map<cod,...>> }.
+function agregarApostasPorPiloto(betsPorAno, id) {
+  const geral = new Map();
+  const porAno = new Map();
+  const acumula = (mapa, cod, pontos) => {
+    if (!mapa.has(cod)) mapa.set(cod, { vezes: 0, pontos: 0 });
+    const reg = mapa.get(cod);
+    reg.vezes += 1;
+    reg.pontos += pontos;
+  };
+  for (const [ano, bets] of betsPorAno) {
+    const jogador = bets && bets.players && bets.players[id];
+    if (!jogador) continue;
+    const mapaAno = new Map();
+    porAno.set(ano, mapaAno);
+    for (const rodada of Object.values(jogador.rounds || {})) {
+      for (const det of rodada.top6_detail || []) {
+        if (!det.guess) continue;
+        acumula(geral, det.guess, det.points || 0);
+        acumula(mapaAno, det.guess, det.points || 0);
+      }
+    }
+  }
+  return { geral, porAno };
+}
+
+function jogadorCard(titulo, valorPrincipal, extra) {
+  return el("div", { class: "corrida-card jogador-card" }, [
+    el("div", { class: "corrida-card__titulo" }, [titulo]),
+    el("div", { class: "jogador-card__valor" }, [valorPrincipal]),
+    extra ? el("div", { class: "corrida-card__extra" }, [extra]) : null,
+  ]);
+}
+
+function renderGraficoPosicaoJogador(canvas, temporadas) {
+  const labels = temporadas.map((t) => String(t.ano));
+  const dados = temporadas.map((t) => t.posicao);
+  const maxPos = Math.max(4, ...temporadas.map((t) => t.jogadores));
+  new Chart(canvas, {
+    type: "line",
+    data: {
+      labels,
+      datasets: [
+        {
+          label: "Posição no ranking",
+          data: dados,
+          borderColor: corJogador(0),
+          backgroundColor: corJogador(0),
+          tension: 0.2,
+          pointRadius: 5,
+          pointHoverRadius: 7,
+          spanGaps: true,
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: (ctx) => {
+              const t = temporadas[ctx.dataIndex];
+              return `${ctx.parsed.y}º de ${t.jogadores} jogadores`;
+            },
+          },
+        },
+      },
+      scales: {
+        y: {
+          reverse: true,
+          min: 1,
+          max: maxPos,
+          ticks: { stepSize: 1, precision: 0 },
+          title: { display: true, text: "Posição" },
+        },
+      },
+    },
+  });
+}
+
+function renderApostasPorPiloto(container, agregado, nome) {
+  const linhas = [...agregado.geral.entries()]
+    .map(([cod, r]) => ({ cod, ...r }))
+    .sort((a, b) => b.vezes - a.vezes || b.pontos - a.pontos || a.cod.localeCompare(b.cod));
+
+  if (!linhas.length) {
+    container.replaceChildren(el("p", { class: "status" }, ["Sem palpites de top6 registrados."]));
+    return;
+  }
+
+  const tabela = el("table", { class: "corridas-tabela jogador-pilotos-tabela" }, [
+    el("thead", {}, [
+      el("tr", {}, [
+        el("th", {}, ["Piloto"]),
+        el("th", { class: "num" }, ["Vezes apostado"]),
+        el("th", { class: "num" }, ["Pontos ganhos"]),
+        el("th", { class: "num" }, ["Pts / aposta"]),
+        el("th", {}, [""]),
+      ]),
+    ]),
+  ]);
+  const tbody = el("tbody");
+  for (const l of linhas) {
+    const media = (l.pontos / l.vezes).toFixed(2).replace(".", ",");
+    const abrir = () => abrirModalPilotoAno(l.cod, agregado.porAno, nome);
+    const linha = el("tr", { class: "jogador-pilotos-tabela__linha", tabindex: "0", role: "button" }, [
+      el("td", {}, [chipPiloto(l.cod)]),
+      el("td", { class: "num" }, [String(l.vezes)]),
+      el("td", { class: "num" }, [String(l.pontos)]),
+      el("td", { class: "num" }, [media]),
+      el("td", { class: "num" }, [el("span", { class: "jogador-pilotos-tabela__ver" }, ["por ano ▸"])]),
+    ]);
+    linha.addEventListener("click", abrir);
+    linha.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        abrir();
+      }
+    });
+    tbody.appendChild(linha);
+  }
+  tabela.appendChild(tbody);
+  container.replaceChildren(tabela);
+}
+
+function abrirModalPilotoAno(cod, porAno, nome) {
+  const modal = document.getElementById("jogador-modal");
+  const anos = [...porAno.keys()].sort((a, b) => Number(a) - Number(b));
+  const corpo = el("div", { class: "jogador-modal__corpo" });
+
+  const tabela = el("table", { class: "corridas-tabela" }, [
+    el("thead", {}, [
+      el("tr", {}, [
+        el("th", {}, ["Temporada"]),
+        el("th", { class: "num" }, ["Vezes apostado"]),
+        el("th", { class: "num" }, ["Pontos ganhos"]),
+      ]),
+    ]),
+  ]);
+  const tbody = el("tbody");
+  let temAlgum = false;
+  for (const ano of anos) {
+    const reg = porAno.get(ano).get(cod);
+    if (!reg) continue;
+    temAlgum = true;
+    tbody.appendChild(
+      el("tr", {}, [
+        el("td", {}, [String(ano)]),
+        el("td", { class: "num" }, [String(reg.vezes)]),
+        el("td", { class: "num" }, [String(reg.pontos)]),
+      ])
+    );
+  }
+  tabela.appendChild(tbody);
+
+  corpo.append(
+    el("div", { class: "jogador-modal__header" }, [
+      el("h3", {}, [`${nome} · apostas em `, chipPiloto(cod), " por temporada"]),
+      el("button", { type: "button", class: "jogador-modal__fechar", "aria-label": "Fechar" }, ["✕"]),
+    ]),
+    temAlgum ? tabela : el("p", { class: "status" }, ["Sem apostas neste piloto."])
+  );
+
+  modal.replaceChildren(corpo);
+  corpo.querySelector(".jogador-modal__fechar").addEventListener("click", () => modal.close());
+  modal.showModal();
+}
+
+modalFechaAoClicarFora();
+function modalFechaAoClicarFora() {
+  document.addEventListener("click", (e) => {
+    const modal = document.getElementById("jogador-modal");
+    if (modal && modal.open && e.target === modal) modal.close();
+  });
+}
+
+async function renderPaginaJogador(id, hof) {
+  MODO_JOGADOR = true;
+  const nome = nomeHall(hof, id);
+
+  document.querySelectorAll(".secao").forEach((s) => (s.hidden = true));
+  const nav = document.querySelector("header .abas");
+  if (nav) nav.hidden = true;
+  const secao = document.getElementById("secao-jogador");
+  secao.hidden = false;
+
+  const titulo = document.getElementById("topo-titulo");
+  if (titulo && titulo.firstChild) titulo.firstChild.textContent = `👤 Jogador ${nome} — Histórico`;
+  document.title = `Jogador ${nome} — Histórico`;
+  const badge = document.getElementById("hist-badge");
+  if (badge) badge.hidden = true;
+  const voltar = document.getElementById("btn-voltar-temporadas");
+  if (voltar) {
+    voltar.hidden = false;
+    voltar.addEventListener("click", () => {
+      location.href = `${location.pathname}#hall`;
+    });
+  }
+
+  const status = document.getElementById("jogador-status");
+  const container = document.getElementById("jogador-container");
+  status.textContent = "Carregando histórico…";
+
+  const anos = (SEASONS.temporadas || []).map((t) => String(t.ano)).sort((a, b) => Number(a) - Number(b));
+  const standingsPorAno = new Map();
+  const betsPorAno = new Map();
+  await Promise.all(
+    anos.map(async (ano) => {
+      const [st, bt] = await Promise.all([
+        carregarJson(`./data/${ano}/standings.json`).catch(() => null),
+        carregarJson(`./data/${ano}/bets.json`).catch(() => null),
+      ]);
+      if (st) standingsPorAno.set(ano, st);
+      if (bt) betsPorAno.set(ano, bt);
+    })
+  );
+
+  const temporadas = [];
+  for (const ano of anos) {
+    const st = standingsPorAno.get(ano);
+    if (!st) continue;
+    const jogador = st.players.find((p) => p.player_id === id);
+    if (!jogador) continue;
+    temporadas.push({ ano, posicao: jogador.position, jogadores: st.players.length });
+  }
+
+  const medalhas = construirRankingHall(hof).find((l) => l.id === id) || { ouro: 0, prata: 0, bronze: 0 };
+  const totalMedalhas = medalhas.ouro + medalhas.prata + medalhas.bronze;
+  const agregado = agregarApostasPorPiloto(betsPorAno, id);
+
+  status.textContent = "";
+  container.replaceChildren();
+
+  const cards = el("div", { class: "corridas-cards" }, [
+    jogadorCard(
+      "Medalhas",
+      String(totalMedalhas),
+      `${medalhas.ouro} 🥇   ${medalhas.prata} 🥈   ${medalhas.bronze} 🥉`
+    ),
+    jogadorCard(
+      "Temporadas disputadas",
+      String(temporadas.length),
+      temporadas.map((t) => t.ano).join(" · ") || "—"
+    ),
+  ]);
+  container.appendChild(cards);
+
+  if (temporadas.length) {
+    const wrap = el("div", { class: "temporada-grafico-wrap" }, [
+      el("h3", { class: "temporada-grafico-titulo" }, ["Posição no ranking por temporada"]),
+      el("div", { class: "temporada-grafico-canvas" }, [el("canvas", { id: "jogador-grafico-posicao" })]),
+    ]);
+    container.appendChild(wrap);
+    renderGraficoPosicaoJogador(document.getElementById("jogador-grafico-posicao"), temporadas);
+  }
+
+  container.appendChild(
+    el("div", { class: "secao-intro" }, [
+      el("h3", {}, ["Apostas por piloto"]),
+      el("p", {}, [
+        "Quantas vezes ",
+        nome,
+        " colocou cada piloto no top6 (todas as temporadas somadas) e quantos pontos esse chute rendeu. Toque numa linha para ver a separação por ano.",
+      ]),
+    ])
+  );
+  const tabelaPilotos = el("div", { id: "jogador-pilotos-container" });
+  container.appendChild(tabelaPilotos);
+  renderApostasPorPiloto(tabelaPilotos, agregado, nome);
 }
 
 // ---------- Abas ----------
@@ -2802,20 +3065,12 @@ function renderRegrasHistorico(standings, entrada, regrasData) {
     )
   );
 
-  const temDivergencia = standings.players.some((j) => j.total_calculado !== j.total);
   partes.push(
     blocoRegra(
-      "Oficial × Calculada",
+      "Pontuação",
       el("p", {}, [
-        el("strong", {}, ["Oficial"]),
-        " é o placar que o grupo publicou — o registro da temporada. ",
-        el("strong", {}, ["Calculada"]),
-        " é o recálculo por estas regras. ",
-        temDivergencia
-          ? "Nesta temporada os dois divergem; a coluna “Calculada” no ranking mostra a " +
-            "diferença entre parênteses. As divergências vêm de contas do grupo na época " +
-            "(placar publicado às pressas, somas que não fecham) e não de mudança de regra."
-          : "Nesta temporada o recálculo bate 100% com o placar do grupo.",
+        "Vale o placar que o grupo publicou no WhatsApp — é o registro oficial da " +
+          "temporada. A média por corrida é esse total oficial dividido pelas rodadas jogadas.",
       ])
     )
   );
@@ -2959,6 +3214,19 @@ async function main() {
 
   try {
     SEASONS = await carregarJson("./data/seasons.json");
+
+    const jogId = jogadorPedido();
+    if (jogId) {
+      const hof = await carregarJson("./data/hall_of_fame.json");
+      const valido = construirRankingHall(hof).some((l) => l.id === jogId);
+      if (!valido) {
+        location.replace(location.pathname);
+        return;
+      }
+      await renderPaginaJogador(jogId, hof);
+      return;
+    }
+
     const atual = String(SEASONS.atual);
     const anos = SEASONS.temporadas.map((t) => String(t.ano));
     const pedido = anoPedido();
@@ -3052,6 +3320,11 @@ async function main() {
     const hof = await carregarJson("./data/hall_of_fame.json");
     renderHallOfFame(hof, SEASONS);
     document.getElementById("hall-status").textContent = "";
+
+    if (location.hash === "#hall") {
+      const abaHall = document.querySelector('header .abas button.aba[data-aba="hall"]');
+      if (abaHall) abaHall.click();
+    }
   } catch (erro) {
     console.error(erro);
     document.getElementById("ranking-status").textContent = "Erro ao carregar os dados do bolão.";

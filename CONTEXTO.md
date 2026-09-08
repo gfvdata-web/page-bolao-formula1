@@ -1536,6 +1536,46 @@ temporadas.
   células (o `histCelula` já devolvia `—` para rodada ausente). 2026 (não
   finalizada) segue mostrando só as rodadas consolidadas.
 
+**Sub-etapa 2026-09-08e — página de histórico por jogador (Hall of Fame).**
+- **Tabela "Ranking de vitórias"** (`renderRankingHall`): ganhou uma coluna
+  **"Total"** no fim (🥇+🥈+🥉) e um botão **"Acessar"** (`a.hall-acessar`,
+  `?jogador=<id>`) entre o nome e a coluna 🥇. A ordem das linhas não mudou
+  (🥇 desc, 🥈 desc, 🥉 desc, nome).
+- **Rota nova `?jogador=<id>`** (recarrega a página, sem SPA — igual a `?ano`).
+  `id` tem que ser um medalhista (aparecer em `construirRankingHall`); inválido
+  → redireciona para a URL limpa. Estado global `MODO_JOGADOR`. Quando ativo,
+  `main()` chama `renderPaginaJogador(id, hof)` e **retorna** (pula todo o
+  pipeline de temporada).
+- **`renderPaginaJogador`** (`docs/app.js`): esconde `.abas` + todas as `.secao`,
+  mostra `#secao-jogador`, troca o `<h1>` para `👤 Jogador <nome> — Histórico`,
+  revela `#btn-voltar-temporadas` (→ `location.pathname + "#hall"`). Carrega
+  `data/<ano>/standings.json` + `bets.json` de **todas** as temporadas de
+  `seasons.json` (client-side, `Promise.all`, `.catch(()=>null)`). Sem gerador
+  Python novo, sem mudança em `bolao/site.py` nem nos formatos de
+  `docs/data/*.json`.
+- **Conteúdo (sem sub-abas — "sem segregação" por enquanto):**
+  1. Card **Medalhas** — total + legenda `N 🥇   N 🥈   N 🥉`.
+  2. Card **Temporadas disputadas** — nº de temporadas em que o `player_id`
+     aparece no `standings.players` + lista dos anos.
+  3. Gráfico **Posição no ranking por temporada** (Chart.js, eixo Y invertido,
+     `jogador.position` por ano) — `renderGraficoPosicaoJogador`. Canvas criado
+     com a seção já visível (sem init preguiçoso).
+  4. **Apostas por piloto** (`renderApostasPorPiloto` + `agregarApostasPorPiloto`)
+     — tabela piloto × (vezes apostado, pontos ganhos no top6, pts/aposta),
+     agregada de `bets.players[id].rounds[*].top6_detail` de todas as
+     temporadas, ordenada por vezes desc. Clicar/Enter numa linha abre
+     **`<dialog id="jogador-modal">`** (`abrirModalPilotoAno`) com a separação
+     por ano daquele piloto. Só o top6 entra nessa conta (piloto da rodada
+     fora). Fecha no ✕, no Esc ou clicando fora.
+- **`#hall` no hash:** `main()` (fluxo normal) clica a aba Hall of Fame quando
+  `location.hash === "#hall"` — é como o botão "Voltar para temporadas" volta
+  já na aba certa.
+- **HTML novo:** `#btn-voltar-temporadas` no header, `#secao-jogador`
+  (`#jogador-status` + `#jogador-container`), `<dialog id="jogador-modal">`.
+  **CSS novo:** bloco `/* Página do jogador */` (`.jogador-card__valor`,
+  `.jogador-pilotos-tabela`, `.jogador-modal`/`::backdrop`).
+- Testes Python inalterados (90, nenhum toca no front-end).
+
 ## 9. Pendências / decisões adiadas
 
 - Formato e importação dos **históricos** de anos anteriores.

@@ -13,6 +13,7 @@
   <div class="topo__linha">
     <h1 id="topo-titulo">🏁 Bolão F1 2026<span class="hist-badge" id="hist-badge" hidden>HISTÓRICO</span></h1>
     <button type="button" class="hist-voltar" id="btn-voltar-atual" hidden>← Voltar para 2026</button>
+    <button type="button" class="hist-voltar" id="btn-voltar-temporadas" hidden>← Voltar para temporadas</button>
     <div class="tema-switch" id="tema-switch" role="group" aria-label="Tema da página">
       <button type="button" class="tema-switch__btn" data-tema="light" aria-pressed="false">
         <span aria-hidden="true">☀️</span><span class="tema-switch__label">Claro</span>
@@ -224,7 +225,14 @@
     <div id="hall-status" class="status"></div>
     <div id="hall-container"></div>
   </section>
+
+  <section id="secao-jogador" class="secao" hidden role="tabpanel">
+    <div id="jogador-status" class="status"></div>
+    <div id="jogador-container"></div>
+  </section>
 </main>
+
+<dialog id="jogador-modal" class="jogador-modal"></dialog>
 
 <footer class="rodape">
   <p>Qualifying da F1 · temporada 2026</p>
