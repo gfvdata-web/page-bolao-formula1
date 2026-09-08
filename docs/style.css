@@ -507,7 +507,7 @@ main {
 }
 
 .hist-jogador-chip,
-.rendimento-jogador-chip {
+.rendimento-chip {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
@@ -521,8 +521,7 @@ main {
   cursor: pointer;
 }
 
-.hist-jogador-chip__ponto,
-.rendimento-jogador-chip__ponto {
+.hist-jogador-chip__ponto {
   width: 0.7rem;
   height: 0.7rem;
   border-radius: 50%;
@@ -530,13 +529,25 @@ main {
   flex-shrink: 0;
 }
 
-.hist-jogador-chip[aria-pressed="true"],
-.rendimento-jogador-chip[aria-pressed="true"] {
+.rendimento-chip__ponto {
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50%;
+  background: var(--cor-chip, var(--texto-fraco));
+  flex-shrink: 0;
+}
+
+.hist-jogador-chip[aria-pressed="true"] {
   border-color: var(--cor-jogador);
   box-shadow: inset 0 0 0 1px var(--cor-jogador);
 }
 
-.rendimento-jogador-chip:not([aria-pressed="true"]) {
+.rendimento-chip[aria-pressed="true"] {
+  border-color: var(--cor-chip);
+  box-shadow: inset 0 0 0 1px var(--cor-chip);
+}
+
+.rendimento-chip:not([aria-pressed="true"]) {
   opacity: 0.5;
 }
 
@@ -1290,35 +1301,38 @@ button.subaba[aria-selected="true"] {
   vertical-align: middle;
 }
 
-/* Rendimento — switch de modo + chips de jogador */
+/* Rendimento — switch de modo + chips de filtro */
 
 .rendimento-modo {
   display: flex;
+  width: fit-content;
+  margin: 0 auto 1rem;
   border: 1px solid var(--borda);
   border-radius: 999px;
   overflow: hidden;
-  margin-bottom: 0.9rem;
+  background: var(--bg-card);
 }
 
 .rendimento-modo__btn {
-  flex: 1;
   border: none;
-  background: var(--bg-card);
+  background: transparent;
   color: var(--texto-fraco);
   font: inherit;
-  font-size: 0.82rem;
+  font-size: 0.74rem;
   font-weight: 600;
-  padding: 0.45rem 0.7rem;
+  padding: 0.25rem 0.85rem;
   cursor: pointer;
 }
 
-.rendimento-modo__btn + .rendimento-modo__btn {
-  border-left: 1px solid var(--borda);
+.rendimento-modo__btn--ativo {
+  background: color-mix(in srgb, var(--acento) 14%, transparent);
+  color: var(--acento);
 }
 
-.rendimento-modo__btn--ativo {
-  background: var(--acento);
-  color: #fff;
+.rendimento-chips-dica {
+  margin: 0 0 0.4rem;
+  font-size: 0.76rem;
+  color: var(--texto-fraco);
 }
 
 .rendimento-jogadores {
@@ -1397,6 +1411,7 @@ button.subaba[aria-selected="true"] {
 }
 
 .pilotos-container {
+  position: relative;
   background: var(--bg-card);
   border-radius: 10px;
   box-shadow: var(--sombra);
@@ -1409,6 +1424,65 @@ button.subaba[aria-selected="true"] {
 
 .pilotos-svg {
   display: block;
+}
+
+/* Popup de contagem por posição — mesmo visual dos tooltips dos gráficos. */
+.pilotos-tooltip {
+  position: absolute;
+  z-index: 20;
+  pointer-events: none;
+  background: rgba(0, 0, 0, 0.82);
+  color: #fff;
+  border-radius: 6px;
+  padding: 0.5rem 0.6rem;
+  font-size: 0.7rem;
+  line-height: 1.35;
+  min-width: 9rem;
+  max-width: 14rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+}
+
+.pilotos-tooltip__titulo {
+  font-weight: 700;
+  font-size: 0.78rem;
+}
+
+.pilotos-tooltip__sub {
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 0.35rem;
+}
+
+.pilotos-tooltip__linha {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.pilotos-tooltip__pos {
+  width: 1.9rem;
+  color: rgba(255, 255, 255, 0.85);
+  font-variant-numeric: tabular-nums;
+}
+
+.pilotos-tooltip__barra-wrap {
+  flex: 1;
+  height: 0.5rem;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.pilotos-tooltip__barra {
+  display: block;
+  height: 100%;
+  border-radius: 2px;
+}
+
+.pilotos-tooltip__n {
+  width: 1rem;
+  text-align: right;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
 }
 
 /* Hall of Fame */

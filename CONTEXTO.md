@@ -909,28 +909,32 @@ Rendimento vira switch de modo + chips de jogador.**
 - **Rendimento:** os dois selects (`select-rendimento-jogador`,
   `select-rendimento-piloto`) e o `<hr>` sumiram. Agora:
   - `.secao-intro` no topo + **switch `#rendimento-modo`** (`.rendimento-modo__btn`
-    `data-modo="piloto|jogador"`, mesmo visual do `.temporada-modo`) logo abaixo da
-    sub-aba — mostra **um** dos dois gráficos por vez (`#rendimento-view-piloto` /
-    `#rendimento-view-jogador`, `hidden` alternado).
-  - **Filtro = chips de jogador** (`#rendimento-jogadores` →
-    `.rendimento-jogador-chip`, agrupado no CSS com `.hist-jogador-chip`) +
-    botões `Todos`/`Limpar` (`#rendimento-jogadores-acoes`). Estado
-    `rendimentoSelecao` (Set; começa com todos). `rendimentoIdsAtivos()` devolve
-    `"todos"` (todos marcados), `[]` (nenhum → estado "selecione ao menos um
-    jogador") ou a lista.
-  - **Modo "piloto"** (`renderRendimento(ids)`): pool dos jogadores selecionados,
-    uma barra por piloto (cor da equipe); se for subconjunto, entra a 2ª barra
-    cinza "Média geral (todos)" + coluna "Média geral" na tabela. Perde o filtro
-    por piloto que existia (o eixo de recorte agora é sempre jogador).
-  - **Modo "jogador"** (`renderRendimentoPorJogador(ids)`): uma barra por jogador
-    selecionado (cor do jogador, `corRendimentoJogador` = `corJogador(índice
-    alfabético)`), rankeado por pts/aposta no top6 somando todos os pilotos. Sem
-    barra/coluna de comparação (era o "vs. média do jogador" do filtro por piloto,
-    que não existe mais).
+    `data-modo="piloto|jogador"`) logo abaixo da sub-aba — compacto, centralizado
+    (`width: fit-content; margin: 0 auto`), botão ativo com fundo
+    `color-mix(--acento 14%, transparent)` + texto `--acento` (nada de fundo
+    vermelho sólido). Mostra **um** dos dois gráficos por vez
+    (`#rendimento-view-piloto` / `#rendimento-view-jogador`, `hidden` alternado).
+  - **Filtro = chips** (`#rendimento-jogadores` → `.rendimento-chip`, agrupado no
+    CSS com `.hist-jogador-chip`; var de cor própria `--cor-chip`) + `Todos`/`Limpar`
+    (`#rendimento-jogadores-acoes`) + `#rendimento-chips-dica` (texto que muda por
+    modo). **O conteúdo da tira muda conforme o modo:** modo "piloto" → chips de
+    **jogador** (`rendimentoSelJogadores`); modo "jogador" → chips de **piloto**
+    (`rendimentoSelPilotos`, cor da equipe). `popularRendimentoChips()` reconstrói
+    a tira no clique do switch. `rendimentoIdsJogadoresAtivos()` /
+    `rendimentoCodigosAtivos()` devolvem `"todos"` / `[]` / lista.
+  - **Modo "piloto"** (`renderRendimento(ids)`): pool dos jogadores marcados, uma
+    barra por piloto (cor da equipe); subconjunto → 2ª barra cinza "Média geral
+    (todos)" + coluna "Média geral". Perdeu o filtro por piloto (o recorte é sempre
+    jogador).
+  - **Modo "jogador"** (`renderRendimentoPorJogador(codigos)`): **todos** os
+    jogadores aparecem sempre (uma barra cada, cor do jogador). O filtro escolhe
+    **quais pilotos** entram na conta; com subconjunto de pilotos entra a barra/
+    coluna cinza "Média geral (todos os pilotos)" = rendimento do jogador somando
+    tudo. Jogador sem aposta nos pilotos do filtro aparece com `–`/0 e vai ao fim.
   - `garantirGraficoRendimento`/`rerenderizarGraficos`/`configurarRendimento`
     tratam só o gráfico do modo ativo; trocar de modo destrói o gráfico do modo
-    que saiu (evita canvas 0×0 preso do Chart.js). Estados guardam `ids` (não mais
-    `playerId`/`codigoPiloto`).
+    que saiu (evita canvas 0×0 preso do Chart.js). `rendimentoEstado` guarda `ids`;
+    `rendimentoPorJogadorEstado` guarda `codigos`.
 - Nenhuma mudança em `bolao/site.py` nem nos formatos de `docs/data/*.json`.
 
 ### Etapa 5 — GitHub Actions ✅

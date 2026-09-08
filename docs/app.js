@@ -2099,12 +2099,6 @@ function renderPilotos(results) {
       stroke: cor,
       "stroke-width": 1,
     });
-    violino.appendChild(
-      svgEl("title", {}, [
-        `${piloto.codigo} — média P${piloto.media.toFixed(1)} · mediana P${piloto.mediana} · ` +
-          `melhor P${piloto.melhor} · pior P${piloto.pior} · ${piloto.posicoes.length} quali`,
-      ])
-    );
     svg.appendChild(violino);
 
     // Cada quali como um ponto (jitter vertical determinístico p/ não empilhar).
@@ -2126,15 +2120,27 @@ function renderPilotos(results) {
         `P${piloto.media.toFixed(1)}`,
       ])
     );
+
+    // Área invisível cobrindo a linha inteira do piloto — alvo do popup.
+    const alvo = svgEl("rect", {
+      x: margemEsq,
+      y: cy - alturaLinha / 2,
+      width: larguraPlot,
+      height: alturaLinha,
+      fill: "transparent",
+    });
+    alvo.style.cursor = "crosshair";
+    ligarTooltip(alvo, piloto);
+    svg.appendChild(alvo);
   });
 
   const legenda = el("p", { class: "preferencia-legenda" }, [
     "Cada linha é um piloto (ordenados pela posição média real crescente, mostrada à direita). A forma " +
       "mostra em que posições ele mais larga nos quali já disputados; cada ponto é um quali. " +
-      "A faixa clara à esquerda é o top6.",
+      "A faixa clara à esquerda é o top6. Passe o mouse numa linha para ver a contagem por posição.",
   ]);
 
-  container.replaceChildren(el("div", { class: "pilotos-scroll" }, [svg]), legenda);
+  container.replaceChildren(el("div", { class: "pilotos-scroll" }, [svg]), tooltip, legenda);
 }
 
 // ---------- Hall of Fame ----------
@@ -2238,7 +2244,12 @@ function garantirGraficoRendimento() {
   }
   if (rendimentoModo === "jogador" && rendimentoPorJogadorEstado && rendimentoPorJogadorEstado.linhas.length) {
     if (graficoRendimentoPorJogador) graficoRendimentoPorJogador.resize();
-    else renderGraficoRendimentoPorJogador(rendimentoPorJogadorEstado.linhas, rendimentoPorJogadorEstado.bets);
+    else
+      renderGraficoRendimentoPorJogador(
+        rendimentoPorJogadorEstado.linhas,
+        rendimentoPorJogadorEstado.codigos,
+        rendimentoPorJogadorEstado.bets
+      );
   }
 }
 
@@ -2357,7 +2368,7 @@ function rerenderizarGraficos() {
   if (corridasVisivel && standingsParaTemporada) renderTemporada(standingsParaTemporada);
   if (rendimentoEstado) renderRendimento(rendimentoEstado.ids, rendimentoEstado.bets);
   if (rendimentoPorJogadorEstado) {
-    renderRendimentoPorJogador(rendimentoPorJogadorEstado.ids, rendimentoPorJogadorEstado.bets);
+    renderRendimentoPorJogador(rendimentoPorJogadorEstado.codigos, rendimentoPorJogadorEstado.bets);
   }
 }
 
@@ -2450,8 +2461,11 @@ async function main() {
     renderPreferenciaPiloto("todos", bets, results);
 
     rendimentoBets = bets;
-    popularRendimentoJogadores(bets);
-    rendimentoSelecao = new Set(rendimentoJogadores.map((j) => j.player_id));
+    rendimentoJogadores = ordemJogadores(bets);
+    rendimentoPilotos = [...coletarRendimento(bets, "todos").keys()].sort((a, b) => a.localeCompare(b));
+    rendimentoSelJogadores = new Set(rendimentoJogadores.map((j) => j.player_id));
+    rendimentoSelPilotos = new Set(rendimentoPilotos);
+    popularRendimentoChips();
     configurarRendimento();
     atualizarRendimento();
 
