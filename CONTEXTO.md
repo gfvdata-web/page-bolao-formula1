@@ -1097,6 +1097,13 @@ enquanto a Jolpica não publica o quali.**
 - **2026-09-08 (Austin):** palpites da R19/2025 recuperados do grupo e anexados
   aos CSV de 2025; `pontos_avulsos.json` de 2025 removido. 2025 fecha 24/24
   rodadas. Ver "R19 Austin — palpites recuperados" mais abaixo.
+- **2026-09-08 (cores por temporada):** em modo histórico as bolinhas/gráficos
+  de piloto usam as cores da equipe **daquele ano**, não as de 2026. Novo mapa
+  `CORES_PILOTO_ANO` em `docs/app.js` (`{ "2021".."2025": {cod: hex} }`);
+  `corPiloto()` consulta `CORES_PILOTO_ANO[TEMPORADA]` quando `MODO_HISTORICO`,
+  senão cai em `CORES_PILOTO` (2026) e depois no cinza. Único ponto de troca —
+  todos os gráficos passam por `corPiloto()`. Cores decorativas (aproximadas),
+  não vêm dos dados. 2026 permanece inalterado.
 
 **Análise do `f12025bolao.xlsx` (fonte dos palpites 2025):**
 - **Aba 1 "Página1"** — 138 palpites, colunas `circuito, nome, p1..p6, pos`

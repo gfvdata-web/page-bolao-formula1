@@ -16,7 +16,75 @@ const CORES_PILOTO = {
   PER: "#FFD100", BOT: "#FFD100", // Cadillac
 };
 
+// Cores por equipe de TEMPORADAS PASSADAS, mapeadas por código de piloto.
+// Cada ano usa a grade e as cores daquele ano (não as de 2026). Puramente
+// decorativo, igual a CORES_PILOTO. Códigos fora do mapa caem no cinza padrão.
+const CORES_PILOTO_ANO = {
+  "2021": {
+    VER: "#0600EF", PER: "#0600EF",                 // Red Bull
+    HAM: "#00D2BE", BOT: "#00D2BE",                 // Mercedes
+    LEC: "#DC0000", SAI: "#DC0000",                 // Ferrari
+    NOR: "#FF8700", RIC: "#FF8700",                 // McLaren
+    ALO: "#0090FF", OCO: "#0090FF",                 // Alpine
+    GAS: "#2B4562", TSU: "#2B4562",                 // AlphaTauri
+    VET: "#006F62", STR: "#006F62",                 // Aston Martin
+    RAI: "#900000", GIO: "#900000", KUB: "#900000", // Alfa Romeo
+    RUS: "#005AFF", LAT: "#005AFF",                 // Williams
+    MSC: "#B6BABD", MAZ: "#B6BABD",                 // Haas
+  },
+  "2022": {
+    VER: "#3671C6", PER: "#3671C6",                 // Red Bull
+    LEC: "#F91536", SAI: "#F91536",                 // Ferrari
+    HAM: "#6CD3BF", RUS: "#6CD3BF",                 // Mercedes
+    NOR: "#FF8700", RIC: "#FF8700",                 // McLaren
+    ALO: "#2293D1", OCO: "#2293D1",                 // Alpine
+    GAS: "#4E7C9B", TSU: "#4E7C9B",                 // AlphaTauri
+    VET: "#2D826D", STR: "#2D826D", HUL: "#2D826D", // Aston Martin
+    ALB: "#37BEDD", LAT: "#37BEDD", DEV: "#37BEDD", // Williams
+    BOT: "#B12039", ZHO: "#B12039",                 // Alfa Romeo
+    MAG: "#B6BABD", MSC: "#B6BABD",                 // Haas
+  },
+  "2023": {
+    VER: "#3671C6", PER: "#3671C6",                 // Red Bull
+    HAM: "#27F4D2", RUS: "#27F4D2",                 // Mercedes
+    LEC: "#F91536", SAI: "#F91536",                 // Ferrari
+    NOR: "#FF8000", PIA: "#FF8000",                 // McLaren
+    ALO: "#229971", STR: "#229971",                 // Aston Martin
+    GAS: "#2293D1", OCO: "#2293D1",                 // Alpine
+    ALB: "#64C4FF", SAR: "#64C4FF",                 // Williams
+    TSU: "#5E8FAA", DEV: "#5E8FAA", RIC: "#5E8FAA", LAW: "#5E8FAA", // AlphaTauri
+    BOT: "#C92D4B", ZHO: "#C92D4B",                 // Alfa Romeo
+    MAG: "#B6BABD", HUL: "#B6BABD",                 // Haas
+  },
+  "2024": {
+    VER: "#3671C6", PER: "#3671C6",                 // Red Bull
+    LEC: "#E8002D", SAI: "#E8002D", BEA: "#E8002D", // Ferrari
+    NOR: "#FF8000", PIA: "#FF8000",                 // McLaren
+    HAM: "#27F4D2", RUS: "#27F4D2",                 // Mercedes
+    ALO: "#229971", STR: "#229971",                 // Aston Martin
+    TSU: "#6692FF", RIC: "#6692FF", LAW: "#6692FF", // RB
+    ALB: "#64C4FF", SAR: "#64C4FF", COL: "#64C4FF", // Williams
+    GAS: "#0090FF", OCO: "#0090FF", DOO: "#0090FF", // Alpine
+    MAG: "#B6BABD", HUL: "#B6BABD",                 // Haas
+    BOT: "#52E252", ZHO: "#52E252",                 // Kick Sauber
+  },
+  "2025": {
+    VER: "#3671C6", TSU: "#3671C6", LAW: "#3671C6", // Red Bull
+    NOR: "#FF8000", PIA: "#FF8000",                 // McLaren
+    LEC: "#E8002D", HAM: "#E8002D",                 // Ferrari
+    RUS: "#27F4D2", ANT: "#27F4D2",                 // Mercedes
+    ALO: "#229971", STR: "#229971",                 // Aston Martin
+    GAS: "#0090FF", DOO: "#0090FF", COL: "#0090FF", // Alpine
+    ALB: "#64C4FF", SAI: "#64C4FF",                 // Williams
+    HAD: "#6692FF",                                 // Racing Bulls
+    OCO: "#B6BABD", BEA: "#B6BABD",                 // Haas
+    HUL: "#00E701", BOR: "#00E701",                 // Sauber
+  },
+};
+
 function corPiloto(codigo) {
+  const mapaAno = MODO_HISTORICO ? CORES_PILOTO_ANO[TEMPORADA] : null;
+  if (mapaAno && mapaAno[codigo]) return mapaAno[codigo];
   return CORES_PILOTO[codigo] || "#9aa0a8";
 }
 
