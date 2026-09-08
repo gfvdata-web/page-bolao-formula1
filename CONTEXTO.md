@@ -898,6 +898,41 @@ posição × corrida.**
   mudança em `bolao/site.py` nem nos formatos de `docs/data/*.json` — tudo já
   vinha de `bets.json`/`standings.json`.
 
+**Ajuste posterior (ainda Etapa 4): Preferência piloto ganha intro/legenda;
+Rendimento vira switch de modo + chips de jogador.**
+- **Preferência piloto:** bloco `.secao-intro` (HTML estático) no topo explicando
+  o que a tabela compara, e `.legenda-bloco` (HTML estático, `<h4>` + `<ul>`)
+  abaixo da tabela explicando cada coluna e a badge ▲/▼ (▲ = apostado pior do que
+  larga = subestimado; ▼ = melhor = superestimado). A `<p class="preferencia-legenda">`
+  que era montada em `renderPreferenciaPiloto` saiu (a função só monta a tabela
+  agora). Filtro "Jogador" (select) **inalterado**.
+- **Rendimento:** os dois selects (`select-rendimento-jogador`,
+  `select-rendimento-piloto`) e o `<hr>` sumiram. Agora:
+  - `.secao-intro` no topo + **switch `#rendimento-modo`** (`.rendimento-modo__btn`
+    `data-modo="piloto|jogador"`, mesmo visual do `.temporada-modo`) logo abaixo da
+    sub-aba — mostra **um** dos dois gráficos por vez (`#rendimento-view-piloto` /
+    `#rendimento-view-jogador`, `hidden` alternado).
+  - **Filtro = chips de jogador** (`#rendimento-jogadores` →
+    `.rendimento-jogador-chip`, agrupado no CSS com `.hist-jogador-chip`) +
+    botões `Todos`/`Limpar` (`#rendimento-jogadores-acoes`). Estado
+    `rendimentoSelecao` (Set; começa com todos). `rendimentoIdsAtivos()` devolve
+    `"todos"` (todos marcados), `[]` (nenhum → estado "selecione ao menos um
+    jogador") ou a lista.
+  - **Modo "piloto"** (`renderRendimento(ids)`): pool dos jogadores selecionados,
+    uma barra por piloto (cor da equipe); se for subconjunto, entra a 2ª barra
+    cinza "Média geral (todos)" + coluna "Média geral" na tabela. Perde o filtro
+    por piloto que existia (o eixo de recorte agora é sempre jogador).
+  - **Modo "jogador"** (`renderRendimentoPorJogador(ids)`): uma barra por jogador
+    selecionado (cor do jogador, `corRendimentoJogador` = `corJogador(índice
+    alfabético)`), rankeado por pts/aposta no top6 somando todos os pilotos. Sem
+    barra/coluna de comparação (era o "vs. média do jogador" do filtro por piloto,
+    que não existe mais).
+  - `garantirGraficoRendimento`/`rerenderizarGraficos`/`configurarRendimento`
+    tratam só o gráfico do modo ativo; trocar de modo destrói o gráfico do modo
+    que saiu (evita canvas 0×0 preso do Chart.js). Estados guardam `ids` (não mais
+    `playerId`/`codigoPiloto`).
+- Nenhuma mudança em `bolao/site.py` nem nos formatos de `docs/data/*.json`.
+
 ### Etapa 5 — GitHub Actions ✅
 - **Objetivo:** workflow acionado por `repository_dispatch` que roda o pipeline
   completo (parse → buscar resultado → pontuar → gerar dados → commit).

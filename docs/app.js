@@ -1298,29 +1298,64 @@ function renderPreferenciaPiloto(playerId, bets, results) {
     );
   }
   tabela.appendChild(tbody);
-  const legenda = el("p", { class: "preferencia-legenda" }, [
-    "Posição Média REAL: média das posições em que o piloto realmente terminou os quali. Posição média palpite: média das posições em que os jogadores apostaram nesse piloto.",
-  ]);
-  container.replaceChildren(tabela, legenda);
+  container.replaceChildren(tabela);
 }
 
-// ---------- Rendimento por piloto ----------
+// ---------- Rendimento (top6) — por piloto ou por jogador ----------
 
 let graficoRendimento = null;
-let rendimentoEstado = null; // { bets, playerId, linhas }
+let graficoRendimentoPorJogador = null;
+let rendimentoEstado = null; // { bets, ids, linhas }
+let rendimentoPorJogadorEstado = null; // { bets, ids, linhas }
+
+let rendimentoModo = "piloto"; // "piloto" | "jogador"
+let rendimentoBets = null;
+let rendimentoJogadores = []; // lista ordenada por nome (cor estável por índice)
+let rendimentoSelecao = new Set(); // player_ids marcados; vazio = nenhum
+
+// Ordem estável dos jogadores (por nome), usada para a cor fixa de cada um.
+function ordemJogadores(bets) {
+  return Object.values(bets.players).sort((a, b) => a.name.localeCompare(b.name, "pt-BR"));
+}
+
+function nomeJogadorBets(bets, playerId) {
+  const jogador = bets.players[playerId];
+  return jogador ? jogador.name : playerId;
+}
+
+function corRendimentoJogador(playerId) {
+  const indice = rendimentoJogadores.findIndex((j) => j.player_id === playerId);
+  return corJogador(indice < 0 ? 0 : indice);
+}
+
+// Ids ativos no formato que as funções de coleta esperam: "todos" quando todos
+// estão marcados, [] quando nenhum, ou a lista de ids (na ordem estável).
+function rendimentoIdsAtivos() {
+  if (rendimentoSelecao.size === 0) return [];
+  if (rendimentoSelecao.size === rendimentoJogadores.length) return "todos";
+  return rendimentoJogadores.map((j) => j.player_id).filter((id) => rendimentoSelecao.has(id));
+}
+
+function rendimentoRotuloSelecao(ids) {
+  if (ids === "todos") return "todos os jogadores";
+  if (ids.length === 1) return nomeJogadorBets(rendimentoBets, ids[0]);
+  return `${ids.length} jogadores selecionados`;
+}
 
 // Quanto cada piloto rende para quem aposta nele: percorre os palpites de top6
 // e soma os pontos que cada piloto escolhido gerou (2 pt posição exata, 1 pt
-// dentro do top6 real, 0 fora). O piloto da rodada (bônus) fica de fora —
-// ele é definido pela rodada, ninguém "aposta nele" por escolha própria.
-function coletarRendimento(bets, playerId) {
-  const jogadores = playerId === "todos" ? Object.values(bets.players) : [bets.players[playerId]].filter(Boolean);
+// dentro do top6 real, 0 fora). O piloto da rodada (bônus) fica de fora — ele é
+// definido pela rodada, ninguém "aposta nele" por escolha própria.
+function coletarRendimento(bets, ids) {
+  const jogadores =
+    ids === "todos" ? Object.values(bets.players) : ids.map((id) => bets.players[id]).filter(Boolean);
   const porPiloto = new Map(); // codigo -> { apostas, pontos, exatas, dentro, fora }
 
   for (const jogador of jogadores) {
     for (const rodada of Object.values(jogador.rounds)) {
       for (const detalhe of rodada.top6_detail || []) {
-        const registro = porPiloto.get(detalhe.guess) || { apostas: 0, pontos: 0, exatas: 0, dentro: 0, fora: 0 };
+        const registro =
+          porPiloto.get(detalhe.guess) || { apostas: 0, pontos: 0, exatas: 0, dentro: 0, fora: 0 };
         registro.apostas += 1;
         registro.pontos += detalhe.points;
         if (detalhe.points >= 2) registro.exatas += 1;
@@ -1333,12 +1368,11 @@ function coletarRendimento(bets, playerId) {
   return porPiloto;
 }
 
-// Só entram os pilotos que o filtro ativo realmente apostou (rendimento sem
-// aposta não existe). `mediaGeral` é sempre a média de todos os jogadores
-// juntos, para a comparação "esse jogador tira mais ou menos desse piloto".
-function construirLinhasRendimento(bets, playerId) {
+// Modo "por piloto": um piloto por linha, com o rendimento dos jogadores
+// selecionados e a média geral (todos os jogadores) ao lado para comparar.
+function construirLinhasRendimento(bets, ids) {
   const geral = coletarRendimento(bets, "todos");
-  const doFiltro = playerId === "todos" ? geral : coletarRendimento(bets, playerId);
+  const doFiltro = coletarRendimento(bets, ids);
 
   return [...doFiltro.entries()]
     .map(([codigo, registro]) => {
@@ -1354,26 +1388,63 @@ function construirLinhasRendimento(bets, playerId) {
     .sort((a, b) => b.media - a.media || b.apostas - a.apostas || a.codigo.localeCompare(b.codigo));
 }
 
-function nomeJogadorBets(bets, playerId) {
-  const jogador = bets.players[playerId];
-  return jogador ? jogador.name : playerId;
+// Rendimento de cada jogador no top6 somando TODOS os pilotos que ele apostou.
+function coletarRendimentoPorJogador(bets) {
+  const porJogador = new Map(); // playerId -> { apostas, pontos, exatas, dentro, fora }
+  for (const jogador of Object.values(bets.players)) {
+    for (const rodada of Object.values(jogador.rounds)) {
+      for (const detalhe of rodada.top6_detail || []) {
+        const registro =
+          porJogador.get(jogador.player_id) || { apostas: 0, pontos: 0, exatas: 0, dentro: 0, fora: 0 };
+        registro.apostas += 1;
+        registro.pontos += detalhe.points;
+        if (detalhe.points >= 2) registro.exatas += 1;
+        else if (detalhe.points === 1) registro.dentro += 1;
+        else registro.fora += 1;
+        porJogador.set(jogador.player_id, registro);
+      }
+    }
+  }
+  return porJogador;
 }
 
-// Barras horizontais ordenadas (melhor rendimento no topo), coloridas pela
-// equipe do piloto. Com um jogador no filtro, entra uma 2ª barra cinza com a
-// média geral daquele piloto.
-function renderGraficoRendimento(linhas, playerId, bets) {
+// Modo "por jogador": um jogador por linha (só os selecionados).
+function construirLinhasRendimentoPorJogador(bets, ids) {
+  const porJogador = coletarRendimentoPorJogador(bets);
+  const alvo = ids === "todos" ? [...porJogador.keys()] : ids;
+  return alvo
+    .filter((id) => porJogador.has(id))
+    .map((id) => {
+      const registro = porJogador.get(id);
+      return { playerId: id, ...registro, media: registro.pontos / registro.apostas };
+    })
+    .sort(
+      (a, b) =>
+        b.media - a.media ||
+        b.apostas - a.apostas ||
+        nomeJogadorBets(bets, a.playerId).localeCompare(nomeJogadorBets(bets, b.playerId), "pt-BR")
+    );
+}
+
+// Sinaliza rendimento acima (▲) ou abaixo (▼) da média geral daquele piloto.
+function badgeRendimentoGeral(media, mediaGeral) {
+  const diferenca = media - mediaGeral;
+  const seta = diferenca >= 0 ? "▲" : "▼";
+  return el("span", { class: "distancia-badge" }, [seta, ` ${Math.abs(diferenca).toFixed(2)}`]);
+}
+
+// ----- Modo "por piloto" -----
+
+function renderGraficoRendimento(linhas, ids, bets) {
   const canvas = document.getElementById("rendimento-grafico");
-  const comparando = playerId !== "todos";
-  // Altura proporcional ao nº de pilotos (o wrap tem altura fixa no CSS só
-  // como fallback) — com ~20 pilotos, barras de 26px ainda ficam legíveis.
+  const comparando = ids !== "todos";
   canvas.parentElement.style.height = `${Math.max(200, linhas.length * (comparando ? 34 : 26) + 56)}px`;
 
   const corTexto = corCss("--texto-fraco");
   const corGrade = corCss("--borda");
   const datasets = [
     {
-      label: comparando ? nomeJogadorBets(bets, playerId) : "Todos os jogadores",
+      label: comparando ? rendimentoRotuloSelecao(ids) : "Todos os jogadores",
       data: linhas.map((linha) => linha.media),
       backgroundColor: linhas.map((linha) => corPiloto(linha.codigo)),
       borderWidth: 0,
@@ -1381,7 +1452,7 @@ function renderGraficoRendimento(linhas, playerId, bets) {
   ];
   if (comparando) {
     datasets.push({
-      label: "Média geral",
+      label: "Média geral (todos)",
       data: linhas.map((linha) => linha.mediaGeral),
       backgroundColor: corGrade,
       borderWidth: 0,
@@ -1428,17 +1499,8 @@ function renderGraficoRendimento(linhas, playerId, bets) {
   });
 }
 
-// Sinaliza rendimento acima (▲) ou abaixo (▼) da média geral daquele piloto.
-function badgeRendimentoGeral(media, mediaGeral) {
-  const diferenca = media - mediaGeral;
-  const seta = diferenca >= 0 ? "▲" : "▼";
-  return el("span", { class: "distancia-badge" }, [seta, ` ${Math.abs(diferenca).toFixed(2)}`]);
-}
-
-function renderTabelaRendimento(linhas, playerId) {
+function renderTabelaRendimento(linhas, comparando) {
   const container = document.getElementById("rendimento-container");
-  const comparando = playerId !== "todos";
-
   const cabecalho = [
     el("th", { class: "num" }, ["#"]),
     el("th", {}, ["Piloto"]),
@@ -1476,28 +1538,17 @@ function renderTabelaRendimento(linhas, playerId) {
     );
   });
   tabela.appendChild(tbody);
-
-  const legenda = el("p", { class: "preferencia-legenda" }, [
-    "Pts/aposta: média de pontos que o piloto gerou em cada palpite de top6 em que foi escolhido " +
-      "(2 pt = posição exata, 1 pt = dentro do top6 real, 0 pt = fora). O piloto da rodada não entra nessa conta.",
-  ]);
-  container.replaceChildren(el("div", { class: "rendimento-tabela-wrap" }, [tabela]), legenda);
+  container.replaceChildren(el("div", { class: "rendimento-tabela-wrap" }, [tabela]));
 }
 
-function renderRendimento(playerId, bets) {
-  const linhas = construirLinhasRendimento(bets, playerId);
-  rendimentoEstado = { bets, playerId, linhas };
-
+function renderRendimento(ids, bets) {
   const titulo = document.getElementById("rendimento-titulo");
-  titulo.textContent =
-    playerId === "todos"
-      ? "Pontos que cada piloto rende por aposta"
-      : `Rendimento por piloto — ${nomeJogadorBets(bets, playerId)} vs. média geral`;
+  const container = document.getElementById("rendimento-container");
 
-  if (!linhas.length) {
-    document
-      .getElementById("rendimento-container")
-      .replaceChildren(el("p", { class: "status" }, ["Sem palpites de top6 registrados."]));
+  if (Array.isArray(ids) && !ids.length) {
+    rendimentoEstado = { bets, ids, linhas: [] };
+    titulo.textContent = "Pontos que cada piloto rende por aposta";
+    container.replaceChildren(el("p", { class: "status" }, ["Selecione ao menos um jogador."]));
     if (graficoRendimento) {
       graficoRendimento.destroy();
       graficoRendimento = null;
@@ -1505,132 +1556,67 @@ function renderRendimento(playerId, bets) {
     return;
   }
 
-  renderTabelaRendimento(linhas, playerId);
-  // Mesmo cuidado dos gráficos da Temporada: só criar o Chart com o canvas
-  // visível (ver garantirGraficoRendimento).
-  if (!document.getElementById("subsecao-rendimento").hidden && !document.getElementById("secao-palpites").hidden) {
-    renderGraficoRendimento(linhas, playerId, bets);
-  } else if (graficoRendimento) {
+  const linhas = construirLinhasRendimento(bets, ids);
+  const comparando = ids !== "todos";
+  rendimentoEstado = { bets, ids, linhas };
+
+  titulo.textContent =
+    ids === "todos"
+      ? "Pontos que cada piloto rende por aposta"
+      : `Rendimento por piloto — ${rendimentoRotuloSelecao(ids)}`;
+
+  if (!linhas.length) {
+    container.replaceChildren(el("p", { class: "status" }, ["Sem palpites de top6 registrados."]));
+    if (graficoRendimento) {
+      graficoRendimento.destroy();
+      graficoRendimento = null;
+    }
+    return;
+  }
+
+  renderTabelaRendimento(linhas, comparando);
+  if (rendimentoGraficoVisivel("piloto")) renderGraficoRendimento(linhas, ids, bets);
+  else if (graficoRendimento) {
     graficoRendimento.destroy();
     graficoRendimento = null;
   }
 }
 
-// ---------- Rendimento por jogador (filtrando por piloto) ----------
-// Espelha a seção acima: em vez de fixar o jogador e rankear pilotos, fixa o
-// piloto e rankeia jogadores por quanto cada um tira apostando nele.
+// ----- Modo "por jogador" -----
 
-let graficoRendimentoPorJogador = null;
-let rendimentoPorJogadorEstado = null; // { bets, codigoPiloto, linhas }
-
-function popularSelectPilotosComTodos(selectId, bets) {
-  const select = document.getElementById(selectId);
-  const codigos = [...coletarRendimento(bets, "todos").keys()].sort((a, b) => a.localeCompare(b));
-  select.replaceChildren(
-    el("option", { value: "todos" }, ["Todos"]),
-    ...codigos.map((codigo) => el("option", { value: codigo }, [codigo]))
-  );
-}
-
-// Ordem estável dos jogadores (por nome) usada só para escolher uma cor fixa
-// por jogador nos gráficos desta seção, independente da ordem de rankeamento.
-function ordemJogadores(bets) {
-  return Object.values(bets.players).sort((a, b) => a.name.localeCompare(b.name, "pt-BR"));
-}
-
-function coletarRendimentoPorJogador(bets, codigoPiloto) {
-  const porJogador = new Map(); // playerId -> { apostas, pontos, exatas, dentro, fora }
-
-  for (const jogador of Object.values(bets.players)) {
-    for (const rodada of Object.values(jogador.rounds)) {
-      for (const detalhe of rodada.top6_detail || []) {
-        if (codigoPiloto !== "todos" && detalhe.guess !== codigoPiloto) continue;
-        const registro = porJogador.get(jogador.player_id) || { apostas: 0, pontos: 0, exatas: 0, dentro: 0, fora: 0 };
-        registro.apostas += 1;
-        registro.pontos += detalhe.points;
-        if (detalhe.points >= 2) registro.exatas += 1;
-        else if (detalhe.points === 1) registro.dentro += 1;
-        else registro.fora += 1;
-        porJogador.set(jogador.player_id, registro);
-      }
-    }
-  }
-  return porJogador;
-}
-
-// `mediaGeral` aqui é a média do próprio jogador somando TODOS os pilotos —
-// serve pra comparar "esse jogador tira mais ou menos nesse piloto específico
-// do que na média geral dele".
-function construirLinhasRendimentoPorJogador(bets, codigoPiloto) {
-  const geral = coletarRendimentoPorJogador(bets, "todos");
-  const doFiltro = codigoPiloto === "todos" ? geral : coletarRendimentoPorJogador(bets, codigoPiloto);
-
-  return [...doFiltro.entries()]
-    .map(([playerId, registro]) => {
-      const registroGeral = geral.get(playerId);
-      return {
-        playerId,
-        ...registro,
-        media: registro.pontos / registro.apostas,
-        apostasGeral: registroGeral ? registroGeral.apostas : 0,
-        mediaGeral: registroGeral ? registroGeral.pontos / registroGeral.apostas : null,
-      };
-    })
-    .sort(
-      (a, b) =>
-        b.media - a.media ||
-        b.apostas - a.apostas ||
-        nomeJogadorBets(bets, a.playerId).localeCompare(nomeJogadorBets(bets, b.playerId), "pt-BR")
-    );
-}
-
-function renderGraficoRendimentoPorJogador(linhas, codigoPiloto, bets) {
+function renderGraficoRendimentoPorJogador(linhas, bets) {
   const canvas = document.getElementById("rendimento-jogador-grafico");
-  const comparando = codigoPiloto !== "todos";
-  canvas.parentElement.style.height = `${Math.max(200, linhas.length * (comparando ? 34 : 26) + 56)}px`;
+  canvas.parentElement.style.height = `${Math.max(200, linhas.length * 30 + 56)}px`;
 
   const corTexto = corCss("--texto-fraco");
   const corGrade = corCss("--borda");
-  const ordem = ordemJogadores(bets);
-  const datasets = [
-    {
-      label: comparando ? codigoPiloto : "Todos os pilotos",
-      data: linhas.map((linha) => linha.media),
-      backgroundColor: linhas.map((linha) => corJogador(ordem.findIndex((j) => j.player_id === linha.playerId))),
-      borderWidth: 0,
-    },
-  ];
-  if (comparando) {
-    datasets.push({
-      label: "Média do jogador (todos os pilotos)",
-      data: linhas.map((linha) => linha.mediaGeral),
-      backgroundColor: corGrade,
-      borderWidth: 0,
-    });
-  }
 
   if (graficoRendimentoPorJogador) graficoRendimentoPorJogador.destroy();
   graficoRendimentoPorJogador = new Chart(canvas.getContext("2d"), {
     type: "bar",
-    data: { labels: linhas.map((linha) => nomeJogadorBets(bets, linha.playerId)), datasets },
+    data: {
+      labels: linhas.map((linha) => nomeJogadorBets(bets, linha.playerId)),
+      datasets: [
+        {
+          label: "Pts/aposta no top6",
+          data: linhas.map((linha) => linha.media),
+          backgroundColor: linhas.map((linha) => corRendimentoJogador(linha.playerId)),
+          borderWidth: 0,
+        },
+      ],
+    },
     options: {
       indexAxis: "y",
       responsive: true,
       maintainAspectRatio: false,
       animation: false,
       plugins: {
-        legend: {
-          display: comparando,
-          labels: { color: corTexto, boxWidth: 12, boxHeight: 8, font: { size: 11 } },
-        },
+        legend: { display: false },
         tooltip: {
           callbacks: {
             label(item) {
               const linha = linhas[item.dataIndex];
-              const geral = item.datasetIndex === 1;
-              const media = geral ? linha.mediaGeral : linha.media;
-              const apostas = geral ? linha.apostasGeral : linha.apostas;
-              return `${item.dataset.label}: ${media.toFixed(2)} pts/aposta (${apostas} apostas)`;
+              return `${linha.media.toFixed(2)} pts/aposta (${linha.apostas} apostas)`;
             },
           },
         },
@@ -1649,69 +1635,55 @@ function renderGraficoRendimentoPorJogador(linhas, codigoPiloto, bets) {
   });
 }
 
-function renderTabelaRendimentoPorJogador(linhas, codigoPiloto, bets) {
+function renderTabelaRendimentoPorJogador(linhas, bets) {
   const container = document.getElementById("rendimento-jogador-container");
-  const comparando = codigoPiloto !== "todos";
-
   const cabecalho = [
     el("th", { class: "num" }, ["#"]),
     el("th", {}, ["Jogador"]),
     el("th", { class: "num" }, ["Pts/aposta"]),
-    comparando ? el("th", { class: "num" }, ["Média do jogador"]) : null,
     el("th", { class: "num" }, ["Pontos"]),
     el("th", { class: "num" }, ["Apostas"]),
     el("th", { class: "num" }, ["2 pt"]),
     el("th", { class: "num" }, ["1 pt"]),
     el("th", { class: "num" }, ["0 pt"]),
-  ].filter(Boolean);
+  ];
 
   const tabela = el("table", { class: "rendimento-tabela" }, [el("thead", {}, [el("tr", {}, cabecalho)])]);
   const tbody = el("tbody");
   linhas.forEach((linha, indice) => {
     tbody.appendChild(
-      el(
-        "tr",
-        {},
-        [
-          el("td", { class: "num rendimento-pos" }, [String(indice + 1)]),
-          el("td", {}, [nomeJogadorBets(bets, linha.playerId)]),
-          el("td", { class: "num rendimento-media" }, [
-            `${linha.media.toFixed(2)} `,
-            ...(comparando && linha.mediaGeral !== null ? [badgeRendimentoGeral(linha.media, linha.mediaGeral)] : []),
+      el("tr", {}, [
+        el("td", { class: "num rendimento-pos" }, [String(indice + 1)]),
+        el("td", {}, [
+          el("span", { class: "piloto-chip" }, [
+            el("span", {
+              class: "piloto-bolinha",
+              style: `background:${corRendimentoJogador(linha.playerId)}`,
+            }),
+            nomeJogadorBets(bets, linha.playerId),
           ]),
-          comparando ? el("td", { class: "num" }, [linha.mediaGeral === null ? "-" : linha.mediaGeral.toFixed(2)]) : null,
-          el("td", { class: "num" }, [String(linha.pontos)]),
-          el("td", { class: "num" }, [String(linha.apostas)]),
-          el("td", { class: "num" }, [String(linha.exatas)]),
-          el("td", { class: "num" }, [String(linha.dentro)]),
-          el("td", { class: "num" }, [String(linha.fora)]),
-        ].filter(Boolean)
-      )
+        ]),
+        el("td", { class: "num rendimento-media" }, [linha.media.toFixed(2)]),
+        el("td", { class: "num" }, [String(linha.pontos)]),
+        el("td", { class: "num" }, [String(linha.apostas)]),
+        el("td", { class: "num" }, [String(linha.exatas)]),
+        el("td", { class: "num" }, [String(linha.dentro)]),
+        el("td", { class: "num" }, [String(linha.fora)]),
+      ])
     );
   });
   tabela.appendChild(tbody);
-
-  const legenda = el("p", { class: "preferencia-legenda" }, [
-    "Pts/aposta: média de pontos que cada jogador tirou apostando nesse piloto no top6 " +
-      "(2 pt = posição exata, 1 pt = dentro do top6 real, 0 pt = fora). O piloto da rodada não entra nessa conta.",
-  ]);
-  container.replaceChildren(el("div", { class: "rendimento-tabela-wrap" }, [tabela]), legenda);
+  container.replaceChildren(el("div", { class: "rendimento-tabela-wrap" }, [tabela]));
 }
 
-function renderRendimentoPorJogador(codigoPiloto, bets) {
-  const linhas = construirLinhasRendimentoPorJogador(bets, codigoPiloto);
-  rendimentoPorJogadorEstado = { bets, codigoPiloto, linhas };
-
+function renderRendimentoPorJogador(ids, bets) {
   const titulo = document.getElementById("rendimento-jogador-titulo");
-  titulo.textContent =
-    codigoPiloto === "todos"
-      ? "Pontos que cada jogador tira no top6 (todos os pilotos)"
-      : `Rendimento por jogador — ${codigoPiloto} vs. média do próprio jogador`;
+  const container = document.getElementById("rendimento-jogador-container");
 
-  if (!linhas.length) {
-    document
-      .getElementById("rendimento-jogador-container")
-      .replaceChildren(el("p", { class: "status" }, ["Sem palpites de top6 registrados nesse piloto."]));
+  if (Array.isArray(ids) && !ids.length) {
+    rendimentoPorJogadorEstado = { bets, ids, linhas: [] };
+    titulo.textContent = "Pontos que cada jogador tira no top6";
+    container.replaceChildren(el("p", { class: "status" }, ["Selecione ao menos um jogador."]));
     if (graficoRendimentoPorJogador) {
       graficoRendimentoPorJogador.destroy();
       graficoRendimentoPorJogador = null;
@@ -1719,13 +1691,112 @@ function renderRendimentoPorJogador(codigoPiloto, bets) {
     return;
   }
 
-  renderTabelaRendimentoPorJogador(linhas, codigoPiloto, bets);
-  if (!document.getElementById("subsecao-rendimento").hidden && !document.getElementById("secao-palpites").hidden) {
-    renderGraficoRendimentoPorJogador(linhas, codigoPiloto, bets);
-  } else if (graficoRendimentoPorJogador) {
+  const linhas = construirLinhasRendimentoPorJogador(bets, ids);
+  rendimentoPorJogadorEstado = { bets, ids, linhas };
+
+  titulo.textContent =
+    ids === "todos"
+      ? "Pontos que cada jogador tira no top6"
+      : `Pontos no top6 — ${rendimentoRotuloSelecao(ids)}`;
+
+  if (!linhas.length) {
+    container.replaceChildren(el("p", { class: "status" }, ["Sem palpites de top6 registrados."]));
+    if (graficoRendimentoPorJogador) {
+      graficoRendimentoPorJogador.destroy();
+      graficoRendimentoPorJogador = null;
+    }
+    return;
+  }
+
+  renderTabelaRendimentoPorJogador(linhas, bets);
+  if (rendimentoGraficoVisivel("jogador")) renderGraficoRendimentoPorJogador(linhas, bets);
+  else if (graficoRendimentoPorJogador) {
     graficoRendimentoPorJogador.destroy();
     graficoRendimentoPorJogador = null;
   }
+}
+
+// ----- Filtro (chips de jogador) + switch de modo -----
+
+function rendimentoGraficoVisivel(modo) {
+  if (document.getElementById("secao-palpites").hidden) return false;
+  if (document.getElementById("subsecao-rendimento").hidden) return false;
+  return !document.getElementById(`rendimento-view-${modo}`).hidden;
+}
+
+function popularRendimentoJogadores(bets) {
+  rendimentoJogadores = ordemJogadores(bets);
+  const box = document.getElementById("rendimento-jogadores");
+  box.replaceChildren(
+    ...rendimentoJogadores.map((j) => {
+      const chip = el(
+        "button",
+        {
+          type: "button",
+          class: "rendimento-jogador-chip",
+          "data-player": j.player_id,
+          "aria-pressed": "false",
+          style: `--cor-jogador:${corRendimentoJogador(j.player_id)}`,
+        },
+        [el("span", { class: "rendimento-jogador-chip__ponto" }), j.name]
+      );
+      chip.addEventListener("click", () => {
+        if (rendimentoSelecao.has(j.player_id)) rendimentoSelecao.delete(j.player_id);
+        else rendimentoSelecao.add(j.player_id);
+        atualizarRendimento();
+      });
+      return chip;
+    })
+  );
+}
+
+function sincronizarRendimentoChips() {
+  document.querySelectorAll("#rendimento-jogadores .rendimento-jogador-chip").forEach((chip) => {
+    chip.setAttribute("aria-pressed", rendimentoSelecao.has(chip.dataset.player) ? "true" : "false");
+  });
+}
+
+function atualizarRendimento() {
+  sincronizarRendimentoChips();
+  const ids = rendimentoIdsAtivos();
+  if (rendimentoModo === "piloto") renderRendimento(ids, rendimentoBets);
+  else renderRendimentoPorJogador(ids, rendimentoBets);
+}
+
+function configurarRendimento() {
+  document.querySelectorAll("#rendimento-modo .rendimento-modo__btn").forEach((botao) => {
+    botao.addEventListener("click", () => {
+      rendimentoModo = botao.dataset.modo;
+      document.querySelectorAll("#rendimento-modo .rendimento-modo__btn").forEach((b) => {
+        const ativo = b === botao;
+        b.classList.toggle("rendimento-modo__btn--ativo", ativo);
+        b.setAttribute("aria-pressed", ativo ? "true" : "false");
+      });
+      document.getElementById("rendimento-view-piloto").hidden = rendimentoModo !== "piloto";
+      document.getElementById("rendimento-view-jogador").hidden = rendimentoModo !== "jogador";
+      // Descarta o gráfico do modo que saiu de cena (evita canvas 0×0 preso).
+      if (rendimentoModo === "piloto" && graficoRendimentoPorJogador) {
+        graficoRendimentoPorJogador.destroy();
+        graficoRendimentoPorJogador = null;
+      }
+      if (rendimentoModo === "jogador" && graficoRendimento) {
+        graficoRendimento.destroy();
+        graficoRendimento = null;
+      }
+      atualizarRendimento();
+    });
+  });
+
+  document.querySelectorAll("#rendimento-jogadores-acoes .rendimento-jogadores__acao").forEach((botao) => {
+    botao.addEventListener("click", () => {
+      if (botao.dataset.acao === "todos") {
+        rendimentoJogadores.forEach((j) => rendimentoSelecao.add(j.player_id));
+      } else {
+        rendimentoSelecao.clear();
+      }
+      atualizarRendimento();
+    });
+  });
 }
 
 // ---------- Pilotos (distribuição da posição real no quali) ----------
@@ -2032,18 +2103,13 @@ function garantirGraficosTemporada() {
 // Mesmo problema de layout do Chart.js descrito acima: o gráfico de rendimento
 // só é criado quando a sub-aba Rendimento fica de fato visível.
 function garantirGraficoRendimento() {
-  if (rendimentoEstado && rendimentoEstado.linhas.length) {
+  if (rendimentoModo === "piloto" && rendimentoEstado && rendimentoEstado.linhas.length) {
     if (graficoRendimento) graficoRendimento.resize();
-    else renderGraficoRendimento(rendimentoEstado.linhas, rendimentoEstado.playerId, rendimentoEstado.bets);
+    else renderGraficoRendimento(rendimentoEstado.linhas, rendimentoEstado.ids, rendimentoEstado.bets);
   }
-  if (rendimentoPorJogadorEstado && rendimentoPorJogadorEstado.linhas.length) {
+  if (rendimentoModo === "jogador" && rendimentoPorJogadorEstado && rendimentoPorJogadorEstado.linhas.length) {
     if (graficoRendimentoPorJogador) graficoRendimentoPorJogador.resize();
-    else
-      renderGraficoRendimentoPorJogador(
-        rendimentoPorJogadorEstado.linhas,
-        rendimentoPorJogadorEstado.codigoPiloto,
-        rendimentoPorJogadorEstado.bets
-      );
+    else renderGraficoRendimentoPorJogador(rendimentoPorJogadorEstado.linhas, rendimentoPorJogadorEstado.bets);
   }
 }
 
@@ -2160,9 +2226,9 @@ function rerenderizarGraficos() {
   dadosTemporada = null;
 
   if (corridasVisivel && standingsParaTemporada) renderTemporada(standingsParaTemporada);
-  if (rendimentoEstado) renderRendimento(rendimentoEstado.playerId, rendimentoEstado.bets);
+  if (rendimentoEstado) renderRendimento(rendimentoEstado.ids, rendimentoEstado.bets);
   if (rendimentoPorJogadorEstado) {
-    renderRendimentoPorJogador(rendimentoPorJogadorEstado.codigoPiloto, rendimentoPorJogadorEstado.bets);
+    renderRendimentoPorJogador(rendimentoPorJogadorEstado.ids, rendimentoPorJogadorEstado.bets);
   }
 }
 
@@ -2254,19 +2320,11 @@ async function main() {
     });
     renderPreferenciaPiloto("todos", bets, results);
 
-    popularSelectComTodos("select-rendimento-jogador", bets);
-    const selectRendimento = document.getElementById("select-rendimento-jogador");
-    selectRendimento.addEventListener("change", () => {
-      renderRendimento(selectRendimento.value, bets);
-    });
-    renderRendimento("todos", bets);
-
-    popularSelectPilotosComTodos("select-rendimento-piloto", bets);
-    const selectRendimentoPiloto = document.getElementById("select-rendimento-piloto");
-    selectRendimentoPiloto.addEventListener("change", () => {
-      renderRendimentoPorJogador(selectRendimentoPiloto.value, bets);
-    });
-    renderRendimentoPorJogador("todos", bets);
+    rendimentoBets = bets;
+    popularRendimentoJogadores(bets);
+    rendimentoSelecao = new Set(rendimentoJogadores.map((j) => j.player_id));
+    configurarRendimento();
+    atualizarRendimento();
 
     const hof = await carregarJson("./data/hall_of_fame.json");
     renderHallOfFame(hof);

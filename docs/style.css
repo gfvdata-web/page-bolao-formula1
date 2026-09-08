@@ -506,7 +506,8 @@ main {
   margin-bottom: 0.4rem;
 }
 
-.hist-jogador-chip {
+.hist-jogador-chip,
+.rendimento-jogador-chip {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
@@ -520,7 +521,8 @@ main {
   cursor: pointer;
 }
 
-.hist-jogador-chip__ponto {
+.hist-jogador-chip__ponto,
+.rendimento-jogador-chip__ponto {
   width: 0.7rem;
   height: 0.7rem;
   border-radius: 50%;
@@ -528,9 +530,14 @@ main {
   flex-shrink: 0;
 }
 
-.hist-jogador-chip[aria-pressed="true"] {
+.hist-jogador-chip[aria-pressed="true"],
+.rendimento-jogador-chip[aria-pressed="true"] {
   border-color: var(--cor-jogador);
   box-shadow: inset 0 0 0 1px var(--cor-jogador);
+}
+
+.rendimento-jogador-chip:not([aria-pressed="true"]) {
+  opacity: 0.5;
 }
 
 .hist-jogadores__dica {
@@ -1227,6 +1234,117 @@ button.subaba[aria-selected="true"] {
   font-variant-numeric: tabular-nums;
 }
 
+/* Intro e legenda das sub-abas */
+
+.secao-intro {
+  background: var(--bg-card);
+  border-radius: 10px;
+  box-shadow: var(--sombra);
+  padding: 0.9rem 1rem;
+  margin-bottom: 1rem;
+}
+
+.secao-intro h3 {
+  margin: 0 0 0.35rem;
+  font-size: 0.95rem;
+}
+
+.secao-intro p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--texto-fraco);
+}
+
+.legenda-bloco {
+  margin-top: 1rem;
+  padding: 0.9rem 1rem;
+  background: var(--bg-card);
+  border-radius: 10px;
+  box-shadow: var(--sombra);
+  font-size: 0.85rem;
+  color: var(--texto-fraco);
+}
+
+.legenda-bloco h4 {
+  margin: 0 0 0.5rem;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--texto);
+}
+
+.legenda-bloco ul {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+
+.legenda-bloco li {
+  margin-bottom: 0.35rem;
+}
+
+.legenda-bloco li:last-child {
+  margin-bottom: 0;
+}
+
+.legenda-bloco .distancia-badge {
+  vertical-align: middle;
+}
+
+/* Rendimento — switch de modo + chips de jogador */
+
+.rendimento-modo {
+  display: flex;
+  border: 1px solid var(--borda);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 0.9rem;
+}
+
+.rendimento-modo__btn {
+  flex: 1;
+  border: none;
+  background: var(--bg-card);
+  color: var(--texto-fraco);
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.45rem 0.7rem;
+  cursor: pointer;
+}
+
+.rendimento-modo__btn + .rendimento-modo__btn {
+  border-left: 1px solid var(--borda);
+}
+
+.rendimento-modo__btn--ativo {
+  background: var(--acento);
+  color: #fff;
+}
+
+.rendimento-jogadores {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.4rem;
+}
+
+.rendimento-jogadores-acoes {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.rendimento-jogadores__acao {
+  border: 1px solid var(--borda);
+  background: var(--bg-card);
+  color: var(--texto-fraco);
+  border-radius: 999px;
+  padding: 0.2rem 0.7rem;
+  font-size: 0.76rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
 /* Rendimento por piloto */
 
 .rendimento-grafico-wrap {
@@ -1266,12 +1384,6 @@ button.subaba[aria-selected="true"] {
 .rendimento-media {
   font-weight: 600;
   white-space: nowrap;
-}
-
-.rendimento-divisor {
-  border: none;
-  border-top: 1px solid var(--borda);
-  margin: 1.5rem 0;
 }
 
 /* Pilotos (violino da posição real no quali) */
