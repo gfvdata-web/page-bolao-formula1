@@ -1,0 +1,29 @@
+{
+  "race_id": "2023-21",
+  "season": 2023,
+  "round": 21,
+  "circuit": "vegas",
+  "race": "Las Vegas",
+  "order": [
+    "LEC",
+    "SAI",
+    "VER",
+    "RUS",
+    "GAS",
+    "ALB",
+    "SAR",
+    "BOT",
+    "MAG",
+    "ALO",
+    "HAM",
+    "PER",
+    "HUL",
+    "STR",
+    "RIC",
+    "NOR",
+    "OCO",
+    "ZHO",
+    "PIA",
+    "TSU"
+  ]
+}

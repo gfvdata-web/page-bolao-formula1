@@ -1,0 +1,29 @@
+{
+  "race_id": "2021-10",
+  "season": 2021,
+  "round": 10,
+  "circuit": "silverstone",
+  "race": "Silverstone",
+  "order": [
+    "HAM",
+    "VER",
+    "BOT",
+    "LEC",
+    "PER",
+    "NOR",
+    "RIC",
+    "RUS",
+    "SAI",
+    "VET",
+    "ALO",
+    "GAS",
+    "OCO",
+    "GIO",
+    "STR",
+    "TSU",
+    "RAI",
+    "LAT",
+    "MSC",
+    "MAZ"
+  ]
+}

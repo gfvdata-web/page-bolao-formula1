@@ -1,0 +1,29 @@
+{
+  "race_id": "2023-08",
+  "season": 2023,
+  "round": 8,
+  "circuit": "villeneuve",
+  "race": "Montreal",
+  "order": [
+    "VER",
+    "HUL",
+    "ALO",
+    "HAM",
+    "RUS",
+    "OCO",
+    "NOR",
+    "SAI",
+    "PIA",
+    "ALB",
+    "LEC",
+    "PER",
+    "STR",
+    "MAG",
+    "BOT",
+    "TSU",
+    "GAS",
+    "DEV",
+    "SAR",
+    "ZHO"
+  ]
+}

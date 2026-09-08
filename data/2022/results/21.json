@@ -1,0 +1,29 @@
+{
+  "race_id": "2022-21",
+  "season": 2022,
+  "round": 21,
+  "circuit": "interlagos",
+  "race": "São Paulo",
+  "order": [
+    "MAG",
+    "VER",
+    "RUS",
+    "NOR",
+    "SAI",
+    "OCO",
+    "ALO",
+    "HAM",
+    "PER",
+    "LEC",
+    "ALB",
+    "GAS",
+    "VET",
+    "RIC",
+    "STR",
+    "LAT",
+    "ZHO",
+    "BOT",
+    "TSU",
+    "MSC"
+  ]
+}

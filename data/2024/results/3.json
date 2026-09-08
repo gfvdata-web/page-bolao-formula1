@@ -1,0 +1,28 @@
+{
+  "race_id": "2024-03",
+  "season": 2024,
+  "round": 3,
+  "circuit": "albert_park",
+  "race": "Melbourne",
+  "order": [
+    "VER",
+    "SAI",
+    "PER",
+    "NOR",
+    "LEC",
+    "PIA",
+    "RUS",
+    "TSU",
+    "STR",
+    "ALO",
+    "HAM",
+    "ALB",
+    "BOT",
+    "MAG",
+    "OCO",
+    "HUL",
+    "GAS",
+    "RIC",
+    "ZHO"
+  ]
+}

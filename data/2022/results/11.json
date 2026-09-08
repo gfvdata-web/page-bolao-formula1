@@ -1,0 +1,29 @@
+{
+  "race_id": "2022-11",
+  "season": 2022,
+  "round": 11,
+  "circuit": "red_bull_ring",
+  "race": "Spielberg",
+  "order": [
+    "VER",
+    "LEC",
+    "SAI",
+    "RUS",
+    "OCO",
+    "MAG",
+    "MSC",
+    "ALO",
+    "HAM",
+    "GAS",
+    "ALB",
+    "BOT",
+    "PER",
+    "TSU",
+    "NOR",
+    "RIC",
+    "STR",
+    "ZHO",
+    "LAT",
+    "VET"
+  ]
+}

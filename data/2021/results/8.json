@@ -1,0 +1,29 @@
+{
+  "race_id": "2021-08",
+  "season": 2021,
+  "round": 8,
+  "circuit": "red_bull_ring",
+  "race": "Spielberg",
+  "order": [
+    "VER",
+    "BOT",
+    "HAM",
+    "NOR",
+    "PER",
+    "GAS",
+    "LEC",
+    "TSU",
+    "ALO",
+    "STR",
+    "RUS",
+    "SAI",
+    "RIC",
+    "VET",
+    "GIO",
+    "LAT",
+    "OCO",
+    "RAI",
+    "MSC",
+    "MAZ"
+  ]
+}

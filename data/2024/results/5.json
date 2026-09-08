@@ -1,0 +1,29 @@
+{
+  "race_id": "2024-05",
+  "season": 2024,
+  "round": 5,
+  "circuit": "shanghai",
+  "race": "Shanghai",
+  "order": [
+    "VER",
+    "PER",
+    "ALO",
+    "NOR",
+    "PIA",
+    "LEC",
+    "SAI",
+    "RUS",
+    "HUL",
+    "BOT",
+    "STR",
+    "RIC",
+    "OCO",
+    "ALB",
+    "GAS",
+    "ZHO",
+    "MAG",
+    "HAM",
+    "TSU",
+    "SAR"
+  ]
+}

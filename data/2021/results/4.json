@@ -1,0 +1,29 @@
+{
+  "race_id": "2021-04",
+  "season": 2021,
+  "round": 4,
+  "circuit": "catalunya",
+  "race": "Barcelona",
+  "order": [
+    "HAM",
+    "VER",
+    "BOT",
+    "LEC",
+    "OCO",
+    "SAI",
+    "RIC",
+    "PER",
+    "NOR",
+    "ALO",
+    "STR",
+    "GAS",
+    "VET",
+    "GIO",
+    "RUS",
+    "TSU",
+    "RAI",
+    "MSC",
+    "LAT",
+    "MAZ"
+  ]
+}

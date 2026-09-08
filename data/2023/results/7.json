@@ -1,0 +1,29 @@
+{
+  "race_id": "2023-07",
+  "season": 2023,
+  "round": 7,
+  "circuit": "catalunya",
+  "race": "Barcelona",
+  "order": [
+    "VER",
+    "SAI",
+    "NOR",
+    "GAS",
+    "HAM",
+    "STR",
+    "OCO",
+    "HUL",
+    "ALO",
+    "PIA",
+    "PER",
+    "RUS",
+    "ZHO",
+    "DEV",
+    "TSU",
+    "BOT",
+    "MAG",
+    "ALB",
+    "LEC",
+    "SAR"
+  ]
+}

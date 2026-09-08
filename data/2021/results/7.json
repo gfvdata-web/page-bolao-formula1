@@ -1,0 +1,29 @@
+{
+  "race_id": "2021-07",
+  "season": 2021,
+  "round": 7,
+  "circuit": "ricard",
+  "race": "Le Castellet",
+  "order": [
+    "VER",
+    "HAM",
+    "BOT",
+    "PER",
+    "SAI",
+    "GAS",
+    "LEC",
+    "NOR",
+    "ALO",
+    "RIC",
+    "OCO",
+    "VET",
+    "GIO",
+    "RUS",
+    "MSC",
+    "LAT",
+    "RAI",
+    "MAZ",
+    "STR",
+    "TSU"
+  ]
+}

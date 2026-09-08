@@ -1,0 +1,29 @@
+{
+  "race_id": "2021-15",
+  "season": 2021,
+  "round": 15,
+  "circuit": "sochi",
+  "race": "Sochi",
+  "order": [
+    "NOR",
+    "SAI",
+    "RUS",
+    "HAM",
+    "RIC",
+    "ALO",
+    "BOT",
+    "STR",
+    "PER",
+    "OCO",
+    "VET",
+    "GAS",
+    "TSU",
+    "LAT",
+    "LEC",
+    "RAI",
+    "MSC",
+    "GIO",
+    "MAZ",
+    "VER"
+  ]
+}

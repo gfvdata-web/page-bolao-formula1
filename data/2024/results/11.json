@@ -1,0 +1,29 @@
+{
+  "race_id": "2024-11",
+  "season": 2024,
+  "round": 11,
+  "circuit": "red_bull_ring",
+  "race": "Spielberg",
+  "order": [
+    "VER",
+    "NOR",
+    "RUS",
+    "SAI",
+    "HAM",
+    "LEC",
+    "PIA",
+    "PER",
+    "HUL",
+    "OCO",
+    "RIC",
+    "MAG",
+    "GAS",
+    "TSU",
+    "ALO",
+    "ALB",
+    "STR",
+    "BOT",
+    "SAR",
+    "ZHO"
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "race_id": "2023-04",
+  "season": 2023,
+  "round": 4,
+  "circuit": "baku",
+  "race": "Baku",
+  "order": [
+    "LEC",
+    "VER",
+    "PER",
+    "SAI",
+    "HAM",
+    "ALO",
+    "NOR",
+    "TSU",
+    "STR",
+    "PIA",
+    "RUS",
+    "OCO",
+    "ALB",
+    "BOT",
+    "SAR",
+    "ZHO",
+    "HUL",
+    "MAG",
+    "GAS",
+    "DEV"
+  ]
+}

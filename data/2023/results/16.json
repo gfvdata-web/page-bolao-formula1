@@ -1,0 +1,29 @@
+{
+  "race_id": "2023-16",
+  "season": 2023,
+  "round": 16,
+  "circuit": "suzuka",
+  "race": "Suzuka",
+  "order": [
+    "VER",
+    "PIA",
+    "NOR",
+    "LEC",
+    "PER",
+    "SAI",
+    "HAM",
+    "RUS",
+    "TSU",
+    "ALO",
+    "LAW",
+    "GAS",
+    "ALB",
+    "OCO",
+    "MAG",
+    "BOT",
+    "STR",
+    "HUL",
+    "ZHO",
+    "SAR"
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "race_id": "2023-19",
+  "season": 2023,
+  "round": 19,
+  "circuit": "rodriguez",
+  "race": "Mexico City",
+  "order": [
+    "LEC",
+    "SAI",
+    "VER",
+    "RIC",
+    "PER",
+    "HAM",
+    "PIA",
+    "RUS",
+    "BOT",
+    "ZHO",
+    "GAS",
+    "HUL",
+    "ALO",
+    "ALB",
+    "TSU",
+    "OCO",
+    "MAG",
+    "STR",
+    "NOR",
+    "SAR"
+  ]
+}

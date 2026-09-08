@@ -1,0 +1,29 @@
+{
+  "race_id": "2023-01",
+  "season": 2023,
+  "round": 1,
+  "circuit": "bahrain",
+  "race": "Sakhir",
+  "order": [
+    "VER",
+    "PER",
+    "LEC",
+    "SAI",
+    "ALO",
+    "RUS",
+    "HAM",
+    "STR",
+    "OCO",
+    "HUL",
+    "NOR",
+    "BOT",
+    "ZHO",
+    "TSU",
+    "ALB",
+    "SAR",
+    "MAG",
+    "PIA",
+    "DEV",
+    "GAS"
+  ]
+}

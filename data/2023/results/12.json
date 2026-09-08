@@ -1,0 +1,29 @@
+{
+  "race_id": "2023-12",
+  "season": 2023,
+  "round": 12,
+  "circuit": "spa",
+  "race": "Spa",
+  "order": [
+    "VER",
+    "LEC",
+    "PER",
+    "HAM",
+    "SAI",
+    "PIA",
+    "NOR",
+    "RUS",
+    "ALO",
+    "STR",
+    "TSU",
+    "GAS",
+    "MAG",
+    "BOT",
+    "OCO",
+    "ALB",
+    "ZHO",
+    "SAR",
+    "RIC",
+    "HUL"
+  ]
+}

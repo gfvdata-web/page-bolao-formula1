@@ -1,0 +1,29 @@
+{
+  "race_id": "2023-18",
+  "season": 2023,
+  "round": 18,
+  "circuit": "americas",
+  "race": "Austin",
+  "order": [
+    "LEC",
+    "NOR",
+    "HAM",
+    "SAI",
+    "RUS",
+    "VER",
+    "GAS",
+    "OCO",
+    "PER",
+    "PIA",
+    "TSU",
+    "ZHO",
+    "BOT",
+    "MAG",
+    "RIC",
+    "HUL",
+    "ALO",
+    "ALB",
+    "STR",
+    "SAR"
+  ]
+}

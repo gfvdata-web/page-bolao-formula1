@@ -1,0 +1,29 @@
+{
+  "race_id": "2023-20",
+  "season": 2023,
+  "round": 20,
+  "circuit": "interlagos",
+  "race": "São Paulo",
+  "order": [
+    "VER",
+    "LEC",
+    "STR",
+    "ALO",
+    "HAM",
+    "RUS",
+    "NOR",
+    "SAI",
+    "PER",
+    "PIA",
+    "HUL",
+    "OCO",
+    "GAS",
+    "MAG",
+    "ALB",
+    "TSU",
+    "RIC",
+    "BOT",
+    "SAR",
+    "ZHO"
+  ]
+}

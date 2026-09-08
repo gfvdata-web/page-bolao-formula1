@@ -1,0 +1,29 @@
+{
+  "race_id": "2023-15",
+  "season": 2023,
+  "round": 15,
+  "circuit": "marina_bay",
+  "race": "Marina Bay",
+  "order": [
+    "SAI",
+    "RUS",
+    "LEC",
+    "NOR",
+    "HAM",
+    "MAG",
+    "ALO",
+    "OCO",
+    "HUL",
+    "LAW",
+    "VER",
+    "GAS",
+    "PER",
+    "ALB",
+    "TSU",
+    "BOT",
+    "PIA",
+    "SAR",
+    "ZHO",
+    "STR"
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "race_id": "2022-14",
+  "season": 2022,
+  "round": 14,
+  "circuit": "spa",
+  "race": "Spa",
+  "order": [
+    "VER",
+    "SAI",
+    "PER",
+    "LEC",
+    "OCO",
+    "ALO",
+    "HAM",
+    "RUS",
+    "ALB",
+    "NOR",
+    "RIC",
+    "GAS",
+    "ZHO",
+    "STR",
+    "MSC",
+    "VET",
+    "LAT",
+    "MAG",
+    "TSU",
+    "BOT"
+  ]
+}

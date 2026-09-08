@@ -1,0 +1,29 @@
+{
+  "race_id": "2023-09",
+  "season": 2023,
+  "round": 9,
+  "circuit": "red_bull_ring",
+  "race": "Spielberg",
+  "order": [
+    "VER",
+    "LEC",
+    "SAI",
+    "NOR",
+    "HAM",
+    "STR",
+    "ALO",
+    "HUL",
+    "GAS",
+    "ALB",
+    "RUS",
+    "OCO",
+    "PIA",
+    "BOT",
+    "PER",
+    "TSU",
+    "ZHO",
+    "SAR",
+    "MAG",
+    "DEV"
+  ]
+}

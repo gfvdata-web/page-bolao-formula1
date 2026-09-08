@@ -1,0 +1,29 @@
+{
+  "race_id": "2022-19",
+  "season": 2022,
+  "round": 19,
+  "circuit": "americas",
+  "race": "Austin",
+  "order": [
+    "SAI",
+    "LEC",
+    "VER",
+    "PER",
+    "HAM",
+    "RUS",
+    "STR",
+    "NOR",
+    "ALO",
+    "BOT",
+    "ALB",
+    "VET",
+    "GAS",
+    "ZHO",
+    "TSU",
+    "MAG",
+    "RIC",
+    "OCO",
+    "MSC",
+    "LAT"
+  ]
+}

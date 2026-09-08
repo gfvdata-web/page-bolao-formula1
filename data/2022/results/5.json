@@ -1,0 +1,29 @@
+{
+  "race_id": "2022-05",
+  "season": 2022,
+  "round": 5,
+  "circuit": "miami",
+  "race": "Miami",
+  "order": [
+    "LEC",
+    "SAI",
+    "VER",
+    "PER",
+    "BOT",
+    "HAM",
+    "GAS",
+    "NOR",
+    "TSU",
+    "STR",
+    "ALO",
+    "RUS",
+    "VET",
+    "RIC",
+    "MSC",
+    "MAG",
+    "ZHO",
+    "ALB",
+    "LAT",
+    "OCO"
+  ]
+}

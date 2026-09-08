@@ -1,0 +1,29 @@
+{
+  "race_id": "2022-06",
+  "season": 2022,
+  "round": 6,
+  "circuit": "catalunya",
+  "race": "Barcelona",
+  "order": [
+    "LEC",
+    "VER",
+    "SAI",
+    "RUS",
+    "PER",
+    "HAM",
+    "BOT",
+    "MAG",
+    "RIC",
+    "MSC",
+    "NOR",
+    "OCO",
+    "TSU",
+    "GAS",
+    "ZHO",
+    "VET",
+    "ALO",
+    "STR",
+    "ALB",
+    "LAT"
+  ]
+}

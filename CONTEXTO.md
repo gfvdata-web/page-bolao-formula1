@@ -1184,6 +1184,66 @@ enquanto a Jolpica não publica o quali.**
   rodadas anteriores à estreia. Definir se o histórico usa a mesma regra ou só
   pontos brutos / a regra original de 2025.
 
+**Sub-etapa 2026-09-08b — histórico 2021–2024 (export do WhatsApp):**
+
+Fonte: backup `.txt` do grupo (48.990 mensagens, 04/2021→09/2026). O arquivo
+**não entra no repositório** e os `.txt` derivados vão para `historico_wpp/`
+(no `.gitignore`) — decisão de privacidade do usuário. Só os CSV estruturados
+(`data/<ano>/palpites_<ano>.csv`, `rodadas_<ano>.csv`) são versionados, no
+mesmo formato que 2025 já usa.
+
+**O formato do palpite mudou ao longo dos anos** (`SEASONS` em
+`bolao/whatsapp_import.py`) — isso muda a pontuação máxima por corrida:
+
+| Ano  | Top | Piloto da rodada | Máx/corrida |
+|------|-----|------------------|-------------|
+| 2021 | 5   | não existia      | 10          |
+| 2022 | 6   | não existia      | 12          |
+| 2023 | 6   | não existia      | 12          |
+| 2024 | 6   | sim (desde R1)   | 13          |
+| 2025 | 6   | sim              | 13          |
+
+A regra 2/1/0 (exata / dentro do top N real / fora) vale em **todos** os anos —
+**validada** contra as pontuações que o próprio grupo publicou: 2021 bate em
+65/65 palpites conferidos; 2023 bate exatamente em vários checkpoints
+acumulados (r9: 9 de 10 jogadores; r11: 8 de 10 — os que divergem são sempre
+quem faltou rodadas, ou seja, compensação).
+
+**Cobertura por temporada** (rodadas com palpite / total):
+- **2021: 12/22** (rodadas 11–22, Hungria→Abu Dhabi). As rodadas 1–10 existiram
+  no bolão mas **não estão** no WhatsApp — o ranking de 11/12/2021 fecha com
+  `Guilherme 111 pts / 22 🏁`. O saldo das rodadas 1–10 só é recuperável pelos
+  rankings acumulados (`historico_wpp/classificacoes.txt`).
+- **2022: 20/22** (faltam R4 Imola e R5 Miami).
+- **2023: 22/22** e **2024: 24/24** — completas.
+- **2025:** fora deste import (já vem do xlsx, r1–15). O export do WhatsApp
+  **não tem nenhuma mensagem entre 08/2025 e 12/2025**, então as rodadas 16–24
+  de 2025 continuam sem fonte.
+
+**Decisões de identidade de jogador (fechadas com o usuário em 2026-09-08):**
+- `pedro` (rankings de 2021) = **`francez`** (Pedro Francez).
+- `sergio` / `Sergin` = **`lage`** (mesma pessoa; a grafia mudou no meio de 2022
+  — nunca aparecem juntos numa mesma mensagem).
+- O `Bernardo` dos rankings de 2021 é **Bernardo Viana** (`bernardo_v`), pessoa
+  diferente do `Bernardo Lavôr` (`bernardo`) que jogou em 2025.
+- `DRU` (2023, Bahrein) **é jogador**; `Leo`, `Lex`, `Vest`, `MASSA 2008` e
+  afins são ruído/piada e são descartados.
+- `gui`→`guilherme`, `rod`→`rodrigo`.
+
+**`bolao/whatsapp_import.py` (novo):** lê o export, reconhece blocos
+jogador→pilotos por **sequência** (não por texto do nome — resolve `Sergio` e
+`Ferrari`, que também são apelidos de piloto), resolve a rodada pela **data**
+(±6 dias do quali; 2022 não tinha cabeçalho), consolida o palpite final de cada
+corrida (mensagem mais completa + recuperação de quem sumiu da versão final) e
+grava `historico_raw.txt`, `palpitesfinais.txt`, `classificacoes.txt` e os CSV.
+Apelidos de piloto colhidos do próprio grupo (`vetel`, `sains`, `charlin`,
+`rua`, `lindo`, `han`…) ficam em `APELIDOS_COMUNS`/`APELIDOS_POR_ANO`.
+
+Total: **636 palpites** importados (75 + 150 + 182 + 229) com **21 avisos**
+(bloco com número de pilotos fora do padrão, piloto repetido, jogador
+recuperado de mensagem anterior). **R24 de 2024 (Abu Dhabi) não teve piloto da
+rodada** — ninguém mandou `P#` e o cabeçalho não traz o piloto.
+
 ## 9. Pendências / decisões adiadas
 
 - Formato e importação dos **históricos** de anos anteriores.

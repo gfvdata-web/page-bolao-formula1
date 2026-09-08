@@ -1,0 +1,29 @@
+{
+  "race_id": "2022-17",
+  "season": 2022,
+  "round": 17,
+  "circuit": "marina_bay",
+  "race": "Marina Bay",
+  "order": [
+    "LEC",
+    "PER",
+    "HAM",
+    "SAI",
+    "ALO",
+    "NOR",
+    "GAS",
+    "VER",
+    "MAG",
+    "TSU",
+    "RUS",
+    "STR",
+    "MSC",
+    "VET",
+    "ZHO",
+    "BOT",
+    "RIC",
+    "OCO",
+    "ALB",
+    "LAT"
+  ]
+}

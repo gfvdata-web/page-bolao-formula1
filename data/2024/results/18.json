@@ -1,0 +1,29 @@
+{
+  "race_id": "2024-18",
+  "season": 2024,
+  "round": 18,
+  "circuit": "marina_bay",
+  "race": "Marina Bay",
+  "order": [
+    "NOR",
+    "VER",
+    "HAM",
+    "RUS",
+    "PIA",
+    "HUL",
+    "ALO",
+    "TSU",
+    "LEC",
+    "SAI",
+    "ALB",
+    "COL",
+    "PER",
+    "MAG",
+    "OCO",
+    "RIC",
+    "STR",
+    "GAS",
+    "BOT",
+    "ZHO"
+  ]
+}

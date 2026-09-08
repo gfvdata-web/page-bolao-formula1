@@ -1,0 +1,379 @@
+{
+  "season": 2021,
+  "races": [
+    {
+      "race_id": "2021-01",
+      "season": 2021,
+      "round": 1,
+      "circuit": "bahrain",
+      "race": "Sakhir",
+      "date": "2021-03-28",
+      "qualifying_utc": null,
+      "sprint": false,
+      "aliases": [
+        "bahrain",
+        "bahrain international circuit",
+        "sakhir",
+        "bahrain grand prix"
+      ]
+    },
+    {
+      "race_id": "2021-02",
+      "season": 2021,
+      "round": 2,
+      "circuit": "imola",
+      "race": "Imola",
+      "date": "2021-04-18",
+      "qualifying_utc": null,
+      "sprint": false,
+      "aliases": [
+        "imola",
+        "autodromo enzo e dino ferrari",
+        "italy",
+        "emilia romagna grand prix",
+        "emilia romagna"
+      ]
+    },
+    {
+      "race_id": "2021-03",
+      "season": 2021,
+      "round": 3,
+      "circuit": "portimao",
+      "race": "Portimão",
+      "date": "2021-05-02",
+      "qualifying_utc": null,
+      "sprint": false,
+      "aliases": [
+        "portimao",
+        "autodromo internacional do algarve",
+        "portugal",
+        "portuguese grand prix",
+        "portuguese"
+      ]
+    },
+    {
+      "race_id": "2021-04",
+      "season": 2021,
+      "round": 4,
+      "circuit": "catalunya",
+      "race": "Barcelona",
+      "date": "2021-05-09",
+      "qualifying_utc": null,
+      "sprint": false,
+      "aliases": [
+        "catalunya",
+        "circuit de barcelona catalunya",
+        "barcelona",
+        "spain",
+        "spanish grand prix",
+        "spanish"
+      ]
+    },
+    {
+      "race_id": "2021-05",
+      "season": 2021,
+      "round": 5,
+      "circuit": "monaco",
+      "race": "Monte Carlo",
+      "date": "2021-05-23",
+      "qualifying_utc": null,
+      "sprint": false,
+      "aliases": [
+        "monaco",
+        "circuit de monaco",
+        "monte carlo",
+        "monaco grand prix"
+      ]
+    },
+    {
+      "race_id": "2021-06",
+      "season": 2021,
+      "round": 6,
+      "circuit": "baku",
+      "race": "Baku",
+      "date": "2021-06-06",
+      "qualifying_utc": null,
+      "sprint": false,
+      "aliases": [
+        "baku",
+        "baku city circuit",
+        "azerbaijan",
+        "azerbaijan grand prix"
+      ]
+    },
+    {
+      "race_id": "2021-07",
+      "season": 2021,
+      "round": 7,
+      "circuit": "ricard",
+      "race": "Le Castellet",
+      "date": "2021-06-20",
+      "qualifying_utc": null,
+      "sprint": false,
+      "aliases": [
+        "ricard",
+        "circuit paul ricard",
+        "le castellet",
+        "france",
+        "french grand prix",
+        "french"
+      ]
+    },
+    {
+      "race_id": "2021-08",
+      "season": 2021,
+      "round": 8,
+      "circuit": "red_bull_ring",
+      "race": "Spielberg",
+      "date": "2021-06-27",
+      "qualifying_utc": null,
+      "sprint": false,
+      "aliases": [
+        "red bull ring",
+        "spielberg",
+        "austria",
+        "styrian grand prix",
+        "styrian"
+      ]
+    },
+    {
+      "race_id": "2021-09",
+      "season": 2021,
+      "round": 9,
+      "circuit": "red_bull_ring",
+      "race": "Spielberg",
+      "date": "2021-07-04",
+      "qualifying_utc": null,
+      "sprint": false,
+      "aliases": [
+        "red bull ring",
+        "spielberg",
+        "austria",
+        "austrian grand prix",
+        "austrian"
+      ]
+    },
+    {
+      "race_id": "2021-10",
+      "season": 2021,
+      "round": 10,
+      "circuit": "silverstone",
+      "race": "Silverstone",
+      "date": "2021-07-18",
+      "qualifying_utc": null,
+      "sprint": true,
+      "aliases": [
+        "silverstone",
+        "silverstone circuit",
+        "uk",
+        "british grand prix",
+        "british"
+      ]
+    },
+    {
+      "race_id": "2021-11",
+      "season": 2021,
+      "round": 11,
+      "circuit": "hungaroring",
+      "race": "Budapest",
+      "date": "2021-08-01",
+      "qualifying_utc": null,
+      "sprint": false,
+      "aliases": [
+        "hungaroring",
+        "budapest",
+        "hungary",
+        "hungarian grand prix",
+        "hungarian"
+      ]
+    },
+    {
+      "race_id": "2021-12",
+      "season": 2021,
+      "round": 12,
+      "circuit": "spa",
+      "race": "Spa",
+      "date": "2021-08-29",
+      "qualifying_utc": null,
+      "sprint": false,
+      "aliases": [
+        "spa",
+        "circuit de spa francorchamps",
+        "belgium",
+        "belgian grand prix",
+        "belgian"
+      ]
+    },
+    {
+      "race_id": "2021-13",
+      "season": 2021,
+      "round": 13,
+      "circuit": "zandvoort",
+      "race": "Zandvoort",
+      "date": "2021-09-05",
+      "qualifying_utc": null,
+      "sprint": false,
+      "aliases": [
+        "zandvoort",
+        "circuit park zandvoort",
+        "netherlands",
+        "dutch grand prix",
+        "dutch"
+      ]
+    },
+    {
+      "race_id": "2021-14",
+      "season": 2021,
+      "round": 14,
+      "circuit": "monza",
+      "race": "Monza",
+      "date": "2021-09-12",
+      "qualifying_utc": null,
+      "sprint": true,
+      "aliases": [
+        "monza",
+        "autodromo nazionale di monza",
+        "italy",
+        "italian grand prix",
+        "italian"
+      ]
+    },
+    {
+      "race_id": "2021-15",
+      "season": 2021,
+      "round": 15,
+      "circuit": "sochi",
+      "race": "Sochi",
+      "date": "2021-09-26",
+      "qualifying_utc": null,
+      "sprint": false,
+      "aliases": [
+        "sochi",
+        "sochi autodrom",
+        "russia",
+        "russian grand prix",
+        "russian"
+      ]
+    },
+    {
+      "race_id": "2021-16",
+      "season": 2021,
+      "round": 16,
+      "circuit": "istanbul",
+      "race": "Istanbul",
+      "date": "2021-10-10",
+      "qualifying_utc": null,
+      "sprint": false,
+      "aliases": [
+        "istanbul",
+        "istanbul park",
+        "turkey",
+        "turkish grand prix",
+        "turkish"
+      ]
+    },
+    {
+      "race_id": "2021-17",
+      "season": 2021,
+      "round": 17,
+      "circuit": "americas",
+      "race": "Austin",
+      "date": "2021-10-24",
+      "qualifying_utc": null,
+      "sprint": false,
+      "aliases": [
+        "americas",
+        "circuit of the americas",
+        "austin",
+        "usa",
+        "united states grand prix",
+        "united states"
+      ]
+    },
+    {
+      "race_id": "2021-18",
+      "season": 2021,
+      "round": 18,
+      "circuit": "rodriguez",
+      "race": "Mexico City",
+      "date": "2021-11-07",
+      "qualifying_utc": null,
+      "sprint": false,
+      "aliases": [
+        "rodriguez",
+        "autodromo hermanos rodriguez",
+        "mexico city",
+        "mexico",
+        "mexico city grand prix"
+      ]
+    },
+    {
+      "race_id": "2021-19",
+      "season": 2021,
+      "round": 19,
+      "circuit": "interlagos",
+      "race": "São Paulo",
+      "date": "2021-11-14",
+      "qualifying_utc": null,
+      "sprint": true,
+      "aliases": [
+        "interlagos",
+        "autodromo jose carlos pace",
+        "sao paulo",
+        "brazil",
+        "sao paulo grand prix"
+      ]
+    },
+    {
+      "race_id": "2021-20",
+      "season": 2021,
+      "round": 20,
+      "circuit": "losail",
+      "race": "Lusail",
+      "date": "2021-11-21",
+      "qualifying_utc": null,
+      "sprint": false,
+      "aliases": [
+        "losail",
+        "losail international circuit",
+        "lusail",
+        "qatar",
+        "qatar grand prix"
+      ]
+    },
+    {
+      "race_id": "2021-21",
+      "season": 2021,
+      "round": 21,
+      "circuit": "jeddah",
+      "race": "Jeddah",
+      "date": "2021-12-05",
+      "qualifying_utc": null,
+      "sprint": false,
+      "aliases": [
+        "jeddah",
+        "jeddah corniche circuit",
+        "saudi arabia",
+        "saudi arabian grand prix",
+        "saudi arabian"
+      ]
+    },
+    {
+      "race_id": "2021-22",
+      "season": 2021,
+      "round": 22,
+      "circuit": "yas_marina",
+      "race": "Abu Dhabi",
+      "date": "2021-12-12",
+      "qualifying_utc": null,
+      "sprint": false,
+      "aliases": [
+        "yas marina",
+        "yas marina circuit",
+        "abu dhabi",
+        "uae",
+        "abu dhabi grand prix"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "race_id": "2023-02",
+  "season": 2023,
+  "round": 2,
+  "circuit": "jeddah",
+  "race": "Jeddah",
+  "order": [
+    "PER",
+    "LEC",
+    "ALO",
+    "RUS",
+    "SAI",
+    "STR",
+    "OCO",
+    "HAM",
+    "PIA",
+    "GAS",
+    "HUL",
+    "ZHO",
+    "MAG",
+    "BOT",
+    "VER",
+    "TSU",
+    "ALB",
+    "DEV",
+    "NOR",
+    "SAR"
+  ]
+}

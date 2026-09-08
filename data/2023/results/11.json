@@ -1,0 +1,29 @@
+{
+  "race_id": "2023-11",
+  "season": 2023,
+  "round": 11,
+  "circuit": "hungaroring",
+  "race": "Budapest",
+  "order": [
+    "HAM",
+    "VER",
+    "NOR",
+    "PIA",
+    "ZHO",
+    "LEC",
+    "BOT",
+    "ALO",
+    "PER",
+    "HUL",
+    "SAI",
+    "OCO",
+    "RIC",
+    "STR",
+    "GAS",
+    "ALB",
+    "TSU",
+    "RUS",
+    "MAG",
+    "SAR"
+  ]
+}

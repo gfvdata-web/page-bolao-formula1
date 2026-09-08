@@ -1,0 +1,29 @@
+{
+  "race_id": "2022-20",
+  "season": 2022,
+  "round": 20,
+  "circuit": "rodriguez",
+  "race": "Mexico City",
+  "order": [
+    "VER",
+    "RUS",
+    "HAM",
+    "PER",
+    "SAI",
+    "BOT",
+    "LEC",
+    "NOR",
+    "ALO",
+    "OCO",
+    "RIC",
+    "ZHO",
+    "TSU",
+    "GAS",
+    "MAG",
+    "MSC",
+    "VET",
+    "STR",
+    "ALB",
+    "LAT"
+  ]
+}

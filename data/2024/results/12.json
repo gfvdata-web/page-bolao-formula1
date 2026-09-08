@@ -1,0 +1,29 @@
+{
+  "race_id": "2024-12",
+  "season": 2024,
+  "round": 12,
+  "circuit": "silverstone",
+  "race": "Silverstone",
+  "order": [
+    "RUS",
+    "HAM",
+    "NOR",
+    "VER",
+    "PIA",
+    "HUL",
+    "SAI",
+    "STR",
+    "ALB",
+    "ALO",
+    "LEC",
+    "SAR",
+    "TSU",
+    "ZHO",
+    "RIC",
+    "BOT",
+    "MAG",
+    "OCO",
+    "PER",
+    "GAS"
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "race_id": "2022-09",
+  "season": 2022,
+  "round": 9,
+  "circuit": "villeneuve",
+  "race": "Montreal",
+  "order": [
+    "VER",
+    "ALO",
+    "SAI",
+    "HAM",
+    "MAG",
+    "MSC",
+    "OCO",
+    "RUS",
+    "RIC",
+    "ZHO",
+    "BOT",
+    "ALB",
+    "PER",
+    "NOR",
+    "LEC",
+    "GAS",
+    "VET",
+    "STR",
+    "LAT",
+    "TSU"
+  ]
+}

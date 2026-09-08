@@ -1,0 +1,29 @@
+{
+  "race_id": "2021-19",
+  "season": 2021,
+  "round": 19,
+  "circuit": "interlagos",
+  "race": "São Paulo",
+  "order": [
+    "HAM",
+    "VER",
+    "BOT",
+    "PER",
+    "GAS",
+    "SAI",
+    "LEC",
+    "NOR",
+    "RIC",
+    "ALO",
+    "OCO",
+    "VET",
+    "TSU",
+    "RAI",
+    "GIO",
+    "STR",
+    "LAT",
+    "RUS",
+    "MSC",
+    "MAZ"
+  ]
+}

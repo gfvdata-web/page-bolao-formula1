@@ -1,0 +1,29 @@
+{
+  "race_id": "2024-22",
+  "season": 2024,
+  "round": 22,
+  "circuit": "vegas",
+  "race": "Las Vegas",
+  "order": [
+    "RUS",
+    "SAI",
+    "GAS",
+    "LEC",
+    "VER",
+    "NOR",
+    "TSU",
+    "PIA",
+    "HUL",
+    "HAM",
+    "OCO",
+    "MAG",
+    "ZHO",
+    "COL",
+    "LAW",
+    "PER",
+    "ALO",
+    "ALB",
+    "BOT",
+    "STR"
+  ]
+}

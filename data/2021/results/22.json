@@ -1,0 +1,29 @@
+{
+  "race_id": "2021-22",
+  "season": 2021,
+  "round": 22,
+  "circuit": "yas_marina",
+  "race": "Abu Dhabi",
+  "order": [
+    "VER",
+    "HAM",
+    "NOR",
+    "PER",
+    "SAI",
+    "BOT",
+    "LEC",
+    "TSU",
+    "OCO",
+    "RIC",
+    "ALO",
+    "GAS",
+    "STR",
+    "GIO",
+    "VET",
+    "LAT",
+    "RUS",
+    "RAI",
+    "MSC",
+    "MAZ"
+  ]
+}

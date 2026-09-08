@@ -1,0 +1,379 @@
+{
+  "season": 2022,
+  "races": [
+    {
+      "race_id": "2022-01",
+      "season": 2022,
+      "round": 1,
+      "circuit": "bahrain",
+      "race": "Sakhir",
+      "date": "2022-03-20",
+      "qualifying_utc": "2022-03-19T15:00:00Z",
+      "sprint": false,
+      "aliases": [
+        "bahrain",
+        "bahrain international circuit",
+        "sakhir",
+        "bahrain grand prix"
+      ]
+    },
+    {
+      "race_id": "2022-02",
+      "season": 2022,
+      "round": 2,
+      "circuit": "jeddah",
+      "race": "Jeddah",
+      "date": "2022-03-27",
+      "qualifying_utc": "2022-03-26T17:00:00Z",
+      "sprint": false,
+      "aliases": [
+        "jeddah",
+        "jeddah corniche circuit",
+        "saudi arabia",
+        "saudi arabian grand prix",
+        "saudi arabian"
+      ]
+    },
+    {
+      "race_id": "2022-03",
+      "season": 2022,
+      "round": 3,
+      "circuit": "albert_park",
+      "race": "Melbourne",
+      "date": "2022-04-10",
+      "qualifying_utc": "2022-04-09T06:00:00Z",
+      "sprint": false,
+      "aliases": [
+        "albert park",
+        "albert park grand prix circuit",
+        "melbourne",
+        "australia",
+        "australian grand prix",
+        "australian"
+      ]
+    },
+    {
+      "race_id": "2022-04",
+      "season": 2022,
+      "round": 4,
+      "circuit": "imola",
+      "race": "Imola",
+      "date": "2022-04-24",
+      "qualifying_utc": "2022-04-22T15:00:00Z",
+      "sprint": true,
+      "aliases": [
+        "imola",
+        "autodromo enzo e dino ferrari",
+        "italy",
+        "emilia romagna grand prix",
+        "emilia romagna"
+      ]
+    },
+    {
+      "race_id": "2022-05",
+      "season": 2022,
+      "round": 5,
+      "circuit": "miami",
+      "race": "Miami",
+      "date": "2022-05-08",
+      "qualifying_utc": "2022-05-07T20:00:00Z",
+      "sprint": false,
+      "aliases": [
+        "miami",
+        "miami international autodrome",
+        "usa",
+        "miami grand prix"
+      ]
+    },
+    {
+      "race_id": "2022-06",
+      "season": 2022,
+      "round": 6,
+      "circuit": "catalunya",
+      "race": "Barcelona",
+      "date": "2022-05-22",
+      "qualifying_utc": "2022-05-21T14:00:00Z",
+      "sprint": false,
+      "aliases": [
+        "catalunya",
+        "circuit de barcelona catalunya",
+        "barcelona",
+        "spain",
+        "spanish grand prix",
+        "spanish"
+      ]
+    },
+    {
+      "race_id": "2022-07",
+      "season": 2022,
+      "round": 7,
+      "circuit": "monaco",
+      "race": "Monte Carlo",
+      "date": "2022-05-29",
+      "qualifying_utc": "2022-05-28T14:00:00Z",
+      "sprint": false,
+      "aliases": [
+        "monaco",
+        "circuit de monaco",
+        "monte carlo",
+        "monaco grand prix"
+      ]
+    },
+    {
+      "race_id": "2022-08",
+      "season": 2022,
+      "round": 8,
+      "circuit": "baku",
+      "race": "Baku",
+      "date": "2022-06-12",
+      "qualifying_utc": "2022-06-11T14:00:00Z",
+      "sprint": false,
+      "aliases": [
+        "baku",
+        "baku city circuit",
+        "azerbaijan",
+        "azerbaijan grand prix"
+      ]
+    },
+    {
+      "race_id": "2022-09",
+      "season": 2022,
+      "round": 9,
+      "circuit": "villeneuve",
+      "race": "Montreal",
+      "date": "2022-06-19",
+      "qualifying_utc": "2022-06-18T20:00:00Z",
+      "sprint": false,
+      "aliases": [
+        "villeneuve",
+        "circuit gilles villeneuve",
+        "montreal",
+        "canada",
+        "canadian grand prix",
+        "canadian"
+      ]
+    },
+    {
+      "race_id": "2022-10",
+      "season": 2022,
+      "round": 10,
+      "circuit": "silverstone",
+      "race": "Silverstone",
+      "date": "2022-07-03",
+      "qualifying_utc": "2022-07-02T14:00:00Z",
+      "sprint": false,
+      "aliases": [
+        "silverstone",
+        "silverstone circuit",
+        "uk",
+        "british grand prix",
+        "british"
+      ]
+    },
+    {
+      "race_id": "2022-11",
+      "season": 2022,
+      "round": 11,
+      "circuit": "red_bull_ring",
+      "race": "Spielberg",
+      "date": "2022-07-10",
+      "qualifying_utc": "2022-07-08T15:00:00Z",
+      "sprint": true,
+      "aliases": [
+        "red bull ring",
+        "spielberg",
+        "austria",
+        "austrian grand prix",
+        "austrian"
+      ]
+    },
+    {
+      "race_id": "2022-12",
+      "season": 2022,
+      "round": 12,
+      "circuit": "ricard",
+      "race": "Le Castellet",
+      "date": "2022-07-24",
+      "qualifying_utc": "2022-07-23T14:00:00Z",
+      "sprint": false,
+      "aliases": [
+        "ricard",
+        "circuit paul ricard",
+        "le castellet",
+        "france",
+        "french grand prix",
+        "french"
+      ]
+    },
+    {
+      "race_id": "2022-13",
+      "season": 2022,
+      "round": 13,
+      "circuit": "hungaroring",
+      "race": "Budapest",
+      "date": "2022-07-31",
+      "qualifying_utc": "2022-07-30T14:00:00Z",
+      "sprint": false,
+      "aliases": [
+        "hungaroring",
+        "budapest",
+        "hungary",
+        "hungarian grand prix",
+        "hungarian"
+      ]
+    },
+    {
+      "race_id": "2022-14",
+      "season": 2022,
+      "round": 14,
+      "circuit": "spa",
+      "race": "Spa",
+      "date": "2022-08-28",
+      "qualifying_utc": "2022-08-27T14:00:00Z",
+      "sprint": false,
+      "aliases": [
+        "spa",
+        "circuit de spa francorchamps",
+        "belgium",
+        "belgian grand prix",
+        "belgian"
+      ]
+    },
+    {
+      "race_id": "2022-15",
+      "season": 2022,
+      "round": 15,
+      "circuit": "zandvoort",
+      "race": "Zandvoort",
+      "date": "2022-09-04",
+      "qualifying_utc": "2022-09-03T13:00:00Z",
+      "sprint": false,
+      "aliases": [
+        "zandvoort",
+        "circuit park zandvoort",
+        "netherlands",
+        "dutch grand prix",
+        "dutch"
+      ]
+    },
+    {
+      "race_id": "2022-16",
+      "season": 2022,
+      "round": 16,
+      "circuit": "monza",
+      "race": "Monza",
+      "date": "2022-09-11",
+      "qualifying_utc": "2022-09-10T14:00:00Z",
+      "sprint": false,
+      "aliases": [
+        "monza",
+        "autodromo nazionale di monza",
+        "italy",
+        "italian grand prix",
+        "italian"
+      ]
+    },
+    {
+      "race_id": "2022-17",
+      "season": 2022,
+      "round": 17,
+      "circuit": "marina_bay",
+      "race": "Marina Bay",
+      "date": "2022-10-02",
+      "qualifying_utc": "2022-10-01T13:00:00Z",
+      "sprint": false,
+      "aliases": [
+        "marina bay",
+        "marina bay street circuit",
+        "singapore",
+        "singapore grand prix"
+      ]
+    },
+    {
+      "race_id": "2022-18",
+      "season": 2022,
+      "round": 18,
+      "circuit": "suzuka",
+      "race": "Suzuka",
+      "date": "2022-10-09",
+      "qualifying_utc": "2022-10-08T06:00:00Z",
+      "sprint": false,
+      "aliases": [
+        "suzuka",
+        "suzuka circuit",
+        "japan",
+        "japanese grand prix",
+        "japanese"
+      ]
+    },
+    {
+      "race_id": "2022-19",
+      "season": 2022,
+      "round": 19,
+      "circuit": "americas",
+      "race": "Austin",
+      "date": "2022-10-23",
+      "qualifying_utc": "2022-10-22T22:00:00Z",
+      "sprint": false,
+      "aliases": [
+        "americas",
+        "circuit of the americas",
+        "austin",
+        "usa",
+        "united states grand prix",
+        "united states"
+      ]
+    },
+    {
+      "race_id": "2022-20",
+      "season": 2022,
+      "round": 20,
+      "circuit": "rodriguez",
+      "race": "Mexico City",
+      "date": "2022-10-30",
+      "qualifying_utc": "2022-10-29T20:00:00Z",
+      "sprint": false,
+      "aliases": [
+        "rodriguez",
+        "autodromo hermanos rodriguez",
+        "mexico city",
+        "mexico",
+        "mexico city grand prix"
+      ]
+    },
+    {
+      "race_id": "2022-21",
+      "season": 2022,
+      "round": 21,
+      "circuit": "interlagos",
+      "race": "São Paulo",
+      "date": "2022-11-13",
+      "qualifying_utc": "2022-11-11T19:00:00Z",
+      "sprint": true,
+      "aliases": [
+        "interlagos",
+        "autodromo jose carlos pace",
+        "sao paulo",
+        "brazil",
+        "sao paulo grand prix"
+      ]
+    },
+    {
+      "race_id": "2022-22",
+      "season": 2022,
+      "round": 22,
+      "circuit": "yas_marina",
+      "race": "Abu Dhabi",
+      "date": "2022-11-20",
+      "qualifying_utc": "2022-11-19T14:00:00Z",
+      "sprint": false,
+      "aliases": [
+        "yas marina",
+        "yas marina circuit",
+        "abu dhabi",
+        "uae",
+        "abu dhabi grand prix"
+      ]
+    }
+  ]
+}

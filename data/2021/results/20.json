@@ -1,0 +1,29 @@
+{
+  "race_id": "2021-20",
+  "season": 2021,
+  "round": 20,
+  "circuit": "losail",
+  "race": "Lusail",
+  "order": [
+    "HAM",
+    "VER",
+    "BOT",
+    "GAS",
+    "ALO",
+    "NOR",
+    "SAI",
+    "TSU",
+    "OCO",
+    "VET",
+    "PER",
+    "STR",
+    "LEC",
+    "RIC",
+    "RUS",
+    "RAI",
+    "LAT",
+    "GIO",
+    "MSC",
+    "MAZ"
+  ]
+}

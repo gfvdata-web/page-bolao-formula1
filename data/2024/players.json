@@ -1,0 +1,35 @@
+{
+  "_comment": "Temporada 2024 (Etapa 7, importada do historico do WhatsApp). Mesmo formato de data/2026/players.json. Ids canonicos reaproveitam os de 2026/2025 quando e a mesma pessoa. Decisoes de identidade fechadas com o usuario: 'pedro' (rankings de 2021) = 'francez'; 'sergio'/'sergin' = 'lage' (mesma pessoa, grafia mudou no meio de 2022); o 'Bernardo' dos rankings de 2021 e Bernardo Viana ('bernardo_v'), pessoa diferente do 'Bernardo Lavor' de 2025.",
+  "aliases": {
+    "arthur": "arthur",
+    "caliman": "caliman",
+    "cintia": "cintia",
+    "dalla": "dalla",
+    "eleazar": "eleazar",
+    "ferrari": "ferrari",
+    "francez": "francez",
+    "gui": "guilherme",
+    "guilherme": "guilherme",
+    "igor": "igor",
+    "lage": "lage",
+    "luciano": "luciano",
+    "pedro": "francez",
+    "sergin": "lage",
+    "sergio": "lage",
+    "vinicius": "vinicius"
+  },
+  "names": {
+    "arthur": "Arthur",
+    "caliman": "Caliman",
+    "cintia": "Cintia",
+    "dalla": "Dalla",
+    "eleazar": "Eleazar",
+    "ferrari": "Ferrari",
+    "francez": "Francez",
+    "guilherme": "Guilherme",
+    "igor": "Igor",
+    "lage": "Lage",
+    "luciano": "Luciano",
+    "vinicius": "Vinícius"
+  }
+}

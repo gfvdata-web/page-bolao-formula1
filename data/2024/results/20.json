@@ -1,0 +1,29 @@
+{
+  "race_id": "2024-20",
+  "season": 2024,
+  "round": 20,
+  "circuit": "rodriguez",
+  "race": "Mexico City",
+  "order": [
+    "SAI",
+    "VER",
+    "NOR",
+    "LEC",
+    "RUS",
+    "HAM",
+    "MAG",
+    "GAS",
+    "ALB",
+    "HUL",
+    "TSU",
+    "LAW",
+    "ALO",
+    "STR",
+    "BOT",
+    "COL",
+    "PIA",
+    "PER",
+    "OCO",
+    "ZHO"
+  ]
+}

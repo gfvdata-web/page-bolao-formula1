@@ -1,0 +1,29 @@
+{
+  "race_id": "2021-06",
+  "season": 2021,
+  "round": 6,
+  "circuit": "baku",
+  "race": "Baku",
+  "order": [
+    "LEC",
+    "HAM",
+    "VER",
+    "GAS",
+    "SAI",
+    "NOR",
+    "PER",
+    "TSU",
+    "ALO",
+    "BOT",
+    "VET",
+    "OCO",
+    "RIC",
+    "RAI",
+    "RUS",
+    "LAT",
+    "MSC",
+    "MAZ",
+    "STR",
+    "GIO"
+  ]
+}

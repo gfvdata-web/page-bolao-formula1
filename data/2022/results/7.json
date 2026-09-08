@@ -1,0 +1,29 @@
+{
+  "race_id": "2022-07",
+  "season": 2022,
+  "round": 7,
+  "circuit": "monaco",
+  "race": "Monte Carlo",
+  "order": [
+    "LEC",
+    "SAI",
+    "PER",
+    "VER",
+    "NOR",
+    "RUS",
+    "ALO",
+    "HAM",
+    "VET",
+    "OCO",
+    "TSU",
+    "BOT",
+    "MAG",
+    "RIC",
+    "MSC",
+    "ALB",
+    "GAS",
+    "STR",
+    "LAT",
+    "ZHO"
+  ]
+}

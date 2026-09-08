@@ -1,0 +1,29 @@
+{
+  "race_id": "2022-13",
+  "season": 2022,
+  "round": 13,
+  "circuit": "hungaroring",
+  "race": "Budapest",
+  "order": [
+    "RUS",
+    "SAI",
+    "LEC",
+    "NOR",
+    "OCO",
+    "ALO",
+    "HAM",
+    "BOT",
+    "RIC",
+    "VER",
+    "PER",
+    "ZHO",
+    "MAG",
+    "STR",
+    "MSC",
+    "TSU",
+    "ALB",
+    "VET",
+    "GAS",
+    "LAT"
+  ]
+}

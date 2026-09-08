@@ -1,0 +1,29 @@
+{
+  "race_id": "2022-12",
+  "season": 2022,
+  "round": 12,
+  "circuit": "ricard",
+  "race": "Le Castellet",
+  "order": [
+    "LEC",
+    "VER",
+    "PER",
+    "HAM",
+    "NOR",
+    "RUS",
+    "ALO",
+    "TSU",
+    "SAI",
+    "MAG",
+    "RIC",
+    "OCO",
+    "BOT",
+    "VET",
+    "ALB",
+    "GAS",
+    "STR",
+    "ZHO",
+    "MSC",
+    "LAT"
+  ]
+}

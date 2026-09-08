@@ -1,0 +1,29 @@
+{
+  "race_id": "2022-10",
+  "season": 2022,
+  "round": 10,
+  "circuit": "silverstone",
+  "race": "Silverstone",
+  "order": [
+    "SAI",
+    "VER",
+    "LEC",
+    "PER",
+    "HAM",
+    "NOR",
+    "ALO",
+    "RUS",
+    "ZHO",
+    "LAT",
+    "GAS",
+    "BOT",
+    "TSU",
+    "RIC",
+    "OCO",
+    "ALB",
+    "MAG",
+    "VET",
+    "MSC",
+    "STR"
+  ]
+}

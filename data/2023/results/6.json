@@ -1,0 +1,29 @@
+{
+  "race_id": "2023-06",
+  "season": 2023,
+  "round": 6,
+  "circuit": "monaco",
+  "race": "Monte Carlo",
+  "order": [
+    "VER",
+    "ALO",
+    "LEC",
+    "OCO",
+    "SAI",
+    "HAM",
+    "GAS",
+    "RUS",
+    "TSU",
+    "NOR",
+    "PIA",
+    "DEV",
+    "ALB",
+    "STR",
+    "BOT",
+    "SAR",
+    "MAG",
+    "HUL",
+    "ZHO",
+    "PER"
+  ]
+}

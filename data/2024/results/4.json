@@ -1,0 +1,29 @@
+{
+  "race_id": "2024-04",
+  "season": 2024,
+  "round": 4,
+  "circuit": "suzuka",
+  "race": "Suzuka",
+  "order": [
+    "VER",
+    "PER",
+    "NOR",
+    "SAI",
+    "ALO",
+    "PIA",
+    "HAM",
+    "LEC",
+    "RUS",
+    "TSU",
+    "RIC",
+    "HUL",
+    "BOT",
+    "ALB",
+    "OCO",
+    "STR",
+    "GAS",
+    "MAG",
+    "SAR",
+    "ZHO"
+  ]
+}

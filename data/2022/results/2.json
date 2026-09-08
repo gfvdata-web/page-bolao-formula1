@@ -1,0 +1,29 @@
+{
+  "race_id": "2022-02",
+  "season": 2022,
+  "round": 2,
+  "circuit": "jeddah",
+  "race": "Jeddah",
+  "order": [
+    "PER",
+    "LEC",
+    "SAI",
+    "VER",
+    "OCO",
+    "RUS",
+    "ALO",
+    "BOT",
+    "GAS",
+    "MAG",
+    "NOR",
+    "RIC",
+    "ZHO",
+    "MSC",
+    "STR",
+    "HAM",
+    "ALB",
+    "HUL",
+    "LAT",
+    "TSU"
+  ]
+}

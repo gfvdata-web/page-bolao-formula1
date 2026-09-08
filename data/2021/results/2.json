@@ -1,0 +1,29 @@
+{
+  "race_id": "2021-02",
+  "season": 2021,
+  "round": 2,
+  "circuit": "imola",
+  "race": "Imola",
+  "order": [
+    "HAM",
+    "PER",
+    "VER",
+    "LEC",
+    "GAS",
+    "RIC",
+    "NOR",
+    "BOT",
+    "OCO",
+    "STR",
+    "SAI",
+    "RUS",
+    "VET",
+    "LAT",
+    "ALO",
+    "RAI",
+    "GIO",
+    "MSC",
+    "MAZ",
+    "TSU"
+  ]
+}

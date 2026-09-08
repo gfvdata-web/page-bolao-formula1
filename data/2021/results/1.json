@@ -1,0 +1,29 @@
+{
+  "race_id": "2021-01",
+  "season": 2021,
+  "round": 1,
+  "circuit": "bahrain",
+  "race": "Sakhir",
+  "order": [
+    "VER",
+    "HAM",
+    "BOT",
+    "LEC",
+    "GAS",
+    "RIC",
+    "NOR",
+    "SAI",
+    "ALO",
+    "STR",
+    "PER",
+    "GIO",
+    "TSU",
+    "RAI",
+    "RUS",
+    "OCO",
+    "LAT",
+    "VET",
+    "MSC",
+    "MAZ"
+  ]
+}

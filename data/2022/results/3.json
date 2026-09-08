@@ -1,0 +1,29 @@
+{
+  "race_id": "2022-03",
+  "season": 2022,
+  "round": 3,
+  "circuit": "albert_park",
+  "race": "Melbourne",
+  "order": [
+    "LEC",
+    "VER",
+    "PER",
+    "NOR",
+    "HAM",
+    "RUS",
+    "RIC",
+    "OCO",
+    "SAI",
+    "ALO",
+    "GAS",
+    "BOT",
+    "TSU",
+    "ZHO",
+    "MSC",
+    "ALB",
+    "MAG",
+    "VET",
+    "LAT",
+    "STR"
+  ]
+}

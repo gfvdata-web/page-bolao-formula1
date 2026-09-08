@@ -1,0 +1,29 @@
+{
+  "race_id": "2021-17",
+  "season": 2021,
+  "round": 17,
+  "circuit": "americas",
+  "race": "Austin",
+  "order": [
+    "VER",
+    "HAM",
+    "PER",
+    "BOT",
+    "LEC",
+    "SAI",
+    "RIC",
+    "NOR",
+    "GAS",
+    "TSU",
+    "OCO",
+    "VET",
+    "GIO",
+    "ALO",
+    "RUS",
+    "STR",
+    "LAT",
+    "RAI",
+    "MSC",
+    "MAZ"
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "race_id": "2024-07",
+  "season": 2024,
+  "round": 7,
+  "circuit": "imola",
+  "race": "Imola",
+  "order": [
+    "VER",
+    "PIA",
+    "NOR",
+    "LEC",
+    "SAI",
+    "RUS",
+    "TSU",
+    "HAM",
+    "RIC",
+    "HUL",
+    "PER",
+    "OCO",
+    "STR",
+    "ALB",
+    "GAS",
+    "BOT",
+    "ZHO",
+    "MAG",
+    "ALO",
+    "SAR"
+  ]
+}

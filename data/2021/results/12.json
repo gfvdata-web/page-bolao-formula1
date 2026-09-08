@@ -1,0 +1,29 @@
+{
+  "race_id": "2021-12",
+  "season": 2021,
+  "round": 12,
+  "circuit": "spa",
+  "race": "Spa",
+  "order": [
+    "VER",
+    "RUS",
+    "HAM",
+    "RIC",
+    "VET",
+    "GAS",
+    "PER",
+    "BOT",
+    "OCO",
+    "NOR",
+    "LEC",
+    "LAT",
+    "SAI",
+    "ALO",
+    "STR",
+    "GIO",
+    "TSU",
+    "MSC",
+    "RAI",
+    "MAZ"
+  ]
+}

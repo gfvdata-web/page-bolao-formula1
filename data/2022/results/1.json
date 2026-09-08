@@ -1,0 +1,29 @@
+{
+  "race_id": "2022-01",
+  "season": 2022,
+  "round": 1,
+  "circuit": "bahrain",
+  "race": "Sakhir",
+  "order": [
+    "LEC",
+    "VER",
+    "SAI",
+    "PER",
+    "HAM",
+    "BOT",
+    "MAG",
+    "ALO",
+    "RUS",
+    "GAS",
+    "OCO",
+    "MSC",
+    "NOR",
+    "ALB",
+    "ZHO",
+    "TSU",
+    "HUL",
+    "RIC",
+    "STR",
+    "LAT"
+  ]
+}

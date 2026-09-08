@@ -1,0 +1,29 @@
+{
+  "race_id": "2022-18",
+  "season": 2022,
+  "round": 18,
+  "circuit": "suzuka",
+  "race": "Suzuka",
+  "order": [
+    "VER",
+    "LEC",
+    "SAI",
+    "PER",
+    "OCO",
+    "HAM",
+    "ALO",
+    "RUS",
+    "VET",
+    "NOR",
+    "RIC",
+    "BOT",
+    "TSU",
+    "ZHO",
+    "MSC",
+    "ALB",
+    "GAS",
+    "MAG",
+    "STR",
+    "LAT"
+  ]
+}

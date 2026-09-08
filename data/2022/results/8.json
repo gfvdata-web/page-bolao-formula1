@@ -1,0 +1,29 @@
+{
+  "race_id": "2022-08",
+  "season": 2022,
+  "round": 8,
+  "circuit": "baku",
+  "race": "Baku",
+  "order": [
+    "LEC",
+    "PER",
+    "VER",
+    "SAI",
+    "RUS",
+    "GAS",
+    "HAM",
+    "TSU",
+    "VET",
+    "ALO",
+    "NOR",
+    "RIC",
+    "OCO",
+    "ZHO",
+    "BOT",
+    "MAG",
+    "ALB",
+    "LAT",
+    "STR",
+    "MSC"
+  ]
+}

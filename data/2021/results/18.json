@@ -1,0 +1,29 @@
+{
+  "race_id": "2021-18",
+  "season": 2021,
+  "round": 18,
+  "circuit": "rodriguez",
+  "race": "Mexico City",
+  "order": [
+    "BOT",
+    "HAM",
+    "VER",
+    "PER",
+    "GAS",
+    "SAI",
+    "RIC",
+    "LEC",
+    "TSU",
+    "NOR",
+    "VET",
+    "RAI",
+    "RUS",
+    "GIO",
+    "OCO",
+    "ALO",
+    "LAT",
+    "MSC",
+    "MAZ",
+    "STR"
+  ]
+}

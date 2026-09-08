@@ -1,0 +1,29 @@
+{
+  "race_id": "2021-03",
+  "season": 2021,
+  "round": 3,
+  "circuit": "portimao",
+  "race": "Portimão",
+  "order": [
+    "BOT",
+    "HAM",
+    "VER",
+    "PER",
+    "SAI",
+    "OCO",
+    "NOR",
+    "LEC",
+    "GAS",
+    "VET",
+    "RUS",
+    "GIO",
+    "ALO",
+    "TSU",
+    "RAI",
+    "RIC",
+    "STR",
+    "LAT",
+    "MSC",
+    "MAZ"
+  ]
+}

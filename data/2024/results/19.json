@@ -1,0 +1,29 @@
+{
+  "race_id": "2024-19",
+  "season": 2024,
+  "round": 19,
+  "circuit": "americas",
+  "race": "Austin",
+  "order": [
+    "NOR",
+    "VER",
+    "SAI",
+    "LEC",
+    "PIA",
+    "RUS",
+    "GAS",
+    "ALO",
+    "MAG",
+    "PER",
+    "TSU",
+    "HUL",
+    "OCO",
+    "STR",
+    "LAW",
+    "ALB",
+    "COL",
+    "BOT",
+    "HAM",
+    "ZHO"
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "race_id": "2021-21",
+  "season": 2021,
+  "round": 21,
+  "circuit": "jeddah",
+  "race": "Jeddah",
+  "order": [
+    "HAM",
+    "BOT",
+    "VER",
+    "LEC",
+    "PER",
+    "GAS",
+    "NOR",
+    "TSU",
+    "OCO",
+    "GIO",
+    "RIC",
+    "RAI",
+    "ALO",
+    "RUS",
+    "SAI",
+    "LAT",
+    "VET",
+    "STR",
+    "MSC",
+    "MAZ"
+  ]
+}

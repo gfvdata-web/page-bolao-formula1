@@ -1,0 +1,29 @@
+{
+  "race_id": "2024-02",
+  "season": 2024,
+  "round": 2,
+  "circuit": "jeddah",
+  "race": "Jeddah",
+  "order": [
+    "VER",
+    "LEC",
+    "PER",
+    "ALO",
+    "PIA",
+    "NOR",
+    "RUS",
+    "HAM",
+    "TSU",
+    "STR",
+    "BEA",
+    "ALB",
+    "MAG",
+    "RIC",
+    "HUL",
+    "BOT",
+    "OCO",
+    "GAS",
+    "SAR",
+    "ZHO"
+  ]
+}

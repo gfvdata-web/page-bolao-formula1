@@ -1,0 +1,28 @@
+{
+  "race_id": "2021-05",
+  "season": 2021,
+  "round": 5,
+  "circuit": "monaco",
+  "race": "Monte Carlo",
+  "order": [
+    "LEC",
+    "VER",
+    "BOT",
+    "SAI",
+    "NOR",
+    "GAS",
+    "HAM",
+    "VET",
+    "PER",
+    "GIO",
+    "OCO",
+    "RIC",
+    "STR",
+    "RAI",
+    "RUS",
+    "TSU",
+    "ALO",
+    "LAT",
+    "MAZ"
+  ]
+}

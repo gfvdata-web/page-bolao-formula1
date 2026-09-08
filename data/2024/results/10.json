@@ -1,0 +1,29 @@
+{
+  "race_id": "2024-10",
+  "season": 2024,
+  "round": 10,
+  "circuit": "catalunya",
+  "race": "Barcelona",
+  "order": [
+    "NOR",
+    "VER",
+    "HAM",
+    "RUS",
+    "LEC",
+    "SAI",
+    "GAS",
+    "PER",
+    "OCO",
+    "PIA",
+    "ALO",
+    "BOT",
+    "HUL",
+    "STR",
+    "ZHO",
+    "MAG",
+    "TSU",
+    "RIC",
+    "ALB",
+    "SAR"
+  ]
+}

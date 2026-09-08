@@ -1,0 +1,29 @@
+{
+  "race_id": "2024-17",
+  "season": 2024,
+  "round": 17,
+  "circuit": "baku",
+  "race": "Baku",
+  "order": [
+    "LEC",
+    "PIA",
+    "SAI",
+    "PER",
+    "RUS",
+    "VER",
+    "HAM",
+    "ALO",
+    "COL",
+    "ALB",
+    "BEA",
+    "TSU",
+    "HUL",
+    "STR",
+    "GAS",
+    "RIC",
+    "NOR",
+    "BOT",
+    "ZHO",
+    "OCO"
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "race_id": "2024-13",
+  "season": 2024,
+  "round": 13,
+  "circuit": "hungaroring",
+  "race": "Budapest",
+  "order": [
+    "NOR",
+    "PIA",
+    "VER",
+    "SAI",
+    "HAM",
+    "LEC",
+    "ALO",
+    "STR",
+    "RIC",
+    "TSU",
+    "HUL",
+    "BOT",
+    "ALB",
+    "SAR",
+    "MAG",
+    "PER",
+    "RUS",
+    "ZHO",
+    "OCO",
+    "GAS"
+  ]
+}

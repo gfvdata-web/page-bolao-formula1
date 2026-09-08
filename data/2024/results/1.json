@@ -1,0 +1,29 @@
+{
+  "race_id": "2024-01",
+  "season": 2024,
+  "round": 1,
+  "circuit": "bahrain",
+  "race": "Sakhir",
+  "order": [
+    "VER",
+    "LEC",
+    "RUS",
+    "SAI",
+    "PER",
+    "ALO",
+    "NOR",
+    "PIA",
+    "HAM",
+    "HUL",
+    "TSU",
+    "STR",
+    "ALB",
+    "RIC",
+    "MAG",
+    "BOT",
+    "ZHO",
+    "SAR",
+    "OCO",
+    "GAS"
+  ]
+}

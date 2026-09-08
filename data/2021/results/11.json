@@ -1,0 +1,29 @@
+{
+  "race_id": "2021-11",
+  "season": 2021,
+  "round": 11,
+  "circuit": "hungaroring",
+  "race": "Budapest",
+  "order": [
+    "HAM",
+    "BOT",
+    "VER",
+    "PER",
+    "GAS",
+    "NOR",
+    "LEC",
+    "OCO",
+    "ALO",
+    "VET",
+    "RIC",
+    "STR",
+    "RAI",
+    "GIO",
+    "SAI",
+    "TSU",
+    "RUS",
+    "LAT",
+    "MAZ",
+    "MSC"
+  ]
+}

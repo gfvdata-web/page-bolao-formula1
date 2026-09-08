@@ -1,0 +1,29 @@
+{
+  "race_id": "2023-03",
+  "season": 2023,
+  "round": 3,
+  "circuit": "albert_park",
+  "race": "Melbourne",
+  "order": [
+    "VER",
+    "RUS",
+    "HAM",
+    "ALO",
+    "SAI",
+    "STR",
+    "LEC",
+    "ALB",
+    "GAS",
+    "HUL",
+    "OCO",
+    "TSU",
+    "NOR",
+    "MAG",
+    "DEV",
+    "PIA",
+    "ZHO",
+    "SAR",
+    "BOT",
+    "PER"
+  ]
+}

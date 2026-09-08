@@ -20,3 +20,6 @@ env/
 Thumbs.db
 .vscode/
 .idea/
+
+# Historico do WhatsApp (Etapa 7): mensagens do grupo, nao versionar
+historico_wpp/

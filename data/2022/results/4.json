@@ -1,0 +1,29 @@
+{
+  "race_id": "2022-04",
+  "season": 2022,
+  "round": 4,
+  "circuit": "imola",
+  "race": "Imola",
+  "order": [
+    "VER",
+    "LEC",
+    "NOR",
+    "MAG",
+    "ALO",
+    "RIC",
+    "PER",
+    "BOT",
+    "VET",
+    "SAI",
+    "RUS",
+    "MSC",
+    "HAM",
+    "ZHO",
+    "STR",
+    "TSU",
+    "GAS",
+    "LAT",
+    "OCO",
+    "ALB"
+  ]
+}

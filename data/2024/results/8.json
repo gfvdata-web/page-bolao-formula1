@@ -1,0 +1,29 @@
+{
+  "race_id": "2024-08",
+  "season": 2024,
+  "round": 8,
+  "circuit": "monaco",
+  "race": "Monte Carlo",
+  "order": [
+    "LEC",
+    "PIA",
+    "SAI",
+    "NOR",
+    "RUS",
+    "VER",
+    "HAM",
+    "TSU",
+    "ALB",
+    "GAS",
+    "OCO",
+    "RIC",
+    "STR",
+    "ALO",
+    "HUL",
+    "SAR",
+    "MAG",
+    "PER",
+    "BOT",
+    "ZHO"
+  ]
+}

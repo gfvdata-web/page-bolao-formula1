@@ -1,0 +1,29 @@
+{
+  "race_id": "2023-10",
+  "season": 2023,
+  "round": 10,
+  "circuit": "silverstone",
+  "race": "Silverstone",
+  "order": [
+    "VER",
+    "NOR",
+    "PIA",
+    "LEC",
+    "SAI",
+    "RUS",
+    "HAM",
+    "ALB",
+    "ALO",
+    "GAS",
+    "HUL",
+    "STR",
+    "OCO",
+    "SAR",
+    "PER",
+    "BOT",
+    "TSU",
+    "ZHO",
+    "DEV",
+    "MAG"
+  ]
+}

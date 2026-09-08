@@ -1,0 +1,29 @@
+{
+  "race_id": "2023-17",
+  "season": 2023,
+  "round": 17,
+  "circuit": "losail",
+  "race": "Lusail",
+  "order": [
+    "VER",
+    "RUS",
+    "HAM",
+    "ALO",
+    "LEC",
+    "PIA",
+    "GAS",
+    "OCO",
+    "BOT",
+    "NOR",
+    "TSU",
+    "SAI",
+    "PER",
+    "ALB",
+    "HUL",
+    "SAR",
+    "STR",
+    "LAW",
+    "MAG",
+    "ZHO"
+  ]
+}

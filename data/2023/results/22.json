@@ -1,0 +1,29 @@
+{
+  "race_id": "2023-22",
+  "season": 2023,
+  "round": 22,
+  "circuit": "yas_marina",
+  "race": "Abu Dhabi",
+  "order": [
+    "VER",
+    "LEC",
+    "PIA",
+    "RUS",
+    "NOR",
+    "TSU",
+    "ALO",
+    "HUL",
+    "PER",
+    "GAS",
+    "HAM",
+    "OCO",
+    "STR",
+    "ALB",
+    "RIC",
+    "SAI",
+    "MAG",
+    "BOT",
+    "ZHO",
+    "SAR"
+  ]
+}

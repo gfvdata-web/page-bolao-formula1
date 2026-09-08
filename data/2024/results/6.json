@@ -1,0 +1,29 @@
+{
+  "race_id": "2024-06",
+  "season": 2024,
+  "round": 6,
+  "circuit": "miami",
+  "race": "Miami",
+  "order": [
+    "VER",
+    "LEC",
+    "SAI",
+    "PER",
+    "NOR",
+    "PIA",
+    "RUS",
+    "HAM",
+    "HUL",
+    "TSU",
+    "STR",
+    "GAS",
+    "OCO",
+    "ALB",
+    "ALO",
+    "BOT",
+    "SAR",
+    "RIC",
+    "MAG",
+    "ZHO"
+  ]
+}
