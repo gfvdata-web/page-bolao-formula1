@@ -1605,6 +1605,32 @@ temporadas.
   Heurística **decorativa e imperfeita** (ex.: AlphaTauri→Alpine do Gasly
   colapsa; se incomodar, criar um mapa de override por piloto). CSS novo
   `.piloto-bolinhas` (wrapper flex, gap 0.15rem).
+- **Gráfico:** legenda removida; o "Parcial" agora vai **no rótulo do eixo X**
+  ao lado do ano atual (`scales.x.ticks.callback`), o dataset-fantasma de
+  legenda saiu.
+- **Card Medalhas:** contagem em `.jogador-medalhas` (flex `space-between`,
+  largura total) — `🥇 N` / `🥈 N` / `🥉 N` espaçados pra não confundir número
+  com emoji.
+- **Colisão de classe corrigida:** já existia `.jogador-card` (chips de filtro
+  dos gráficos de Ranking/Corridas). Os cards da página do jogador passaram a
+  usar **`.jogador-hist-card`** / `.jogador-hist-card__valor`.
+
+**Ajustes 2026-09-08f (mesma sub-etapa):**
+- **"Ranking de vitórias" agora lista TODOS os jogadores** que já disputaram uma
+  temporada (não só medalhistas) — `construirTabelaVitorias(hof, universo)`:
+  medalhistas primeiro (ordem 🥇/🥈/🥉), depois o resto em ordem alfabética com
+  0/0/0. Todos ganham botão **Acessar** → página do jogador liberada pra todos.
+- **Universo de jogadores:** `carregarTodasStandings()` +
+  `universoJogadores(map)` (id → `{nome, anos}`) varrendo os
+  `docs/data/<ano>/standings.json`. Carregado em `main()` (fluxo normal, junto
+  do `hof`) e reaproveitado na validação de `?jogador=` e dentro de
+  `renderPaginaJogador` (que agora recebe `standingsPreload` + `universo` e só
+  busca os `bets.json`). Nome de exibição do não-medalhista vem do `standings`.
+- **Dois badges "Maior trunfo" / "Maior decepção"** (`badgesTrunfoDecepcao`,
+  `.jogador-destaque`) entre o título "Apostas por piloto" e a tabela: melhor e
+  pior `pts/aposta` de um par **(piloto, temporada)**, considerando só pares em
+  que o jogador apostou nesse piloto **≥ 5 vezes** naquela temporada. Fonte:
+  `agregado.porAno`. Some se nenhum par qualifica.
 
 ## 9. Pendências / decisões adiadas
 

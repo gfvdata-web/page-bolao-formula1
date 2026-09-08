@@ -1652,14 +1652,39 @@ button.subaba[aria-selected="true"] {
 #hist-matriz-titulo { margin: 1.4rem 0 0.6rem; }
 
 /* ---------- Página do jogador (histórico entre temporadas) ---------- */
-.jogador-card { flex: 1 1 220px; }
-.jogador-card__valor {
+.jogador-hist-card { flex: 1 1 220px; }
+.jogador-hist-card__valor {
   font-size: 1.8rem;
   font-weight: 800;
   line-height: 1.1;
   margin-top: 0.1rem;
 }
-.jogador-card .corrida-card__extra { font-size: 0.85rem; }
+.jogador-hist-card .corrida-card__extra { font-size: 0.85rem; margin-top: 0.15rem; }
+
+.jogador-medalhas {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-top: 0.4rem;
+  padding: 0 0.3rem;
+}
+.jogador-medalhas__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 1.05rem;
+}
+.jogador-medalhas__item strong {
+  font-size: 1.1rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.jogador-destaque { border-left: 3px solid var(--borda); }
+.jogador-destaque--trunfo { border-left-color: var(--ok2, #1e9e5a); }
+.jogador-destaque--decepcao { border-left-color: var(--acento); }
+.jogador-destaque .jogador-hist-card__valor { font-size: 1.35rem; }
+.jogador-destaques { margin-top: 0.9rem; }
 
 #jogador-container .temporada-grafico-wrap { margin-top: 1.2rem; }
 #jogador-container .secao-intro { margin-top: 1.6rem; }

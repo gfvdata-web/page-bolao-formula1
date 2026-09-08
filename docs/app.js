@@ -2403,8 +2403,22 @@ function construirRankingHall(hof) {
     .sort((a, b) => b.ouro - a.ouro || b.prata - a.prata || b.bronze - a.bronze || a.nome.localeCompare(b.nome, "pt-BR"));
 }
 
-function renderRankingHall(hof) {
+// Tabela do "Ranking de vitórias": medalhistas primeiro (ordem 🥇/🥈/🥉), e
+// depois todos os outros jogadores que já disputaram uma temporada, em ordem
+// alfabética, com 0 medalhas.
+function construirTabelaVitorias(hof, universo) {
   const linhas = construirRankingHall(hof);
+  if (!universo) return linhas;
+  const jaListados = new Set(linhas.map((l) => l.id));
+  const extras = [...universo.entries()]
+    .filter(([id]) => !jaListados.has(id))
+    .map(([id, dados]) => ({ id, nome: dados.nome || nomeHall(hof, id), ouro: 0, prata: 0, bronze: 0 }))
+    .sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR"));
+  return [...linhas, ...extras];
+}
+
+function renderRankingHall(hof, universo) {
+  const linhas = construirTabelaVitorias(hof, universo);
   const tabela = el("table", { class: "hall-ranking-tabela" }, [
     el("thead", {}, [
       el("tr", {}, [
@@ -2464,14 +2478,39 @@ function renderListaAnosHall(hof, seasons) {
   return lista;
 }
 
-function renderHallOfFame(hof, seasons) {
+function renderHallOfFame(hof, seasons, universo) {
   const container = document.getElementById("hall-container");
   container.replaceChildren(
     el("div", { class: "hall-grid" }, [
-      el("div", { class: "hall-coluna" }, [el("h2", {}, ["Ranking de vitórias"]), renderRankingHall(hof)]),
+      el("div", { class: "hall-coluna" }, [el("h2", {}, ["Ranking de vitórias"]), renderRankingHall(hof, universo)]),
       el("div", { class: "hall-coluna" }, [el("h2", {}, ["Pódios por ano"]), renderListaAnosHall(hof, seasons)]),
     ])
   );
+}
+
+// Carrega os standings de todas as temporadas de seasons.json (paralelo).
+async function carregarTodasStandings() {
+  const anos = (SEASONS?.temporadas || []).map((t) => String(t.ano)).sort();
+  const mapa = new Map();
+  await Promise.all(
+    anos.map(async (ano) => {
+      const st = await carregarJson(`./data/${ano}/standings.json`).catch(() => null);
+      if (st) mapa.set(ano, st);
+    })
+  );
+  return mapa;
+}
+
+// id -> { nome, anos:[...] } de todo jogador que já apareceu num standings.
+function universoJogadores(standingsPorAno) {
+  const universo = new Map();
+  for (const [ano, st] of standingsPorAno) {
+    for (const p of st.players || []) {
+      if (!universo.has(p.player_id)) universo.set(p.player_id, { nome: p.name, anos: [] });
+      universo.get(p.player_id).anos.push(ano);
+    }
+  }
+  return universo;
 }
 
 // ---------- Página do jogador (histórico entre temporadas) ----------
@@ -2512,9 +2551,9 @@ function agregarApostasPorPiloto(betsPorAno, id) {
 }
 
 function jogadorCard(titulo, valorPrincipal, extra) {
-  return el("div", { class: "corrida-card jogador-card" }, [
+  return el("div", { class: "corrida-card jogador-hist-card" }, [
     el("div", { class: "corrida-card__titulo" }, [titulo]),
-    el("div", { class: "jogador-card__valor" }, [valorPrincipal]),
+    el("div", { class: "jogador-hist-card__valor" }, [valorPrincipal]),
     extra ? el("div", { class: "corrida-card__extra" }, [extra]) : null,
   ]);
 }
@@ -2571,15 +2610,6 @@ function renderGraficoPosicaoJogador(canvas, temporadas) {
       },
     },
   ];
-  if (parcialFinal) {
-    datasets.push({
-      label: `${anoAtual} parcial`,
-      data: labels.map(() => null),
-      borderColor: corJogador(0),
-      borderDash: [6, 5],
-      pointRadius: 0,
-    });
-  }
 
   new Chart(canvas, {
     type: "line",
@@ -2589,9 +2619,8 @@ function renderGraficoPosicaoJogador(canvas, temporadas) {
       maintainAspectRatio: false,
       interaction: { mode: "index", intersect: false },
       plugins: {
-        legend: { display: parcialFinal, position: "bottom" },
+        legend: { display: false },
         tooltip: {
-          filter: (item) => item.datasetIndex === 0,
           callbacks: {
             label: (ctx) => {
               const t = temporadas[ctx.dataIndex];
@@ -2601,6 +2630,14 @@ function renderGraficoPosicaoJogador(canvas, temporadas) {
         },
       },
       scales: {
+        x: {
+          ticks: {
+            callback(value, index) {
+              const lbl = this.getLabelForValue(value);
+              return parcialFinal && index === ultimoIdx ? `${lbl} Parcial` : lbl;
+            },
+          },
+        },
         y: {
           reverse: true,
           min: 0,
@@ -2710,9 +2747,9 @@ function modalFechaAoClicarFora() {
   });
 }
 
-async function renderPaginaJogador(id, hof) {
+async function renderPaginaJogador(id, hof, standingsPreload, universo) {
   MODO_JOGADOR = true;
-  const nome = nomeHall(hof, id);
+  const nome = (universo && universo.get(id) && universo.get(id).nome) || nomeHall(hof, id);
 
   document.querySelectorAll(".secao").forEach((s) => (s.hidden = true));
   const nav = document.querySelector("header .abas");
@@ -2738,16 +2775,17 @@ async function renderPaginaJogador(id, hof) {
   status.textContent = "Carregando histórico…";
 
   const anos = (SEASONS.temporadas || []).map((t) => String(t.ano)).sort((a, b) => Number(a) - Number(b));
-  const standingsPorAno = new Map();
+  const standingsPorAno = standingsPreload || new Map();
   const betsPorAno = new Map();
   await Promise.all(
     anos.map(async (ano) => {
-      const [st, bt] = await Promise.all([
-        carregarJson(`./data/${ano}/standings.json`).catch(() => null),
-        carregarJson(`./data/${ano}/bets.json`).catch(() => null),
-      ]);
-      if (st) standingsPorAno.set(ano, st);
+      const tarefas = [carregarJson(`./data/${ano}/bets.json`).catch(() => null)];
+      if (!standingsPorAno.has(ano)) {
+        tarefas.push(carregarJson(`./data/${ano}/standings.json`).catch(() => null));
+      }
+      const [bt, st] = await Promise.all(tarefas);
       if (bt) betsPorAno.set(ano, bt);
+      if (st) standingsPorAno.set(ano, st);
     })
   );
 
@@ -2771,7 +2809,11 @@ async function renderPaginaJogador(id, hof) {
     jogadorCard(
       "Medalhas",
       String(totalMedalhas),
-      `${medalhas.ouro} 🥇   ${medalhas.prata} 🥈   ${medalhas.bronze} 🥉`
+      el("div", { class: "jogador-medalhas" }, [
+        el("span", { class: "jogador-medalhas__item" }, ["🥇", el("strong", {}, [String(medalhas.ouro)])]),
+        el("span", { class: "jogador-medalhas__item" }, ["🥈", el("strong", {}, [String(medalhas.prata)])]),
+        el("span", { class: "jogador-medalhas__item" }, ["🥉", el("strong", {}, [String(medalhas.bronze)])]),
+      ])
     ),
     jogadorCard(
       "Temporadas disputadas",
@@ -2800,9 +2842,40 @@ async function renderPaginaJogador(id, hof) {
       ]),
     ])
   );
+  const badgesRendimento = badgesTrunfoDecepcao(agregado);
+  if (badgesRendimento) container.appendChild(badgesRendimento);
+
   const tabelaPilotos = el("div", { id: "jogador-pilotos-container" });
   container.appendChild(tabelaPilotos);
   renderApostasPorPiloto(tabelaPilotos, agregado, nome);
+}
+
+// Melhor e pior (piloto, temporada) pelo pts/aposta do top6 — só contam pares
+// em que o jogador apostou naquele piloto ao menos 5 vezes na temporada.
+function badgesTrunfoDecepcao(agregado) {
+  const pares = [];
+  for (const [ano, mapa] of agregado.porAno) {
+    for (const [cod, r] of mapa) {
+      if (r.vezes >= 5) pares.push({ ano, cod, vezes: r.vezes, pontos: r.pontos, media: r.pontos / r.vezes });
+    }
+  }
+  if (!pares.length) return null;
+  pares.sort((a, b) => b.media - a.media || b.vezes - a.vezes || b.pontos - a.pontos);
+  const trunfo = pares[0];
+  const decepcao = pares[pares.length - 1];
+
+  const card = (titulo, p, classe) =>
+    el("div", { class: `corrida-card jogador-hist-card jogador-destaque ${classe}` }, [
+      el("div", { class: "corrida-card__titulo" }, [titulo]),
+      el("div", { class: "jogador-hist-card__valor" }, [p.media.toFixed(1).replace(".", ","), " pts/aposta"]),
+      el("div", { class: "corrida-card__extra" }, [
+        `${p.cod} · ${p.ano} — ${p.pontos} pts em ${p.vezes} apostas`,
+      ]),
+    ]);
+
+  const cards = [card("Maior trunfo", trunfo, "jogador-destaque--trunfo")];
+  if (decepcao !== trunfo) cards.push(card("Maior decepção", decepcao, "jogador-destaque--decepcao"));
+  return el("div", { class: "corridas-cards jogador-destaques" }, cards);
 }
 
 // ---------- Abas ----------
@@ -3308,13 +3381,17 @@ async function main() {
 
     const jogId = jogadorPedido();
     if (jogId) {
-      const hof = await carregarJson("./data/hall_of_fame.json");
-      const valido = construirRankingHall(hof).some((l) => l.id === jogId);
+      const [hof, standingsPorAno] = await Promise.all([
+        carregarJson("./data/hall_of_fame.json"),
+        carregarTodasStandings(),
+      ]);
+      const universo = universoJogadores(standingsPorAno);
+      const valido = universo.has(jogId) || construirRankingHall(hof).some((l) => l.id === jogId);
       if (!valido) {
         location.replace(location.pathname);
         return;
       }
-      await renderPaginaJogador(jogId, hof);
+      await renderPaginaJogador(jogId, hof, standingsPorAno, universo);
       return;
     }
 
@@ -3408,8 +3485,11 @@ async function main() {
     configurarRendimento();
     atualizarRendimento();
 
-    const hof = await carregarJson("./data/hall_of_fame.json");
-    renderHallOfFame(hof, SEASONS);
+    const [hof, standingsTodas] = await Promise.all([
+      carregarJson("./data/hall_of_fame.json"),
+      carregarTodasStandings(),
+    ]);
+    renderHallOfFame(hof, SEASONS, universoJogadores(standingsTodas));
     document.getElementById("hall-status").textContent = "";
 
     if (location.hash === "#hall") {
