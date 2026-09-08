@@ -400,7 +400,11 @@ function mostrarFaixaTooltip(texto, alvo) {
   let left = r.left + r.width / 2 - tt.width / 2 + window.scrollX;
   left = Math.max(8, Math.min(left, window.scrollX + document.documentElement.clientWidth - tt.width - 8));
   _faixaTooltipEl.style.left = `${left}px`;
-  _faixaTooltipEl.style.top = `${r.top + window.scrollY - tt.height - 8}px`;
+  // Acima do alvo por padrão; abaixo quando não há espaço (ex.: cabeçalho de tabela).
+  const acima = r.top - tt.height - 8 >= 0;
+  _faixaTooltipEl.style.top = `${
+    (acima ? r.top - tt.height - 8 : r.bottom + 8) + window.scrollY
+  }px`;
 }
 function esconderFaixaTooltip() {
   if (_faixaTooltipEl) _faixaTooltipEl.hidden = true;
@@ -2488,16 +2492,18 @@ function nomeHall(hof, id) {
 }
 
 function construirRankingHall(hof) {
-  const contagem = new Map(); // id -> { ouro, prata, bronze }
-  const registrar = (id, medalha) => {
+  const contagem = new Map(); // id -> { ouro, prata, bronze, medalhasPorAno:[{ano,medalha}] }
+  const registrar = (id, medalha, ano) => {
     if (!id) return;
-    if (!contagem.has(id)) contagem.set(id, { ouro: 0, prata: 0, bronze: 0 });
-    contagem.get(id)[medalha]++;
+    if (!contagem.has(id)) contagem.set(id, { ouro: 0, prata: 0, bronze: 0, medalhasPorAno: [] });
+    const reg = contagem.get(id);
+    reg[medalha]++;
+    reg.medalhasPorAno.push({ ano: ano.ano, medalha });
   };
   for (const ano of hof.anos) {
-    registrar(ano.ouro, "ouro");
-    registrar(ano.prata, "prata");
-    registrar(ano.bronze, "bronze");
+    registrar(ano.ouro, "ouro", ano);
+    registrar(ano.prata, "prata", ano);
+    registrar(ano.bronze, "bronze", ano);
   }
   return [...contagem.entries()]
     .map(([id, m]) => ({ id, nome: nomeHall(hof, id), ...m }))
@@ -2519,60 +2525,156 @@ function construirTabelaVitorias(hof, universo) {
           ouro: 0,
           prata: 0,
           bronze: 0,
+          medalhasPorAno: [],
           semMedalha: true,
           pontos: dados.pontos || 0,
         }))
         .sort((a, b) => b.pontos - a.pontos || a.nome.localeCompare(b.nome, "pt-BR"))
     : [];
   const todas = [...linhas, ...extras];
-  // Anexa as estatísticas do universo (participações, pontos, % de acerto).
+  // Anexa as estatísticas do universo (participações, pontos, % de acerto e o
+  // detalhamento por temporada usado nos pop-ups).
   for (const linha of todas) {
     const u = universo && universo.get(linha.id);
-    linha.participacoes = u ? u.anos.length : 0;
+    linha.anos = u ? u.anos.slice() : [];
+    linha.porAno = u ? u.porAno : new Map();
+    linha.participacoes = linha.anos.length;
     linha.pontos = u ? u.pontos : linha.pontos || 0;
     linha.acerto = u && u.acertoDen ? (u.acertoNum / u.acertoDen) * 100 : null;
   }
   return todas;
 }
 
+const HALL_MEDALHA_EMOJI = { ouro: "🥇", prata: "🥈", bronze: "🥉" };
+const HALL_MEDALHA_NOME = { ouro: "Ouro", prata: "Prata", bronze: "Bronze" };
+
+// Liga um pop-up (o mesmo tooltip flutuante da faixa de calendário) a um
+// elemento: 1ª linha do texto vira título, o resto vira as linhas.
+function ligarDicaHall(node, texto) {
+  if (!texto) return node;
+  node.classList.add("hall-tem-dica");
+  node.setAttribute("tabindex", "0");
+  const mostra = (e) => mostrarFaixaTooltip(texto, e.currentTarget);
+  node.addEventListener("mouseenter", mostra);
+  node.addEventListener("focus", mostra);
+  node.addEventListener("mouseleave", esconderFaixaTooltip);
+  node.addEventListener("blur", esconderFaixaTooltip);
+  return node;
+}
+
 function renderRankingHall(hof, universo) {
   const linhas = construirTabelaVitorias(hof, universo);
+  const fmtPct = (n) => `${n.toFixed(1).replace(".", ",")}%`;
+
+  // Até onde cada "tecido de honra" desce: índice da última linha (na ordem
+  // exibida) que tem aquela medalha.
+  const ultimo = { ouro: -1, prata: -1, bronze: -1 };
+  linhas.forEach((l, i) => {
+    if (l.ouro > 0) ultimo.ouro = i;
+    if (l.prata > 0) ultimo.prata = i;
+    if (l.bronze > 0) ultimo.bronze = i;
+  });
+
+  const thMedalha = (medalha) =>
+    ligarDicaHall(
+      el("th", { class: `num hall-med hall-med--${medalha}` }, [HALL_MEDALHA_EMOJI[medalha]]),
+      `${HALL_MEDALHA_NOME[medalha]}\n${
+        { ouro: "1º", prata: "2º", bronze: "3º" }[medalha]
+      } lugar no ranking oficial da temporada`
+    );
+
   const tabela = el("table", { class: "hall-ranking-tabela" }, [
     el("thead", {}, [
       el("tr", {}, [
         el("th", {}, ["Jogador"]),
-        el("th", { class: "num" }, ["🥇"]),
-        el("th", { class: "num" }, ["🥈"]),
-        el("th", { class: "num" }, ["🥉"]),
-        el("th", { class: "num" }, ["Pódios"]),
-        el("th", { class: "num" }, ["Participações"]),
-        el("th", { class: "num" }, ["Pontos"]),
-        el("th", { class: "num", title: "Pontos feitos ÷ máximo possível nas corridas em que palpitou" }, ["Acerto"]),
+        thMedalha("ouro"),
+        thMedalha("prata"),
+        thMedalha("bronze"),
+        ligarDicaHall(
+          el("th", { class: "num" }, ["Pódios"]),
+          "Pódios\nTotal de pódios (ouro + prata + bronze) somando todas as temporadas"
+        ),
+        ligarDicaHall(
+          el("th", { class: "num" }, ["Participações"]),
+          "Participações\nTemporadas em que o jogador disputou o bolão"
+        ),
+        ligarDicaHall(
+          el("th", { class: "num" }, ["Pontos"]),
+          "Pontos\nSoma dos pontos oficiais de todas as temporadas disputadas"
+        ),
+        ligarDicaHall(
+          el("th", { class: "num" }, ["Acerto"]),
+          "Acerto\nPontos feitos ÷ máximo possível, contando só as corridas em que palpitou (teto por corrida de cada temporada)"
+        ),
         el("th", {}, [""]),
       ]),
     ]),
   ]);
+
   const tbody = el("tbody");
-  for (const linha of linhas) {
+  linhas.forEach((linha, i) => {
     const total = linha.ouro + linha.prata + linha.bronze;
-    const acerto =
-      linha.acerto == null ? "—" : `${linha.acerto.toFixed(1).replace(".", ",")}%`;
+    const acerto = linha.acerto == null ? "—" : fmtPct(linha.acerto);
+    const anosDesc = (linha.anos || []).slice().sort((a, b) => b.localeCompare(a));
+
+    const dicaPodios =
+      linha.medalhasPorAno && linha.medalhasPorAno.length
+        ? [
+            "Pódios por temporada",
+            ...linha.medalhasPorAno
+              .slice()
+              .sort((a, b) => b.ano - a.ano)
+              .map((m) => `${m.ano}   ${HALL_MEDALHA_EMOJI[m.medalha]} ${HALL_MEDALHA_NOME[m.medalha]}`),
+          ].join("\n")
+        : "Pódios por temporada\nNenhum pódio ainda";
+
+    const dicaPart = anosDesc.length
+      ? ["Temporadas disputadas", ...anosDesc].join("\n")
+      : null;
+
+    const dicaPontos = anosDesc.length
+      ? [
+          "Pontos por temporada",
+          ...anosDesc.map((a) => `${a}   ${linha.porAno?.get(a)?.pontos ?? 0}`),
+        ].join("\n")
+      : null;
+
+    const dicaAcerto = anosDesc.length
+      ? [
+          "Acerto por temporada",
+          ...anosDesc.map((a) => {
+            const d = linha.porAno?.get(a);
+            return `${a}   ${d && d.acertoDen ? fmtPct((d.acertoNum / d.acertoDen) * 100) : "—"}`;
+          }),
+        ].join("\n")
+      : null;
+
+    const celMedalha = (medalha, valor) => {
+      const dentro = i <= ultimo[medalha];
+      const classes = ["num"];
+      if (dentro) {
+        classes.push("hall-med", `hall-med--${medalha}`);
+        if (i === ultimo[medalha]) classes.push("hall-med--fim");
+      }
+      return el("td", { class: classes.join(" ") }, [String(valor)]);
+    };
+
     tbody.appendChild(
       el("tr", { class: linha.semMedalha ? "hall-linha--sem-medalha" : "" }, [
         el("td", {}, [linha.nome]),
-        el("td", { class: "num" }, [String(linha.ouro)]),
-        el("td", { class: "num" }, [String(linha.prata)]),
-        el("td", { class: "num" }, [String(linha.bronze)]),
-        el("td", { class: "num" }, [String(total)]),
-        el("td", { class: "num" }, [String(linha.participacoes)]),
-        el("td", { class: "num" }, [String(linha.pontos)]),
-        el("td", { class: "num" }, [acerto]),
+        celMedalha("ouro", linha.ouro),
+        celMedalha("prata", linha.prata),
+        celMedalha("bronze", linha.bronze),
+        ligarDicaHall(el("td", { class: "num" }, [String(total)]), dicaPodios),
+        ligarDicaHall(el("td", { class: "num" }, [String(linha.participacoes)]), dicaPart),
+        ligarDicaHall(el("td", { class: "num" }, [String(linha.pontos)]), dicaPontos),
+        ligarDicaHall(el("td", { class: "num" }, [acerto]), dicaAcerto),
         el("td", { class: "hall-acessar-cel" }, [
           el("a", { class: "hall-acessar", href: `?jogador=${encodeURIComponent(linha.id)}` }, ["Acessar"]),
         ]),
       ])
     );
-  }
+  });
   tabela.appendChild(tbody);
   return el("div", { class: "hall-ranking-wrap" }, [tabela]);
 }
@@ -2673,20 +2775,30 @@ function universoJogadores(standingsPorAno) {
     const maxPts = Number(st.format?.max_points) || 0;
     for (const p of st.players || []) {
       if (!universo.has(p.player_id))
-        universo.set(p.player_id, { nome: p.name, anos: [], pontos: 0, acertoNum: 0, acertoDen: 0 });
+        universo.set(p.player_id, {
+          nome: p.name,
+          anos: [],
+          pontos: 0,
+          acertoNum: 0,
+          acertoDen: 0,
+          porAno: new Map(), // ano -> { pontos, acertoNum, acertoDen }
+        });
       const reg = universo.get(p.player_id);
       reg.anos.push(ano);
-      reg.pontos += Number(p.total ?? p.total_somado ?? 0) || 0;
+      const pontos = Number(p.total ?? p.total_somado ?? 0) || 0;
+      reg.pontos += pontos;
       let feitos = Number(p.carry_points) || 0;
       let corridas = Number(p.carry_rounds) || 0;
       for (const v of Object.values(p.per_round || {})) {
         feitos += Number(v) || 0;
         corridas++;
       }
-      if (corridas && maxPts) {
-        reg.acertoNum += feitos;
-        reg.acertoDen += corridas * maxPts;
-      }
+      const temAcerto = corridas && maxPts;
+      const num = temAcerto ? feitos : 0;
+      const den = temAcerto ? corridas * maxPts : 0;
+      reg.acertoNum += num;
+      reg.acertoDen += den;
+      reg.porAno.set(ano, { pontos, acertoNum: num, acertoDen: den });
     }
   }
   return universo;

@@ -1595,20 +1595,17 @@ button.subaba[aria-selected="true"] {
   border-bottom: none;
 }
 
-/* Jogadores sem nenhuma medalha: fundo levemente mais escuro/sombreado. */
+/* Jogadores sem nenhuma medalha: fundo só um tom mais escuro, bem sutil. */
 .hall-ranking-tabela tbody tr.hall-linha--sem-medalha {
-  background: rgba(0, 0, 0, 0.055);
+  background: rgba(0, 0, 0, 0.03);
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) .hall-ranking-tabela tbody tr.hall-linha--sem-medalha {
-    background: rgba(0, 0, 0, 0.28);
+    background: rgba(0, 0, 0, 0.14);
   }
 }
 :root[data-theme="dark"] .hall-ranking-tabela tbody tr.hall-linha--sem-medalha {
-  background: rgba(0, 0, 0, 0.28);
-}
-.hall-ranking-tabela tbody tr.hall-linha--sem-medalha td {
-  color: var(--texto-fraco);
+  background: rgba(0, 0, 0, 0.14);
 }
 
 .hall-ranking-tabela td.num, .hall-ranking-tabela th.num {
@@ -1627,6 +1624,55 @@ button.subaba[aria-selected="true"] {
   white-space: nowrap;
 }
 .hall-ranking-tabela .hall-acessar { margin-left: 0; }
+
+/* Pop-ups (mesmo tooltip flutuante da faixa de calendário). */
+.hall-tem-dica { cursor: help; outline: none; }
+.hall-tem-dica:focus-visible { box-shadow: inset 0 0 0 2px var(--acento); }
+
+/* "Tecido de honra": faixa translúcida na cor da medalha descendo pela coluna,
+   só até a última linha de quem já ganhou aquela medalha. */
+.hall-ranking-tabela th.hall-med,
+.hall-ranking-tabela td.hall-med {
+  position: relative;
+}
+.hall-ranking-tabela td.hall-med { font-weight: 700; }
+.hall-ranking-tabela .hall-med--ouro {
+  background: linear-gradient(90deg,
+    rgba(212, 165, 35, 0.16), rgba(212, 165, 35, 0.4), rgba(212, 165, 35, 0.16));
+}
+.hall-ranking-tabela .hall-med--prata {
+  background: linear-gradient(90deg,
+    rgba(150, 158, 170, 0.2), rgba(150, 158, 170, 0.46), rgba(150, 158, 170, 0.2));
+}
+.hall-ranking-tabela .hall-med--bronze {
+  background: linear-gradient(90deg,
+    rgba(196, 110, 48, 0.16), rgba(196, 110, 48, 0.42), rgba(196, 110, 48, 0.16));
+}
+/* Cabeçalho: o tecido "nasce" mais forte no topo. */
+.hall-ranking-tabela th.hall-med { border-radius: 6px 6px 0 0; }
+.hall-ranking-tabela th.hall-med--ouro { background: rgba(212, 165, 35, 0.5); }
+.hall-ranking-tabela th.hall-med--prata { background: rgba(150, 158, 170, 0.55); }
+.hall-ranking-tabela th.hall-med--bronze { background: rgba(196, 110, 48, 0.5); }
+/* Vincos laterais do tecido. */
+.hall-ranking-tabela td.hall-med::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow: inset 8px 0 8px -8px rgba(0, 0, 0, 0.18),
+    inset -8px 0 8px -8px rgba(0, 0, 0, 0.18);
+}
+/* Ponta do tecido: dissolve antes de terminar a linha. */
+.hall-ranking-tabela td.hall-med--fim::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  pointer-events: none;
+  background: linear-gradient(to bottom, transparent 30%, var(--bg-card) 94%);
+}
 
 /* Switch Jogadores / Temporadas (mesmo estilo do switch de Rendimento). */
 .hall-switch { margin-top: 0.2rem; }
