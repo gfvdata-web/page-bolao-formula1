@@ -1585,6 +1585,27 @@ temporadas.
   `.jogador-pilotos-tabela`, `.jogador-modal`/`::backdrop`).
 - Testes Python inalterados (90, nenhum toca no front-end).
 
+**Ajustes 2026-09-08e (mesma sub-etapa):**
+- **Gráfico "Posição no ranking por temporada":** plugin inline
+  `pluginRotulos` (`afterDatasetsDraw`) desenha o **emoji da medalha** (🥇/🥈/🥉)
+  no ponto dos pódios (`pointRadius: 0` nesses pontos) e o **número da posição**
+  como rótulo limpo (cor `--texto-fraco`, acima do ponto) no resto. Eixo Y com
+  `min: 0` (era 1) e `max = jogadores + 1` — folga em cima/embaixo pra não
+  cortar o círculo/emoji; tick `0` escondido no `callback`.
+- **Linha 2025→2026 pontilhada** quando a última temporada do jogador é a
+  `SEASONS.atual` (`parcialFinal`): `segment.borderDash` no último segmento +
+  2º dataset só-legenda (`data` toda `null`, `borderDash`) com label
+  `"<ano> parcial"`; `legend` ligada só nesse caso, `tooltip.filter` ignora o
+  dataset fantasma.
+- **`chipPilotoEquipes(cod)` / `coresEquipesPiloto(cod)`:** no card "Apostas por
+  piloto" o chip mostra **uma bolinha por equipe** pela qual o piloto passou
+  nas temporadas do site (não só a cor de 2026). Cores são agrupadas por
+  distância RGB ≤ 130 (`_distCor`) — ajuste fino de tom da mesma equipe de um
+  ano pro outro conta como uma só; troca real de equipe vira cor nova.
+  Heurística **decorativa e imperfeita** (ex.: AlphaTauri→Alpine do Gasly
+  colapsa; se incomodar, criar um mapa de override por piloto). CSS novo
+  `.piloto-bolinhas` (wrapper flex, gap 0.15rem).
+
 ## 9. Pendências / decisões adiadas
 
 - Formato e importação dos **históricos** de anos anteriores.

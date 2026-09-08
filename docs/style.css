@@ -455,6 +455,13 @@ main {
   display: inline-block;
 }
 
+.piloto-bolinhas {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15rem;
+  flex-shrink: 0;
+}
+
 .ponto-badge {
   display: inline-block;
   padding: 0.1rem 0.5rem;

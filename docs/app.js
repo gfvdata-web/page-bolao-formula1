@@ -88,6 +88,50 @@ function corPiloto(codigo) {
   return CORES_PILOTO[codigo] || "#9aa0a8";
 }
 
+function _hexRgb(hex) {
+  const m = /^#?([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i.exec(hex || "");
+  return m ? [parseInt(m[1], 16), parseInt(m[2], 16), parseInt(m[3], 16)] : null;
+}
+
+function _distCor(a, b) {
+  const x = _hexRgb(a);
+  const y = _hexRgb(b);
+  if (!x || !y) return Infinity;
+  return Math.hypot(x[0] - y[0], x[1] - y[1], x[2] - y[2]);
+}
+
+// Todas as cores de equipe que um piloto usou nas temporadas do site. Cores
+// próximas (mesma equipe, tom ajustado de um ano para o outro) contam como uma
+// só; troca real de equipe entra como cor nova. Ordem cronológica.
+function coresEquipesPiloto(cod) {
+  const atual = String(SEASONS?.atual ?? "");
+  const anos = (SEASONS?.temporadas || []).map((t) => String(t.ano)).sort();
+  const grupos = []; // { repr }
+  for (const ano of anos) {
+    const mapa = CORES_PILOTO_ANO[ano] || (ano === atual ? CORES_PILOTO : null);
+    const hex = mapa && mapa[cod];
+    if (!hex) continue;
+    const grupo = grupos.find((g) => _distCor(g.repr, hex) <= 130);
+    if (grupo) grupo.repr = hex; // mantém o tom mais recente da equipe
+    else grupos.push({ repr: hex });
+  }
+  return grupos.map((g) => g.repr);
+}
+
+// Chip do piloto com uma ou mais bolinhas (uma por equipe pela qual passou).
+function chipPilotoEquipes(cod) {
+  const cores = coresEquipesPiloto(cod);
+  const paleta = cores.length ? cores : [corPiloto(cod)];
+  return el("span", { class: "piloto-chip" }, [
+    el(
+      "span",
+      { class: "piloto-bolinhas" },
+      paleta.map((c) => el("span", { class: "piloto-bolinha", style: `background:${c}` }))
+    ),
+    cod,
+  ]);
+}
+
 // Paleta cíclica para linhas de jogador nos gráficos (decorativo, sem relação com equipes).
 const PALETA_JOGADOR = [
   "#e10600", "#1e9e5a", "#3671C6", "#FF8000", "#c99a00",
@@ -2478,30 +2522,76 @@ function jogadorCard(titulo, valorPrincipal, extra) {
 function renderGraficoPosicaoJogador(canvas, temporadas) {
   const labels = temporadas.map((t) => String(t.ano));
   const dados = temporadas.map((t) => t.posicao);
-  const maxPos = Math.max(4, ...temporadas.map((t) => t.jogadores));
+  // +1 de folga em cima e embaixo pra não cortar o círculo / emoji da medalha.
+  const maxPos = Math.max(4, ...temporadas.map((t) => t.jogadores)) + 1;
+  const MEDALHA = { 1: "🥇", 2: "🥈", 3: "🥉" };
+  const anoAtual = String(SEASONS?.atual ?? "");
+  const ultimoIdx = temporadas.length - 1;
+  const parcialFinal = temporadas.length > 1 && labels[ultimoIdx] === anoAtual;
+
+  // Emoji da medalha nos pódios; número da posição (rótulo limpo) no resto.
+  const pluginRotulos = {
+    id: "rotulosPosicaoJogador",
+    afterDatasetsDraw(chart) {
+      const { ctx } = chart;
+      const meta = chart.getDatasetMeta(0);
+      meta.data.forEach((pt, i) => {
+        const pos = dados[i];
+        if (pos == null) return;
+        ctx.save();
+        ctx.textAlign = "center";
+        if (MEDALHA[pos]) {
+          ctx.textBaseline = "middle";
+          ctx.font = "17px system-ui, 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif";
+          ctx.fillText(MEDALHA[pos], pt.x, pt.y);
+        } else {
+          ctx.textBaseline = "bottom";
+          ctx.font = "700 11px system-ui, sans-serif";
+          ctx.fillStyle = corCss("--texto-fraco");
+          ctx.fillText(String(pos), pt.x, pt.y - 9);
+        }
+        ctx.restore();
+      });
+    },
+  };
+
+  const datasets = [
+    {
+      label: "Posição no ranking",
+      data: dados,
+      borderColor: corJogador(0),
+      backgroundColor: corJogador(0),
+      tension: 0.2,
+      pointRadius: dados.map((p) => (MEDALHA[p] ? 0 : 4)),
+      pointHoverRadius: dados.map((p) => (MEDALHA[p] ? 0 : 6)),
+      spanGaps: true,
+      segment: {
+        borderDash: (ctx) =>
+          parcialFinal && ctx.p1DataIndex === ultimoIdx ? [6, 5] : undefined,
+      },
+    },
+  ];
+  if (parcialFinal) {
+    datasets.push({
+      label: `${anoAtual} parcial`,
+      data: labels.map(() => null),
+      borderColor: corJogador(0),
+      borderDash: [6, 5],
+      pointRadius: 0,
+    });
+  }
+
   new Chart(canvas, {
     type: "line",
-    data: {
-      labels,
-      datasets: [
-        {
-          label: "Posição no ranking",
-          data: dados,
-          borderColor: corJogador(0),
-          backgroundColor: corJogador(0),
-          tension: 0.2,
-          pointRadius: 5,
-          pointHoverRadius: 7,
-          spanGaps: true,
-        },
-      ],
-    },
+    data: { labels, datasets },
     options: {
       responsive: true,
       maintainAspectRatio: false,
+      interaction: { mode: "index", intersect: false },
       plugins: {
-        legend: { display: false },
+        legend: { display: parcialFinal, position: "bottom" },
         tooltip: {
+          filter: (item) => item.datasetIndex === 0,
           callbacks: {
             label: (ctx) => {
               const t = temporadas[ctx.dataIndex];
@@ -2513,13 +2603,14 @@ function renderGraficoPosicaoJogador(canvas, temporadas) {
       scales: {
         y: {
           reverse: true,
-          min: 1,
+          min: 0,
           max: maxPos,
-          ticks: { stepSize: 1, precision: 0 },
+          ticks: { stepSize: 1, callback: (v) => (v >= 1 ? v : "") },
           title: { display: true, text: "Posição" },
         },
       },
     },
+    plugins: [pluginRotulos],
   });
 }
 
@@ -2549,7 +2640,7 @@ function renderApostasPorPiloto(container, agregado, nome) {
     const media = (l.pontos / l.vezes).toFixed(2).replace(".", ",");
     const abrir = () => abrirModalPilotoAno(l.cod, agregado.porAno, nome);
     const linha = el("tr", { class: "jogador-pilotos-tabela__linha", tabindex: "0", role: "button" }, [
-      el("td", {}, [chipPiloto(l.cod)]),
+      el("td", {}, [chipPilotoEquipes(l.cod)]),
       el("td", { class: "num" }, [String(l.vezes)]),
       el("td", { class: "num" }, [String(l.pontos)]),
       el("td", { class: "num" }, [media]),
@@ -2600,7 +2691,7 @@ function abrirModalPilotoAno(cod, porAno, nome) {
 
   corpo.append(
     el("div", { class: "jogador-modal__header" }, [
-      el("h3", {}, [`${nome} · apostas em `, chipPiloto(cod), " por temporada"]),
+      el("h3", {}, [`${nome} · apostas em `, chipPilotoEquipes(cod), " por temporada"]),
       el("button", { type: "button", class: "jogador-modal__fechar", "aria-label": "Fechar" }, ["✕"]),
     ]),
     temAlgum ? tabela : el("p", { class: "status" }, ["Sem apostas neste piloto."])
