@@ -1470,6 +1470,28 @@ temporadas.
   `total_recalculado`, `total_somado` no `standings.json`) ainda **não** é
   exibida — segue como sub-etapa seguinte.
 
+**Ajustes 2026-09-08d (mesma sub-etapa):**
+- **Bug do gráfico "Posição no ranking" (Ranking/Corridas):** em temporada sem
+  compensação, o jogador que não apostava uma rodada sumia da linha acumulada
+  (e da posição daquela rodada). `construirSerieJogador` passou a empurrar o
+  acumulado **sempre** (`soma` não vira `null` — o total só não cresce) e o
+  marcador some (`pointRadius 0`) nas rodadas sem palpite; o gráfico "por
+  corrida" continua com o buraco (correto). O acumulado agora **parte de
+  `carry_points`** (2021), então bate com o `total` do `standings.json`.
+- **Matriz posição × corrida movida para Ranking/Geral nas temporadas
+  finalizadas** (`MODO_HISTORICO`): `aplicarModoHistorico()` realoca o nó
+  `#subsecao-historico` para dentro de `#subsecao-ranking-geral` (com um
+  `<h2 id="hist-matriz-titulo">`), esconde o card `.corrida-detalhe-card`
+  ("Pontuação da corrida" — leitura corrida-a-corrida não serve p/ ano
+  fechado) e a sub-aba **Histórico** (Preferência vira o padrão de Palpites).
+  Só relocação de DOM — nenhuma função de render mudou de assinatura.
+- **`rodadasMatriz()` (nova):** em `MODO_HISTORICO` as colunas da matriz vêm do
+  **calendário inteiro** (`calendarGlobal`), não só de `standings.rounds`.
+  Rodada sem palpite → coluna com cabeçalho `(sem registro)`
+  (`.hist-matriz__sem-registro`/`.hist-matriz__rnota`) e `—` em todas as
+  células (o `histCelula` já devolvia `—` para rodada ausente). 2026 (não
+  finalizada) segue mostrando só as rodadas consolidadas.
+
 ## 9. Pendências / decisões adiadas
 
 - Formato e importação dos **históricos** de anos anteriores.
