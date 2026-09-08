@@ -263,19 +263,22 @@ main {
   margin-bottom: 1rem;
 }
 
-/* Faixa fina de bandeiras do calendário (Ranking / Geral) */
+/* Faixa fina de bandeiras do calendário (Ranking / Geral) — sempre 1 linha:
+   os círculos encolhem para caber todas as corridas na largura disponível. */
 .corridas-flags {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   justify-content: space-between;
-  gap: 3px;
+  gap: 2px;
   margin-bottom: 0.45rem;
   padding: 0 0.1rem;
 }
 .corridas-flags:empty { display: none; }
 .corridas-flags__item {
-  width: 1.05rem;
-  height: 1.05rem;
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 1.05rem;
+  aspect-ratio: 1 / 1;
   border-radius: 50%;
   border: 1px solid var(--borda);
   background: var(--bg-card);
@@ -283,7 +286,7 @@ main {
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  font-size: 0.82rem;
+  font-size: 0.7rem;
   line-height: 1;
   cursor: default;
   transition: transform 0.1s ease;

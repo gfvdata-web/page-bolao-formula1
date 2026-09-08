@@ -1665,6 +1665,13 @@ temporadas.
   `R{n} · {país}` / `{circuito}` / `Quali: {qualifying_utc→America/Sao_Paulo}`
   (ou "fim de semana de {data}" quando não há horário).
 - Sem gerador Python, sem mudança em `docs/data/*.json`.
+- **Sempre 1 linha:** `.corridas-flags` é `flex-wrap: nowrap`; os itens são
+  `flex: 1 1 0; min-width: 0; max-width: 1.05rem; aspect-ratio: 1/1` — encolhem
+  no celular para caber todas as corridas numa linha só (no desktop batem o teto
+  de 1.05rem e o `space-between` distribui a folga).
+- **Rodapé:** 2ª linha "Todos os horários referidos nesta página são relativos
+  ao horário oficial de Brasília"; as marcações "(horário de Brasília)" saíram
+  dos cards e do tooltip (`formatarQualiBrasilia` só formata, sem sufixo).
 
 ## 9. Pendências / decisões adiadas
 
