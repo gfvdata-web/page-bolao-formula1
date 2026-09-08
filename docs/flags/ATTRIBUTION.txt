@@ -1,0 +1,4 @@
+Bandeiras (arquivos .svg desta pasta): Twemoji
+https://github.com/jdecked/twemoji  —  (c) Twitter, Inc. e colaboradores
+Licenca: CC-BY 4.0 (https://creativecommons.org/licenses/by/4.0/)
+Usadas na faixa de calendario do site (Ranking > Geral), redimensionadas.

@@ -306,7 +306,108 @@ function cardInfo(titulo, valor, extra) {
   ]);
 }
 
+// slug do circuito (circuitId da Jolpica) -> país + ISO2 (bandeira em
+// docs/flags/<iso>.svg, Twemoji CC-BY 4.0, versionadas no repo) + nome do
+// traçado. Puramente para a faixa de calendário do Ranking/Geral (decorativo).
+const CIRCUITOS = {
+  albert_park:   { pais: "Austrália",       iso: "au", nome: "Albert Park" },
+  shanghai:      { pais: "China",           iso: "cn", nome: "Shanghai" },
+  suzuka:        { pais: "Japão",           iso: "jp", nome: "Suzuka" },
+  bahrain:       { pais: "Bahrein",         iso: "bh", nome: "Sakhir" },
+  jeddah:        { pais: "Arábia Saudita",  iso: "sa", nome: "Jeddah" },
+  miami:         { pais: "Estados Unidos",  iso: "us", nome: "Miami" },
+  imola:         { pais: "Itália",          iso: "it", nome: "Imola" },
+  monaco:        { pais: "Mônaco",          iso: "mc", nome: "Monte Carlo" },
+  catalunya:     { pais: "Espanha",         iso: "es", nome: "Barcelona-Catalunya" },
+  villeneuve:    { pais: "Canadá",          iso: "ca", nome: "Gilles Villeneuve" },
+  red_bull_ring: { pais: "Áustria",         iso: "at", nome: "Red Bull Ring" },
+  silverstone:   { pais: "Reino Unido",     iso: "gb", nome: "Silverstone" },
+  hungaroring:   { pais: "Hungria",         iso: "hu", nome: "Hungaroring" },
+  spa:           { pais: "Bélgica",         iso: "be", nome: "Spa-Francorchamps" },
+  zandvoort:     { pais: "Holanda",         iso: "nl", nome: "Zandvoort" },
+  monza:         { pais: "Itália",          iso: "it", nome: "Monza" },
+  madring:       { pais: "Espanha",         iso: "es", nome: "Madring (Madri)" },
+  baku:          { pais: "Azerbaijão",      iso: "az", nome: "Baku" },
+  marina_bay:    { pais: "Singapura",       iso: "sg", nome: "Marina Bay" },
+  americas:      { pais: "Estados Unidos",  iso: "us", nome: "Circuit of the Americas" },
+  rodriguez:     { pais: "México",          iso: "mx", nome: "Hermanos Rodríguez" },
+  interlagos:    { pais: "Brasil",          iso: "br", nome: "Interlagos" },
+  vegas:         { pais: "Estados Unidos",  iso: "us", nome: "Las Vegas Strip" },
+  losail:        { pais: "Catar",           iso: "qa", nome: "Lusail" },
+  yas_marina:    { pais: "Emirados Árabes", iso: "ae", nome: "Yas Marina" },
+  istanbul:      { pais: "Turquia",         iso: "tr", nome: "Istanbul Park" },
+  sochi:         { pais: "Rússia",          iso: "ru", nome: "Sochi Autodrom" },
+  portimao:      { pais: "Portugal",        iso: "pt", nome: "Algarve (Portimão)" },
+  ricard:        { pais: "França",          iso: "fr", nome: "Paul Ricard" },
+};
+
+// Faixa fina de bandeiras (uma por corrida do calendário), acima dos cards do
+// Ranking/Geral. Na temporada atual, as corridas já contabilizadas ficam
+// escurecidas; em temporadas passadas, todas normais.
+function renderFaixaCalendario(standings, calendar) {
+  const alvo = document.getElementById("corridas-flags");
+  if (!alvo) return;
+  const races = (calendar?.races || []).slice().sort((a, b) => a.round - b.round);
+  const consolidadas = new Set((standings?.rounds || []).map((r) => r.round));
+  alvo.replaceChildren(
+    ...races.map((r) => {
+      const info = CIRCUITOS[r.circuit] || { pais: r.race, iso: null, nome: r.race };
+      const passada = !MODO_HISTORICO && consolidadas.has(r.round);
+      const quali = r.qualifying_utc
+        ? formatarQualiBrasilia(r.qualifying_utc)
+        : r.date
+        ? `quali no fim de semana de ${formatarDataBR(r.date)}`
+        : "data a confirmar";
+      const item = el(
+        "span",
+        {
+          class: "corridas-flags__item" + (passada ? " corridas-flags__item--passada" : ""),
+          tabindex: "0",
+          role: "img",
+          "aria-label": `R${r.round} ${info.pais}`,
+        },
+        [
+          info.iso
+            ? el("img", { src: `./flags/${info.iso}.svg`, alt: "", loading: "lazy", "aria-hidden": "true" })
+            : "🏁",
+        ]
+      );
+      const texto = `R${r.round} · ${info.pais}\n${info.nome}\nQuali: ${quali}`;
+      const mostra = (e) => mostrarFaixaTooltip(texto, e.currentTarget);
+      item.addEventListener("mouseenter", mostra);
+      item.addEventListener("focus", mostra);
+      item.addEventListener("mouseleave", esconderFaixaTooltip);
+      item.addEventListener("blur", esconderFaixaTooltip);
+      return item;
+    })
+  );
+}
+
+let _faixaTooltipEl = null;
+function mostrarFaixaTooltip(texto, alvo) {
+  if (!_faixaTooltipEl) {
+    _faixaTooltipEl = el("div", { class: "faixa-tooltip", role: "tooltip" });
+    document.body.appendChild(_faixaTooltipEl);
+  }
+  _faixaTooltipEl.replaceChildren(
+    ...texto.split("\n").map((linha, i) =>
+      el("div", { class: i === 0 ? "faixa-tooltip__titulo" : "faixa-tooltip__linha" }, [linha])
+    )
+  );
+  _faixaTooltipEl.hidden = false;
+  const r = alvo.getBoundingClientRect();
+  const tt = _faixaTooltipEl.getBoundingClientRect();
+  let left = r.left + r.width / 2 - tt.width / 2 + window.scrollX;
+  left = Math.max(8, Math.min(left, window.scrollX + document.documentElement.clientWidth - tt.width - 8));
+  _faixaTooltipEl.style.left = `${left}px`;
+  _faixaTooltipEl.style.top = `${r.top + window.scrollY - tt.height - 8}px`;
+}
+function esconderFaixaTooltip() {
+  if (_faixaTooltipEl) _faixaTooltipEl.hidden = true;
+}
+
 function renderCorridas(standings, calendar) {
+  renderFaixaCalendario(standings, calendar);
   const container = document.getElementById("corridas-cards");
 
   if (MODO_HISTORICO) {

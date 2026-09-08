@@ -1631,6 +1631,32 @@ temporadas.
   pior `pts/aposta` de um par **(piloto, temporada)**, considerando só pares em
   que o jogador apostou nesse piloto **≥ 5 vezes** naquela temporada. Fonte:
   `agregado.porAno`. Some se nenhum par qualifica.
+- **Pop-up de apostas por piloto/ano** ganhou coluna **"Pts / aposta"**.
+- **Jogadores sem medalha no "Ranking de vitórias"** agora ordenados pelo
+  **somatório de pontos** de todas as temporadas (desc), não alfabético;
+  linha com fundo sombreado (`tr.hall-linha--sem-medalha`). `universoJogadores`
+  acumula `pontos` (`p.total ?? p.total_somado`).
+
+**Ajustes 2026-09-08g (mesma sub-etapa) — faixa de bandeiras no Ranking/Geral:**
+- **Faixa fina de círculos** (`#corridas-flags` → `renderFaixaCalendario`),
+  **acima** de `#corridas-cards` na sub-aba **Geral** do Ranking: um círculo por
+  corrida do calendário (`calendar.races`), da borda esquerda à direita
+  (`display:flex; justify-content:space-between; flex-wrap`). Cada círculo tem a
+  bandeira do país do circuito. Na temporada atual, as corridas já em
+  `standings.rounds` ficam **escurecidas** (`--passada`, grayscale+opacity); em
+  `MODO_HISTORICO` **nenhuma** escurece.
+- **Bandeiras versionadas no repo:** `docs/flags/<iso2>.svg` (25 arquivos,
+  **Twemoji, CC-BY 4.0**, `docs/flags/ATTRIBUTION.txt`) — sem CDN/rede em
+  runtime, ~37 KB somando todas, cache do navegador. `<img loading="lazy">`
+  dentro do círculo (`object-fit: cover`).
+- **`CIRCUITOS`** (`app.js`): mapa `circuitId` (slug da Jolpica) → `{pais, iso,
+  nome}` para os 29 circuitos que já apareceram em algum calendário 2021–2026.
+  Circuito fora do mapa cai num 🏁 genérico.
+- **Tooltip próprio** (`.faixa-tooltip`, `mostrarFaixaTooltip`/`esconder…`, um
+  único nó reaproveitado, posicionado acima do círculo) no hover/foco:
+  `R{n} · {país}` / `{circuito}` / `Quali: {qualifying_utc→America/Sao_Paulo}`
+  (ou "fim de semana de {data}" quando não há horário).
+- Sem gerador Python, sem mudança em `docs/data/*.json`.
 
 ## 9. Pendências / decisões adiadas
 
