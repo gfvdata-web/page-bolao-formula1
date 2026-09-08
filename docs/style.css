@@ -1641,3 +1641,14 @@ button.subaba[aria-selected="true"] {
   cursor: default;
 }
 .hall-acessar--ativa:hover { background: transparent; color: var(--texto-fraco); }
+
+#hist-matriz-titulo { margin: 1.4rem 0 0.6rem; }
+
+.hist-matriz__sem-registro { opacity: 0.55; }
+.hist-matriz__rnota {
+  display: block;
+  font-size: 0.62rem;
+  font-weight: 400;
+  color: var(--texto-fraco);
+  font-style: italic;
+}

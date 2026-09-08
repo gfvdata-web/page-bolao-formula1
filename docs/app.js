@@ -47,6 +47,7 @@ let TEMPORADA = "2026";
 let SEASONS = null;
 let FORMATO = { top_n: 6, bonus: true, bonus_points: 1, compensation: true, max_points: 13 };
 let MODO_HISTORICO = false;
+let calendarGlobal = null;
 
 function anoPedido() {
   const p = new URLSearchParams(location.search).get("ano");
@@ -792,15 +793,35 @@ function histCelula(round, linhaIdx, tipo) {
   return el("td", {}, [cel]);
 }
 
+// Colunas da matriz. Numa temporada finalizada mostramos TODAS as corridas do
+// calendário — inclusive as sem palpite registrado, marcadas "(sem registro)"
+// e com "—" em todas as células — para a leitura ser da temporada inteira.
+function rodadasMatriz() {
+  const consolidadas = histStandings.rounds.slice().sort((a, b) => a.round - b.round);
+  if (!MODO_HISTORICO || !calendarGlobal) {
+    return consolidadas.map((r) => ({ round: r.round, race: r.race, semRegistro: false }));
+  }
+  const porRound = new Map(consolidadas.map((r) => [r.round, r]));
+  return calendarGlobal.races
+    .slice()
+    .sort((a, b) => a.round - b.round)
+    .map((r) =>
+      porRound.has(r.round)
+        ? { round: r.round, race: porRound.get(r.round).race, semRegistro: false }
+        : { round: r.round, race: r.race, semRegistro: true }
+    );
+}
+
 function renderHistMatriz() {
-  const rodadas = histStandings.rounds.slice().sort((a, b) => a.round - b.round);
+  const rodadas = rodadasMatriz();
   const thead = el("thead", {}, [
     el("tr", {}, [
       el("th", { class: "hist-matriz__pos" }, [""]),
       ...rodadas.map((r) =>
-        el("th", {}, [
+        el("th", { class: r.semRegistro ? "hist-matriz__sem-registro" : "" }, [
           el("span", { class: "hist-matriz__rlabel" }, [`R${r.round}`]),
           el("span", { class: "hist-matriz__rcorrida" }, [r.race]),
+          r.semRegistro ? el("span", { class: "hist-matriz__rnota" }, ["(sem registro)"]) : null,
         ])
       ),
     ]),
@@ -970,11 +991,13 @@ function construirSerieJogador(jogador, rounds, cor) {
   const pointRadius = [];
   const pointBackgroundColor = [];
   const compensadoPorIndice = [];
-  let soma = 0;
+  // O acumulado (e a posição no ranking) parte do saldo de corridas anteriores
+  // às que têm palpite (2021), para bater com o `total` do standings.
+  let soma = jogador.carry_points || 0;
 
   for (const rodada of rounds) {
     const numero = rodada.round;
-    let valor;
+    let valor; // pontos da rodada (por-rodada); null = não apostou aquela corrida
     if (compensadas.has(numero)) {
       valor = rodada.min_score;
       pointStyle.push("triangle");
@@ -982,15 +1005,18 @@ function construirSerieJogador(jogador, rounds, cor) {
       pointBackgroundColor.push("#fff");
       compensadoPorIndice.push(true);
     } else {
-      valor = jogador.per_round[numero] ?? null;
+      const p = jogador.per_round[numero];
+      valor = p ?? null;
       pointStyle.push("circle");
-      pointRadius.push(4);
+      // Sem palpite e sem compensação: a linha acumulada segue reta (o total
+      // não muda), sem marcador — o jogador NÃO some do ranking daquela rodada.
+      pointRadius.push(p == null ? 0 : 4);
       pointBackgroundColor.push(cor);
       compensadoPorIndice.push(false);
     }
     porRodada.push(valor);
     soma += valor ?? 0;
-    acumulado.push(valor == null ? null : soma);
+    acumulado.push(soma);
   }
 
   const base = {
@@ -2576,6 +2602,34 @@ function aplicarModoHistorico() {
       const geral = document.querySelector('#secao-ranking button.subaba[data-subaba="geral"]');
       if (geral) geral.click();
     }
+
+    // Temporada finalizada: a leitura corrida-a-corrida ("Pontuação da corrida")
+    // dá lugar à matriz de todas as corridas, que sai de Palpites/Histórico para
+    // Ranking/Geral. A sub-aba Histórico deixa de existir (Preferência vira o
+    // padrão de Palpites).
+    const historico = document.getElementById("subsecao-historico");
+    const geralSec = document.getElementById("subsecao-ranking-geral");
+    const detalheCard = document.querySelector("#subsecao-ranking-geral .corrida-detalhe-card");
+    const regras = geralSec && geralSec.querySelector(".regras-pontuacao");
+    if (historico && geralSec && detalheCard && regras) {
+      detalheCard.hidden = true;
+      if (!document.getElementById("hist-matriz-titulo")) {
+        geralSec.insertBefore(
+          el("h2", { id: "hist-matriz-titulo" }, ["Palpites por corrida"]),
+          regras
+        );
+      }
+      geralSec.insertBefore(historico, regras);
+      historico.hidden = false;
+    }
+    const btnHist = document.querySelector('#secao-palpites button.subaba[data-subaba="historico"]');
+    const btnPref = document.querySelector('#secao-palpites button.subaba[data-subaba="preferencia"]');
+    const secPref = document.getElementById("subsecao-preferencia");
+    if (btnHist) btnHist.hidden = true;
+    if (btnHist && btnHist.getAttribute("aria-selected") === "true" && btnPref && secPref) {
+      btnPref.setAttribute("aria-selected", "true");
+      secPref.hidden = false;
+    }
   }
 }
 
@@ -2616,6 +2670,7 @@ async function main() {
     });
 
     const calendar = await carregarJson(caminhoDados("calendar"));
+    calendarGlobal = calendar;
     renderCorridas(standings, calendar);
     renderTabelaCorridas(standings);
     if (!MODO_HISTORICO) renderSimulador(standings, calendar);
