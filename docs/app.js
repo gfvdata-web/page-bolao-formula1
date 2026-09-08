@@ -2707,6 +2707,7 @@ function abrirModalPilotoAno(cod, porAno, nome) {
         el("th", {}, ["Temporada"]),
         el("th", { class: "num" }, ["Vezes apostado"]),
         el("th", { class: "num" }, ["Pontos ganhos"]),
+        el("th", { class: "num" }, ["Pts / aposta"]),
       ]),
     ]),
   ]);
@@ -2716,11 +2717,13 @@ function abrirModalPilotoAno(cod, porAno, nome) {
     const reg = porAno.get(ano).get(cod);
     if (!reg) continue;
     temAlgum = true;
+    const media = reg.vezes ? (reg.pontos / reg.vezes).toFixed(2).replace(".", ",") : "—";
     tbody.appendChild(
       el("tr", {}, [
         el("td", {}, [String(ano)]),
         el("td", { class: "num" }, [String(reg.vezes)]),
         el("td", { class: "num" }, [String(reg.pontos)]),
+        el("td", { class: "num" }, [media]),
       ])
     );
   }
