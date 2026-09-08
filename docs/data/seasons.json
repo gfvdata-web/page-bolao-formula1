@@ -1,11 +1,96 @@
 {
+  "atual": 2026,
   "temporadas": [
-    2026,
-    2025,
-    2024,
-    2023,
-    2022,
-    2021
-  ],
-  "atual": 2026
+    {
+      "ano": 2026,
+      "format": {
+        "top_n": 6,
+        "bonus": true,
+        "bonus_points": 1,
+        "compensation": true,
+        "max_points": 13
+      },
+      "rodadas": 13,
+      "rodadas_totais": 22,
+      "parcial": false,
+      "faltando": []
+    },
+    {
+      "ano": 2025,
+      "format": {
+        "top_n": 6,
+        "bonus": true,
+        "bonus_points": 1,
+        "compensation": true,
+        "max_points": 13
+      },
+      "rodadas": 23,
+      "rodadas_totais": 24,
+      "parcial": true,
+      "faltando": [
+        "Rodada 19 (Austin): sem palpites recuperados"
+      ]
+    },
+    {
+      "ano": 2024,
+      "format": {
+        "top_n": 6,
+        "bonus": true,
+        "bonus_points": 2,
+        "compensation": false,
+        "max_points": 14
+      },
+      "rodadas": 24,
+      "rodadas_totais": 24,
+      "parcial": false,
+      "faltando": []
+    },
+    {
+      "ano": 2023,
+      "format": {
+        "top_n": 6,
+        "bonus": false,
+        "bonus_points": 0,
+        "compensation": false,
+        "max_points": 12
+      },
+      "rodadas": 22,
+      "rodadas_totais": 22,
+      "parcial": false,
+      "faltando": []
+    },
+    {
+      "ano": 2022,
+      "format": {
+        "top_n": 6,
+        "bonus": false,
+        "bonus_points": 0,
+        "compensation": false,
+        "max_points": 12
+      },
+      "rodadas": 20,
+      "rodadas_totais": 22,
+      "parcial": true,
+      "faltando": [
+        "Rodada 4 (Imola): sem palpites recuperados",
+        "Rodada 5 (Miami): sem palpites recuperados"
+      ]
+    },
+    {
+      "ano": 2021,
+      "format": {
+        "top_n": 5,
+        "bonus": false,
+        "bonus_points": 0,
+        "compensation": false,
+        "max_points": 10
+      },
+      "rodadas": 12,
+      "rodadas_totais": 22,
+      "parcial": true,
+      "faltando": [
+        "Rodadas 1–10: só o saldo acumulado, sem detalhe por corrida"
+      ]
+    }
+  ]
 }

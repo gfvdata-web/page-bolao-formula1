@@ -1,5 +1,21 @@
 {
   "season": 2022,
+  "format": {
+    "top_n": 6,
+    "bonus": false,
+    "bonus_points": 0,
+    "compensation": false,
+    "max_points": 12
+  },
+  "meta": {
+    "rodadas": 20,
+    "rodadas_totais": 22,
+    "parcial": true,
+    "faltando": [
+      "Rodada 4 (Imola): sem palpites recuperados",
+      "Rodada 5 (Miami): sem palpites recuperados"
+    ]
+  },
   "rounds": [
     {
       "round": 1,

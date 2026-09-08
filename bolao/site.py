@@ -35,6 +35,10 @@ from .normalize import normalize_key
 from .parser import parse_sheet
 from .scoring import PlayerScore, Result, score_sheet
 
+# Temporada corrente do projeto (a que o site abre por padrão). As temporadas
+# anteriores são acessadas via ?ano=YYYY e entram em "modo histórico".
+TEMPORADA_ATUAL = 2026
+
 
 def _load_json(caminho: Path) -> dict:
     return json.loads(caminho.read_text(encoding="utf-8"))
@@ -365,8 +369,53 @@ def generate(
                 "compensation_total": ac["compensation_total"],
             }
         )
+    # Formato da temporada (top_n / piloto da rodada / compensação) — o
+    # front-end lê isto para adaptar as visualizações (2021 = top5 sem bônus,
+    # 2024 = bônus vale 2, etc.).
+    fmt_doc = {
+        "top_n": fmt.top_n,
+        "bonus": fmt.bonus,
+        "bonus_points": fmt.bonus_points if fmt.bonus else 0,
+        "compensation": fmt.compensation,
+        "max_points": fmt.max_points,
+    }
+
+    # Cobertura da temporada: o que falta para o site avisar numa faixa quando
+    # uma temporada antiga está incompleta.
+    consolidadas = {info["round"] for info in round_infos}
+    nome_por_rodada = {r["round"]: r["race"] for r in calendar["races"]}
+    # Fins de semana de Sprint contam (o quali principal vale) — ver CONTEXTO.
+    total_rodadas = len(calendar["races"])
+    carry_ate = int(_load_json(saldo_path).get("ate_rodada", 0)) if saldo_path.exists() else 0
+    faltando: list[str] = []
+    if carry_ate:
+        faltando.append(
+            f"Rodadas 1–{carry_ate}: só o saldo acumulado, sem detalhe por corrida"
+        )
+    if consolidadas:
+        ultima = max(consolidadas)
+        for r in sorted(nome_por_rodada):
+            if carry_ate < r < ultima and r not in consolidadas:
+                faltando.append(f"Rodada {r} ({nome_por_rodada[r]}): sem palpites recuperados")
+    if avulsos_path.exists():
+        bruto_av = _load_json(avulsos_path)
+        if not bruto_av.get("incluir_no_ranking"):
+            for rstr in sorted(bruto_av.get("rounds", {}), key=int):
+                nome = nome_por_rodada.get(int(rstr), f"R{rstr}")
+                faltando.append(
+                    f"Rodada {rstr} ({nome}): placar publicado, ainda fora do ranking"
+                )
+    meta_doc = {
+        "rodadas": len(consolidadas),
+        "rodadas_totais": total_rodadas,
+        "parcial": bool(faltando),
+        "faltando": faltando,
+    }
+
     standings = {
         "season": season,
+        "format": fmt_doc,
+        "meta": meta_doc,
         "rounds": round_infos,
         "players": standings_players,
     }
@@ -438,17 +487,22 @@ def generate(
     # --- docs/data/seasons.json (índice das temporadas disponíveis) ---
     # Varre as pastas irmãs com standings.json — assim gerar uma temporada não
     # apaga as outras do índice. O seletor de temporada do site lê este arquivo.
-    temporadas = sorted(
-        (
-            int(p.parent.name)
-            for p in (docs_dir / "data").glob("*/standings.json")
-            if p.parent.name.isdigit()
-        ),
-        reverse=True,
-    )
+    entradas = []
+    for p in (docs_dir / "data").glob("*/standings.json"):
+        if not p.parent.name.isdigit():
+            continue
+        st = _load_json(p)
+        entradas.append(
+            {
+                "ano": int(p.parent.name),
+                "format": st.get("format", {}),
+                **st.get("meta", {}),
+            }
+        )
+    entradas.sort(key=lambda e: e["ano"], reverse=True)
     _dump_json(
         docs_dir / "data" / "seasons.json",
-        {"temporadas": temporadas, "atual": temporadas[0] if temporadas else season},
+        {"atual": TEMPORADA_ATUAL, "temporadas": entradas},
     )
 
     return {

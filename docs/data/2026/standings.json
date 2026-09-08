@@ -1,5 +1,18 @@
 {
   "season": 2026,
+  "format": {
+    "top_n": 6,
+    "bonus": true,
+    "bonus_points": 1,
+    "compensation": true,
+    "max_points": 13
+  },
+  "meta": {
+    "rodadas": 13,
+    "rodadas_totais": 22,
+    "parcial": false,
+    "faltando": []
+  },
   "rounds": [
     {
       "round": 1,

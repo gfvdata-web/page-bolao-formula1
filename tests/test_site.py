@@ -130,6 +130,18 @@ class TestGenerate(unittest.TestCase):
         self.assertEqual(self.standings["rounds"][0]["min_score"], 9)
         self.assertEqual(self.standings["rounds"][1]["min_score"], 9)
 
+    def test_standings_expoe_formato_e_meta(self):
+        fmt = self.standings["format"]
+        self.assertEqual(fmt["top_n"], 6)
+        self.assertTrue(fmt["bonus"])
+        self.assertEqual(fmt["bonus_points"], 1)
+        self.assertTrue(fmt["compensation"])
+        self.assertEqual(fmt["max_points"], 13)
+        meta = self.standings["meta"]
+        self.assertEqual(meta["rodadas"], 2)
+        self.assertIn("parcial", meta)
+        self.assertIn("faltando", meta)
+
     def test_top6_e_bonus_totais(self):
         joao = next(p for p in self.standings["players"] if p["player_id"] == "joao")
         self.assertEqual(joao["top6_total"], 22)  # 12 + 10

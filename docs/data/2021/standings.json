@@ -1,5 +1,20 @@
 {
   "season": 2021,
+  "format": {
+    "top_n": 5,
+    "bonus": false,
+    "bonus_points": 0,
+    "compensation": false,
+    "max_points": 10
+  },
+  "meta": {
+    "rodadas": 12,
+    "rodadas_totais": 22,
+    "parcial": true,
+    "faltando": [
+      "Rodadas 1–10: só o saldo acumulado, sem detalhe por corrida"
+    ]
+  },
   "rounds": [
     {
       "round": 11,

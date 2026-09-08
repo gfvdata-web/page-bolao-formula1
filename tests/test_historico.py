@@ -106,8 +106,13 @@ class TestHistorico(unittest.TestCase):
     def test_seasons_json_lista_a_temporada(self):
         generate(self.data, self.docs, SEASON)
         seasons = json.loads((self.docs / "data" / "seasons.json").read_text(encoding="utf-8"))
-        self.assertEqual(seasons["temporadas"], [SEASON])
+        anos = [t["ano"] for t in seasons["temporadas"]]
+        self.assertEqual(anos, [SEASON])
         self.assertEqual(seasons["atual"], SEASON)
+        entrada = seasons["temporadas"][0]
+        self.assertEqual(entrada["format"]["top_n"], 6)
+        self.assertTrue(entrada["format"]["bonus"])
+        self.assertIn("parcial", entrada)
 
 
 if __name__ == "__main__":

@@ -1,5 +1,20 @@
 {
   "season": 2025,
+  "format": {
+    "top_n": 6,
+    "bonus": true,
+    "bonus_points": 1,
+    "compensation": true,
+    "max_points": 13
+  },
+  "meta": {
+    "rodadas": 23,
+    "rodadas_totais": 24,
+    "parcial": true,
+    "faltando": [
+      "Rodada 19 (Austin): sem palpites recuperados"
+    ]
+  },
   "rounds": [
     {
       "round": 1,

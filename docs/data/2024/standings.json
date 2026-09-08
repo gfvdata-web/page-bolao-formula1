@@ -1,5 +1,18 @@
 {
   "season": 2024,
+  "format": {
+    "top_n": 6,
+    "bonus": true,
+    "bonus_points": 2,
+    "compensation": false,
+    "max_points": 14
+  },
+  "meta": {
+    "rodadas": 24,
+    "rodadas_totais": 24,
+    "parcial": false,
+    "faltando": []
+  },
   "rounds": [
     {
       "round": 1,
