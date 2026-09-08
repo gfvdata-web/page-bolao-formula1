@@ -1317,21 +1317,19 @@ cobertura (2 corridas) e 2023 tem uma compensação que o recálculo não conhec
 sorteado foi o VER, os **10 jogadores cravaram P1** e ele fez a pole — o placar
 publicado bate **10/10 com 2 pts e 0/10 com 1 pt**.
 
-**Pendência aberta — o "+1 por palpitar" no começo de 2024.** Mesmo com o bônus
-valendo 2, as rodadas 1 a 5 continuam com **1 ponto a mais para cada jogador
-que mandou um chute, mesmo errando**. Testando pares (acerto, erro) contra as
-pontuações publicadas:
+**O "+1 por palpitar" de 2024 NÃO é regra oficial** (decidido com o usuário em
+2026-09-08 — não reabrir). Nas rodadas 1 a 5 de 2024 o placar publicado dá 1
+ponto a mais a cada jogador que mandou um chute do piloto da rodada, mesmo
+errando; ajustar o modelo para isso levaria a conferência de 48% para 80% das
+linhas. **O usuário não reconhece essa regra**, então ela fica registrada
+apenas como observação — provavelmente erro de conta do grupo na época. Os
+dados usam a regra oficial: **acerto = 2 pts em 2024, erro = 0**.
 
-| regra do bônus | linhas que batem | rodadas exatas |
-|----------------|------------------|----------------|
+| regra do bônus testada | linhas que batem | rodadas exatas |
+|------------------------|------------------|----------------|
 | acerto 1, erro 0 | 49/114 (43%) | 0/12 |
-| acerto 2, erro 0 (**em uso**) | 55/114 (48%) | 1/12 |
-| **acerto 2, erro 1 até a R5; depois 1 e 0** | **91/114 (80%)** | 3/12 |
-
-Com a terceira regra, R2/R4/R5 fecham 10/10, R1 8/10, R3 8/9 e R7 8/10. Não foi
-adotada porque muda o **3º lugar de 2024** (o recálculo dá `caliman`, o
-`hall_of_fame` diz `lage`) e a decisão é do usuário. Os dados gravados usam
-acerto = 2, erro = 0.
+| acerto 2, erro 0 (**oficial, em uso**) | 55/114 (48%) | 1/12 |
+| acerto 2, erro 1 até a R5; depois 1 e 0 (*descartada*) | 91/114 (80%) | 3/12 |
 
 **Correções de atribuição de rodada (2026-09-08):** `resolve_round` ganhou
 `passado=True` — mensagem de **pontuação/classificação** só pode falar de
