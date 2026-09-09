@@ -1649,29 +1649,29 @@ button.subaba[aria-selected="true"] {
   white-space: pre;
 }
 
-/* Destaque das medalhas: mesma cor no cabeçalho e nas células de quem ganhou
-   (valor > 0). Sem fade — cor chapada + vincos laterais discretos. */
+/* Destaque das medalhas — "grifo": barrinha na cor da medalha embaixo do
+   número, igual no cabeçalho e nas células de quem ganhou (valor > 0). Quem
+   tem 0 fica esmaecido. */
 .hall-ranking-tabela th.hall-med,
 .hall-ranking-tabela td.hall-med {
   position: relative;
   font-weight: 700;
 }
-.hall-ranking-tabela .hall-med--ouro { background: rgba(212, 165, 35, 0.22); }
-.hall-ranking-tabela .hall-med--prata { background: rgba(150, 158, 170, 0.26); }
-.hall-ranking-tabela .hall-med--bronze { background: rgba(196, 110, 48, 0.22); }
-.hall-ranking-tabela th.hall-med { border-radius: 6px 6px 0 0; }
-.hall-ranking-tabela th.hall-med--ouro { background: rgba(212, 165, 35, 0.38); }
-.hall-ranking-tabela th.hall-med--prata { background: rgba(150, 158, 170, 0.42); }
-.hall-ranking-tabela th.hall-med--bronze { background: rgba(196, 110, 48, 0.38); }
-.hall-ranking-tabela th.hall-med::before,
-.hall-ranking-tabela td.hall-med::before {
+.hall-ranking-tabela th.hall-med { color: var(--texto); }
+.hall-ranking-tabela td.hall-med0 { color: var(--texto-fraco); }
+.hall-ranking-tabela .hall-med::after {
   content: "";
   position: absolute;
-  inset: 0;
+  left: 0.5rem;
+  right: 0.5rem;
+  bottom: 5px;
+  height: 3px;
+  border-radius: 2px;
   pointer-events: none;
-  box-shadow: inset 8px 0 8px -8px rgba(0, 0, 0, 0.16),
-    inset -8px 0 8px -8px rgba(0, 0, 0, 0.16);
 }
+.hall-ranking-tabela .hall-med--ouro::after { background: #d8b24a; }
+.hall-ranking-tabela .hall-med--prata::after { background: #aab0bb; }
+.hall-ranking-tabela .hall-med--bronze::after { background: #c8824a; }
 
 /* Switch Jogadores / Temporadas (mesmo estilo do switch de Rendimento). */
 .hall-switch { margin-top: 0.2rem; }

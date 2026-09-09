@@ -2667,11 +2667,12 @@ function renderRankingHall(hof, universo) {
         ].join("\n")
       : null;
 
-    // Destaque só em quem realmente ganhou aquela medalha (valor > 0).
+    // Destaque só em quem realmente ganhou aquela medalha (valor > 0);
+    // quem tem 0 fica esmaecido (hall-med0).
     const celMedalha = (medalha, valor) =>
       el(
         "td",
-        { class: valor > 0 ? `num hall-med hall-med--${medalha}` : "num" },
+        { class: valor > 0 ? `num hall-med hall-med--${medalha}` : "num hall-med0" },
         [String(valor)]
       );
 
