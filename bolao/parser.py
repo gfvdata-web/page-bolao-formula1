@@ -61,7 +61,8 @@ class ParseError(ValueError):
 
 
 # Palavras de enfeite que aparecem na linha do piloto da rodada e não fazem
-# parte do nome do piloto (ex.: "Piloto escolhido: Hadjar").
+# parte do nome do piloto (ex.: "Piloto escolhido: Hadjar", "Piloto da vez:
+# Alonso").
 _FILLER_BONUS = {
     "piloto",
     "escolhido",
@@ -69,6 +70,8 @@ _FILLER_BONUS = {
     "sorteado",
     "sorteada",
     "sorteio",
+    "da",
+    "vez",
 }
 
 # Palavras de enfeite no começo da linha da corrida ("Bolão Qualify <Corrida>").
@@ -153,6 +156,27 @@ def _resolve_race_line(header_lines: list[str]) -> tuple[str, str]:
     return race, header_raw
 
 
+def _fecha_bloco_sem_bonus(
+    buffer: list[str], driver_aliases: dict, player_aliases: dict, top_n: int
+) -> Bet:
+    """Fecha um bloco ``nome + top_n pilotos`` sem linha ``P#``.
+
+    Acontece quando o jogador esqueceu de chutar a posição do piloto da
+    rodada na mensagem original: sem a linha ``P#`` para fechar o bloco, o
+    jogador realmente **não apostou** nesse bônus — vale 0 pt (mesma regra do
+    chute ``P0``, ver ``_parse_bonus_guess``), em vez de estourar o parser
+    juntando esse bloco com o do próximo jogador.
+    """
+    nome = buffer[0]
+    top6 = [normalize_driver(c, driver_aliases) for c in buffer[1 : 1 + top_n]]
+    return Bet(
+        player_id=normalize_player(nome, player_aliases),
+        player_raw=nome,
+        top6=top6,
+        bonus_guess=0,
+    )
+
+
 def _parse_players(
     corpo: list[str], driver_aliases: dict, player_aliases: dict, top_n: int = 6
 ) -> list[Bet]:
@@ -160,11 +184,22 @@ def _parse_players(
 
     Ignora linhas em branco (já removidas) e é tolerante a uma linha vazia logo
     após o nome — cada jogador é ``nome + 6 pilotos + P#`` (8 linhas úteis).
+
+    Um jogador pode esquecer o chute do bônus (sem linha ``P#``): nesse caso o
+    bloco fecha sozinho ao acumular ``nome + top_n`` linhas (o tamanho de um
+    bloco completo sem bônus) assim que a linha seguinte não for um chute —
+    ela pertence ao próximo jogador, não a este. Vale 0 pt no bônus.
     """
     bets: list[Bet] = []
     buffer: list[str] = []
+    esperado_sem_bonus = top_n + 1  # nome + top_n pilotos
     for linha in corpo:
         if not _is_guess_line(linha):
+            if len(buffer) == esperado_sem_bonus:
+                bets.append(
+                    _fecha_bloco_sem_bonus(buffer, driver_aliases, player_aliases, top_n)
+                )
+                buffer = []
             buffer.append(linha)
             continue
         bloco = buffer + [linha]
@@ -187,7 +222,12 @@ def _parse_players(
             )
         )
     if buffer:
-        raise ParseError(f"Bloco de jogador incompleto (sem linha P#): {buffer!r}")
+        if len(buffer) == esperado_sem_bonus:
+            bets.append(
+                _fecha_bloco_sem_bonus(buffer, driver_aliases, player_aliases, top_n)
+            )
+        else:
+            raise ParseError(f"Bloco de jogador incompleto (sem linha P#): {buffer!r}")
     return bets
 
 

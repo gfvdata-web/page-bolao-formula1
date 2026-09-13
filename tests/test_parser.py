@@ -54,6 +54,14 @@ class TestParseMensagensReais(unittest.TestCase):
         sheet = parse_sheet(texto, DRIVERS)
         self.assertEqual(sheet.bonus_driver, "HAD")
 
+    def test_piloto_da_vez(self):
+        # Bug real (rodada de Madrid): "Piloto da vez: Alonso" — "da"/"vez"
+        # não eram enfeites reconhecidos e o piloto virava "DAV" (fallback
+        # das 3 primeiras letras), pontuando o bônus da rodada toda errado.
+        texto = "Corrida\nPiloto da vez: Alonso\n\nJoao\nVER\nNOR\nRUS\nHAM\nANT\nPIA\nP1\n"
+        sheet = parse_sheet(texto, DRIVERS)
+        self.assertEqual(sheet.bonus_driver, "ALO")
+
     def test_linha_em_branco_apos_o_nome(self):
         texto = (
             "Corrida\nPiloto Hamilton\n\n"
@@ -84,6 +92,37 @@ class TestParseMensagensReais(unittest.TestCase):
         self.assertEqual(sheet.bets[0].bonus_guess, 14)
         self.assertEqual(sheet.bets[1].player_raw, "Caliman")
         self.assertEqual(sheet.bets[1].bonus_guess, 16)
+
+    def test_jogador_sem_chute_do_bonus_no_meio(self):
+        # Bug real (rodada de Madrid): o Igor esqueceu a linha `P#` e a linha
+        # em branco antes do próximo jogador — o bloco dele (nome + 6
+        # pilotos) precisa fechar sozinho, com bônus = 0, sem misturar com o
+        # bloco do Caliman.
+        texto = (
+            "Corrida\nPiloto Alonso\n\n"
+            "Igor\nANT\nRUS\nHAM\nLEC\nVER\nNOR\n"
+            "Caliman\nANT\nRUS\nLEC\nNOR\nVER\nPIA\nP18\n"
+        )
+        sheet = parse_sheet(texto, DRIVERS)
+        self.assertEqual(len(sheet.bets), 2)
+        igor = sheet.bets[0]
+        self.assertEqual(igor.player_raw, "Igor")
+        self.assertEqual(igor.top6, ["ANT", "RUS", "HAM", "LEC", "VER", "NOR"])
+        self.assertEqual(igor.bonus_guess, 0)
+        caliman = sheet.bets[1]
+        self.assertEqual(caliman.player_raw, "Caliman")
+        self.assertEqual(caliman.bonus_guess, 18)
+
+    def test_jogador_sem_chute_do_bonus_no_fim_da_mensagem(self):
+        texto = (
+            "Corrida\nPiloto Alonso\n\n"
+            "Caliman\nANT\nRUS\nLEC\nNOR\nVER\nPIA\nP18\n"
+            "Igor\nANT\nRUS\nHAM\nLEC\nVER\nNOR\n"
+        )
+        sheet = parse_sheet(texto, DRIVERS)
+        self.assertEqual(len(sheet.bets), 2)
+        self.assertEqual(sheet.bets[1].player_raw, "Igor")
+        self.assertEqual(sheet.bets[1].bonus_guess, 0)
 
 
 class TestParseErros(unittest.TestCase):
