@@ -8,7 +8,7 @@
     "max_points": 13
   },
   "meta": {
-    "rodadas": 13,
+    "rodadas": 14,
     "rodadas_totais": 22,
     "parcial": false,
     "faltando": []
@@ -271,6 +271,25 @@
         "caliman",
         "caio_l"
       ]
+    },
+    {
+      "round": 14,
+      "race_id": "2026-14",
+      "race": "Madrid",
+      "circuit": "madring",
+      "date": "2026-09-13",
+      "sprint": false,
+      "bonus_driver": "ALO",
+      "min_score": 5,
+      "bet_order": [
+        "guilherme",
+        "vinicius",
+        "ferrari",
+        "igor",
+        "caliman",
+        "filipe",
+        "dalla"
+      ]
     }
   ],
   "players": [
@@ -278,17 +297,17 @@
       "position": 1,
       "player_id": "dalla",
       "name": "Dalla",
-      "total": 88,
-      "total_calculado": 88,
-      "top6_total": 87,
-      "bonus_total": 1,
+      "total": 94,
+      "total_calculado": 94,
+      "top6_total": 92,
+      "bonus_total": 2,
       "carry_points": 0,
       "carry_rounds": 0,
       "avulsos_points": 0,
-      "total_somado": 88,
+      "total_somado": 94,
       "rounds_sem_palpite": [],
-      "rounds_played": 13,
-      "avg_points": 6.8,
+      "rounds_played": 14,
+      "avg_points": 6.7,
       "per_round": {
         "1": 4,
         "2": 8,
@@ -302,7 +321,8 @@
         "10": 8,
         "11": 7,
         "12": 8,
-        "13": 5
+        "13": 5,
+        "14": 6
       },
       "compensated_rounds": [],
       "compensation_total": 0
@@ -311,16 +331,16 @@
       "position": 2,
       "player_id": "ferrari",
       "name": "Ferrari",
-      "total": 84,
-      "total_calculado": 84,
-      "top6_total": 81,
+      "total": 91,
+      "total_calculado": 91,
+      "top6_total": 88,
       "bonus_total": 3,
       "carry_points": 0,
       "carry_rounds": 0,
       "avulsos_points": 0,
-      "total_somado": 84,
+      "total_somado": 91,
       "rounds_sem_palpite": [],
-      "rounds_played": 13,
+      "rounds_played": 14,
       "avg_points": 6.5,
       "per_round": {
         "1": 7,
@@ -335,7 +355,8 @@
         "10": 7,
         "11": 8,
         "12": 6,
-        "13": 4
+        "13": 4,
+        "14": 7
       },
       "compensated_rounds": [],
       "compensation_total": 0
@@ -344,16 +365,16 @@
       "position": 3,
       "player_id": "vinicius",
       "name": "Vinícius",
-      "total": 84,
-      "total_calculado": 84,
-      "top6_total": 82,
+      "total": 91,
+      "total_calculado": 91,
+      "top6_total": 89,
       "bonus_total": 2,
       "carry_points": 0,
       "carry_rounds": 0,
       "avulsos_points": 0,
-      "total_somado": 84,
+      "total_somado": 91,
       "rounds_sem_palpite": [],
-      "rounds_played": 13,
+      "rounds_played": 14,
       "avg_points": 6.5,
       "per_round": {
         "1": 4,
@@ -368,7 +389,8 @@
         "10": 11,
         "11": 5,
         "12": 6,
-        "13": 4
+        "13": 4,
+        "14": 7
       },
       "compensated_rounds": [],
       "compensation_total": 0
@@ -377,16 +399,16 @@
       "position": 4,
       "player_id": "caliman",
       "name": "Caliman",
-      "total": 82,
-      "total_calculado": 82,
-      "top6_total": 81,
-      "bonus_total": 1,
+      "total": 88,
+      "total_calculado": 88,
+      "top6_total": 86,
+      "bonus_total": 2,
       "carry_points": 0,
       "carry_rounds": 0,
       "avulsos_points": 0,
-      "total_somado": 82,
+      "total_somado": 88,
       "rounds_sem_palpite": [],
-      "rounds_played": 13,
+      "rounds_played": 14,
       "avg_points": 6.3,
       "per_round": {
         "1": 4,
@@ -401,7 +423,8 @@
         "10": 10,
         "11": 6,
         "12": 5,
-        "13": 6
+        "13": 6,
+        "14": 6
       },
       "compensated_rounds": [],
       "compensation_total": 0
@@ -410,16 +433,16 @@
       "position": 5,
       "player_id": "igor",
       "name": "Igor",
-      "total": 76,
-      "total_calculado": 76,
-      "top6_total": 73,
+      "total": 82,
+      "total_calculado": 82,
+      "top6_total": 79,
       "bonus_total": 0,
       "carry_points": 0,
       "carry_rounds": 0,
       "avulsos_points": 0,
-      "total_somado": 76,
+      "total_somado": 82,
       "rounds_sem_palpite": [],
-      "rounds_played": 12,
+      "rounds_played": 13,
       "avg_points": 6.1,
       "per_round": {
         "1": 4,
@@ -433,7 +456,8 @@
         "10": 7,
         "11": 7,
         "12": 5,
-        "13": 5
+        "13": 5,
+        "14": 6
       },
       "compensated_rounds": [
         7
@@ -442,16 +466,50 @@
     },
     {
       "position": 6,
+      "player_id": "guilherme",
+      "name": "Guilherme",
+      "total": 79,
+      "total_calculado": 79,
+      "top6_total": 77,
+      "bonus_total": 2,
+      "carry_points": 0,
+      "carry_rounds": 0,
+      "avulsos_points": 0,
+      "total_somado": 79,
+      "rounds_sem_palpite": [],
+      "rounds_played": 14,
+      "avg_points": 5.6,
+      "per_round": {
+        "1": 4,
+        "2": 6,
+        "3": 6,
+        "4": 5,
+        "5": 5,
+        "6": 5,
+        "7": 5,
+        "8": 8,
+        "9": 6,
+        "10": 8,
+        "11": 5,
+        "12": 5,
+        "13": 5,
+        "14": 6
+      },
+      "compensated_rounds": [],
+      "compensation_total": 0
+    },
+    {
+      "position": 7,
       "player_id": "caio_l",
       "name": "Caio Lopes",
-      "total": 73,
-      "total_calculado": 73,
+      "total": 78,
+      "total_calculado": 78,
       "top6_total": 61,
       "bonus_total": 0,
       "carry_points": 0,
       "carry_rounds": 0,
       "avulsos_points": 0,
-      "total_somado": 73,
+      "total_somado": 78,
       "rounds_sem_palpite": [],
       "rounds_played": 10,
       "avg_points": 6.1,
@@ -470,55 +528,23 @@
       "compensated_rounds": [
         2,
         7,
-        8
+        8,
+        14
       ],
-      "compensation_total": 12
-    },
-    {
-      "position": 7,
-      "player_id": "guilherme",
-      "name": "Guilherme",
-      "total": 73,
-      "total_calculado": 73,
-      "top6_total": 71,
-      "bonus_total": 2,
-      "carry_points": 0,
-      "carry_rounds": 0,
-      "avulsos_points": 0,
-      "total_somado": 73,
-      "rounds_sem_palpite": [],
-      "rounds_played": 13,
-      "avg_points": 5.6,
-      "per_round": {
-        "1": 4,
-        "2": 6,
-        "3": 6,
-        "4": 5,
-        "5": 5,
-        "6": 5,
-        "7": 5,
-        "8": 8,
-        "9": 6,
-        "10": 8,
-        "11": 5,
-        "12": 5,
-        "13": 5
-      },
-      "compensated_rounds": [],
-      "compensation_total": 0
+      "compensation_total": 17
     },
     {
       "position": 8,
       "player_id": "francez",
       "name": "Francez",
-      "total": 66,
-      "total_calculado": 66,
+      "total": 71,
+      "total_calculado": 71,
       "top6_total": 44,
       "bonus_total": 0,
       "carry_points": 0,
       "carry_rounds": 0,
       "avulsos_points": 0,
-      "total_somado": 66,
+      "total_somado": 71,
       "rounds_sem_palpite": [],
       "rounds_played": 7,
       "avg_points": 6.3,
@@ -537,31 +563,33 @@
         9,
         11,
         12,
-        13
+        13,
+        14
       ],
-      "compensation_total": 22
+      "compensation_total": 27
     },
     {
       "position": 9,
       "player_id": "filipe",
       "name": "Filipe",
-      "total": 64,
-      "total_calculado": 64,
-      "top6_total": 33,
+      "total": 70,
+      "total_calculado": 70,
+      "top6_total": 39,
       "bonus_total": 0,
       "carry_points": 0,
       "carry_rounds": 0,
       "avulsos_points": 0,
-      "total_somado": 64,
+      "total_somado": 70,
       "rounds_sem_palpite": [],
-      "rounds_played": 5,
-      "avg_points": 6.6,
+      "rounds_played": 6,
+      "avg_points": 6.5,
       "per_round": {
         "9": 6,
         "10": 8,
         "11": 6,
         "12": 7,
-        "13": 6
+        "13": 6,
+        "14": 6
       },
       "compensated_rounds": [
         1,
@@ -579,14 +607,14 @@
       "position": 10,
       "player_id": "lage",
       "name": "Lage",
-      "total": 58,
-      "total_calculado": 58,
+      "total": 63,
+      "total_calculado": 63,
       "top6_total": 18,
       "bonus_total": 0,
       "carry_points": 0,
       "carry_rounds": 0,
       "avulsos_points": 0,
-      "total_somado": 58,
+      "total_somado": 63,
       "rounds_sem_palpite": [],
       "rounds_played": 3,
       "avg_points": 6.0,
@@ -605,9 +633,10 @@
         10,
         11,
         12,
-        13
+        13,
+        14
       ],
-      "compensation_total": 40
+      "compensation_total": 45
     }
   ]
 }

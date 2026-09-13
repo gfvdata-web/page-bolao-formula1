@@ -567,6 +567,47 @@
         "ALO",
         "STR"
       ]
+    },
+    "14": {
+      "round": 14,
+      "race_id": "2026-14",
+      "race": "Madrid",
+      "circuit": "madring",
+      "date": "2026-09-13",
+      "sprint": false,
+      "bonus_driver": "ALO",
+      "min_score": 5,
+      "bet_order": [
+        "guilherme",
+        "vinicius",
+        "ferrari",
+        "igor",
+        "caliman",
+        "filipe",
+        "dalla"
+      ],
+      "order": [
+        "NOR",
+        "ANT",
+        "VER",
+        "HAM",
+        "LEC",
+        "RUS",
+        "PIA",
+        "LAW",
+        "COL",
+        "LIN",
+        "HUL",
+        "BOR",
+        "OCO",
+        "GAS",
+        "TSU",
+        "ALB",
+        "SAI",
+        "ALO",
+        "PER",
+        "BOT"
+      ]
     }
   }
 }
