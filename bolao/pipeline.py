@@ -131,8 +131,14 @@ def main(argv: list[str] | None = None) -> int:
 
     args = p.parse_args(argv)
 
+    # Sem isso, ler o texto do stdin (`printf '%s' "$TEXTO" | python -m ...`)
+    # usa o encoding padrão da plataforma/console em vez de UTF-8 — no Linux
+    # (Actions) normalmente coincide, mas no Windows local pode corromper
+    # acento (ex.: "Vinícius" virando bytes duplicados ao regravar em disco).
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8")
+    if hasattr(sys.stdin, "reconfigure"):
+        sys.stdin.reconfigure(encoding="utf-8")
 
     try:
         if args.cmd == "run":
