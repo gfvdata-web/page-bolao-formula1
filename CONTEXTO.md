@@ -1037,6 +1037,44 @@ enquanto a Jolpica não publica o quali.**
 - Testes novos em `tests/test_pipeline.py` (classe `TestPipelineCLI`, cobre os
   códigos 0/1/2 e o `--json`) — total do projeto: **68**.
 
+**Ajuste posterior (ainda Etapa 5): 3 bugs reais na rodada de Madrid (r14) —
+parser mais tolerante + alias de calendário.**
+- **Sintoma:** a Action de Madrid rodou e falhou em 8s (nada foi gravado — sem
+  `messages/14.txt`, sem `results/14.json`), e ninguém percebeu até o usuário
+  perguntar por que o site não tinha atualizado.
+- **Bug 1 (`bolao/parser.py`):** o Igor esqueceu a linha `P#` (chute do piloto
+  da rodada) e a linha em branco antes do próximo jogador. Sem terminador, o
+  parser juntava o bloco dele com o do jogador seguinte e estourava
+  `ParseError`. **Corrigido:** um bloco `nome + top_n pilotos` agora fecha
+  sozinho ao acumular `top_n + 1` linhas assim que a linha seguinte não é um
+  chute (`_fecha_bloco_sem_bonus`) — ela pertence ao próximo jogador. Jogador
+  sem chute do bônus vale **0 pt** (mesma regra do `P0`), em vez de derrubar a
+  rodada inteira.
+- **Bug 2 (`bolao/parser.py`, `_FILLER_BONUS`):** o cabeçalho usou "Piloto **da
+  vez**: Alonso" — frase nova, não reconhecida como enfeite — e o piloto da
+  rodada virava `DAV` (fallback de 3 letras) em vez de `ALO`, pontuando o
+  bônus da rodada **toda** errado, **sem erro nenhum** (o pior tipo de bug:
+  silencioso). `"da"`/`"vez"` entraram em `_FILLER_BONUS`.
+- **Bug 3 (`data/2026/calendar.json`):** o cabeçalho também tinha "**Mad
+  Ring**" (com espaço — o nome oficial do circuito é uma palavra só,
+  "Madring"). `resolve_race` casa por palavras em comum, e a palavra solta
+  `"ring"` batia com o alias `"red bull ring"` da Áustria (rodada 8, já
+  pontuada) — `"madring"` (uma palavra) não batia com `"mad"`/`"ring"`
+  separados. **Sem esse alias, reenviar o palpite já corrigido teria
+  sobrescrito a rodada 8 em vez de gravar a rodada 14** (falha silenciosa,
+  pior que o crash do parser). Alias `"mad ring"` adicionado à rodada 14.
+- **Padrão para o futuro:** falha de parser (`ParseError`) é o comportamento
+  **desejado** diante de ambiguidade real (não adivinhar) — mas "jogador sem
+  chute do bônus" deixou de ser ambiguidade (o bloco fecha por tamanho, não
+  por adivinhação de conteúdo). Já resolução de corrida errada e piloto da
+  rodada errado **não geram erro nenhum** por padrão (`resolve_race` sempre
+  devolve alguma corrida se houver palavra em comum; `normalize_driver`
+  sempre cai no fallback de 3 letras) — esses dois exigem **conferência manual
+  do resumo antes de confiar num envio novo de cabeçalho** (variação de
+  fraseado ainda não vista pode enganar os dois sem avisar).
+- Testes novos em `tests/test_parser.py` (bloco sem bônus no meio/fim da
+  mensagem, "Piloto da vez") — total do projeto: **93**.
+
 ### Etapa 6 — Google Forms + Apps Script ✅
 - **Objetivo:** formulário no celular + Apps Script que dispara o
   `repository_dispatch` com o texto colado e a corrida.
