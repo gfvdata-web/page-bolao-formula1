@@ -1711,6 +1711,83 @@ temporadas.
   ao horário oficial de Brasília"; as marcações "(horário de Brasília)" saíram
   dos cards e do tooltip (`formatarQualiBrasilia` só formata, sem sufixo).
 
+**Ajuste posterior (ainda Etapa 4): bloco "Ir para" (switch de temas
+jogador/piloto) + nova página do piloto.**
+- **Bloco `.ir-para-bloco`** logo abaixo de `.regras-pontuacao` na sub-aba
+  **Geral** do Ranking: texto "Ir para" + dois botões (`#btn-ir-jogador`,
+  `#btn-ir-piloto`).
+- **Modal genérico de escolha** (`<dialog id="ir-para-modal">`, reaproveita a
+  classe `.jogador-modal`): `abrirIrParaModal(titulo, itens, aoEscolher)` monta
+  uma lista buscável (`.ir-para-modal__item`, campo de busca filtra por
+  `label`). Clicar num item roda `aoEscolher(id)` e fecha o modal.
+  - Botão **Jogador** carrega `hall_of_fame.json` + todas as `standings.json`
+    (mesmas fontes/funções da Etapa "página do jogador":
+    `carregarTodasStandings`, `universoJogadores`) e lista todo jogador que já
+    disputou uma temporada; ao escolher, navega para `?jogador=<id>` — **a
+    mesma página do jogador já existente** (Hall of Fame → Acessar), sem
+    nenhuma mudança nela.
+  - Botão **Piloto** carrega `results.json` de todas as temporadas
+    (`carregarTodosResults`, novo, mesmo padrão de `carregarTodasStandings`) e
+    lista todo código de piloto que já apareceu num grid real
+    (`universoPilotos`: código → `Set` de anos); ao escolher, navega para
+    `?piloto=<código>`.
+  - Listas cacheadas em memória (`_irParaJogadoresCache`/`_irParaPilotosCache`)
+    — só buscam os JSONs na primeira vez que cada botão é clicado.
+- **Rota nova `?piloto=<código>`** (recarrega a página, sem SPA — mesmo padrão
+  de `?ano`/`?jogador`). Código inválido (não aparece em nenhum
+  `results.json`) → redireciona para a URL limpa. Estado global `MODO_PILOTO`.
+  `main()` trata essa rota **antes** da lógica de temporada (mesma posição do
+  bloco `?jogador`) e retorna cedo.
+- **`renderPaginaPiloto`** (`docs/app.js`): mesmo esqueleto de
+  `renderPaginaJogador` — esconde `.abas`+`.secao`, mostra `#secao-piloto`,
+  troca `<h1>` para `🏎️ Piloto <código> — Histórico`, botão novo
+  `#btn-voltar-piloto` (→ `location.pathname`, url limpa; diferente do
+  `#btn-voltar-temporadas` do jogador, que volta para `#hall` — aqui não faz
+  sentido, essa página não é alcançada pelo Hall of Fame). Carrega
+  `results.json` **e** `bets.json` de todas as temporadas
+  (`carregarTodosBets`, novo, mesmo padrão).
+  - Card **Temporadas disputadas** + card **Quali disputados** (contagem bruta
+    de linhas de resultado com esse código).
+  - **Gráfico 1 — violino VERTICAL por temporada** (`renderViolinoPilotoPorAno`):
+    releitura de `renderPilotos` (aba Pilotos) com os eixos trocados — lá cada
+    **linha horizontal** era um piloto (posição no eixo X); aqui cada
+    **coluna vertical** é uma temporada do mesmo piloto (posição no eixo Y,
+    P1 no topo). Mesmíssimos detalhes/fórmulas da versão horizontal, só
+    espelhados: densidade gaussiana (`densidadeGaussiana`, banda 1.1)
+    recortada à janela `[melhor-1.5, pior+1.5]`, normalizada por coluna
+    (mesma espessura máxima em todas as temporadas); jitter determinístico
+    por quali (agora horizontal, dentro da coluna); faixa clara do top`top_n`
+    (agora uma faixa horizontal no topo do plot); tooltip ao passar o mouse
+    numa coluna com o mesmo histograma por posição
+    (`.pilotos-tooltip`/`ligarTooltip`, funções compartilhadas com a aba
+    Pilotos). Reaproveita as classes CSS `.pilotos-container`/`.pilotos-scroll`/
+    `.pilotos-svg`/`.pilotos-tooltip*` (genéricas, sem depender da orientação
+    dos eixos). Cor da linha = `coresEquipesPiloto(código)` (última equipe
+    conhecida do piloto, mesma heurística da página do jogador), com
+    `corPiloto` como fallback só se o piloto não tiver nenhuma cor histórica
+    mapeada. `maxGrid` do eixo Y = maior grid visto **nas temporadas em que
+    aquele piloto correu** (`coletarMaxGridAnos`, olha todas as corridas
+    daquelas temporadas, não só as do piloto).
+  - **Gráfico 2 — "Quem mais aposta em `<código>`"**: escolha livre pedida
+    pelo usuário ("algum detalhamento sobre as apostas dos jogadores nesses
+    pilotos"). `agregarJogadoresPorPiloto(betsPorAno, código)` varre
+    `top6_detail` de todos os jogadores em todas as temporadas e agrega por
+    `player_id`: vezes apostado, pontos ganhos, soma/contagem de posição
+    apostada (`det.pos`). `renderGraficoJogadoresPorPiloto` = Chart.js barra
+    horizontal com **pts/aposta por jogador** naquele piloto (mesmo layout de
+    `renderGraficoRendimentoPorJogador`, eixo 0–2, cor por índice via
+    `corJogador`). Abaixo, tabela (`.rendimento-tabela`) com vezes apostado,
+    pontos, pts/aposta e posição média apostada (P1–P6) — ordenada por
+    pts/aposta desc.
+- **Sem gerador Python, sem mudança em `bolao/site.py` nem nos formatos de
+  `docs/data/*.json`** — tudo consumido como já estava (`results.json` e
+  `bets.json` de cada temporada, já existentes).
+- **`FORMATO.top_n`** usado na faixa de destaque do violino do piloto fica no
+  valor da temporada carregada por último (padrão da constante global, `6`) —
+  não recarrega o `standings.json` de cada ano só para isso; imprecisão
+  cosmética aceitável para temporadas antigas com formato diferente (ex.:
+  top5), mesma simplificação que outras visões cross-temporada já assumem.
+
 ## 9. Pendências / decisões adiadas
 
 - Formato e importação dos **históricos** de anos anteriores.

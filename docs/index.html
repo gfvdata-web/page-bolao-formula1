@@ -14,6 +14,7 @@
     <h1 id="topo-titulo">🏁 Bolão F1 2026<span class="hist-badge" id="hist-badge" hidden>HISTÓRICO</span></h1>
     <button type="button" class="hist-voltar" id="btn-voltar-atual" hidden>← Voltar para 2026</button>
     <button type="button" class="hist-voltar" id="btn-voltar-temporadas" hidden>← Voltar para temporadas</button>
+    <button type="button" class="hist-voltar" id="btn-voltar-piloto" hidden>← Voltar</button>
     <div class="tema-switch" id="tema-switch" role="group" aria-label="Tema da página">
       <button type="button" class="tema-switch__btn" data-tema="light" aria-pressed="false">
         <span aria-hidden="true">☀️</span><span class="tema-switch__label">Claro</span>
@@ -64,6 +65,13 @@
       <div class="regras-pontuacao">
         <h2>Regras de pontuação</h2>
         <ul id="regras-lista"></ul>
+      </div>
+      <div class="ir-para-bloco">
+        <p class="ir-para-bloco__texto">Ir para</p>
+        <div class="ir-para-bloco__botoes">
+          <button type="button" id="btn-ir-jogador" class="ir-para-botao">👤 Jogador</button>
+          <button type="button" id="btn-ir-piloto" class="ir-para-botao">🏎️ Piloto</button>
+        </div>
       </div>
     </div>
 
@@ -231,9 +239,15 @@
     <div id="jogador-status" class="status"></div>
     <div id="jogador-container"></div>
   </section>
+
+  <section id="secao-piloto" class="secao" hidden role="tabpanel">
+    <div id="piloto-status" class="status"></div>
+    <div id="piloto-container"></div>
+  </section>
 </main>
 
 <dialog id="jogador-modal" class="jogador-modal"></dialog>
+<dialog id="ir-para-modal" class="jogador-modal ir-para-modal"></dialog>
 
 <footer class="rodape">
   <p>Qualifying da F1 · temporada 2026</p>

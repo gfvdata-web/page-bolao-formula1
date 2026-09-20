@@ -975,6 +975,80 @@ main {
   margin-bottom: 0;
 }
 
+.ir-para-bloco {
+  margin-top: 1rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--borda);
+  text-align: center;
+}
+
+.ir-para-bloco__texto {
+  margin: 0 0 0.5rem;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--texto-fraco);
+}
+
+.ir-para-bloco__botoes {
+  display: flex;
+  justify-content: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.ir-para-botao {
+  border: 1px solid var(--borda);
+  background: var(--bg);
+  color: var(--texto);
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.45rem 1.1rem;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.ir-para-botao:hover { border-color: var(--acento); color: var(--acento); }
+
+.ir-para-modal__busca {
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 0.6rem;
+  padding: 0.45rem 0.6rem;
+  border: 1px solid var(--borda);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--texto);
+  font: inherit;
+  font-size: 0.85rem;
+}
+
+.ir-para-modal__lista {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  max-height: 55vh;
+  overflow-y: auto;
+}
+
+.ir-para-modal__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  width: 100%;
+  border: 1px solid var(--borda);
+  background: var(--bg);
+  color: var(--texto);
+  font: inherit;
+  text-align: left;
+  padding: 0.5rem 0.7rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.ir-para-modal__item:hover { border-color: var(--acento); }
+.ir-para-modal__item small { color: var(--texto-fraco); font-weight: 400; white-space: nowrap; }
+
 /* Sub-abas (Palpites por jogador) */
 
 nav.subabas {
@@ -1840,6 +1914,11 @@ button.subaba[aria-selected="true"] {
 
 #jogador-container .temporada-grafico-wrap { margin-top: 1.2rem; }
 #jogador-container .secao-intro { margin-top: 1.6rem; }
+
+#piloto-container .temporada-grafico-wrap { margin-top: 1.2rem; }
+#piloto-container .secao-intro { margin-top: 1.6rem; }
+#piloto-container .rendimento-grafico-wrap { margin-top: 1.2rem; }
+#piloto-container .rendimento-tabela-wrap { margin-top: 0.8rem; }
 
 .jogador-pilotos-tabela__linha { cursor: pointer; }
 .jogador-pilotos-tabela__linha:hover td { background: var(--bg); }

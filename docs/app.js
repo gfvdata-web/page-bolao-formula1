@@ -2821,6 +2821,144 @@ function universoJogadores(standingsPorAno) {
   return universo;
 }
 
+// Carrega os results de todas as temporadas de seasons.json (paralelo).
+async function carregarTodosResults() {
+  const anos = (SEASONS?.temporadas || []).map((t) => String(t.ano)).sort();
+  const mapa = new Map();
+  await Promise.all(
+    anos.map(async (ano) => {
+      const r = await carregarJson(`./data/${ano}/results.json`).catch(() => null);
+      if (r) mapa.set(ano, r);
+    })
+  );
+  return mapa;
+}
+
+// Carrega os bets de todas as temporadas de seasons.json (paralelo).
+async function carregarTodosBets() {
+  const anos = (SEASONS?.temporadas || []).map((t) => String(t.ano)).sort();
+  const mapa = new Map();
+  await Promise.all(
+    anos.map(async (ano) => {
+      const b = await carregarJson(`./data/${ano}/bets.json`).catch(() => null);
+      if (b) mapa.set(ano, b);
+    })
+  );
+  return mapa;
+}
+
+// codigo -> Set de anos em que o piloto apareceu no grid real do quali
+// (results.json, rounds[].order), varrendo todas as temporadas.
+function universoPilotos(resultsPorAno) {
+  const universo = new Map();
+  for (const [ano, res] of resultsPorAno) {
+    for (const rodada of Object.values(res.rounds || {})) {
+      for (const codigo of rodada.order || []) {
+        if (!universo.has(codigo)) universo.set(codigo, new Set());
+        universo.get(codigo).add(ano);
+      }
+    }
+  }
+  return universo;
+}
+
+// ---------- "Ir para" (switch de temas: jogador / piloto) ----------
+
+// Modal genérico de escolha (reaproveita o visual do jogador-modal). `itens` é
+// uma lista de {id, label, sub}; `aoEscolher(id)` roda ao clicar num item.
+function abrirIrParaModal(titulo, itens, aoEscolher) {
+  const modal = document.getElementById("ir-para-modal");
+  const busca = el("input", {
+    type: "search",
+    class: "ir-para-modal__busca",
+    placeholder: "Buscar…",
+    "aria-label": "Buscar",
+  });
+  const lista = el("div", { class: "ir-para-modal__lista" });
+
+  function pintar(filtro) {
+    const f = (filtro || "").trim().toLowerCase();
+    const filtrados = f ? itens.filter((it) => it.label.toLowerCase().includes(f)) : itens;
+    if (!filtrados.length) {
+      lista.replaceChildren(el("p", { class: "status" }, ["Nada encontrado."]));
+      return;
+    }
+    lista.replaceChildren(
+      ...filtrados.map((it) => {
+        const botao = el("button", { type: "button", class: "ir-para-modal__item" }, [
+          el("span", {}, [it.label]),
+          it.sub ? el("small", {}, [it.sub]) : null,
+        ]);
+        botao.addEventListener("click", () => {
+          modal.close();
+          aoEscolher(it.id);
+        });
+        return botao;
+      })
+    );
+  }
+
+  busca.addEventListener("input", () => pintar(busca.value));
+
+  const fechar = el("button", { type: "button", class: "jogador-modal__fechar", "aria-label": "Fechar" }, ["✕"]);
+  fechar.addEventListener("click", () => modal.close());
+
+  const corpo = el("div", { class: "jogador-modal__corpo" }, [
+    el("div", { class: "jogador-modal__header" }, [el("h3", {}, [titulo]), fechar]),
+    busca,
+    lista,
+  ]);
+  modal.replaceChildren(corpo);
+  pintar("");
+  modal.showModal();
+  busca.focus();
+}
+
+let _irParaJogadoresCache = null;
+let _irParaPilotosCache = null;
+
+function configurarIrPara() {
+  const btnJogador = document.getElementById("btn-ir-jogador");
+  const btnPiloto = document.getElementById("btn-ir-piloto");
+
+  if (btnJogador) {
+    btnJogador.addEventListener("click", async () => {
+      if (!_irParaJogadoresCache) {
+        const [hof, standingsPorAno] = await Promise.all([
+          carregarJson("./data/hall_of_fame.json"),
+          carregarTodasStandings(),
+        ]);
+        const universo = universoJogadores(standingsPorAno);
+        _irParaJogadoresCache = [...universo.entries()]
+          .map(([id, dados]) => ({
+            id,
+            label: dados.nome || nomeHall(hof, id),
+            sub: dados.anos.slice().sort().join(" · "),
+          }))
+          .sort((a, b) => a.label.localeCompare(b.label, "pt-BR"));
+      }
+      abrirIrParaModal("👤 Escolha um jogador", _irParaJogadoresCache, (id) => {
+        location.href = `${location.pathname}?jogador=${encodeURIComponent(id)}`;
+      });
+    });
+  }
+
+  if (btnPiloto) {
+    btnPiloto.addEventListener("click", async () => {
+      if (!_irParaPilotosCache) {
+        const resultsPorAno = await carregarTodosResults();
+        const universo = universoPilotos(resultsPorAno);
+        _irParaPilotosCache = [...universo.entries()]
+          .map(([codigo, anos]) => ({ id: codigo, label: codigo, sub: [...anos].sort().join(" · ") }))
+          .sort((a, b) => a.label.localeCompare(b.label));
+      }
+      abrirIrParaModal("🏎️ Escolha um piloto", _irParaPilotosCache, (codigo) => {
+        location.href = `${location.pathname}?piloto=${encodeURIComponent(codigo)}`;
+      });
+    });
+  }
+}
+
 // ---------- Página do jogador (histórico entre temporadas) ----------
 
 let MODO_JOGADOR = false;
@@ -3187,6 +3325,449 @@ function badgesTrunfoDecepcao(agregado) {
   const cards = [card("Maior trunfo", trunfo, "jogador-destaque--trunfo")];
   if (decepcao !== trunfo) cards.push(card("Maior decepção", decepcao, "jogador-destaque--decepcao"));
   return el("div", { class: "corridas-cards jogador-destaques" }, cards);
+}
+
+// ---------- Página do piloto (histórico entre temporadas) ----------
+
+let MODO_PILOTO = false;
+
+function pilotoPedido() {
+  const p = new URLSearchParams(location.search).get("piloto");
+  return p ? p.trim().toUpperCase() : null;
+}
+
+// Maior grid visto nas temporadas informadas (todas as corridas, não só as do
+// piloto) — usado como escala do eixo de posição do violino vertical.
+function coletarMaxGridAnos(resultsPorAno, anos) {
+  let maxGrid = 0;
+  for (const ano of anos) {
+    const res = resultsPorAno.get(ano);
+    if (!res) continue;
+    for (const rodada of Object.values(res.rounds || {})) {
+      maxGrid = Math.max(maxGrid, (rodada.order || []).length);
+    }
+  }
+  return maxGrid;
+}
+
+// Um violino VERTICAL por temporada (eixo de posição na vertical, P1 no topo),
+// releitura de renderPilotos (aba Pilotos) com os eixos trocados: lá cada linha
+// era um piloto; aqui cada coluna é um ano do mesmo piloto.
+function renderViolinoPilotoPorAno(codigo, porAno, maxGrid) {
+  const container = document.getElementById("piloto-violino-container");
+  const anos = [...porAno.keys()].sort((a, b) => Number(a) - Number(b));
+
+  if (!anos.length || !maxGrid) {
+    container.replaceChildren(el("p", { class: "status" }, ["Sem quali disputados registrados."]));
+    return;
+  }
+
+  const margemEsq = 30;
+  const margemDir = 30;
+  const margemTopo = 24;
+  const margemBase = 34;
+  const alturaPlot = 420;
+  const larguraColuna = 74;
+  const larguraTotal = margemEsq + anos.length * larguraColuna + margemDir;
+  const alturaTotal = margemTopo + alturaPlot + margemBase;
+
+  const yMin = 0.5;
+  const yMax = maxGrid + 0.5;
+  const escalaY = (pos) => margemTopo + ((pos - yMin) / (yMax - yMin)) * alturaPlot;
+
+  const ys = [];
+  for (let y = yMin; y <= yMax + 1e-9; y += 0.2) ys.push(y);
+  const banda = 1.1;
+
+  const corGrade = corCss("--borda");
+  const corTexto = corCss("--texto-fraco");
+  const corTextoForte = corCss("--texto");
+  const corAcento = corCss("--acento");
+  const coresHist = coresEquipesPiloto(codigo);
+  const cor = coresHist.length ? coresHist[coresHist.length - 1] : corPiloto(codigo);
+
+  const tooltip = el("div", { class: "pilotos-tooltip" });
+  tooltip.hidden = true;
+
+  function statsAno(posicoes) {
+    return {
+      posicoes,
+      media: mediaLista(posicoes),
+      mediana: medianaLista(posicoes),
+      melhor: Math.min(...posicoes),
+      pior: Math.max(...posicoes),
+    };
+  }
+
+  function montarTooltip(ano, dados) {
+    const cont = contagemPorPosicao(dados.posicoes, maxGrid);
+    const maxC = Math.max(...cont) || 1;
+    const linhas = [];
+    for (let p = 1; p <= maxGrid; p++) {
+      if (!cont[p]) continue;
+      linhas.push(
+        el("div", { class: "pilotos-tooltip__linha" }, [
+          el("span", { class: "pilotos-tooltip__pos" }, [`P${p}`]),
+          el("span", { class: "pilotos-tooltip__barra-wrap" }, [
+            el("span", {
+              class: "pilotos-tooltip__barra",
+              style: `width:${(cont[p] / maxC) * 100}%;background:${cor}`,
+            }),
+          ]),
+          el("span", { class: "pilotos-tooltip__n" }, [String(cont[p])]),
+        ])
+      );
+    }
+    return [
+      el("div", { class: "pilotos-tooltip__titulo" }, [`${ano} · ${dados.posicoes.length} quali`]),
+      el("div", { class: "pilotos-tooltip__sub" }, [
+        `média P${dados.media.toFixed(1)} · mediana P${dados.mediana} · melhor P${dados.melhor} · pior P${dados.pior}`,
+      ]),
+      ...linhas,
+    ];
+  }
+
+  function posicionarTooltip(evento) {
+    const rect = container.getBoundingClientRect();
+    let x = evento.clientX - rect.left + 14;
+    const y = evento.clientY - rect.top + 14;
+    if (x + tooltip.offsetWidth > container.clientWidth - 4) {
+      x = evento.clientX - rect.left - tooltip.offsetWidth - 14;
+    }
+    tooltip.style.left = `${Math.max(4, x)}px`;
+    tooltip.style.top = `${y}px`;
+  }
+
+  function ligarTooltip(alvo, ano, dados) {
+    alvo.addEventListener("pointerenter", (evento) => {
+      tooltip.replaceChildren(...montarTooltip(ano, dados));
+      tooltip.hidden = false;
+      posicionarTooltip(evento);
+    });
+    alvo.addEventListener("pointermove", posicionarTooltip);
+    alvo.addEventListener("pointerleave", () => {
+      tooltip.hidden = true;
+    });
+  }
+
+  const svg = svgEl("svg", {
+    class: "pilotos-svg",
+    width: larguraTotal,
+    height: alturaTotal,
+    viewBox: `0 0 ${larguraTotal} ${alturaTotal}`,
+    role: "img",
+    "aria-label": `Distribuição da posição real de largada de ${codigo} por temporada`,
+  });
+
+  // Faixa do topN (destaque de fundo) — aqui horizontal, no topo do plot.
+  svg.appendChild(
+    svgEl("rect", {
+      x: margemEsq,
+      y: escalaY(0.5),
+      width: larguraTotal - margemEsq - margemDir,
+      height: escalaY(FORMATO.top_n + 0.5) - escalaY(0.5),
+      fill: corAcento,
+      opacity: 0.06,
+    })
+  );
+
+  // Gridlines horizontais + rótulos P# na esquerda e na direita.
+  for (let p = 1; p <= maxGrid; p++) {
+    const y = escalaY(p);
+    const destaque = p === 1 || p % 5 === 0;
+    svg.appendChild(
+      svgEl("line", {
+        x1: margemEsq,
+        y1: y,
+        x2: larguraTotal - margemDir,
+        y2: y,
+        stroke: corGrade,
+        "stroke-width": destaque ? 1 : 0.5,
+        "stroke-dasharray": destaque ? "0" : "2 3",
+      })
+    );
+    if (destaque) {
+      for (const x of [margemEsq - 10, larguraTotal - margemDir + 10]) {
+        svg.appendChild(
+          svgEl("text", { x, y: y + 3.5, "text-anchor": "middle", "font-size": 10, fill: corTexto }, [`P${p}`])
+        );
+      }
+    }
+  }
+
+  anos.forEach((ano, i) => {
+    const dados = statsAno(porAno.get(ano));
+    const cx = margemEsq + i * larguraColuna + larguraColuna / 2;
+    const meiaLargura = larguraColuna * 0.36;
+    // Mesma lógica de janela do violino horizontal: a gaussiana nunca zera, então
+    // recortamos ao redor de onde o piloto realmente largou naquele ano.
+    const janelaMin = Math.max(yMin, dados.melhor - 1.5);
+    const janelaMax = Math.min(yMax, dados.pior + 1.5);
+    const ysJanela = ys.filter((y) => y >= janelaMin && y <= janelaMax);
+    const densidades = densidadeGaussiana(dados.posicoes, ysJanela, banda);
+    const maxDens = Math.max(...densidades) || 1;
+
+    svg.appendChild(
+      svgEl("line", {
+        x1: cx,
+        y1: margemTopo,
+        x2: cx,
+        y2: margemTopo + alturaPlot,
+        stroke: corGrade,
+        "stroke-width": 0.5,
+      })
+    );
+
+    const esquerda = ysJanela.map(
+      (y, k) => `${(cx - (densidades[k] / maxDens) * meiaLargura).toFixed(1)},${escalaY(y).toFixed(1)}`
+    );
+    const direita = ysJanela
+      .map((y, k) => `${(cx + (densidades[k] / maxDens) * meiaLargura).toFixed(1)},${escalaY(y).toFixed(1)}`)
+      .reverse();
+    const violino = svgEl("path", {
+      d: `M ${esquerda.join(" L ")} L ${direita.join(" L ")} Z`,
+      fill: cor,
+      "fill-opacity": 0.35,
+      stroke: cor,
+      "stroke-width": 1,
+    });
+    svg.appendChild(violino);
+
+    // Cada quali como um ponto (jitter horizontal determinístico p/ não empilhar).
+    dados.posicoes.forEach((pos, k) => {
+      const jitter = (((k % 5) - 2) / 2) * (meiaLargura / 3);
+      svg.appendChild(
+        svgEl("circle", { cx: cx + jitter, cy: escalaY(pos), r: 1.8, fill: cor, "fill-opacity": 0.55 })
+      );
+    });
+
+    svg.appendChild(
+      svgEl(
+        "text",
+        { x: cx, y: margemTopo - 9, "text-anchor": "middle", "font-size": 11, "font-weight": 700, fill: corTextoForte },
+        [ano]
+      )
+    );
+    svg.appendChild(
+      svgEl(
+        "text",
+        { x: cx, y: margemTopo + alturaPlot + 18, "text-anchor": "middle", "font-size": 10.5, fill: corTexto },
+        [`P${dados.media.toFixed(1)}`]
+      )
+    );
+
+    // Área invisível cobrindo a coluna inteira do ano — alvo do popup.
+    const alvo = svgEl("rect", {
+      x: margemEsq + i * larguraColuna,
+      y: margemTopo,
+      width: larguraColuna,
+      height: alturaPlot,
+      fill: "transparent",
+    });
+    alvo.style.cursor = "crosshair";
+    ligarTooltip(alvo, ano, dados);
+    svg.appendChild(alvo);
+  });
+
+  const legenda = el("p", { class: "preferencia-legenda" }, [
+    `Cada coluna é uma temporada em que ${codigo} correu. A forma mostra em que posições ele mais largou nos quali ` +
+      `daquele ano; cada ponto é um quali. A faixa clara no topo é o top${FORMATO.top_n}. Passe o mouse numa coluna ` +
+      "para ver a contagem por posição.",
+  ]);
+
+  container.replaceChildren(el("div", { class: "pilotos-scroll" }, [svg]), tooltip, legenda);
+}
+
+// Agrega, por jogador, as apostas de top6 num piloto específico (todas as
+// temporadas): quantas vezes apostou, quantos pontos rendeu e em que posição
+// média (P1–P6) costuma colocá-lo.
+function agregarJogadoresPorPiloto(betsPorAno, codigo) {
+  const mapa = new Map(); // player_id -> {nome, vezes, pontos, posSoma, posCount}
+  for (const [, bets] of betsPorAno) {
+    if (!bets || !bets.players) continue;
+    for (const [id, jogador] of Object.entries(bets.players)) {
+      for (const rodada of Object.values(jogador.rounds || {})) {
+        for (const det of rodada.top6_detail || []) {
+          if (det.guess !== codigo) continue;
+          if (!mapa.has(id)) {
+            mapa.set(id, { nome: jogador.name || id, vezes: 0, pontos: 0, posSoma: 0, posCount: 0 });
+          }
+          const reg = mapa.get(id);
+          reg.vezes += 1;
+          reg.pontos += det.points || 0;
+          if (det.pos != null) {
+            reg.posSoma += det.pos;
+            reg.posCount += 1;
+          }
+        }
+      }
+    }
+  }
+  return [...mapa.values()].sort(
+    (a, b) => b.pontos / b.vezes - a.pontos / a.vezes || b.vezes - a.vezes || a.nome.localeCompare(b.nome, "pt-BR")
+  );
+}
+
+let graficoJogadoresPorPiloto = null;
+
+function renderGraficoJogadoresPorPiloto(canvas, linhas, codigo) {
+  canvas.parentElement.style.height = `${Math.max(200, linhas.length * 32 + 56)}px`;
+
+  const corTexto = corCss("--texto-fraco");
+  const corGrade = corCss("--borda");
+
+  if (graficoJogadoresPorPiloto) graficoJogadoresPorPiloto.destroy();
+  graficoJogadoresPorPiloto = new Chart(canvas.getContext("2d"), {
+    type: "bar",
+    data: {
+      labels: linhas.map((l) => l.nome),
+      datasets: [
+        {
+          label: `Pts/aposta em ${codigo}`,
+          data: linhas.map((l) => l.pontos / l.vezes),
+          backgroundColor: linhas.map((l, i) => corJogador(i)),
+          borderWidth: 0,
+        },
+      ],
+    },
+    options: {
+      indexAxis: "y",
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label(item) {
+              const l = linhas[item.dataIndex];
+              return `${(l.pontos / l.vezes).toFixed(2)} pts/aposta (${l.vezes} apostas, ${l.pontos} pts)`;
+            },
+          },
+        },
+      },
+      scales: {
+        x: {
+          min: 0,
+          max: 2,
+          ticks: { color: corTexto, stepSize: 0.5 },
+          grid: { color: corGrade },
+          title: { display: true, text: "Pontos por aposta (máx. 2)", color: corTexto },
+        },
+        y: { ticks: { color: corTexto, font: { size: 11 } }, grid: { display: false } },
+      },
+    },
+  });
+}
+
+async function renderPaginaPiloto(codigo, anosSet, resultsPorAno, betsPorAno) {
+  MODO_PILOTO = true;
+
+  document.querySelectorAll(".secao").forEach((s) => (s.hidden = true));
+  const nav = document.querySelector("header .abas");
+  if (nav) nav.hidden = true;
+  const secao = document.getElementById("secao-piloto");
+  secao.hidden = false;
+
+  const titulo = document.getElementById("topo-titulo");
+  if (titulo && titulo.firstChild) titulo.firstChild.textContent = `🏎️ Piloto ${codigo} — Histórico`;
+  document.title = `Piloto ${codigo} — Histórico`;
+  const badge = document.getElementById("hist-badge");
+  if (badge) badge.hidden = true;
+  const voltar = document.getElementById("btn-voltar-piloto");
+  if (voltar) {
+    voltar.hidden = false;
+    voltar.addEventListener("click", () => {
+      location.href = location.pathname;
+    });
+  }
+
+  const status = document.getElementById("piloto-status");
+  const container = document.getElementById("piloto-container");
+  status.textContent = "";
+  container.replaceChildren();
+
+  const anos = [...anosSet].sort((a, b) => Number(a) - Number(b));
+
+  // Posições reais do piloto, por ano (results.json, rounds[].order).
+  const porAno = new Map();
+  for (const ano of anos) {
+    const res = resultsPorAno.get(ano);
+    if (!res) continue;
+    const posicoes = [];
+    for (const rodada of Object.values(res.rounds || {})) {
+      const idx = (rodada.order || []).indexOf(codigo);
+      if (idx >= 0) posicoes.push(idx + 1);
+    }
+    if (posicoes.length) porAno.set(ano, posicoes);
+  }
+  const maxGrid = coletarMaxGridAnos(resultsPorAno, [...porAno.keys()]);
+  const totalQuali = [...porAno.values()].reduce((s, arr) => s + arr.length, 0);
+
+  container.appendChild(
+    el("div", { class: "corridas-cards" }, [
+      jogadorCard("Temporadas disputadas", String(porAno.size), [...porAno.keys()].join(" · ") || "—"),
+      jogadorCard("Quali disputados", String(totalQuali)),
+    ])
+  );
+
+  const wrapViolino = el("div", { class: "temporada-grafico-wrap" }, [
+    el("h3", { class: "temporada-grafico-titulo" }, ["Posição real de largada no quali, por temporada"]),
+    el("div", { id: "piloto-violino-container", class: "pilotos-container" }),
+  ]);
+  container.appendChild(wrapViolino);
+  renderViolinoPilotoPorAno(codigo, porAno, maxGrid);
+
+  container.appendChild(
+    el("div", { class: "secao-intro" }, [
+      el("h3", {}, [`Quem mais aposta em ${codigo}`]),
+      el("p", {}, [
+        `Para cada jogador que já colocou ${codigo} no top6 (todas as temporadas somadas), quantas vezes apostou, `,
+        "quantos pontos esse chute rendeu e em que posição costuma colocá-lo.",
+      ]),
+    ])
+  );
+
+  const agregadoJogadores = agregarJogadoresPorPiloto(betsPorAno, codigo);
+  if (!agregadoJogadores.length) {
+    container.appendChild(el("p", { class: "status" }, ["Nenhum jogador apostou nesse piloto ainda."]));
+    return;
+  }
+
+  const wrapGrafico = el("div", { class: "rendimento-grafico-wrap" }, [
+    el("h3", { class: "rendimento-grafico-titulo" }, [`Pontos por aposta em ${codigo}, por jogador`]),
+    el("div", { class: "rendimento-grafico-canvas", id: "piloto-jogadores-canvas-wrap" }, [
+      el("canvas", { id: "piloto-jogadores-grafico" }),
+    ]),
+  ]);
+  container.appendChild(wrapGrafico);
+  renderGraficoJogadoresPorPiloto(document.getElementById("piloto-jogadores-grafico"), agregadoJogadores, codigo);
+
+  const tabela = el("table", { class: "corridas-tabela rendimento-tabela" }, [
+    el("thead", {}, [
+      el("tr", {}, [
+        el("th", {}, ["Jogador"]),
+        el("th", { class: "num" }, ["Vezes apostado"]),
+        el("th", { class: "num" }, ["Pontos ganhos"]),
+        el("th", { class: "num" }, ["Pts / aposta"]),
+        el("th", { class: "num" }, ["Posição média apostada"]),
+      ]),
+    ]),
+  ]);
+  const tbody = el("tbody");
+  for (const j of agregadoJogadores) {
+    tbody.appendChild(
+      el("tr", {}, [
+        el("td", {}, [j.nome]),
+        el("td", { class: "num" }, [String(j.vezes)]),
+        el("td", { class: "num" }, [String(j.pontos)]),
+        el("td", { class: "num" }, [(j.pontos / j.vezes).toFixed(2).replace(".", ",")]),
+        el("td", { class: "num" }, [j.posCount ? `P${(j.posSoma / j.posCount).toFixed(1)}` : "—"]),
+      ])
+    );
+  }
+  tabela.appendChild(tbody);
+  container.appendChild(el("div", { class: "rendimento-tabela-wrap" }, [tabela]));
 }
 
 // ---------- Abas ----------
@@ -3686,6 +4267,7 @@ async function main() {
   configurarSubAbas();
   configurarSubAbasRanking();
   configurarModoAcumulado();
+  configurarIrPara();
 
   try {
     SEASONS = await carregarJson("./data/seasons.json");
@@ -3703,6 +4285,19 @@ async function main() {
         return;
       }
       await renderPaginaJogador(jogId, hof, standingsPorAno, universo);
+      return;
+    }
+
+    const pilId = pilotoPedido();
+    if (pilId) {
+      const resultsPorAno = await carregarTodosResults();
+      const universoPil = universoPilotos(resultsPorAno);
+      if (!universoPil.has(pilId)) {
+        location.replace(location.pathname);
+        return;
+      }
+      const betsPorAno = await carregarTodosBets();
+      await renderPaginaPiloto(pilId, universoPil.get(pilId), resultsPorAno, betsPorAno);
       return;
     }
 
