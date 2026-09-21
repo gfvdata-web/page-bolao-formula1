@@ -88,6 +88,16 @@ function corPiloto(codigo) {
   return CORES_PILOTO[codigo] || "#9aa0a8";
 }
 
+// Cor da equipe de um piloto NUM ANO ESPECÍFICO (não necessariamente a
+// temporada ativa) — usado onde cada temporada de um piloto precisa da cor
+// da equipe daquele ano (ex.: violino por ano na página do piloto).
+function corPilotoNoAno(codigo, ano) {
+  const atual = String(SEASONS?.atual ?? TEMPORADA);
+  const mapa = CORES_PILOTO_ANO[String(ano)] || (String(ano) === atual ? CORES_PILOTO : null);
+  if (mapa && mapa[codigo]) return mapa[codigo];
+  return CORES_PILOTO[codigo] || "#9aa0a8";
+}
+
 function _hexRgb(hex) {
   const m = /^#?([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i.exec(hex || "");
   return m ? [parseInt(m[1], 16), parseInt(m[2], 16), parseInt(m[3], 16)] : null;
@@ -103,9 +113,13 @@ function _distCor(a, b) {
 // Todas as cores de equipe que um piloto usou nas temporadas do site. Cores
 // próximas (mesma equipe, tom ajustado de um ano para o outro) contam como uma
 // só; troca real de equipe entra como cor nova. Ordem cronológica.
-function coresEquipesPiloto(cod) {
+function coresEquipesPiloto(cod, anosFiltro = null) {
   const atual = String(SEASONS?.atual ?? "");
-  const anos = (SEASONS?.temporadas || []).map((t) => String(t.ano)).sort();
+  let anos = (SEASONS?.temporadas || []).map((t) => String(t.ano)).sort();
+  if (anosFiltro) {
+    const permitidos = new Set(anosFiltro.map(String));
+    anos = anos.filter((a) => permitidos.has(a));
+  }
   const grupos = []; // { repr }
   for (const ano of anos) {
     const mapa = CORES_PILOTO_ANO[ano] || (ano === atual ? CORES_PILOTO : null);
@@ -119,8 +133,10 @@ function coresEquipesPiloto(cod) {
 }
 
 // Chip do piloto com uma ou mais bolinhas (uma por equipe pela qual passou).
-function chipPilotoEquipes(cod) {
-  const cores = coresEquipesPiloto(cod);
+// Com `anosFiltro`, considera só as equipes das temporadas informadas (ex.:
+// só os anos em que um jogador específico apostou nesse piloto).
+function chipPilotoEquipes(cod, anosFiltro = null) {
+  const cores = coresEquipesPiloto(cod, anosFiltro);
   const paleta = cores.length ? cores : [corPiloto(cod)];
   return el("span", { class: "piloto-chip" }, [
     el(
@@ -3122,8 +3138,11 @@ function renderApostasPorPiloto(container, agregado, nome) {
   for (const l of linhas) {
     const media = (l.pontos / l.vezes).toFixed(2).replace(".", ",");
     const abrir = () => abrirModalPilotoAno(l.cod, agregado.porAno, nome);
+    const anosApostados = [...agregado.porAno.entries()]
+      .filter(([, mapa]) => mapa.has(l.cod))
+      .map(([ano]) => ano);
     const linha = el("tr", { class: "jogador-pilotos-tabela__linha", tabindex: "0", role: "button" }, [
-      el("td", {}, [chipPilotoEquipes(l.cod)]),
+      el("td", {}, [chipPilotoEquipes(l.cod, anosApostados)]),
       el("td", { class: "num" }, [String(l.vezes)]),
       el("td", { class: "num" }, [String(l.pontos)]),
       el("td", { class: "num" }, [media]),
@@ -3159,10 +3178,12 @@ function abrirModalPilotoAno(cod, porAno, nome) {
   ]);
   const tbody = el("tbody");
   let temAlgum = false;
+  const anosApostados = [];
   for (const ano of anos) {
     const reg = porAno.get(ano).get(cod);
     if (!reg) continue;
     temAlgum = true;
+    anosApostados.push(ano);
     const media = reg.vezes ? (reg.pontos / reg.vezes).toFixed(2).replace(".", ",") : "—";
     tbody.appendChild(
       el("tr", {}, [
@@ -3177,7 +3198,7 @@ function abrirModalPilotoAno(cod, porAno, nome) {
 
   corpo.append(
     el("div", { class: "jogador-modal__header" }, [
-      el("h3", {}, [`${nome} · apostas em `, chipPilotoEquipes(cod), " por temporada"]),
+      el("h3", {}, [`${nome} · apostas em `, chipPilotoEquipes(cod, anosApostados), " por temporada"]),
       el("button", { type: "button", class: "jogador-modal__fechar", "aria-label": "Fechar" }, ["✕"]),
     ]),
     temAlgum ? tabela : el("p", { class: "status" }, ["Sem apostas neste piloto."])
@@ -3383,8 +3404,6 @@ function renderViolinoPilotoPorAno(codigo, porAno, maxGrid) {
   const corTexto = corCss("--texto-fraco");
   const corTextoForte = corCss("--texto");
   const corAcento = corCss("--acento");
-  const coresHist = coresEquipesPiloto(codigo);
-  const cor = coresHist.length ? coresHist[coresHist.length - 1] : corPiloto(codigo);
 
   const tooltip = el("div", { class: "pilotos-tooltip" });
   tooltip.hidden = true;
@@ -3399,7 +3418,7 @@ function renderViolinoPilotoPorAno(codigo, porAno, maxGrid) {
     };
   }
 
-  function montarTooltip(ano, dados) {
+  function montarTooltip(ano, dados, cor) {
     const cont = contagemPorPosicao(dados.posicoes, maxGrid);
     const maxC = Math.max(...cont) || 1;
     const linhas = [];
@@ -3438,9 +3457,9 @@ function renderViolinoPilotoPorAno(codigo, porAno, maxGrid) {
     tooltip.style.top = `${y}px`;
   }
 
-  function ligarTooltip(alvo, ano, dados) {
+  function ligarTooltip(alvo, ano, dados, cor) {
     alvo.addEventListener("pointerenter", (evento) => {
-      tooltip.replaceChildren(...montarTooltip(ano, dados));
+      tooltip.replaceChildren(...montarTooltip(ano, dados, cor));
       tooltip.hidden = false;
       posicionarTooltip(evento);
     });
@@ -3497,6 +3516,7 @@ function renderViolinoPilotoPorAno(codigo, porAno, maxGrid) {
 
   anos.forEach((ano, i) => {
     const dados = statsAno(porAno.get(ano));
+    const cor = corPilotoNoAno(codigo, ano);
     const cx = margemEsq + i * larguraColuna + larguraColuna / 2;
     const meiaLargura = larguraColuna * 0.36;
     // Mesma lógica de janela do violino horizontal: a gaussiana nunca zera, então
@@ -3565,7 +3585,7 @@ function renderViolinoPilotoPorAno(codigo, porAno, maxGrid) {
       fill: "transparent",
     });
     alvo.style.cursor = "crosshair";
-    ligarTooltip(alvo, ano, dados);
+    ligarTooltip(alvo, ano, dados, cor);
     svg.appendChild(alvo);
   });
 
