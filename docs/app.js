@@ -82,6 +82,95 @@ const CORES_PILOTO_ANO = {
   },
 };
 
+// Nome da equipe por código de piloto, espelhando os grupos de CORES_PILOTO
+// (temporada ativa) e CORES_PILOTO_ANO (temporadas passadas). Puramente
+// decorativo — usado para rotular o violino por ano na página do piloto.
+const EQUIPE_PILOTO = {
+  VER: "Red Bull", HAD: "Red Bull", TSU: "Red Bull",
+  NOR: "McLaren", PIA: "McLaren",
+  RUS: "Mercedes", ANT: "Mercedes",
+  LEC: "Ferrari", HAM: "Ferrari",
+  ALB: "Williams", SAI: "Williams",
+  ALO: "Aston Martin", STR: "Aston Martin",
+  GAS: "Alpine", COL: "Alpine",
+  BEA: "Haas", OCO: "Haas",
+  LAW: "Racing Bulls", LIN: "Racing Bulls",
+  BOR: "Sauber", HUL: "Sauber",
+  PER: "Cadillac", BOT: "Cadillac",
+};
+
+const EQUIPE_PILOTO_ANO = {
+  "2021": {
+    VER: "Red Bull", PER: "Red Bull",
+    HAM: "Mercedes", BOT: "Mercedes",
+    LEC: "Ferrari", SAI: "Ferrari",
+    NOR: "McLaren", RIC: "McLaren",
+    ALO: "Alpine", OCO: "Alpine",
+    GAS: "AlphaTauri", TSU: "AlphaTauri",
+    VET: "Aston Martin", STR: "Aston Martin",
+    RAI: "Alfa Romeo", GIO: "Alfa Romeo", KUB: "Alfa Romeo",
+    RUS: "Williams", LAT: "Williams",
+    MSC: "Haas", MAZ: "Haas",
+  },
+  "2022": {
+    VER: "Red Bull", PER: "Red Bull",
+    LEC: "Ferrari", SAI: "Ferrari",
+    HAM: "Mercedes", RUS: "Mercedes",
+    NOR: "McLaren", RIC: "McLaren",
+    ALO: "Alpine", OCO: "Alpine",
+    GAS: "AlphaTauri", TSU: "AlphaTauri",
+    VET: "Aston Martin", STR: "Aston Martin", HUL: "Aston Martin",
+    ALB: "Williams", LAT: "Williams", DEV: "Williams",
+    BOT: "Alfa Romeo", ZHO: "Alfa Romeo",
+    MAG: "Haas", MSC: "Haas",
+  },
+  "2023": {
+    VER: "Red Bull", PER: "Red Bull",
+    HAM: "Mercedes", RUS: "Mercedes",
+    LEC: "Ferrari", SAI: "Ferrari",
+    NOR: "McLaren", PIA: "McLaren",
+    ALO: "Aston Martin", STR: "Aston Martin",
+    GAS: "Alpine", OCO: "Alpine",
+    ALB: "Williams", SAR: "Williams",
+    TSU: "AlphaTauri", DEV: "AlphaTauri", RIC: "AlphaTauri", LAW: "AlphaTauri",
+    BOT: "Alfa Romeo", ZHO: "Alfa Romeo",
+    MAG: "Haas", HUL: "Haas",
+  },
+  "2024": {
+    VER: "Red Bull", PER: "Red Bull",
+    LEC: "Ferrari", SAI: "Ferrari", BEA: "Ferrari",
+    NOR: "McLaren", PIA: "McLaren",
+    HAM: "Mercedes", RUS: "Mercedes",
+    ALO: "Aston Martin", STR: "Aston Martin",
+    TSU: "RB", RIC: "RB", LAW: "RB",
+    ALB: "Williams", SAR: "Williams", COL: "Williams",
+    GAS: "Alpine", OCO: "Alpine", DOO: "Alpine",
+    MAG: "Haas", HUL: "Haas",
+    BOT: "Kick Sauber", ZHO: "Kick Sauber",
+  },
+  "2025": {
+    VER: "Red Bull", TSU: "Red Bull", LAW: "Red Bull",
+    NOR: "McLaren", PIA: "McLaren",
+    LEC: "Ferrari", HAM: "Ferrari",
+    RUS: "Mercedes", ANT: "Mercedes",
+    ALO: "Aston Martin", STR: "Aston Martin",
+    GAS: "Alpine", DOO: "Alpine", COL: "Alpine",
+    ALB: "Williams", SAI: "Williams",
+    HAD: "Racing Bulls",
+    OCO: "Haas", BEA: "Haas",
+    HUL: "Sauber", BOR: "Sauber",
+  },
+};
+
+// Nome da equipe de um piloto NUM ANO ESPECÍFICO — mesma lógica de fallback
+// de corPilotoNoAno.
+function equipePilotoNoAno(codigo, ano) {
+  const atual = String(SEASONS?.atual ?? TEMPORADA);
+  const mapa = EQUIPE_PILOTO_ANO[String(ano)] || (String(ano) === atual ? EQUIPE_PILOTO : null);
+  if (mapa && mapa[codigo]) return mapa[codigo];
+  return EQUIPE_PILOTO[codigo] || "";
+}
+
 function corPiloto(codigo) {
   const mapaAno = MODO_HISTORICO ? CORES_PILOTO_ANO[TEMPORADA] : null;
   if (mapaAno && mapaAno[codigo]) return mapaAno[codigo];
@@ -3385,7 +3474,7 @@ function renderViolinoPilotoPorAno(codigo, porAno, maxGrid) {
 
   const margemEsq = 30;
   const margemDir = 30;
-  const margemTopo = 24;
+  const margemTopo = 36;
   const margemBase = 34;
   const alturaPlot = 420;
   const larguraColuna = 74;
@@ -3561,6 +3650,16 @@ function renderViolinoPilotoPorAno(codigo, porAno, maxGrid) {
       );
     });
 
+    const equipe = equipePilotoNoAno(codigo, ano);
+    if (equipe) {
+      svg.appendChild(
+        svgEl(
+          "text",
+          { x: cx, y: margemTopo - 22, "text-anchor": "middle", "font-size": 9, fill: corTexto },
+          [equipe]
+        )
+      );
+    }
     svg.appendChild(
       svgEl(
         "text",
