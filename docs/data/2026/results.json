@@ -608,6 +608,52 @@
         "PER",
         "BOT"
       ]
+    },
+    "15": {
+      "round": 15,
+      "race_id": "2026-15",
+      "race": "Baku",
+      "circuit": "baku",
+      "date": "2026-09-26",
+      "sprint": false,
+      "bonus_driver": "PIA",
+      "min_score": 3,
+      "bet_order": [
+        "guilherme",
+        "filipe",
+        "dalla",
+        "vinicius",
+        "paganini",
+        "ferrari",
+        "caio_l",
+        "caliman",
+        "igor",
+        "francez_back"
+      ],
+      "order": [
+        "RUS",
+        "LEC",
+        "PIA",
+        "HAD",
+        "NOR",
+        "HAM",
+        "GAS",
+        "VER",
+        "SAI",
+        "COL",
+        "BEA",
+        "LAW",
+        "ALB",
+        "OCO",
+        "LIN",
+        "ANT",
+        "BOR",
+        "HUL",
+        "ALO",
+        "PER",
+        "STR",
+        "BOT"
+      ]
     }
   }
 }
