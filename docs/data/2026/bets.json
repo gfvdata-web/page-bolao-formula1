@@ -4444,13 +4444,7 @@
           "bonus_real_pos": 12,
           "bonus_points": 0,
           "total": 8
-        }
-      }
-    },
-    "francez_back": {
-      "player_id": "francez_back",
-      "name": "Francez Back",
-      "rounds": {
+        },
         "15": {
           "round": 15,
           "race_id": "2026-15",

@@ -17,7 +17,7 @@
     "caio_l",
     "caliman",
     "igor",
-    "francez_back"
+    "francez"
   ],
   "result_order": [
     "RUS",
@@ -549,9 +549,9 @@
       "total_recalculado": null
     },
     {
-      "player_id": "francez_back",
-      "player_raw": "Francez Back",
-      "name": "Francez Back",
+      "player_id": "francez",
+      "player_raw": "Francez",
+      "name": "Francez",
       "top6": [
         "ANT",
         "VER",
