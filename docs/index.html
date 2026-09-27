@@ -39,6 +39,7 @@
   <section id="secao-ranking" class="secao" role="tabpanel">
     <nav class="subabas" role="tablist">
       <button class="subaba" data-subaba="geral" role="tab" aria-selected="true">Geral</button>
+      <button class="subaba" data-subaba="palpites" role="tab" aria-selected="false">Palpites</button>
       <button class="subaba" data-subaba="corridas" role="tab" aria-selected="false">Corridas</button>
       <button class="subaba" data-subaba="simulador" role="tab" aria-selected="false">Simulador</button>
       <button class="subaba" data-subaba="regras" role="tab" aria-selected="false" hidden>Regras</button>
@@ -55,13 +56,58 @@
       <div id="ranking-container"></div>
       <div class="corrida-detalhe-card">
         <div class="corrida-detalhe-card__header">
-          <h2>Pontuação da corrida</h2>
-          <div class="corrida-detalhe-card__acoes">
+          <h2 class="card-recolhivel__titulo">
+            Pontuação da corrida
+            <button type="button" id="btn-recolher-corrida" class="btn-recolher" aria-expanded="true" aria-controls="corrida-detalhe-tabela-wrap" aria-label="Ocultar card" title="Ocultar card">
+              <span class="btn-recolher__icone" aria-hidden="true">▾</span>
+            </button>
+          </h2>
+          <div class="corrida-detalhe-card__acoes" id="corrida-detalhe-acoes">
             <select id="select-corrida-detalhe" class="corrida-detalhe-select"></select>
             <button id="btn-copiar-corrida" type="button" class="btn-copiar">📋 Copiar</button>
           </div>
         </div>
         <div id="corrida-detalhe-tabela-wrap" class="corrida-detalhe-tabela-wrap"></div>
+      </div>
+      <div class="chamadas-card">
+        <h2>Explore a temporada</h2>
+        <div class="chamadas-lista">
+          <button type="button" class="chamada" data-ir-aba="ranking" data-ir-subaba="palpites">
+            <span class="chamada__icone" aria-hidden="true">📋</span>
+            <span class="chamada__texto"><strong>Palpites</strong><span>Veja o histórico de palpites de cada jogador que competiu</span></span>
+            <span class="chamada__seta" aria-hidden="true">›</span>
+          </button>
+          <button type="button" class="chamada" data-ir-aba="ranking" data-ir-subaba="corridas">
+            <span class="chamada__icone" aria-hidden="true">📈</span>
+            <span class="chamada__texto"><strong>Corridas</strong><span>Acompanhe a evolução de cada jogador no ranking, corrida a corrida</span></span>
+            <span class="chamada__seta" aria-hidden="true">›</span>
+          </button>
+          <button type="button" class="chamada" data-ir-aba="ranking" data-ir-subaba="simulador">
+            <span class="chamada__icone" aria-hidden="true">🔮</span>
+            <span class="chamada__texto"><strong>Simulador</strong><span>Simule como pode terminar a temporada</span></span>
+            <span class="chamada__seta" aria-hidden="true">›</span>
+          </button>
+          <button type="button" class="chamada" data-ir-aba="pilotos">
+            <span class="chamada__icone" aria-hidden="true">🏎️</span>
+            <span class="chamada__texto"><strong>Pilotos</strong><span>Veja a performance de cada piloto nos qualis da temporada</span></span>
+            <span class="chamada__seta" aria-hidden="true">›</span>
+          </button>
+          <button type="button" class="chamada" data-ir-aba="palpites" data-ir-subaba="preferencia">
+            <span class="chamada__icone" aria-hidden="true">🎯</span>
+            <span class="chamada__texto"><strong>Preferência piloto</strong><span>Onde o grupo aposta cada piloto vs. onde ele larga de verdade</span></span>
+            <span class="chamada__seta" aria-hidden="true">›</span>
+          </button>
+          <button type="button" class="chamada" data-ir-aba="palpites" data-ir-subaba="rendimento">
+            <span class="chamada__icone" aria-hidden="true">💰</span>
+            <span class="chamada__texto"><strong>Rendimento</strong><span>Quanto rende cada aposta, por piloto e por jogador</span></span>
+            <span class="chamada__seta" aria-hidden="true">›</span>
+          </button>
+          <button type="button" class="chamada" data-ir-aba="ranking" data-ir-subaba="regras">
+            <span class="chamada__icone" aria-hidden="true">📜</span>
+            <span class="chamada__texto"><strong>Regras</strong><span>Formato, pontuação e decisões de cálculo desta temporada</span></span>
+            <span class="chamada__seta" aria-hidden="true">›</span>
+          </button>
+        </div>
       </div>
       <div class="regras-pontuacao">
         <h2>Regras de pontuação</h2>
@@ -74,6 +120,40 @@
           <button type="button" id="btn-ir-piloto" class="ir-para-botao">🏎️ Piloto</button>
         </div>
       </div>
+    </div>
+
+    <div id="subsecao-ranking-palpites" class="subsecao" hidden role="tabpanel">
+      <h2 class="subsecao-titulo">Histórico de palpites</h2>
+      <div id="palpites-status" class="status"></div>
+      <div class="hist-jogadores" id="hist-jogadores" role="group" aria-label="Jogadores na tabela"></div>
+      <div class="hist-jogadores-acoes" id="hist-jogadores-acoes">
+        <button type="button" data-acao="todos">Selecionar tudo</button>
+        <button type="button" data-acao="limpar">Limpar</button>
+      </div>
+      <p class="hist-jogadores__dica">Toque num jogador para incluí-lo ou tirá-lo da comparação.</p>
+      <div class="hist-matriz-wrap">
+        <table class="hist-matriz" id="hist-matriz"></table>
+      </div>
+      <div class="hist-legenda">
+        <span><span class="ponto-badge ponto-2">+2</span> posição exata</span>
+        <span><span class="ponto-badge ponto-1">+1</span> no top6 real, outra posição</span>
+        <span><span class="ponto-badge ponto-0">0</span> fora do top6 real</span>
+        <span id="hist-legenda-bonus"><span class="ponto-badge ponto-2">+1</span> piloto da rodada: posição exata</span>
+      </div>
+      <div class="temporada-grafico-wrap">
+        <h3 class="temporada-grafico-titulo">Pontuação por corrida</h3>
+        <div class="temporada-grafico-canvas">
+          <canvas id="temporada-grafico"></canvas>
+        </div>
+      </div>
+      <div id="corridas-tabela-container"></div>
+      <details class="hist-porcorrida" id="hist-porcorrida">
+        <summary class="hist-porcorrida__resumo">Por corrida</summary>
+        <div class="hist-porcorrida__corpo">
+          <p class="hist-porcorrida__nota" id="hist-porcorrida__nota"></p>
+          <div id="palpites-container"></div>
+        </div>
+      </details>
     </div>
 
     <div id="subsecao-ranking-corridas" class="subsecao" hidden role="tabpanel">
@@ -90,13 +170,6 @@
           <canvas id="temporada-grafico-acumulado"></canvas>
         </div>
       </div>
-      <div class="temporada-grafico-wrap">
-        <h3 class="temporada-grafico-titulo">Pontuação por corrida</h3>
-        <div class="temporada-grafico-canvas">
-          <canvas id="temporada-grafico"></canvas>
-        </div>
-      </div>
-      <div id="corridas-tabela-container"></div>
     </div>
 
     <div id="subsecao-ranking-simulador" class="subsecao" hidden role="tabpanel">
@@ -115,38 +188,11 @@
 
   <section id="secao-palpites" class="secao" hidden role="tabpanel">
     <nav class="subabas" role="tablist">
-      <button class="subaba" data-subaba="historico" role="tab" aria-selected="true">Histórico</button>
-      <button class="subaba" data-subaba="preferencia" role="tab" aria-selected="false">Preferência piloto</button>
+      <button class="subaba" data-subaba="preferencia" role="tab" aria-selected="true">Preferência piloto</button>
       <button class="subaba" data-subaba="rendimento" role="tab" aria-selected="false">Rendimento</button>
     </nav>
 
-    <div id="subsecao-historico" class="subsecao" role="tabpanel">
-      <div id="palpites-status" class="status"></div>
-      <div class="hist-jogadores" id="hist-jogadores" role="group" aria-label="Jogadores na tabela"></div>
-      <div class="hist-jogadores-acoes" id="hist-jogadores-acoes">
-        <button type="button" data-acao="todos">Selecionar tudo</button>
-        <button type="button" data-acao="limpar">Limpar</button>
-      </div>
-      <p class="hist-jogadores__dica">Toque num jogador para incluí-lo ou tirá-lo da comparação.</p>
-      <div class="hist-matriz-wrap">
-        <table class="hist-matriz" id="hist-matriz"></table>
-      </div>
-      <div class="hist-legenda">
-        <span><span class="ponto-badge ponto-2">+2</span> posição exata</span>
-        <span><span class="ponto-badge ponto-1">+1</span> no top6 real, outra posição</span>
-        <span><span class="ponto-badge ponto-0">0</span> fora do top6 real</span>
-        <span id="hist-legenda-bonus"><span class="ponto-badge ponto-2">+1</span> piloto da rodada: posição exata</span>
-      </div>
-      <details class="hist-porcorrida" id="hist-porcorrida">
-        <summary class="hist-porcorrida__resumo">Por corrida</summary>
-        <div class="hist-porcorrida__corpo">
-          <p class="hist-porcorrida__nota" id="hist-porcorrida__nota"></p>
-          <div id="palpites-container"></div>
-        </div>
-      </details>
-    </div>
-
-    <div id="subsecao-preferencia" class="subsecao" hidden role="tabpanel">
+    <div id="subsecao-preferencia" class="subsecao" role="tabpanel">
       <div class="secao-intro">
         <h3>Onde o grupo aposta cada piloto vs. onde ele larga de verdade</h3>
         <p>Para cada piloto, a tabela compara a posição em que os jogadores costumam

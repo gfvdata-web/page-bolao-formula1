@@ -1788,6 +1788,31 @@ jogador/piloto) + nova página do piloto.**
   cosmética aceitável para temporadas antigas com formato diferente (ex.:
   top5), mesma simplificação que outras visões cross-temporada já assumem.
 
+**Ajuste posterior (ainda Etapa 4, 2026-09-27): abas padronizadas em todas as
+temporadas — sub-aba "Palpites" no Ranking + card "Explore a temporada".**
+- **Ranking:** Geral · **Palpites** (nova, 2ª) · Corridas · Simulador (só atual)
+  · Regras (só passadas). `#subsecao-ranking-palpites` = histórico (chips +
+  `#hist-matriz` + legenda) → gráfico "Pontuação por corrida"
+  (`#temporada-grafico`) → tabela matriz (`#corridas-tabela-container`) → bloco
+  "Por corrida" (`#hist-porcorrida`, agora também nas temporadas passadas).
+  **Corridas** ficou só com `#temporada-cards` + "Posição no ranking".
+- **Palpites por jogador:** só Preferência piloto (padrão) + Rendimento; a
+  sub-aba/`#subsecao-historico` deixou de existir. **Substitui** a relocação da
+  matriz para a Geral que `aplicarModoHistorico()` fazia (removida) — nada mais
+  muda de lugar no DOM por temporada.
+- **Gráficos da Temporada:** `renderTemporada` só monta séries + cards;
+  `garantirGraficosTemporada()` cria cada gráfico quando a sua sub-aba fica
+  visível (acumulado em Corridas, por rodada em Palpites). Jogadores
+  desligados nos cards ficam em `temporadaDesligados` e valem para os dois.
+- **Card "Pontuação da corrida"** (Geral) em todas as temporadas, com botão
+  `#btn-recolher-corrida` (▾) ao lado do título (`configurarRecolherCorrida`):
+  começa **oculto** nas passadas e **aberto** na atual.
+- **Card "Explore a temporada"** (`.chamadas-card`, entre "Pontuação da
+  corrida" e as regras): botões `.chamada[data-ir-aba][data-ir-subaba]` →
+  Palpites, Corridas, Simulador, Pilotos, Preferência, Rendimento, Regras.
+  `configurarChamadas` esconde a chamada cujo destino está oculto na temporada.
+  Bloco "Ir para" mantido no fim.
+
 ## 9. Pendências / decisões adiadas
 
 - Formato e importação dos **históricos** de anos anteriores.

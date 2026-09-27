@@ -1039,7 +1039,7 @@ function popularHistJogadores(bets, standings) {
 function atualizarHist() {
   sincronizarHistChips();
   renderHistMatriz();
-  if (!MODO_HISTORICO) renderHistPorCorrida();
+  renderHistPorCorrida();
 }
 
 function alternarHistJogador(playerId) {
@@ -1324,6 +1324,9 @@ let standingsParaTemporada = null;
 let modoGraficoAcumulado = "posicao";
 // Séries auxiliares usadas pelos tooltips e pelo modo "Posição".
 let dadosTemporada = null;
+// Índices dos jogadores desligados nos cards de Ranking/Corridas — valem para os
+// dois gráficos (acumulado em Corridas, por corrida em Palpites).
+const temporadaDesligados = new Set();
 
 // Traço vertical que acompanha o mouse, deixando claro qual rodada está sendo lida.
 const pluginLinhaRodada = {
@@ -1596,9 +1599,11 @@ function configurarModoAcumulado() {
   });
 }
 
+// Monta as séries e os cards de jogador. Os gráficos em si são criados à parte,
+// cada um quando a sua sub-aba fica visível (garantirGraficosTemporada).
 function renderTemporada(standings) {
   dadosTemporada = construirDadosTemporada(standings);
-  const { labels, datasetsAcumulado, datasetsPorRodada } = dadosTemporada;
+  const { datasetsAcumulado } = dadosTemporada;
 
   const cardsContainer = document.getElementById("temporada-cards");
   cardsContainer.replaceChildren(
@@ -1608,26 +1613,27 @@ function renderTemporada(standings) {
         { class: "jogador-card", type: "button", style: `--cor-jogador:${dataset.borderColor}` },
         [el("span", { class: "jogador-card__bolinha" }), dataset.label]
       );
+      card.classList.toggle("jogador-card--desligado", temporadaDesligados.has(indice));
       card.addEventListener("click", () => {
         const desligado = card.classList.toggle("jogador-card--desligado");
-        graficoTemporadaAcumulado.data.datasets[indice].hidden = desligado;
-        graficoTemporadaPorRodada.data.datasets[indice].hidden = desligado;
-        graficoTemporadaAcumulado.update();
-        graficoTemporadaPorRodada.update();
+        if (desligado) temporadaDesligados.add(indice);
+        else temporadaDesligados.delete(indice);
+        [graficoTemporadaAcumulado, graficoTemporadaPorRodada].forEach((grafico) => {
+          if (!grafico) return;
+          grafico.data.datasets[indice].hidden = desligado;
+          grafico.update();
+        });
       });
       return card;
     })
   );
+}
 
-  if (graficoTemporadaAcumulado) graficoTemporadaAcumulado.destroy();
-  if (graficoTemporadaPorRodada) graficoTemporadaPorRodada.destroy();
-  graficoTemporadaAcumulado = criarGraficoTemporada(
-    "temporada-grafico-acumulado", labels, datasetsAcumulado, standings, "Pontos acumulados", "acumulado"
-  );
-  graficoTemporadaPorRodada = criarGraficoTemporada(
-    "temporada-grafico", labels, datasetsPorRodada, standings, "Pontos na rodada", "rodada"
-  );
-  if (modoGraficoAcumulado !== "pontos") aplicarModoAcumulado(modoGraficoAcumulado);
+function aplicarDesligadosTemporada(grafico) {
+  grafico.data.datasets.forEach((dataset, indice) => {
+    dataset.hidden = temporadaDesligados.has(indice);
+  });
+  grafico.update();
 }
 
 // ---------- Preferência piloto ----------
@@ -3892,15 +3898,35 @@ async function renderPaginaPiloto(codigo, anosSet, resultsPorAno, betsPorAno) {
 // ---------- Abas ----------
 
 // Chart.js não recupera bem de ser inicializado num canvas ainda escondido
-// (0x0) — resize() sozinho não corrige. Por isso os gráficos da Temporada só
-// são criados na primeira vez que a sub-aba Corridas fica visível (garantirGraficosTemporada).
+// (0x0) — resize() sozinho não corrige. Por isso cada gráfico da Temporada só é
+// criado na primeira vez que a sua sub-aba fica visível: "Posição no ranking" em
+// Corridas, "Pontuação por corrida" em Palpites.
 function garantirGraficosTemporada() {
   if (!standingsParaTemporada) return;
-  if (graficoTemporadaAcumulado && graficoTemporadaPorRodada) {
-    graficoTemporadaAcumulado.resize();
-    graficoTemporadaPorRodada.resize();
-  } else {
-    renderTemporada(standingsParaTemporada);
+  if (document.getElementById("secao-ranking").hidden) return;
+  if (!dadosTemporada) renderTemporada(standingsParaTemporada);
+  const { labels, datasetsAcumulado, datasetsPorRodada } = dadosTemporada;
+
+  if (!document.getElementById("subsecao-ranking-corridas").hidden) {
+    if (graficoTemporadaAcumulado) {
+      graficoTemporadaAcumulado.resize();
+    } else {
+      graficoTemporadaAcumulado = criarGraficoTemporada(
+        "temporada-grafico-acumulado", labels, datasetsAcumulado, standingsParaTemporada, "Pontos acumulados", "acumulado"
+      );
+      aplicarDesligadosTemporada(graficoTemporadaAcumulado);
+      if (modoGraficoAcumulado !== "pontos") aplicarModoAcumulado(modoGraficoAcumulado);
+    }
+  }
+  if (!document.getElementById("subsecao-ranking-palpites").hidden) {
+    if (graficoTemporadaPorRodada) {
+      graficoTemporadaPorRodada.resize();
+    } else {
+      graficoTemporadaPorRodada = criarGraficoTemporada(
+        "temporada-grafico", labels, datasetsPorRodada, standingsParaTemporada, "Pontos na rodada", "rodada"
+      );
+      aplicarDesligadosTemporada(graficoTemporadaPorRodada);
+    }
   }
 }
 
@@ -3938,7 +3964,7 @@ function configurarAbas() {
         secao.hidden = nome !== botao.dataset.aba;
       }
       const subabaRanking = document.querySelector("#secao-ranking button.subaba[aria-selected=\"true\"]");
-      if (botao.dataset.aba === "ranking" && subabaRanking && subabaRanking.dataset.subaba === "corridas") {
+      if (botao.dataset.aba === "ranking" && subabaRanking && ["corridas", "palpites"].includes(subabaRanking.dataset.subaba)) {
         garantirGraficosTemporada();
       }
       const subabaPalpites = document.querySelector("#secao-palpites button.subaba[aria-selected=\"true\"]");
@@ -3952,7 +3978,6 @@ function configurarAbas() {
 function configurarSubAbas() {
   const botoes = document.querySelectorAll("#secao-palpites button.subaba");
   const secoes = {
-    historico: document.getElementById("subsecao-historico"),
     preferencia: document.getElementById("subsecao-preferencia"),
     rendimento: document.getElementById("subsecao-rendimento"),
   };
@@ -3974,6 +3999,7 @@ function configurarSubAbasRanking() {
   const botoes = document.querySelectorAll("#secao-ranking button.subaba");
   const secoes = {
     geral: document.getElementById("subsecao-ranking-geral"),
+    palpites: document.getElementById("subsecao-ranking-palpites"),
     corridas: document.getElementById("subsecao-ranking-corridas"),
     simulador: document.getElementById("subsecao-ranking-simulador"),
     regras: document.getElementById("subsecao-ranking-regras"),
@@ -3985,7 +4011,7 @@ function configurarSubAbasRanking() {
       for (const [nome, secao] of Object.entries(secoes)) {
         secao.hidden = nome !== botao.dataset.subaba;
       }
-      if (botao.dataset.subaba === "corridas") {
+      if (botao.dataset.subaba === "corridas" || botao.dataset.subaba === "palpites") {
         garantirGraficosTemporada();
       }
     });
@@ -4017,10 +4043,6 @@ function sincronizarSwitchTema() {
 function rerenderizarGraficos() {
   if (resultsGlobais) renderPilotos(resultsGlobais);
 
-  const rankingVisivel = !document.getElementById("secao-ranking").hidden;
-  const corridasVisivel =
-    rankingVisivel && !document.getElementById("subsecao-ranking-corridas").hidden;
-
   // Chart.js: destrói tudo; recria já o que está visível, o resto volta pela
   // inicialização preguiçosa das abas (garantir*), agora com a cor nova.
   [
@@ -4035,7 +4057,7 @@ function rerenderizarGraficos() {
   graficoRendimentoPorJogador = null;
   dadosTemporada = null;
 
-  if (corridasVisivel && standingsParaTemporada) renderTemporada(standingsParaTemporada);
+  garantirGraficosTemporada();
   if (rendimentoEstado) renderRendimento(rendimentoEstado.ids, rendimentoEstado.bets);
   if (rendimentoPorJogadorEstado) {
     renderRendimentoPorJogador(rendimentoPorJogadorEstado.codigos, rendimentoPorJogadorEstado.bets);
@@ -4345,39 +4367,52 @@ function aplicarModoHistorico() {
     if (btnRegras) btnRegras.hidden = false;
     const regrasGeral = document.querySelector("#subsecao-ranking-geral .regras-pontuacao");
     if (regrasGeral) regrasGeral.hidden = true;
-
-    // Temporada finalizada: a leitura corrida-a-corrida ("Pontuação da corrida")
-    // dá lugar à matriz de todas as corridas, que sai de Palpites/Histórico para
-    // Ranking/Geral. A sub-aba Histórico deixa de existir (Preferência vira o
-    // padrão de Palpites).
-    const historico = document.getElementById("subsecao-historico");
-    const geralSec = document.getElementById("subsecao-ranking-geral");
-    const detalheCard = document.querySelector("#subsecao-ranking-geral .corrida-detalhe-card");
-    const regras = geralSec && geralSec.querySelector(".regras-pontuacao");
-    if (historico && geralSec && detalheCard && regras) {
-      detalheCard.hidden = true;
-      if (!document.getElementById("hist-matriz-titulo")) {
-        geralSec.insertBefore(
-          el("h2", { id: "hist-matriz-titulo" }, ["Palpites por corrida"]),
-          regras
-        );
-      }
-      geralSec.insertBefore(historico, regras);
-      historico.hidden = false;
-      // "Por corrida" (expandível, rodada a rodada) não faz sentido na visão
-      // histórica — a matriz já cobre a temporada inteira.
-      const porCorrida = document.getElementById("hist-porcorrida");
-      if (porCorrida) porCorrida.hidden = true;
-    }
-    const btnHist = document.querySelector('#secao-palpites button.subaba[data-subaba="historico"]');
-    const btnPref = document.querySelector('#secao-palpites button.subaba[data-subaba="preferencia"]');
-    const secPref = document.getElementById("subsecao-preferencia");
-    if (btnHist) btnHist.hidden = true;
-    if (btnHist && btnHist.getAttribute("aria-selected") === "true" && btnPref && secPref) {
-      btnPref.setAttribute("aria-selected", "true");
-      secPref.hidden = false;
-    }
   }
+}
+
+// Card "Pontuação da corrida" (Ranking/Geral): ícone ao lado do título oculta ou
+// exibe o conteúdo. Começa oculto nas temporadas passadas (leitura corrida a
+// corrida importa menos num ano fechado) e aberto na atual.
+function configurarRecolherCorrida() {
+  const botao = document.getElementById("btn-recolher-corrida");
+  const partes = [
+    document.getElementById("corrida-detalhe-acoes"),
+    document.getElementById("corrida-detalhe-tabela-wrap"),
+  ].filter(Boolean);
+  if (!botao) return;
+  const card = botao.closest(".corrida-detalhe-card");
+  const aplicar = (aberto) => {
+    partes.forEach((p) => (p.hidden = !aberto));
+    if (card) card.classList.toggle("corrida-detalhe-card--recolhido", !aberto);
+    botao.setAttribute("aria-expanded", aberto ? "true" : "false");
+    const rotulo = aberto ? "Ocultar card" : "Exibir card";
+    botao.setAttribute("aria-label", rotulo);
+    botao.title = rotulo;
+  };
+  aplicar(!MODO_HISTORICO);
+  botao.addEventListener("click", () => aplicar(botao.getAttribute("aria-expanded") !== "true"));
+}
+
+// Card "Explore a temporada" (Ranking/Geral): cada chamada abre a aba/sub-aba
+// indicada em data-ir-aba/data-ir-subaba. Chamada cujo destino está escondido
+// nesta temporada (Simulador nas passadas, Regras na atual) some junto.
+function configurarChamadas() {
+  document.querySelectorAll(".chamadas-card .chamada").forEach((chamada) => {
+    const { irAba, irSubaba } = chamada.dataset;
+    const botaoAba = document.querySelector(`header .abas button.aba[data-aba="${irAba}"]`);
+    const botaoSubaba = irSubaba
+      ? document.querySelector(`#secao-${irAba} button.subaba[data-subaba="${irSubaba}"]`)
+      : null;
+    if (!botaoAba || botaoAba.hidden || (irSubaba && (!botaoSubaba || botaoSubaba.hidden))) {
+      chamada.hidden = true;
+      return;
+    }
+    chamada.addEventListener("click", () => {
+      botaoAba.click();
+      if (botaoSubaba) botaoSubaba.click();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  });
 }
 
 async function main() {
@@ -4437,6 +4472,8 @@ async function main() {
     const standings = await carregarJson(caminhoDados("standings"));
     FORMATO = standings.format || FORMATO;
     aplicarModoHistorico();
+    configurarRecolherCorrida();
+    configurarChamadas();
     renderRegras();
     adaptarTextosEstaticos();
     renderRanking(standings);
