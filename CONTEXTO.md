@@ -1813,6 +1813,19 @@ temporadas — sub-aba "Palpites" no Ranking + card "Explore a temporada".**
   `configurarChamadas` esconde a chamada cujo destino está oculto na temporada.
   Bloco "Ir para" mantido no fim.
 
+**Ajustes seguintes (2026-09-27):**
+- Ranking/Palpites começa **sem jogador selecionado** (`histSelecionados = []`,
+  mesmo estado do "Limpar").
+- Ranking/Corridas ganhou a matriz `#temporada-matriz-container`
+  (`renderMatrizTemporada`): jogador × rodada, segue o switch Posição/Pontos do
+  gráfico (posição após a rodada com ▲▼, ou pontos acumulados).
+- Aba principal "Palpites por jogador" renomeada para **"Rendimento"** (só o
+  rótulo; `data-aba="palpites"` e `#secao-palpites` mantidos).
+- Hall of Fame › Temporadas: temporadas de `seasons.json` sem pódio em
+  `hall_of_fame.json` (a atual) entram como "🏁 Em andamento", com barra de
+  progresso `rodadas/rodadas_totais` (%) antes da contagem de jogadores e
+  "Acessar" → URL limpa.
+
 ## 9. Pendências / decisões adiadas
 
 - Formato e importação dos **históricos** de anos anteriores.

@@ -998,7 +998,7 @@ function renderSimulador(standings, calendar) {
   renderTabelaSimulador();
 }
 
-// ---------- Palpites por jogador / Histórico ----------
+// ---------- Ranking / Palpites (histórico) ----------
 
 // Matriz posição × corrida: linhas P1–P6 + piloto da rodada + total; colunas
 // = corridas; célula = palpite de cada jogador selecionado + badge de pontos.
@@ -1569,6 +1569,7 @@ function criarGraficoTemporada(canvasId, labels, datasets, standings, tituloEixo
 // Troca só o `.data` de cada dataset (preserva o `hidden` dos cards de jogador).
 function aplicarModoAcumulado(modo) {
   modoGraficoAcumulado = modo;
+  renderMatrizTemporada();
   const chart = graficoTemporadaAcumulado;
   if (!chart || !dadosTemporada) return;
 
@@ -1626,6 +1627,70 @@ function renderTemporada(standings) {
       });
       return card;
     })
+  );
+  renderMatrizTemporada();
+}
+
+// Matriz de Ranking/Corridas: uma linha por jogador (ordem do ranking atual),
+// uma coluna por rodada. Segue o switch Posição/Pontos do gráfico acumulado:
+// posição no ranking depois da rodada (com ▲▼ em relação à anterior) ou pontos
+// acumulados até ela.
+function renderMatrizTemporada() {
+  const container = document.getElementById("temporada-matriz-container");
+  if (!container || !dadosTemporada) return;
+  const { rounds, datasetsAcumulado, posicoesRanking, pontosAcumulados } = dadosTemporada;
+  const posicao = modoGraficoAcumulado === "posicao";
+
+  const tabela = el("table", { class: "corridas-tabela temporada-matriz" }, [
+    el("thead", {}, [
+      el("tr", {}, [
+        el("th", {}, ["Jogador"]),
+        ...rounds.map((r) =>
+          el("th", { class: "num" }, [
+            el("span", { class: "corridas-tabela__rodada" }, [`R${r.round}`]),
+            el("span", { class: "corridas-tabela__corrida" }, [r.race]),
+          ])
+        ),
+      ]),
+    ]),
+  ]);
+  const tbody = el("tbody");
+  for (const dataset of datasetsAcumulado) {
+    const posicoes = posicoesRanking.get(dataset.playerId) || [];
+    const pontos = pontosAcumulados.get(dataset.playerId) || [];
+    const celulas = rounds.map((_, i) => {
+      if (!posicao) {
+        return el("td", { class: "num" }, [pontos[i] == null ? "–" : String(pontos[i])]);
+      }
+      const atual = posicoes[i];
+      if (atual == null) return el("td", { class: "num" }, ["–"]);
+      const anterior = i > 0 ? posicoes[i - 1] : null;
+      const dif = anterior == null ? 0 : anterior - atual;
+      return el("td", { class: "num" }, [
+        `${atual}º`,
+        dif
+          ? el("span", { class: `temporada-matriz__delta temporada-matriz__delta--${dif > 0 ? "sobe" : "desce"}` }, [
+              dif > 0 ? `▲${dif}` : `▼${-dif}`,
+            ])
+          : null,
+      ]);
+    });
+    tbody.appendChild(
+      el("tr", {}, [
+        el("td", {}, [
+          el("span", { class: "temporada-matriz__jogador" }, [
+            el("span", { class: "jogador-card__bolinha", style: `--cor-jogador:${dataset.borderColor}` }),
+            dataset.label,
+          ]),
+        ]),
+        ...celulas,
+      ])
+    );
+  }
+  tabela.appendChild(tbody);
+  container.replaceChildren(
+    el("h3", { class: "temporada-grafico-titulo" }, [posicao ? "Posição após cada corrida" : "Pontos acumulados após cada corrida"]),
+    el("div", { class: "temporada-matriz-wrap" }, [tabela])
   );
 }
 
@@ -2809,25 +2874,50 @@ function renderRankingHall(hof, universo) {
 
 function renderListaAnosHall(hof, seasons, standingsPorAno) {
   const medalhas = { ouro: "🥇", prata: "🥈", bronze: "🥉" };
-  const anos = hof.anos.slice().sort((a, b) => b.ano - a.ano);
-  const disponiveis = new Set((seasons?.temporadas || []).map((t) => String(t.ano)));
+  const temporadas = seasons?.temporadas || [];
+  const disponiveis = new Set(temporadas.map((t) => String(t.ano)));
   const atual = String(seasons?.atual ?? "");
+  // Temporada(s) ainda sem pódio no hall_of_fame.json (a atual, em andamento)
+  // entram na lista sem medalhas, com o progresso de corridas.
+  const comPodio = new Set(hof.anos.map((a) => String(a.ano)));
+  const anos = [
+    ...hof.anos,
+    ...temporadas.filter((t) => !comPodio.has(String(t.ano))).map((t) => ({ ano: t.ano, emAndamento: t })),
+  ].sort((a, b) => b.ano - a.ano);
   const lista = el("ul", { class: "hall-anos-lista" });
   for (const ano of anos) {
-    const jaAtiva = String(ano.ano) === atual || String(ano.ano) === String(TEMPORADA);
+    const chave = String(ano.ano);
     const acessar =
-      disponiveis.has(String(ano.ano)) && !jaAtiva
-        ? el("a", { class: "hall-acessar", href: `?ano=${ano.ano}` }, ["Acessar"])
-        : String(ano.ano) === String(TEMPORADA)
+      chave === String(TEMPORADA)
         ? el("span", { class: "hall-acessar hall-acessar--ativa" }, ["Você está aqui"])
+        : disponiveis.has(chave)
+        ? el("a", { class: "hall-acessar", href: chave === atual ? location.pathname : `?ano=${chave}` }, ["Acessar"])
         : null;
-    const qtdJogadores = standingsPorAno?.get(String(ano.ano))?.players?.length ?? null;
+    const qtdJogadores = standingsPorAno?.get(chave)?.players?.length ?? null;
+    const t = ano.emAndamento;
+    const pct = t && t.rodadas_totais ? Math.round((100 * t.rodadas) / t.rodadas_totais) : null;
     lista.appendChild(
       el("li", { class: "hall-ano-item" }, [
-        el("span", { class: "hall-ano-item__ano" }, [String(ano.ano)]),
-        el("span", { class: "hall-ano-item__medalha" }, [`${medalhas.ouro} ${nomeHall(hof, ano.ouro)}`]),
-        el("span", { class: "hall-ano-item__medalha" }, [`${medalhas.prata} ${nomeHall(hof, ano.prata)}`]),
-        el("span", { class: "hall-ano-item__medalha" }, [`${medalhas.bronze} ${nomeHall(hof, ano.bronze)}`]),
+        el("span", { class: "hall-ano-item__ano" }, [chave]),
+        ...(t
+          ? [el("span", { class: "hall-ano-item__andamento" }, ["🏁 Em andamento"])]
+          : [
+              el("span", { class: "hall-ano-item__medalha" }, [`${medalhas.ouro} ${nomeHall(hof, ano.ouro)}`]),
+              el("span", { class: "hall-ano-item__medalha" }, [`${medalhas.prata} ${nomeHall(hof, ano.prata)}`]),
+              el("span", { class: "hall-ano-item__medalha" }, [`${medalhas.bronze} ${nomeHall(hof, ano.bronze)}`]),
+            ]),
+        pct != null
+          ? el(
+              "span",
+              { class: "hall-ano-item__progresso", title: `${t.rodadas} de ${t.rodadas_totais} corridas concluídas` },
+              [
+                el("span", { class: "hall-progresso-barra" }, [
+                  el("span", { class: "hall-progresso-barra__cheio", style: `width:${pct}%` }),
+                ]),
+                `${pct}% · ${t.rodadas}/${t.rodadas_totais}`,
+              ]
+            )
+          : null,
         qtdJogadores != null
           ? el("span", { class: "hall-ano-item__jogadores", title: "Jogadores na temporada" }, [
               `${qtdJogadores} jogadores`,
@@ -4523,11 +4613,10 @@ async function main() {
     configurarHistAcoes();
     document.getElementById("palpites-status").textContent = "";
 
+    // Começa sem ninguém selecionado (mesmo estado do "Limpar"): a matriz pede
+    // para escolher um jogador.
     if (jogadoresHist.length) {
-      // Jogador padrão = líder do ranking (o primeiro de standings.players que
-      // tem palpite), não o primeiro em ordem alfabética.
-      const lider = standings.players.find((p) => bets.players[p.player_id]);
-      histSelecionados = [lider ? lider.player_id : jogadoresHist[0].player_id];
+      histSelecionados = [];
       atualizarHist();
     }
 

@@ -1036,6 +1036,30 @@ main {
 
 .chamada__seta { font-size: 1.3rem; line-height: 1; color: var(--texto-fraco); flex-shrink: 0; }
 
+/* Matriz posição/pontos acumulados (Ranking / Corridas) */
+
+.temporada-matriz-container {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: var(--bg-card);
+  border-radius: 10px;
+  box-shadow: var(--sombra);
+}
+.temporada-matriz-container:empty { display: none; }
+.temporada-matriz-container .temporada-grafico-titulo { margin-top: 0; }
+.temporada-matriz-wrap { overflow-x: auto; }
+.temporada-matriz td.num { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.temporada-matriz__jogador {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  white-space: nowrap;
+}
+.temporada-matriz__jogador .jogador-card__bolinha { flex-shrink: 0; }
+.temporada-matriz__delta { margin-left: 0.25rem; font-size: 0.68rem; }
+.temporada-matriz__delta--sobe { color: var(--ok2); }
+.temporada-matriz__delta--desce { color: var(--acento); }
+
 /* Título da sub-aba Ranking / Palpites */
 
 .subsecao-titulo {
@@ -1863,6 +1887,34 @@ button.subaba[aria-selected="true"] {
   margin-left: auto;
 }
 .hall-ano-item__jogadores + .hall-acessar { margin-left: 0.6rem; }
+
+.hall-ano-item__andamento { color: var(--texto-fraco); font-style: italic; }
+
+.hall-ano-item__progresso {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-left: auto;
+  white-space: nowrap;
+  color: var(--texto-fraco);
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+}
+.hall-ano-item__progresso + .hall-ano-item__jogadores { margin-left: 0.6rem; }
+
+.hall-progresso-barra {
+  display: inline-block;
+  width: 3.2rem;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--ok0-bg);
+  overflow: hidden;
+}
+.hall-progresso-barra__cheio {
+  display: block;
+  height: 100%;
+  background: var(--acento);
+}
 
 .hall-anos-lista {
   list-style: none;
