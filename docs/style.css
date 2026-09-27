@@ -1071,6 +1071,7 @@ main {
 }
 
 #subsecao-ranking-palpites .temporada-grafico-wrap { margin-top: 1.4rem; }
+.temporada-cards--no-grafico { margin: 0.6rem 0 0.8rem; }
 
 /* Regras de pontuação (Ranking) */
 

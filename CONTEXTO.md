@@ -1825,6 +1825,12 @@ temporadas — sub-aba "Palpites" no Ranking + card "Explore a temporada".**
   `hall_of_fame.json` (a atual) entram como "🏁 Em andamento", com barra de
   progresso `rodadas/rodadas_totais` (%) antes da contagem de jogadores e
   "Acessar" → URL limpa.
+- Ordem das sub-abas do Ranking: **Geral · Corridas · Palpites · Simulador**
+  (· Regras nas passadas); chamadas do card "Explore" na mesma ordem.
+- Gráfico "Pontuação por corrida" (Palpites) ganhou cards de filtro próprios
+  (`#temporada-cards-rodada`, todos ligados no início). Os cards de Corridas
+  passam a filtrar só o gráfico de posição —
+  `temporadaDesligados = {acumulado, rodada}`, `renderCardsFiltroTemporada`.
 
 ## 9. Pendências / decisões adiadas
 

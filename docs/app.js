@@ -1324,9 +1324,9 @@ let standingsParaTemporada = null;
 let modoGraficoAcumulado = "posicao";
 // Séries auxiliares usadas pelos tooltips e pelo modo "Posição".
 let dadosTemporada = null;
-// Índices dos jogadores desligados nos cards de Ranking/Corridas — valem para os
-// dois gráficos (acumulado em Corridas, por corrida em Palpites).
-const temporadaDesligados = new Set();
+// Índices dos jogadores desligados nos cards de filtro de cada gráfico:
+// "acumulado" (Ranking/Corridas) e "rodada" (Ranking/Palpites). Independentes.
+const temporadaDesligados = { acumulado: new Set(), rodada: new Set() };
 
 // Traço vertical que acompanha o mouse, deixando claro qual rodada está sendo lida.
 const pluginLinhaRodada = {
@@ -1604,31 +1604,36 @@ function configurarModoAcumulado() {
 // cada um quando a sua sub-aba fica visível (garantirGraficosTemporada).
 function renderTemporada(standings) {
   dadosTemporada = construirDadosTemporada(standings);
-  const { datasetsAcumulado } = dadosTemporada;
+  renderCardsFiltroTemporada("temporada-cards", "acumulado", () => graficoTemporadaAcumulado);
+  renderCardsFiltroTemporada("temporada-cards-rodada", "rodada", () => graficoTemporadaPorRodada);
+  renderMatrizTemporada();
+}
 
-  const cardsContainer = document.getElementById("temporada-cards");
-  cardsContainer.replaceChildren(
-    ...datasetsAcumulado.map((dataset, indice) => {
+// Cards de jogador que ligam/desligam as linhas de um dos gráficos da Temporada.
+function renderCardsFiltroTemporada(containerId, chave, obterGrafico) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  const desligados = temporadaDesligados[chave];
+  container.replaceChildren(
+    ...dadosTemporada.datasetsAcumulado.map((dataset, indice) => {
       const card = el(
         "button",
         { class: "jogador-card", type: "button", style: `--cor-jogador:${dataset.borderColor}` },
         [el("span", { class: "jogador-card__bolinha" }), dataset.label]
       );
-      card.classList.toggle("jogador-card--desligado", temporadaDesligados.has(indice));
+      card.classList.toggle("jogador-card--desligado", desligados.has(indice));
       card.addEventListener("click", () => {
         const desligado = card.classList.toggle("jogador-card--desligado");
-        if (desligado) temporadaDesligados.add(indice);
-        else temporadaDesligados.delete(indice);
-        [graficoTemporadaAcumulado, graficoTemporadaPorRodada].forEach((grafico) => {
-          if (!grafico) return;
-          grafico.data.datasets[indice].hidden = desligado;
-          grafico.update();
-        });
+        if (desligado) desligados.add(indice);
+        else desligados.delete(indice);
+        const grafico = obterGrafico();
+        if (!grafico) return;
+        grafico.data.datasets[indice].hidden = desligado;
+        grafico.update();
       });
       return card;
     })
   );
-  renderMatrizTemporada();
 }
 
 // Matriz de Ranking/Corridas: uma linha por jogador (ordem do ranking atual),
@@ -1694,9 +1699,9 @@ function renderMatrizTemporada() {
   );
 }
 
-function aplicarDesligadosTemporada(grafico) {
+function aplicarDesligadosTemporada(grafico, chave) {
   grafico.data.datasets.forEach((dataset, indice) => {
-    dataset.hidden = temporadaDesligados.has(indice);
+    dataset.hidden = temporadaDesligados[chave].has(indice);
   });
   grafico.update();
 }
@@ -4004,7 +4009,7 @@ function garantirGraficosTemporada() {
       graficoTemporadaAcumulado = criarGraficoTemporada(
         "temporada-grafico-acumulado", labels, datasetsAcumulado, standingsParaTemporada, "Pontos acumulados", "acumulado"
       );
-      aplicarDesligadosTemporada(graficoTemporadaAcumulado);
+      aplicarDesligadosTemporada(graficoTemporadaAcumulado, "acumulado");
       if (modoGraficoAcumulado !== "pontos") aplicarModoAcumulado(modoGraficoAcumulado);
     }
   }
@@ -4015,7 +4020,7 @@ function garantirGraficosTemporada() {
       graficoTemporadaPorRodada = criarGraficoTemporada(
         "temporada-grafico", labels, datasetsPorRodada, standingsParaTemporada, "Pontos na rodada", "rodada"
       );
-      aplicarDesligadosTemporada(graficoTemporadaPorRodada);
+      aplicarDesligadosTemporada(graficoTemporadaPorRodada, "rodada");
     }
   }
 }

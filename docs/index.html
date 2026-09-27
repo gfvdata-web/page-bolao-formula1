@@ -39,8 +39,8 @@
   <section id="secao-ranking" class="secao" role="tabpanel">
     <nav class="subabas" role="tablist">
       <button class="subaba" data-subaba="geral" role="tab" aria-selected="true">Geral</button>
-      <button class="subaba" data-subaba="palpites" role="tab" aria-selected="false">Palpites</button>
       <button class="subaba" data-subaba="corridas" role="tab" aria-selected="false">Corridas</button>
+      <button class="subaba" data-subaba="palpites" role="tab" aria-selected="false">Palpites</button>
       <button class="subaba" data-subaba="simulador" role="tab" aria-selected="false">Simulador</button>
       <button class="subaba" data-subaba="regras" role="tab" aria-selected="false" hidden>Regras</button>
     </nav>
@@ -72,14 +72,14 @@
       <div class="chamadas-card">
         <h2>Explore a temporada</h2>
         <div class="chamadas-lista">
-          <button type="button" class="chamada" data-ir-aba="ranking" data-ir-subaba="palpites">
-            <span class="chamada__icone" aria-hidden="true">📋</span>
-            <span class="chamada__texto"><strong>Palpites</strong><span>Veja o histórico de palpites de cada jogador que competiu</span></span>
-            <span class="chamada__seta" aria-hidden="true">›</span>
-          </button>
           <button type="button" class="chamada" data-ir-aba="ranking" data-ir-subaba="corridas">
             <span class="chamada__icone" aria-hidden="true">📈</span>
             <span class="chamada__texto"><strong>Corridas</strong><span>Acompanhe a evolução de cada jogador no ranking, corrida a corrida</span></span>
+            <span class="chamada__seta" aria-hidden="true">›</span>
+          </button>
+          <button type="button" class="chamada" data-ir-aba="ranking" data-ir-subaba="palpites">
+            <span class="chamada__icone" aria-hidden="true">📋</span>
+            <span class="chamada__texto"><strong>Palpites</strong><span>Veja o histórico de palpites de cada jogador que competiu</span></span>
             <span class="chamada__seta" aria-hidden="true">›</span>
           </button>
           <button type="button" class="chamada" data-ir-aba="ranking" data-ir-subaba="simulador">
@@ -142,6 +142,7 @@
       </div>
       <div class="temporada-grafico-wrap">
         <h3 class="temporada-grafico-titulo">Pontuação por corrida</h3>
+        <div id="temporada-cards-rodada" class="temporada-cards temporada-cards--no-grafico" role="group" aria-label="Jogadores no gráfico"></div>
         <div class="temporada-grafico-canvas">
           <canvas id="temporada-grafico"></canvas>
         </div>
