@@ -426,6 +426,11 @@ cards de última/próxima corrida.**
   (o alias manual `"japao"` da rodada 3, ver Etapa 3, foi reaplicado depois —
   cuidado ao rodar `python -m bolao.jolpica calendar` de novo: ele sobrescreve
   aliases manuais, que precisam ser reaplicados).
+- **Calendário re-baixado em 2026-10-03:** a FIA inseriu a rodada 16 "Bahrain
+  GP in Malaysia" (Sepang); Singapura→17 … Abu Dhabi→23 (23 rodadas). Aliases
+  manuais preservados + PT novos (`singapura`, `eua`, `brasil`, `catar`...).
+  Resultado = classificação do `/qualifying` (antes de punições de grid) —
+  conferido nas rodadas 10/11/13, em que o grid de largada diferiu.
 - **Novo arquivo `docs/data/calendar.json`:** cópia enxuta do calendário
   completo da temporada (`round`, `race_id`, `race`, `circuit`, `date`,
   `qualifying_utc`, `sprint` por corrida), gerada por `bolao/site.py:generate`
