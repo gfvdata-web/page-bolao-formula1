@@ -1876,6 +1876,30 @@ temporadas — sub-aba "Palpites" no Ranking + card "Explore a temporada".**
   `app.js`, reaproveita seus helpers globais); `app.js` só ganha o roteamento.
 - **Adiado (perguntar ao usuário após a v1):** links das tabelas da temporada
   (ranking, Pilotos, Rendimento, Pontuação da corrida) para os perfis.
+- **Entregue v1 (2026-10-03), aguardando revisão do usuário:**
+  - Topo: um único `#btn-voltar` (`mostrarVoltar`) + `#btn-menu`
+    (`<a href="?menu">`). `entrarModoPagina()` (app.js) monta toda página fora
+    da temporada. `main()` roda no `DOMContentLoaded` e despacha
+    `ROTAS_ANALISE` (analise.js) antes de `?jogador`/`?piloto`/`?ano`.
+  - `?menu`: lista de temporadas (`renderListaAnosHall(..., aqui=null)`),
+    atalhos Jogadores/Pilotos e busca rápida (`escolherJogador/escolherPiloto`,
+    também usados pelo "Ir para").
+  - `?pilotos` (`agregarPilotos`): filtros temporada/equipe (equipe por
+    rodada), tabela ordenável, bolinha = compara no gráfico (posição média por
+    ano, ou por corrida num ano). Linha → `?piloto`.
+  - `?jogadores` (`agregarJogadores`): chips (início = temporada atual),
+    gráfico por temporada (Posição/Acerto/Pts por corrida), comparativo com
+    filtro de ano, matriz "em quem cada um aposta". Nome → `?jogador`.
+  - `?piloto`: card Equipes, violino rotulado pela equipe real, tabela
+    "Temporada a temporada"; nomes em "Quem mais aposta" → `?jogador`.
+    `?jogador`: código do piloto em "Apostas por piloto" → `?piloto`.
+  - Blocos comuns em analise.js: `tabelaOrdenavel`, `seletorTemporada`,
+    `criarSelecaoCores`, `graficoLinhasAnalise`, `rerenderizarAnalise` (tema).
+  - Estatísticas de piloto contam só as corridas do bolão
+    (`docs/data/<ano>/results.json`).
+  - Pendência: `EQUIPE_PILOTO(_ANO)` do app.js duplica o que hoje vem em
+    `results.equipes` (ex.: 2026 diz "Sauber", o dado diz "Audi"); só serve de
+    reserva. Dá para aposentar numa limpeza futura.
 
 ## 9. Pendências / decisões adiadas
 

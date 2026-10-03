@@ -2279,3 +2279,5 @@ button.subaba[aria-selected="true"] {
 a.analise-jogador:hover { color: var(--acento); }
 .analise-matriz { min-width: 36rem; }
 .analise-matriz__cel { background: color-mix(in srgb, var(--acento) var(--intensidade), transparent); }
+.analise-piloto-link { color: inherit; text-decoration: none; }
+.analise-piloto-link:hover { color: var(--acento); text-decoration: underline; }

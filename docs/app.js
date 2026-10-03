@@ -3447,14 +3447,21 @@ function renderApostasPorPiloto(container, agregado, nome) {
       .filter(([, mapa]) => mapa.has(l.cod))
       .map(([ano]) => ano);
     const linha = el("tr", { class: "jogador-pilotos-tabela__linha", tabindex: "0", role: "button" }, [
-      el("td", {}, [chipPilotoEquipes(l.cod, anosApostados)]),
+      el("td", {}, [
+        el("a", { class: "analise-piloto-link", href: `?piloto=${encodeURIComponent(l.cod)}` }, [
+          chipPilotoEquipes(l.cod, anosApostados),
+        ]),
+      ]),
       el("td", { class: "num" }, [String(l.vezes)]),
       el("td", { class: "num" }, [String(l.pontos)]),
       el("td", { class: "num" }, [media]),
       el("td", { class: "num" }, [el("span", { class: "jogador-pilotos-tabela__ver" }, ["por ano ▸"])]),
     ]);
-    linha.addEventListener("click", abrir);
+    linha.addEventListener("click", (e) => {
+      if (!e.target.closest("a")) abrir();
+    });
     linha.addEventListener("keydown", (e) => {
+      if (e.target !== linha) return;
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
         abrir();
@@ -3658,7 +3665,7 @@ function coletarMaxGridAnos(resultsPorAno, anos) {
 // Um violino VERTICAL por temporada (eixo de posição na vertical, P1 no topo),
 // releitura de renderPilotos (aba Pilotos) com os eixos trocados: lá cada linha
 // era um piloto; aqui cada coluna é um ano do mesmo piloto.
-function renderViolinoPilotoPorAno(codigo, porAno, maxGrid) {
+function renderViolinoPilotoPorAno(codigo, porAno, maxGrid, equipesPorAno) {
   const container = document.getElementById("piloto-violino-container");
   const anos = [...porAno.keys()].sort((a, b) => Number(a) - Number(b));
 
@@ -3845,7 +3852,7 @@ function renderViolinoPilotoPorAno(codigo, porAno, maxGrid) {
       );
     });
 
-    const equipe = equipePilotoNoAno(codigo, ano);
+    const equipe = (equipesPorAno.get(ano) || []).join(" / ") || equipePilotoNoAno(codigo, ano);
     if (equipe) {
       svg.appendChild(
         svgEl(
@@ -3904,7 +3911,7 @@ function agregarJogadoresPorPiloto(betsPorAno, codigo) {
         for (const det of rodada.top6_detail || []) {
           if (det.guess !== codigo) continue;
           if (!mapa.has(id)) {
-            mapa.set(id, { nome: jogador.name || id, vezes: 0, pontos: 0, posSoma: 0, posCount: 0 });
+            mapa.set(id, { id, nome: jogador.name || id, vezes: 0, pontos: 0, posSoma: 0, posCount: 0 });
           }
           const reg = mapa.get(id);
           reg.vezes += 1;
@@ -3998,11 +4005,13 @@ async function renderPaginaPiloto(codigo, anosSet, resultsPorAno, betsPorAno) {
   }
   const maxGrid = coletarMaxGridAnos(resultsPorAno, [...porAno.keys()]);
   const totalQuali = [...porAno.values()].reduce((s, arr) => s + arr.length, 0);
+  const equipesPorAno = equipesDoPilotoPorAno(resultsPorAno, codigo);
 
   container.appendChild(
     el("div", { class: "corridas-cards" }, [
       jogadorCard("Temporadas disputadas", String(porAno.size), [...porAno.keys()].join(" · ") || "—"),
       jogadorCard("Quali disputados", String(totalQuali)),
+      jogadorCard("Equipes", String(new Set([...equipesPorAno.values()].flat()).size), resumoEquipes(equipesPorAno)),
     ])
   );
 
@@ -4011,7 +4020,8 @@ async function renderPaginaPiloto(codigo, anosSet, resultsPorAno, betsPorAno) {
     el("div", { id: "piloto-violino-container", class: "pilotos-container" }),
   ]);
   container.appendChild(wrapViolino);
-  renderViolinoPilotoPorAno(codigo, porAno, maxGrid);
+  renderViolinoPilotoPorAno(codigo, porAno, maxGrid, equipesPorAno);
+  container.appendChild(tabelaPilotoAnoAno(codigo, { resultsPorAno, betsPorAno }));
 
   container.appendChild(
     el("div", { class: "secao-intro" }, [
@@ -4053,7 +4063,7 @@ async function renderPaginaPiloto(codigo, anosSet, resultsPorAno, betsPorAno) {
   for (const j of agregadoJogadores) {
     tbody.appendChild(
       el("tr", {}, [
-        el("td", {}, [j.nome]),
+        el("td", {}, [el("a", { class: "analise-jogador", href: `?jogador=${encodeURIComponent(j.id)}` }, [j.nome])]),
         el("td", { class: "num" }, [String(j.vezes)]),
         el("td", { class: "num" }, [String(j.pontos)]),
         el("td", { class: "num" }, [(j.pontos / j.vezes).toFixed(2).replace(".", ",")]),

@@ -846,3 +846,81 @@ function atualizarPaginaPilotos(dados) {
     });
   }
 }
+
+// ---------- Complementos do perfil do piloto (?piloto, app.js) ----------
+
+// ano -> equipes do piloto naquele ano, na ordem em que apareceram (troca no
+// meio da temporada vira duas). Fonte: results.equipes de cada rodada.
+function equipesDoPilotoPorAno(resultsPorAno, codigo) {
+  const porAno = new Map();
+  for (const ano of anosAnalise()) {
+    const rounds = Object.values(resultsPorAno.get(ano)?.rounds || {}).sort((a, b) => a.round - b.round);
+    for (const rodada of rounds) {
+      if (!(rodada.order || []).includes(codigo)) continue;
+      const eq = equipeNaRodada(rodada, codigo, ano);
+      if (!eq) continue;
+      if (!porAno.has(ano)) porAno.set(ano, []);
+      if (!porAno.get(ano).includes(eq)) porAno.get(ano).push(eq);
+    }
+  }
+  return porAno;
+}
+
+// "Ferrari 2021–2024 · Mercedes 2025–2026": anos seguidos na mesma equipe
+// viram um intervalo.
+function resumoEquipes(equipesPorAno) {
+  const trechos = [];
+  for (const [ano, equipes] of equipesPorAno) {
+    for (const eq of equipes) {
+      const ultimo = trechos[trechos.length - 1];
+      if (ultimo && ultimo.eq === eq && Number(ano) - Number(ultimo.fim) <= 1) ultimo.fim = ano;
+      else trechos.push({ eq, ini: ano, fim: ano });
+    }
+  }
+  return trechos.map((t) => `${t.eq} ${t.ini === t.fim ? t.ini : `${t.ini}–${t.fim}`}`).join(" · ") || "—";
+}
+
+// Tabela temporada a temporada do piloto: quali real + palpites do grupo.
+function tabelaPilotoAnoAno(codigo, dados) {
+  const linhas = anosAnalise()
+    .map((ano) => ({ ano, ...agregarPilotos(dados, ano, "todas").find((l) => l.cod === codigo) }))
+    .filter((l) => l.qualis)
+    .reverse();
+  const td = (v, num = true) => el("td", { class: num ? "num" : "" }, [v]);
+  const tabela = el("table", { class: "corridas-tabela analise-tabela" }, [
+    el("thead", {}, [
+      el("tr", {}, [
+        el("th", {}, ["Temporada"]),
+        el("th", {}, ["Equipe"]),
+        ...["Qualis", "Pos. média", "Melhor", "Poles", "Q3", "Apostas top6", "Pts no top6", "Pts / aposta"].map((t) =>
+          el("th", { class: "num" }, [t])
+        ),
+      ]),
+    ]),
+    el(
+      "tbody",
+      {},
+      linhas.map((l) =>
+        el("tr", {}, [
+          td(l.ano, false),
+          td(l.equipes.join(" / "), false),
+          td(String(l.qualis)),
+          td(fmt1(l.posMedia)),
+          td(`P${l.melhor}`),
+          td(String(l.poles)),
+          td(fmtPct(l.q3 / l.qualis)),
+          td(String(l.apostas)),
+          td(String(l.pontos)),
+          td(l.apostas ? fmt2(l.pontos / l.apostas) : "—"),
+        ])
+      )
+    ),
+  ]);
+  return el("div", { class: "rendimento-grafico-wrap" }, [
+    el("h3", { class: "rendimento-grafico-titulo" }, ["Temporada a temporada"]),
+    el("div", { class: "rendimento-tabela-wrap" }, [tabela]),
+    el("p", { class: "analise-nota" }, [
+      "Só as corridas do bolão. Apostas/pontos: quantas vezes o grupo pôs o piloto no top6 e quanto isso rendeu.",
+    ]),
+  ]);
+}
