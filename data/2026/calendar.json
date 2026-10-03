@@ -234,11 +234,11 @@
       "sprint": false,
       "aliases": [
         "madring",
-        "mad ring",
         "madrid",
         "spain",
         "spanish grand prix",
-        "spanish"
+        "spanish",
+        "mad ring"
       ]
     },
     {
@@ -261,6 +261,24 @@
       "race_id": "2026-16",
       "season": 2026,
       "round": 16,
+      "circuit": "sepang",
+      "race": "Kuala Lumpur",
+      "date": "2026-10-04",
+      "qualifying_utc": "2026-10-03T08:00:00Z",
+      "sprint": false,
+      "aliases": [
+        "sepang",
+        "sepang international circuit",
+        "kuala lumpur",
+        "malaysia",
+        "bahrain grand prix in malaysia",
+        "bahrain in malaysia"
+      ]
+    },
+    {
+      "race_id": "2026-17",
+      "season": 2026,
+      "round": 17,
       "circuit": "marina_bay",
       "race": "Marina Bay",
       "date": "2026-10-11",
@@ -270,13 +288,14 @@
         "marina bay",
         "marina bay street circuit",
         "singapore",
-        "singapore grand prix"
+        "singapore grand prix",
+        "singapura"
       ]
     },
     {
-      "race_id": "2026-17",
+      "race_id": "2026-18",
       "season": 2026,
-      "round": 17,
+      "round": 18,
       "circuit": "americas",
       "race": "Austin",
       "date": "2026-10-25",
@@ -288,13 +307,15 @@
         "austin",
         "usa",
         "united states grand prix",
-        "united states"
+        "united states",
+        "eua",
+        "estados unidos"
       ]
     },
     {
-      "race_id": "2026-18",
+      "race_id": "2026-19",
       "season": 2026,
-      "round": 18,
+      "round": 19,
       "circuit": "rodriguez",
       "race": "Mexico City",
       "date": "2026-11-01",
@@ -305,13 +326,14 @@
         "autodromo hermanos rodriguez",
         "mexico city",
         "mexico",
-        "mexico city grand prix"
+        "mexico city grand prix",
+        "cidade do mexico"
       ]
     },
     {
-      "race_id": "2026-19",
+      "race_id": "2026-20",
       "season": 2026,
-      "round": 19,
+      "round": 20,
       "circuit": "interlagos",
       "race": "São Paulo",
       "date": "2026-11-08",
@@ -323,13 +345,14 @@
         "sao paulo",
         "brazil",
         "brazilian grand prix",
-        "brazilian"
+        "brazilian",
+        "brasil"
       ]
     },
     {
-      "race_id": "2026-20",
+      "race_id": "2026-21",
       "season": 2026,
-      "round": 20,
+      "round": 21,
       "circuit": "vegas",
       "race": "Las Vegas",
       "date": "2026-11-22",
@@ -344,9 +367,9 @@
       ]
     },
     {
-      "race_id": "2026-21",
+      "race_id": "2026-22",
       "season": 2026,
-      "round": 21,
+      "round": 22,
       "circuit": "losail",
       "race": "Lusail",
       "date": "2026-11-29",
@@ -354,16 +377,18 @@
       "sprint": false,
       "aliases": [
         "losail",
-        "losail international circuit",
+        "lusail international circuit",
         "lusail",
         "qatar",
-        "qatar grand prix"
+        "qatar grand prix",
+        "losail international circuit",
+        "catar"
       ]
     },
     {
-      "race_id": "2026-22",
+      "race_id": "2026-23",
       "season": 2026,
-      "round": 22,
+      "round": 23,
       "circuit": "yas_marina",
       "race": "Abu Dhabi",
       "date": "2026-12-06",

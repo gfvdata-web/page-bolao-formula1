@@ -139,6 +139,15 @@
     {
       "round": 16,
       "race_id": "2026-16",
+      "race": "Kuala Lumpur",
+      "circuit": "sepang",
+      "date": "2026-10-04",
+      "qualifying_utc": "2026-10-03T08:00:00Z",
+      "sprint": false
+    },
+    {
+      "round": 17,
+      "race_id": "2026-17",
       "race": "Marina Bay",
       "circuit": "marina_bay",
       "date": "2026-10-11",
@@ -146,8 +155,8 @@
       "sprint": true
     },
     {
-      "round": 17,
-      "race_id": "2026-17",
+      "round": 18,
+      "race_id": "2026-18",
       "race": "Austin",
       "circuit": "americas",
       "date": "2026-10-25",
@@ -155,8 +164,8 @@
       "sprint": false
     },
     {
-      "round": 18,
-      "race_id": "2026-18",
+      "round": 19,
+      "race_id": "2026-19",
       "race": "Mexico City",
       "circuit": "rodriguez",
       "date": "2026-11-01",
@@ -164,8 +173,8 @@
       "sprint": false
     },
     {
-      "round": 19,
-      "race_id": "2026-19",
+      "round": 20,
+      "race_id": "2026-20",
       "race": "São Paulo",
       "circuit": "interlagos",
       "date": "2026-11-08",
@@ -173,8 +182,8 @@
       "sprint": false
     },
     {
-      "round": 20,
-      "race_id": "2026-20",
+      "round": 21,
+      "race_id": "2026-21",
       "race": "Las Vegas",
       "circuit": "vegas",
       "date": "2026-11-22",
@@ -182,8 +191,8 @@
       "sprint": false
     },
     {
-      "round": 21,
-      "race_id": "2026-21",
+      "round": 22,
+      "race_id": "2026-22",
       "race": "Lusail",
       "circuit": "losail",
       "date": "2026-11-29",
@@ -191,8 +200,8 @@
       "sprint": false
     },
     {
-      "round": 22,
-      "race_id": "2026-22",
+      "round": 23,
+      "race_id": "2026-23",
       "race": "Abu Dhabi",
       "circuit": "yas_marina",
       "date": "2026-12-06",
