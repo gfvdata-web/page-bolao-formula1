@@ -11,7 +11,9 @@ Passo a passo para deixar o disparo funcionando pelo celular. Feito uma vez só
 3. **Expiration:** 366 dias (o máximo para conta pessoal).
 4. **Resource owner:** sua conta pessoal.
 5. **Repository access:** "Only select repositories" → escolher
-   `gfvdata-web/page-bolao-formula1`.
+   `gfvdata-web/page-bolao-formula1` **e** `gfvdata-web/painel-status` (o
+   segundo é para o painel acompanhar o pipeline ao vivo; ver "Aviso ao
+   painel-status" abaixo).
 6. **Permissions → Repository permissions:** `Contents` → **Read and write**
    (é o que autoriza disparar `repository_dispatch`). Não precisa de mais nada.
 7. **Generate token** e copiar o valor (`github_pat_...`) — só aparece uma vez.
@@ -71,6 +73,25 @@ texto de teste) e enviar. Conferir:
 - GitHub → aba **Actions** → run novo iniciado pelo evento `novo_palpite`.
 - Site (`https://gfvdata-web.github.io/page-bolao-formula1/`) atualizado
   depois que o run terminar.
+
+## Aviso ao painel-status
+
+A cada envio, depois de disparar o pipeline, o script também manda um
+`repository_dispatch` (`bolao_palpite`) para `gfvdata-web/painel-status`. Lá, o
+job `vigiar-bolao` acompanha o pipeline etapa por etapa até terminar e atualiza
+o painel (https://gfvdata-web.github.io/painel-status/). Se esse aviso falhar,
+o palpite segue normal e chega um e-mail "[Bolão F1] Palpite enviado, mas o
+painel-status não foi avisado".
+
+**Token criado antes desse aviso (só com `page-bolao-formula1`):** não precisa
+gerar outro. Em GitHub → Settings → Developer settings → Fine-grained tokens →
+clicar no token → **Edit** → Repository access → adicionar
+`gfvdata-web/painel-status` → salvar. A permissão `Contents: Read and write`
+vale para os dois. O valor do token não muda.
+
+Teste: no editor do Apps Script, executar `testarAvisoPainel` e conferir na aba
+Actions do `painel-status` um run "Atualizar status" com o evento
+`repository_dispatch` (ele desiste em 10 min se não houver pipeline novo).
 
 ## 7. Renovação do token (lembrete)
 

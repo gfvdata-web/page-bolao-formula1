@@ -3,8 +3,12 @@
  * Dispara um repository_dispatch no GitHub a cada resposta do Google Forms,
  * repassando o texto colado do WhatsApp para o pipeline (bolao/pipeline.py).
  *
+ * Também avisa o painel-status (outro repositório), que acompanha o pipeline ao
+ * vivo até terminar. Falha nesse aviso não afeta o palpite: só gera e-mail.
+ *
  * Configuração necessária (Extensões > Propriedades do projeto > Propriedades do script):
- *   GITHUB_TOKEN  — fine-grained PAT, só repo page-bolao-formula1, "Contents: Read and write"
+ *   GITHUB_TOKEN  — fine-grained PAT, repos page-bolao-formula1 e painel-status,
+ *                   "Contents: Read and write"
  *   ALERTA_EMAIL  — (opcional) e-mail para avisos de falha; sem isso usa o dono do script
  *
  * Trigger necessário (Extensões > Gatilhos): onFormSubmit, do tipo "From form" / "On form submit".
@@ -13,6 +17,8 @@
 const GITHUB_OWNER = 'gfvdata-web';
 const GITHUB_REPO = 'page-bolao-formula1';
 const GITHUB_EVENT_TYPE = 'novo_palpite';
+const PAINEL_REPO = 'painel-status';
+const PAINEL_EVENT_TYPE = 'bolao_palpite';
 
 // Precisam bater com o título exato das perguntas no Google Forms.
 const PERGUNTA_RODADA = 'Rodada (opcional)';
@@ -45,22 +51,31 @@ function onFormSubmit(e) {
       }
     }
 
-    dispararRepositoryDispatch(clientPayload);
+    dispararRepositoryDispatch(GITHUB_REPO, GITHUB_EVENT_TYPE, clientPayload);
   } catch (erro) {
     notificarErro(erro);
     throw erro;
   }
+  avisarPainel();
 }
 
-function dispararRepositoryDispatch(clientPayload) {
+function avisarPainel() {
+  try {
+    dispararRepositoryDispatch(PAINEL_REPO, PAINEL_EVENT_TYPE, {});
+  } catch (erro) {
+    notificarErroPainel(erro);
+  }
+}
+
+function dispararRepositoryDispatch(repo, eventType, clientPayload) {
   const token = PropertiesService.getScriptProperties().getProperty('GITHUB_TOKEN');
   if (!token) {
     throw new Error('Propriedade GITHUB_TOKEN não configurada (Propriedades do script).');
   }
 
-  const url = 'https://api.github.com/repos/' + GITHUB_OWNER + '/' + GITHUB_REPO + '/dispatches';
+  const url = 'https://api.github.com/repos/' + GITHUB_OWNER + '/' + repo + '/dispatches';
   const payload = {
-    event_type: GITHUB_EVENT_TYPE,
+    event_type: eventType,
     client_payload: clientPayload
   };
 
@@ -98,6 +113,23 @@ function notificarErro(erro) {
   });
 }
 
+function notificarErroPainel(erro) {
+  const destinatario = obterEmailAlerta();
+  if (!destinatario) {
+    return;
+  }
+  MailApp.sendEmail({
+    to: destinatario,
+    subject: '[Bolão F1] Palpite enviado, mas o painel-status não foi avisado',
+    body:
+      'O palpite chegou ao pipeline normalmente; só o aviso ao painel-status falhou, ' +
+      'então o painel vai mostrar o andamento só na rotina de 3 em 3 horas.\n\n' +
+      'Erro: ' + erro.message + '\n\n' +
+      'O que fazer: confira se o GITHUB_TOKEN tem acesso também ao repositório ' +
+      'painel-status (Contents: Read and write).'
+  });
+}
+
 function obterEmailAlerta() {
   const propriedade = PropertiesService.getScriptProperties().getProperty('ALERTA_EMAIL');
   if (propriedade) {
@@ -111,8 +143,16 @@ function obterEmailAlerta() {
  * enviar o Forms de verdade) para validar token e conectividade.
  */
 function testarDisparoManual() {
-  dispararRepositoryDispatch({
+  dispararRepositoryDispatch(GITHUB_REPO, GITHUB_EVENT_TYPE, {
     texto: 'Qualify Bolao Teste\nPiloto Verstappen\n\nTeste\nVER\nHAM\nNOR\nLEC\nPIA\nRUS\nP1',
     round: 1
   });
+}
+
+/**
+ * Teste só do aviso ao painel-status: roda o job que acompanha o pipeline
+ * (sem execução nova do Bolão, ele desiste em 10 min).
+ */
+function testarAvisoPainel() {
+  dispararRepositoryDispatch(PAINEL_REPO, PAINEL_EVENT_TYPE, {});
 }

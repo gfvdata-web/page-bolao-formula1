@@ -117,6 +117,7 @@ branco. Cada bloco = nome + 6 códigos de piloto + linha `P#`.
 Você (celular)
   → Google Forms: cola o bloco do WhatsApp + identifica a corrida → envia
     → Apps Script (onFormSubmit): POST repository_dispatch para o GitHub
+      (e um segundo, `bolao_palpite`, para o painel-status acompanhar ao vivo)
       → GitHub Actions (Python):
           1. parseia os palpites do texto
           2. busca o resultado do quali na Jolpica-F1
@@ -1105,8 +1106,8 @@ parser mais tolerante + alias de calendário.**
   problemas" em `SETUP.md`).
 
 **Decisões fixadas na Etapa 6 (não reabrir sem o usuário pedir):**
-- **Autenticação:** fine-grained PAT do GitHub (repo único
-  `page-bolao-formula1`, permissão `Contents: Read and write`, expiração de
+- **Autenticação:** fine-grained PAT do GitHub (repos `page-bolao-formula1`
+  e, desde 2026-10-03, `painel-status` — para o aviso ao painel; permissão `Contents: Read and write`, expiração de
   366 dias), guardado em `PropertiesService` (Propriedades do script) do
   Apps Script — nunca no código-fonte nem no repositório. **Renovado em
   2026-08-15** (o anterior já tinha expirado — o aviso por e-mail do GitHub
