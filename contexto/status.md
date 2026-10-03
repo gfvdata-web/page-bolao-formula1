@@ -28,6 +28,5 @@ para não invadir as etapas vizinhas.
   `total_recalculado`, `total_somado` no `standings.json`). Ver "Pendência" na
   sub-etapa 2026-09-08d.
 - **Etapa 8:** v1 entregue em 2026-10-03, **aguardando revisão do usuário**.
-  Adiado para depois da v1: links das tabelas da temporada para os perfis
-  (perguntar ao usuário).
+  Links das tabelas da temporada para os perfis entregues no mesmo dia.
 - Pendências gerais e decisões adiadas: seção 9 de `visao-geral.md`.

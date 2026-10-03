@@ -2281,3 +2281,8 @@ a.analise-jogador:hover { color: var(--acento); }
 .analise-matriz__cel { background: color-mix(in srgb, var(--acento) var(--intensidade), transparent); }
 .analise-piloto-link { color: inherit; text-decoration: none; }
 .analise-piloto-link:hover { color: var(--acento); text-decoration: underline; }
+/* Links das tabelas da temporada para os perfis (?jogador / ?piloto). */
+.link-perfil { color: inherit; text-decoration: none; }
+.link-perfil:hover, .link-perfil:focus-visible { color: var(--acento); text-decoration: underline; }
+.link-perfil-svg { cursor: pointer; }
+.link-perfil-svg:hover text, .link-perfil-svg:focus-visible text { fill: var(--acento); text-decoration: underline; }

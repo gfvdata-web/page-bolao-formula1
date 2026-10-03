@@ -27,8 +27,8 @@
   (vem do quali na Jolpica), preenchendo 2021–atual.
 - **Código:** páginas novas em `docs/analise.js` (carregado depois do
   `app.js`, reaproveita seus helpers globais); `app.js` só ganha o roteamento.
-- **Adiado (perguntar ao usuário após a v1):** links das tabelas da temporada
-  (ranking, Pilotos, Rendimento, Pontuação da corrida) para os perfis.
+- **Links das tabelas da temporada para os perfis:** aprovados e entregues em
+  2026-10-03 (ver "Ajuste posterior: links para perfis" no fim).
 - **Entregue v1 (2026-10-03), aguardando revisão do usuário:**
   - Topo: um único `#btn-voltar` (`mostrarVoltar`) + `#btn-menu`
     (`<a href="?menu">`). `entrarModoPagina()` (app.js) monta toda página fora
@@ -64,3 +64,16 @@
     `corPilotoNoAno` (equipe principal = mais qualis no ano), `corPiloto`
     (temporada exibida), `coresEquipesPiloto` (uma bolinha por nome de equipe).
     Os antigos mapas fixos `CORES_PILOTO(_ANO)`/`EQUIPE_PILOTO(_ANO)` saíram.
+
+**Ajuste posterior: links para perfis nas tabelas da temporada (2026-10-03).**
+- Helpers em `app.js`: `linkJogador(id, filhos)` e `chipPilotoLink(cod)`
+  (classe `.link-perfil`: cor do texto, destaque + sublinhado no hover).
+- Piloto só vira link se estiver no grid real da temporada exibida
+  (`pilotoTemPerfil`, sobre `resultsGlobais`) — código de palpite com erro de
+  digitação (ex.: `LEV` em 2025) continua texto, sem levar a perfil inválido.
+- Onde: nome do jogador em Ranking/Geral, Corridas (tabela e matriz),
+  Simulador, cabeçalho da Pontuação da corrida e Rendimento (modo jogador);
+  piloto na coluna Resultado/piloto da rodada da Pontuação da corrida,
+  Preferência piloto, Rendimento (modo piloto) e aba Pilotos (código no SVG,
+  `.link-perfil-svg`). Chips de filtro e cards dos gráficos **não** viram link
+  (servem para ligar/desligar séries). Vale também no modo histórico (`?ano`).

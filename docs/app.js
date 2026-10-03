@@ -152,6 +152,28 @@ function chipPiloto(codigo) {
   ]);
 }
 
+// Links das tabelas da temporada para os perfis (?jogador / ?piloto).
+function linkJogador(id, filhos) {
+  return el("a", { class: "link-perfil", href: `?jogador=${encodeURIComponent(id)}` }, filhos);
+}
+
+// Só vira link o piloto que está no grid real da temporada exibida (tem perfil
+// garantido); código de palpite com erro de digitação (ex.: "LEV") fica texto.
+let _pilotosComPerfil = null;
+function pilotoTemPerfil(codigo) {
+  if (!resultsGlobais) return false;
+  if (!_pilotosComPerfil) {
+    _pilotosComPerfil = new Set(Object.values(resultsGlobais.rounds).flatMap((r) => r.order));
+  }
+  return _pilotosComPerfil.has(codigo);
+}
+
+function chipPilotoLink(codigo) {
+  const chip = chipPiloto(codigo);
+  if (!pilotoTemPerfil(codigo)) return chip;
+  return el("a", { class: "link-perfil", href: `?piloto=${encodeURIComponent(codigo)}` }, [chip]);
+}
+
 // `max` é o teto de pontos daquele tipo de acerto (2 no top6, 1 no piloto da
 // rodada) — sem ele, `pts` já corresponde ao nível de cor (comportamento do
 // top6, onde 0/1/2 pt = nível 0/1/2). Com `max`, quem bate o teto vira
@@ -182,7 +204,7 @@ function renderRanking(standings) {
   const medalhas = { 1: "🥇", 2: "🥈", 3: "🥉" };
 
   for (const jogador of standings.players) {
-    const nomeCell = el("td", {}, [jogador.name]);
+    const nomeCell = el("td", {}, [linkJogador(jogador.player_id, [jogador.name])]);
     if (jogador.compensation_total) {
       nomeCell.appendChild(
         el("span", { class: "compensacao-nota" }, [
@@ -422,7 +444,7 @@ function renderTabelaCorridas(standings) {
     });
     tbody.appendChild(
       el("tr", {}, [
-        el("td", {}, [jogador.name]),
+        el("td", {}, [linkJogador(jogador.player_id, [jogador.name])]),
         ...celulas,
         el("td", { class: "num corridas-tabela__total" }, [String(jogador.total)]),
       ])
@@ -483,7 +505,7 @@ function renderCorridaDetalhe(roundNumber, standings, bets, results) {
         el("th", {}, ["Resultado"]),
         ...standings.players.map((j) =>
           el("th", { title: j.name }, [
-            el("span", { class: "corrida-detalhe-th__nome" }, [j.name.split(" ")[0]]),
+            linkJogador(j.player_id, [el("span", { class: "corrida-detalhe-th__nome" }, [j.name.split(" ")[0]])]),
             el("span", { class: "corrida-detalhe-th__total" }, [
               totalRodadaJogador(j) == null ? "–" : `${totalRodadaJogador(j)} pts`,
             ]),
@@ -500,7 +522,7 @@ function renderCorridaDetalhe(roundNumber, standings, bets, results) {
     tbody.appendChild(
       el("tr", {}, [
         el("td", { class: "corrida-detalhe-rotulo" }, [`P${pos}`]),
-        el("td", {}, [chipPiloto(codigoReal)]),
+        el("td", {}, [chipPilotoLink(codigoReal)]),
         ...standings.players.map((jogador) => {
           const rodada = bets.players[jogador.player_id]?.rounds[roundNumber];
           if (!rodada) return el("td", {}, [celVazia()]);
@@ -516,7 +538,7 @@ function renderCorridaDetalhe(roundNumber, standings, bets, results) {
       el("tr", {}, [
         el("td", { class: "corrida-detalhe-rotulo" }, [
           el("span", {}, ["Piloto"]),
-          chipPiloto(bonusDriver),
+          chipPilotoLink(bonusDriver),
         ]),
         el("td", {}, [`P${bonusRealPos}`]),
         ...standings.players.map((jogador) => {
@@ -704,7 +726,7 @@ function renderTabelaSimulador() {
     tbody.appendChild(
       el("tr", {}, [
         el("td", { class: "pos-medalha" }, [medalhas[linha.posicaoSimulada] || String(linha.posicaoSimulada)]),
-        el("td", {}, [linha.jogador.name]),
+        el("td", {}, [linkJogador(linha.jogador.player_id, [linha.jogador.name])]),
         el("td", { class: "num" }, [String(linha.jogador.total)]),
         el("td", { class: "num" }, [linha.mediaAtual.toFixed(1)]),
         el("td", { class: "num" }, [linha.mediaFinal.toFixed(1)]),
@@ -1516,9 +1538,11 @@ function renderMatrizTemporada() {
     tbody.appendChild(
       el("tr", {}, [
         el("td", {}, [
-          el("span", { class: "temporada-matriz__jogador" }, [
-            el("span", { class: "jogador-card__bolinha", style: `--cor-jogador:${dataset.borderColor}` }),
-            dataset.label,
+          linkJogador(dataset.playerId, [
+            el("span", { class: "temporada-matriz__jogador" }, [
+              el("span", { class: "jogador-card__bolinha", style: `--cor-jogador:${dataset.borderColor}` }),
+              dataset.label,
+            ]),
           ]),
         ]),
         ...celulas,
@@ -1637,7 +1661,7 @@ function renderPreferenciaPiloto(playerId, bets, results) {
   for (const linha of linhas) {
     tbody.appendChild(
       el("tr", {}, [
-        el("td", {}, [chipPiloto(linha.codigo)]),
+        el("td", {}, [chipPilotoLink(linha.codigo)]),
         el("td", { class: "num" }, [linha.mediaReal === null ? "-" : linha.mediaReal.toFixed(2)]),
         el(
           "td",
@@ -1902,7 +1926,7 @@ function renderTabelaRendimento(linhas, comparando) {
         {},
         [
           el("td", { class: "num rendimento-pos" }, [String(indice + 1)]),
-          el("td", {}, [chipPiloto(linha.codigo)]),
+          el("td", {}, [chipPilotoLink(linha.codigo)]),
           el("td", { class: "num rendimento-media" }, [
             `${linha.media.toFixed(2)} `,
             ...(comparando && linha.mediaGeral !== null ? [badgeRendimentoGeral(linha.media, linha.mediaGeral)] : []),
@@ -2053,12 +2077,14 @@ function renderTabelaRendimentoPorJogador(linhas, comparando, bets) {
         [
           el("td", { class: "num rendimento-pos" }, [String(indice + 1)]),
           el("td", {}, [
-            el("span", { class: "piloto-chip" }, [
-              el("span", {
-                class: "piloto-bolinha",
-                style: `background:${corRendimentoJogador(linha.playerId)}`,
-              }),
-              nomeJogadorBets(bets, linha.playerId),
+            linkJogador(linha.playerId, [
+              el("span", { class: "piloto-chip" }, [
+                el("span", {
+                  class: "piloto-bolinha",
+                  style: `background:${corRendimentoJogador(linha.playerId)}`,
+                }),
+                nomeJogadorBets(bets, linha.playerId),
+              ]),
             ]),
           ]),
           el("td", { class: "num rendimento-media" }, [
@@ -2551,10 +2577,13 @@ function renderPilotos(results) {
       );
     });
 
-    svg.appendChild(svgEl("circle", { cx: 11, cy, r: 4, fill: cor }));
     svg.appendChild(
-      svgEl("text", { x: 21, y: cy + 3.5, "font-size": 11, "font-weight": 700, fill: corTextoForte }, [
-        piloto.codigo,
+      svgEl("a", { class: "link-perfil-svg", href: `?piloto=${encodeURIComponent(piloto.codigo)}` }, [
+        svgEl("title", {}, [`Perfil de ${piloto.codigo}`]),
+        svgEl("circle", { cx: 11, cy, r: 4, fill: cor }),
+        svgEl("text", { x: 21, y: cy + 3.5, "font-size": 11, "font-weight": 700, fill: corTextoForte }, [
+          piloto.codigo,
+        ]),
       ])
     );
     svg.appendChild(
@@ -2581,7 +2610,7 @@ function renderPilotos(results) {
       "mostra em que posições ele mais larga nos quali já disputados; cada ponto é um quali. " +
       `A faixa clara à esquerda é o top${FORMATO.top_n}. As colunas Q3/Q2/Q1 contam até que fase o piloto ` +
       "foi em cada quali, como aconteceu na sessão (quem correu o Q3 conta Q3 mesmo se punido depois). " +
-      "Passe o mouse numa linha para ver a contagem por posição.",
+      "Passe o mouse numa linha para ver a contagem por posição; clique no código para abrir o perfil do piloto.",
   ]);
 
   container.replaceChildren(el("div", { class: "pilotos-scroll" }, [svg]), tooltip, legenda);
