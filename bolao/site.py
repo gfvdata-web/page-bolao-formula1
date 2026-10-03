@@ -4,7 +4,7 @@ Junta as três camadas anteriores (mensagens do WhatsApp + calendário/resultado
 da Jolpica + núcleo de parsing/pontuação) e produz:
 
 - ``data/2026/scores/<round>.json`` — pontuação por jogador de cada rodada
-  (camada intermediária, seção 6 do CONTEXTO; boa para depurar rodada a rodada).
+  (camada intermediária, ver contexto/etapas/etapa-3-dados-do-site.md; boa para depurar rodada a rodada).
 - ``docs/data/standings.json`` — ranking acumulado da temporada.
 - ``docs/data/bets.json`` — histórico de palpites por jogador (detalhe completo).
 - ``docs/data/results.json`` — grid real por rodada (histórico de posições).
@@ -407,7 +407,7 @@ def generate(
     # uma temporada antiga está incompleta.
     consolidadas = {info["round"] for info in round_infos}
     nome_por_rodada = {r["round"]: r["race"] for r in calendar["races"]}
-    # Fins de semana de Sprint contam (o quali principal vale) — ver CONTEXTO.
+    # Fins de semana de Sprint contam (o quali principal vale) — ver contexto/etapas/etapa-2-jolpica.md.
     total_rodadas = len(calendar["races"])
     carry_ate = int(_load_json(saldo_path).get("ate_rodada", 0)) if saldo_path.exists() else 0
     faltando: list[str] = []

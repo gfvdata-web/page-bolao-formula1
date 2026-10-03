@@ -1,6 +1,6 @@
 """Pontuação de um palpite contra o resultado real do qualifying.
 
-Regras (seção 2 do CONTEXTO.md):
+Regras (seção 2 de contexto/visao-geral.md):
 
 Top6 (máx 12 pts) — para cada um dos 6 pilotos apostados, em ordem:
   * posição exata no quali .............. 2 pts

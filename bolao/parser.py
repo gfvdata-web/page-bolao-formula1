@@ -1,6 +1,6 @@
 """Parsing da mensagem de palpites do WhatsApp.
 
-Formato esperado (ver seção 3 do CONTEXTO.md):
+Formato esperado (ver seção 3 de contexto/visao-geral.md):
 
     Qualify Bolao Silverstone      <- linha 1: identifica a corrida
     Piloto Hamilton                <- linha 2: piloto da rodada (bônus)

@@ -3,7 +3,7 @@
 Jolpica-F1 (https://api.jolpi.ca) é a sucessora da Ergast: gratuita, sem chave,
 compatível com o formato de dados da Ergast. Este módulo busca os dados reais de
 uma temporada e os grava **nos formatos estáveis que a Etapa 1 já consome**
-(ver seção 8 do CONTEXTO.md), sem adaptação manual depois:
+(ver contexto/etapas/etapa-1-parser-pontuacao.md), sem adaptação manual depois:
 
     calendar  ->  data/<season>/calendar.json     (corridas da temporada)
     drivers   ->  data/drivers.json                (entry list -> código 3 letras)
@@ -151,7 +151,7 @@ def build_drivers(drivers_json: dict) -> dict:
 
     Cadastra, para cada piloto: o código de 3 letras, o sobrenome e o nome
     completo. Pilotos sem código oficial (reservas) são ignorados — não se
-    inventa código (ver CONTEXTO.md, seção 6).
+    inventa código (ver contexto/etapas/etapa-2-jolpica.md).
     """
     pilotos = drivers_json.get("MRData", {}).get("DriverTable", {}).get("Drivers", [])
     if not pilotos:

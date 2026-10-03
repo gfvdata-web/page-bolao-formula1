@@ -554,7 +554,7 @@ function primeiraRodadaApostada(jogador) {
   return rodadas.length ? Math.min(...rodadas) : null;
 }
 
-// Texto no formato clássico do WhatsApp (ver CONTEXTO.md) com a classificação
+// Texto no formato clássico do WhatsApp (ver contexto/etapas/etapa-4-site.md, botões "Copiar") com a classificação
 // da temporada: posição, pontos, variação de posição desde a rodada anterior
 // (🆕 se estreou nela), nº de rodadas apostadas e pontos extra (piloto da
 // rodada). A variação reaproveita `construirDadosTemporada` (mesmo cálculo de

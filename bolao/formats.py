@@ -6,7 +6,7 @@ e isso muda a pontuação máxima por corrida. A regra de pontos em si (2 pts na
 posição exata, 1 pt dentro do top N real, 0 fora) é a mesma em todos os anos.
 
 Conferido contra as pontuações que o próprio grupo publicou no WhatsApp
-(ver seção 8 do CONTEXTO.md, Etapa 7).
+(ver contexto/etapas/etapa-7-historico.md).
 """
 
 from dataclasses import dataclass
