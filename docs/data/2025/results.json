@@ -65,6 +65,28 @@
         "LAW": 1,
         "OCO": 1,
         "BEA": 1
+      },
+      "equipes": {
+        "NOR": "McLaren",
+        "PIA": "McLaren",
+        "VER": "Red Bull",
+        "RUS": "Mercedes",
+        "TSU": "RB",
+        "ALB": "Williams",
+        "LEC": "Ferrari",
+        "HAM": "Ferrari",
+        "GAS": "Alpine",
+        "SAI": "Williams",
+        "HAD": "RB",
+        "ALO": "Aston Martin",
+        "STR": "Aston Martin",
+        "DOO": "Alpine",
+        "BOR": "Sauber",
+        "ANT": "Mercedes",
+        "HUL": "Sauber",
+        "LAW": "Red Bull",
+        "OCO": "Haas",
+        "BEA": "Haas"
       }
     },
     "2": {
@@ -132,6 +154,28 @@
         "DOO": 1,
         "BOR": 1,
         "LAW": 1
+      },
+      "equipes": {
+        "PIA": "McLaren",
+        "RUS": "Mercedes",
+        "NOR": "McLaren",
+        "VER": "Red Bull",
+        "HAM": "Ferrari",
+        "LEC": "Ferrari",
+        "HAD": "RB",
+        "ANT": "Mercedes",
+        "TSU": "RB",
+        "ALB": "Williams",
+        "OCO": "Haas",
+        "HUL": "Sauber",
+        "ALO": "Aston Martin",
+        "STR": "Aston Martin",
+        "SAI": "Williams",
+        "GAS": "Alpine",
+        "BEA": "Haas",
+        "DOO": "Alpine",
+        "BOR": "Sauber",
+        "LAW": "Red Bull"
       }
     },
     "3": {
@@ -196,6 +240,28 @@
         "OCO": 1,
         "DOO": 1,
         "STR": 1
+      },
+      "equipes": {
+        "VER": "Red Bull",
+        "NOR": "McLaren",
+        "PIA": "McLaren",
+        "LEC": "Ferrari",
+        "RUS": "Mercedes",
+        "ANT": "Mercedes",
+        "HAD": "RB",
+        "HAM": "Ferrari",
+        "ALB": "Williams",
+        "BEA": "Haas",
+        "GAS": "Alpine",
+        "SAI": "Williams",
+        "ALO": "Aston Martin",
+        "LAW": "RB",
+        "TSU": "Red Bull",
+        "HUL": "Sauber",
+        "BOR": "Sauber",
+        "OCO": "Haas",
+        "DOO": "Alpine",
+        "STR": "Aston Martin"
       }
     },
     "4": {
@@ -262,6 +328,28 @@
         "BOR": 1,
         "STR": 1,
         "BEA": 1
+      },
+      "equipes": {
+        "PIA": "McLaren",
+        "RUS": "Mercedes",
+        "LEC": "Ferrari",
+        "ANT": "Mercedes",
+        "GAS": "Alpine",
+        "NOR": "McLaren",
+        "VER": "Red Bull",
+        "SAI": "Williams",
+        "HAM": "Ferrari",
+        "TSU": "Red Bull",
+        "DOO": "Alpine",
+        "HAD": "RB",
+        "ALO": "Aston Martin",
+        "OCO": "Haas",
+        "ALB": "Williams",
+        "HUL": "Sauber",
+        "LAW": "RB",
+        "BOR": "Sauber",
+        "STR": "Aston Martin",
+        "BEA": "Haas"
       }
     },
     "5": {
@@ -329,6 +417,28 @@
         "HUL": 1,
         "OCO": 1,
         "BOR": 1
+      },
+      "equipes": {
+        "VER": "Red Bull",
+        "PIA": "McLaren",
+        "RUS": "Mercedes",
+        "LEC": "Ferrari",
+        "ANT": "Mercedes",
+        "SAI": "Williams",
+        "HAM": "Ferrari",
+        "TSU": "Red Bull",
+        "GAS": "Alpine",
+        "NOR": "McLaren",
+        "ALB": "Williams",
+        "LAW": "RB",
+        "ALO": "Aston Martin",
+        "HAD": "RB",
+        "BEA": "Haas",
+        "STR": "Aston Martin",
+        "DOO": "Alpine",
+        "HUL": "Sauber",
+        "OCO": "Haas",
+        "BOR": "Sauber"
       }
     },
     "6": {
@@ -393,6 +503,28 @@
         "GAS": 1,
         "STR": 1,
         "BEA": 1
+      },
+      "equipes": {
+        "VER": "Red Bull",
+        "NOR": "McLaren",
+        "ANT": "Mercedes",
+        "PIA": "McLaren",
+        "RUS": "Mercedes",
+        "SAI": "Williams",
+        "ALB": "Williams",
+        "LEC": "Ferrari",
+        "OCO": "Haas",
+        "TSU": "Red Bull",
+        "HAD": "RB",
+        "HAM": "Ferrari",
+        "BOR": "Sauber",
+        "DOO": "Alpine",
+        "LAW": "RB",
+        "HUL": "Sauber",
+        "ALO": "Aston Martin",
+        "GAS": "Alpine",
+        "STR": "Aston Martin",
+        "BEA": "Haas"
       }
     },
     "7": {
@@ -458,6 +590,28 @@
         "HUL": 1,
         "OCO": 1,
         "TSU": 1
+      },
+      "equipes": {
+        "PIA": "McLaren",
+        "VER": "Red Bull",
+        "RUS": "Mercedes",
+        "NOR": "McLaren",
+        "ALO": "Aston Martin",
+        "SAI": "Williams",
+        "ALB": "Williams",
+        "STR": "Aston Martin",
+        "HAD": "RB",
+        "GAS": "Alpine",
+        "LEC": "Ferrari",
+        "HAM": "Ferrari",
+        "ANT": "Mercedes",
+        "BOR": "Sauber",
+        "COL": "Alpine",
+        "BEA": "Haas",
+        "LAW": "RB",
+        "HUL": "Sauber",
+        "OCO": "Haas",
+        "TSU": "Red Bull"
       }
     },
     "8": {
@@ -523,6 +677,28 @@
         "GAS": 1,
         "STR": 1,
         "COL": 1
+      },
+      "equipes": {
+        "NOR": "McLaren",
+        "LEC": "Ferrari",
+        "PIA": "McLaren",
+        "HAM": "Ferrari",
+        "VER": "Red Bull",
+        "HAD": "RB",
+        "ALO": "Aston Martin",
+        "OCO": "Haas",
+        "LAW": "RB",
+        "ALB": "Williams",
+        "SAI": "Williams",
+        "TSU": "Red Bull",
+        "HUL": "Sauber",
+        "RUS": "Mercedes",
+        "ANT": "Mercedes",
+        "BOR": "Sauber",
+        "BEA": "Haas",
+        "GAS": "Alpine",
+        "STR": "Aston Martin",
+        "COL": "Alpine"
       }
     },
     "9": {
@@ -588,6 +764,28 @@
         "SAI": 1,
         "COL": 1,
         "TSU": 1
+      },
+      "equipes": {
+        "PIA": "McLaren",
+        "NOR": "McLaren",
+        "VER": "Red Bull",
+        "RUS": "Mercedes",
+        "HAM": "Ferrari",
+        "ANT": "Mercedes",
+        "LEC": "Ferrari",
+        "GAS": "Alpine",
+        "HAD": "RB",
+        "ALO": "Aston Martin",
+        "ALB": "Williams",
+        "BOR": "Sauber",
+        "LAW": "RB",
+        "STR": "Aston Martin",
+        "BEA": "Haas",
+        "HUL": "Sauber",
+        "OCO": "Haas",
+        "SAI": "Williams",
+        "COL": "Alpine",
+        "TSU": "Red Bull"
       }
     },
     "10": {
@@ -653,6 +851,28 @@
         "STR": 1,
         "LAW": 1,
         "GAS": 1
+      },
+      "equipes": {
+        "RUS": "Mercedes",
+        "VER": "Red Bull",
+        "PIA": "McLaren",
+        "ANT": "Mercedes",
+        "HAM": "Ferrari",
+        "ALO": "Aston Martin",
+        "NOR": "McLaren",
+        "LEC": "Ferrari",
+        "HAD": "RB",
+        "ALB": "Williams",
+        "TSU": "Red Bull",
+        "COL": "Alpine",
+        "HUL": "Sauber",
+        "BEA": "Haas",
+        "OCO": "Haas",
+        "BOR": "Sauber",
+        "SAI": "Williams",
+        "STR": "Aston Martin",
+        "LAW": "RB",
+        "GAS": "Alpine"
       }
     },
     "11": {
@@ -717,6 +937,28 @@
         "TSU": 1,
         "SAI": 1,
         "HUL": 1
+      },
+      "equipes": {
+        "NOR": "McLaren",
+        "LEC": "Ferrari",
+        "PIA": "McLaren",
+        "HAM": "Ferrari",
+        "RUS": "Mercedes",
+        "LAW": "RB",
+        "VER": "Red Bull",
+        "BOR": "Sauber",
+        "ANT": "Mercedes",
+        "GAS": "Alpine",
+        "ALO": "Aston Martin",
+        "ALB": "Williams",
+        "HAD": "RB",
+        "COL": "Alpine",
+        "BEA": "Haas",
+        "STR": "Aston Martin",
+        "OCO": "Haas",
+        "TSU": "Red Bull",
+        "SAI": "Williams",
+        "HUL": "Sauber"
       }
     },
     "12": {
@@ -782,6 +1024,28 @@
         "STR": 1,
         "HUL": 1,
         "COL": 1
+      },
+      "equipes": {
+        "VER": "Red Bull",
+        "PIA": "McLaren",
+        "NOR": "McLaren",
+        "RUS": "Mercedes",
+        "HAM": "Ferrari",
+        "LEC": "Ferrari",
+        "ANT": "Mercedes",
+        "BEA": "Haas",
+        "ALO": "Aston Martin",
+        "GAS": "Alpine",
+        "SAI": "Williams",
+        "TSU": "Red Bull",
+        "HAD": "RB",
+        "ALB": "Williams",
+        "OCO": "Haas",
+        "LAW": "RB",
+        "BOR": "Sauber",
+        "STR": "Aston Martin",
+        "HUL": "Sauber",
+        "COL": "Alpine"
       }
     },
     "13": {
@@ -847,6 +1111,28 @@
         "ANT": 1,
         "ALO": 1,
         "STR": 1
+      },
+      "equipes": {
+        "NOR": "McLaren",
+        "PIA": "McLaren",
+        "LEC": "Ferrari",
+        "VER": "Red Bull",
+        "ALB": "Williams",
+        "RUS": "Mercedes",
+        "TSU": "Red Bull",
+        "HAD": "RB",
+        "LAW": "RB",
+        "BOR": "Sauber",
+        "OCO": "Haas",
+        "BEA": "Haas",
+        "GAS": "Alpine",
+        "HUL": "Sauber",
+        "SAI": "Williams",
+        "HAM": "Ferrari",
+        "COL": "Alpine",
+        "ANT": "Mercedes",
+        "ALO": "Aston Martin",
+        "STR": "Aston Martin"
       }
     },
     "14": {
@@ -911,6 +1197,28 @@
         "OCO": 1,
         "HUL": 1,
         "ALB": 1
+      },
+      "equipes": {
+        "LEC": "Ferrari",
+        "PIA": "McLaren",
+        "NOR": "McLaren",
+        "RUS": "Mercedes",
+        "ALO": "Aston Martin",
+        "STR": "Aston Martin",
+        "BOR": "Sauber",
+        "VER": "Red Bull",
+        "LAW": "RB",
+        "HAD": "RB",
+        "BEA": "Haas",
+        "HAM": "Ferrari",
+        "SAI": "Williams",
+        "COL": "Alpine",
+        "ANT": "Mercedes",
+        "TSU": "Red Bull",
+        "GAS": "Alpine",
+        "OCO": "Haas",
+        "HUL": "Sauber",
+        "ALB": "Williams"
       }
     },
     "15": {
@@ -977,6 +1285,28 @@
         "OCO": 1,
         "BEA": 1,
         "STR": 1
+      },
+      "equipes": {
+        "PIA": "McLaren",
+        "NOR": "McLaren",
+        "VER": "Red Bull",
+        "HAD": "RB",
+        "RUS": "Mercedes",
+        "LEC": "Ferrari",
+        "HAM": "Ferrari",
+        "LAW": "RB",
+        "SAI": "Williams",
+        "ALO": "Aston Martin",
+        "ANT": "Mercedes",
+        "TSU": "Red Bull",
+        "BOR": "Sauber",
+        "GAS": "Alpine",
+        "ALB": "Williams",
+        "COL": "Alpine",
+        "HUL": "Sauber",
+        "OCO": "Haas",
+        "BEA": "Haas",
+        "STR": "Aston Martin"
       }
     },
     "16": {
@@ -1043,6 +1373,28 @@
         "COL": 1,
         "GAS": 1,
         "LAW": 1
+      },
+      "equipes": {
+        "VER": "Red Bull",
+        "NOR": "McLaren",
+        "PIA": "McLaren",
+        "LEC": "Ferrari",
+        "HAM": "Ferrari",
+        "RUS": "Mercedes",
+        "ANT": "Mercedes",
+        "BOR": "Sauber",
+        "ALO": "Aston Martin",
+        "TSU": "Red Bull",
+        "BEA": "Haas",
+        "HUL": "Sauber",
+        "SAI": "Williams",
+        "ALB": "Williams",
+        "OCO": "Haas",
+        "HAD": "RB",
+        "STR": "Aston Martin",
+        "COL": "Alpine",
+        "GAS": "Alpine",
+        "LAW": "RB"
       }
     },
     "17": {
@@ -1109,6 +1461,28 @@
         "GAS": 1,
         "ALB": 1,
         "OCO": 1
+      },
+      "equipes": {
+        "VER": "Red Bull",
+        "SAI": "Williams",
+        "LAW": "RB",
+        "ANT": "Mercedes",
+        "RUS": "Mercedes",
+        "TSU": "Red Bull",
+        "NOR": "McLaren",
+        "HAD": "RB",
+        "PIA": "McLaren",
+        "LEC": "Ferrari",
+        "ALO": "Aston Martin",
+        "HAM": "Ferrari",
+        "BOR": "Sauber",
+        "STR": "Aston Martin",
+        "BEA": "Haas",
+        "COL": "Alpine",
+        "HUL": "Sauber",
+        "GAS": "Alpine",
+        "ALB": "Williams",
+        "OCO": "Haas"
       }
     },
     "18": {
@@ -1175,6 +1549,28 @@
         "GAS": 1,
         "ALB": 1,
         "SAI": 1
+      },
+      "equipes": {
+        "RUS": "Mercedes",
+        "VER": "Red Bull",
+        "PIA": "McLaren",
+        "ANT": "Mercedes",
+        "NOR": "McLaren",
+        "HAM": "Ferrari",
+        "LEC": "Ferrari",
+        "HAD": "RB",
+        "BEA": "Haas",
+        "ALO": "Aston Martin",
+        "HUL": "Sauber",
+        "LAW": "RB",
+        "TSU": "Red Bull",
+        "BOR": "Sauber",
+        "STR": "Aston Martin",
+        "COL": "Alpine",
+        "OCO": "Haas",
+        "GAS": "Alpine",
+        "ALB": "Williams",
+        "SAI": "Williams"
       }
     },
     "19": {
@@ -1239,6 +1635,28 @@
         "STR": 1,
         "ALB": 1,
         "HAD": 1
+      },
+      "equipes": {
+        "VER": "Red Bull",
+        "NOR": "McLaren",
+        "LEC": "Ferrari",
+        "RUS": "Mercedes",
+        "HAM": "Ferrari",
+        "PIA": "McLaren",
+        "ANT": "Mercedes",
+        "BEA": "Haas",
+        "SAI": "Williams",
+        "ALO": "Aston Martin",
+        "HUL": "Sauber",
+        "LAW": "RB",
+        "TSU": "Red Bull",
+        "GAS": "Alpine",
+        "COL": "Alpine",
+        "BOR": "Sauber",
+        "OCO": "Haas",
+        "STR": "Aston Martin",
+        "ALB": "Williams",
+        "HAD": "RB"
       }
     },
     "20": {
@@ -1304,6 +1722,28 @@
         "GAS": 1,
         "STR": 1,
         "COL": 1
+      },
+      "equipes": {
+        "NOR": "McLaren",
+        "LEC": "Ferrari",
+        "HAM": "Ferrari",
+        "RUS": "Mercedes",
+        "VER": "Red Bull",
+        "ANT": "Mercedes",
+        "SAI": "Williams",
+        "PIA": "McLaren",
+        "HAD": "RB",
+        "BEA": "Haas",
+        "TSU": "Red Bull",
+        "OCO": "Haas",
+        "HUL": "Sauber",
+        "ALO": "Aston Martin",
+        "LAW": "RB",
+        "BOR": "Sauber",
+        "ALB": "Williams",
+        "GAS": "Alpine",
+        "STR": "Aston Martin",
+        "COL": "Alpine"
       }
     },
     "21": {
@@ -1367,6 +1807,27 @@
         "OCO": 1,
         "COL": 1,
         "TSU": 1
+      },
+      "equipes": {
+        "NOR": "McLaren",
+        "ANT": "Mercedes",
+        "LEC": "Ferrari",
+        "PIA": "McLaren",
+        "HAD": "RB",
+        "RUS": "Mercedes",
+        "LAW": "RB",
+        "BEA": "Haas",
+        "GAS": "Alpine",
+        "HUL": "Sauber",
+        "ALO": "Aston Martin",
+        "ALB": "Williams",
+        "HAM": "Ferrari",
+        "STR": "Aston Martin",
+        "SAI": "Williams",
+        "VER": "Red Bull",
+        "OCO": "Haas",
+        "COL": "Alpine",
+        "TSU": "Red Bull"
       }
     },
     "22": {
@@ -1430,6 +1891,28 @@
         "BOR": 1,
         "TSU": 1,
         "HAM": 1
+      },
+      "equipes": {
+        "NOR": "McLaren",
+        "VER": "Red Bull",
+        "SAI": "Williams",
+        "RUS": "Mercedes",
+        "PIA": "McLaren",
+        "LAW": "RB",
+        "ALO": "Aston Martin",
+        "HAD": "RB",
+        "LEC": "Ferrari",
+        "GAS": "Alpine",
+        "HUL": "Sauber",
+        "STR": "Aston Martin",
+        "OCO": "Haas",
+        "BEA": "Haas",
+        "COL": "Alpine",
+        "ALB": "Williams",
+        "ANT": "Mercedes",
+        "BOR": "Sauber",
+        "TSU": "Red Bull",
+        "HAM": "Ferrari"
       }
     },
     "23": {
@@ -1495,6 +1978,28 @@
         "HAM": 1,
         "STR": 1,
         "COL": 1
+      },
+      "equipes": {
+        "PIA": "McLaren",
+        "NOR": "McLaren",
+        "VER": "Red Bull",
+        "RUS": "Mercedes",
+        "ANT": "Mercedes",
+        "HAD": "RB",
+        "SAI": "Williams",
+        "ALO": "Aston Martin",
+        "GAS": "Alpine",
+        "LEC": "Ferrari",
+        "HUL": "Sauber",
+        "LAW": "RB",
+        "BEA": "Haas",
+        "BOR": "Sauber",
+        "ALB": "Williams",
+        "TSU": "Red Bull",
+        "OCO": "Haas",
+        "HAM": "Ferrari",
+        "STR": "Aston Martin",
+        "COL": "Alpine"
       }
     },
     "24": {
@@ -1559,6 +2064,28 @@
         "HUL": 1,
         "GAS": 1,
         "COL": 1
+      },
+      "equipes": {
+        "VER": "Red Bull",
+        "NOR": "McLaren",
+        "PIA": "McLaren",
+        "RUS": "Mercedes",
+        "LEC": "Ferrari",
+        "ALO": "Aston Martin",
+        "BOR": "Sauber",
+        "OCO": "Haas",
+        "HAD": "RB",
+        "TSU": "Red Bull",
+        "BEA": "Haas",
+        "SAI": "Williams",
+        "LAW": "RB",
+        "ANT": "Mercedes",
+        "STR": "Aston Martin",
+        "HAM": "Ferrari",
+        "ALB": "Williams",
+        "HUL": "Sauber",
+        "GAS": "Alpine",
+        "COL": "Alpine"
       }
     }
   }

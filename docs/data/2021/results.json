@@ -60,6 +60,28 @@
         "LAT": 1,
         "MAZ": 1,
         "MSC": 1
+      },
+      "equipes": {
+        "HAM": "Mercedes",
+        "BOT": "Mercedes",
+        "VER": "Red Bull",
+        "PER": "Red Bull",
+        "GAS": "AlphaTauri",
+        "NOR": "McLaren",
+        "LEC": "Ferrari",
+        "OCO": "Alpine",
+        "ALO": "Alpine",
+        "VET": "Aston Martin",
+        "RIC": "McLaren",
+        "STR": "Aston Martin",
+        "RAI": "Alfa Romeo",
+        "GIO": "Alfa Romeo",
+        "SAI": "Ferrari",
+        "TSU": "AlphaTauri",
+        "RUS": "Williams",
+        "LAT": "Williams",
+        "MAZ": "Haas",
+        "MSC": "Haas"
       }
     },
     "12": {
@@ -121,6 +143,28 @@
         "MSC": 1,
         "RAI": 1,
         "MAZ": 1
+      },
+      "equipes": {
+        "VER": "Red Bull",
+        "RUS": "Williams",
+        "HAM": "Mercedes",
+        "RIC": "McLaren",
+        "VET": "Aston Martin",
+        "GAS": "AlphaTauri",
+        "PER": "Red Bull",
+        "BOT": "Mercedes",
+        "OCO": "Alpine",
+        "NOR": "McLaren",
+        "LEC": "Ferrari",
+        "LAT": "Williams",
+        "SAI": "Ferrari",
+        "ALO": "Alpine",
+        "STR": "Aston Martin",
+        "GIO": "Alfa Romeo",
+        "TSU": "AlphaTauri",
+        "MSC": "Haas",
+        "RAI": "Alfa Romeo",
+        "MAZ": "Haas"
       }
     },
     "13": {
@@ -183,6 +227,28 @@
         "KUB": 1,
         "MSC": 1,
         "MAZ": 1
+      },
+      "equipes": {
+        "VER": "Red Bull",
+        "HAM": "Mercedes",
+        "BOT": "Mercedes",
+        "GAS": "AlphaTauri",
+        "LEC": "Ferrari",
+        "SAI": "Ferrari",
+        "GIO": "Alfa Romeo",
+        "OCO": "Alpine",
+        "ALO": "Alpine",
+        "RIC": "McLaren",
+        "RUS": "Williams",
+        "STR": "Aston Martin",
+        "NOR": "McLaren",
+        "LAT": "Williams",
+        "TSU": "AlphaTauri",
+        "PER": "Red Bull",
+        "VET": "Aston Martin",
+        "KUB": "Alfa Romeo",
+        "MSC": "Haas",
+        "MAZ": "Haas"
       }
     },
     "14": {
@@ -245,6 +311,28 @@
         "MSC": 1,
         "KUB": 1,
         "MAZ": 1
+      },
+      "equipes": {
+        "BOT": "Mercedes",
+        "HAM": "Mercedes",
+        "VER": "Red Bull",
+        "NOR": "McLaren",
+        "RIC": "McLaren",
+        "GAS": "AlphaTauri",
+        "SAI": "Ferrari",
+        "LEC": "Ferrari",
+        "PER": "Red Bull",
+        "GIO": "Alfa Romeo",
+        "VET": "Aston Martin",
+        "STR": "Aston Martin",
+        "ALO": "Alpine",
+        "OCO": "Alpine",
+        "RUS": "Williams",
+        "LAT": "Williams",
+        "TSU": "AlphaTauri",
+        "MSC": "Haas",
+        "KUB": "Alfa Romeo",
+        "MAZ": "Haas"
       }
     },
     "15": {
@@ -306,6 +394,28 @@
         "GIO": 1,
         "MAZ": 1,
         "VER": 1
+      },
+      "equipes": {
+        "NOR": "McLaren",
+        "SAI": "Ferrari",
+        "RUS": "Williams",
+        "HAM": "Mercedes",
+        "RIC": "McLaren",
+        "ALO": "Alpine",
+        "BOT": "Mercedes",
+        "STR": "Aston Martin",
+        "PER": "Red Bull",
+        "OCO": "Alpine",
+        "VET": "Aston Martin",
+        "GAS": "AlphaTauri",
+        "TSU": "AlphaTauri",
+        "LAT": "Williams",
+        "LEC": "Ferrari",
+        "RAI": "Alfa Romeo",
+        "MSC": "Haas",
+        "GIO": "Alfa Romeo",
+        "MAZ": "Haas",
+        "VER": "Red Bull"
       }
     },
     "16": {
@@ -368,6 +478,28 @@
         "GIO": 1,
         "RAI": 1,
         "MAZ": 1
+      },
+      "equipes": {
+        "HAM": "Mercedes",
+        "BOT": "Mercedes",
+        "VER": "Red Bull",
+        "LEC": "Ferrari",
+        "GAS": "AlphaTauri",
+        "ALO": "Alpine",
+        "PER": "Red Bull",
+        "NOR": "McLaren",
+        "STR": "Aston Martin",
+        "TSU": "AlphaTauri",
+        "VET": "Aston Martin",
+        "OCO": "Alpine",
+        "RUS": "Williams",
+        "MSC": "Haas",
+        "SAI": "Ferrari",
+        "RIC": "McLaren",
+        "LAT": "Williams",
+        "GIO": "Alfa Romeo",
+        "RAI": "Alfa Romeo",
+        "MAZ": "Haas"
       }
     },
     "17": {
@@ -431,6 +563,28 @@
         "RAI": 1,
         "MSC": 1,
         "MAZ": 1
+      },
+      "equipes": {
+        "VER": "Red Bull",
+        "HAM": "Mercedes",
+        "PER": "Red Bull",
+        "BOT": "Mercedes",
+        "LEC": "Ferrari",
+        "SAI": "Ferrari",
+        "RIC": "McLaren",
+        "NOR": "McLaren",
+        "GAS": "AlphaTauri",
+        "TSU": "AlphaTauri",
+        "OCO": "Alpine",
+        "VET": "Aston Martin",
+        "GIO": "Alfa Romeo",
+        "ALO": "Alpine",
+        "RUS": "Williams",
+        "STR": "Aston Martin",
+        "LAT": "Williams",
+        "RAI": "Alfa Romeo",
+        "MSC": "Haas",
+        "MAZ": "Haas"
       }
     },
     "18": {
@@ -494,6 +648,28 @@
         "MSC": 1,
         "MAZ": 1,
         "STR": 1
+      },
+      "equipes": {
+        "BOT": "Mercedes",
+        "HAM": "Mercedes",
+        "VER": "Red Bull",
+        "PER": "Red Bull",
+        "GAS": "AlphaTauri",
+        "SAI": "Ferrari",
+        "RIC": "McLaren",
+        "LEC": "Ferrari",
+        "TSU": "AlphaTauri",
+        "NOR": "McLaren",
+        "VET": "Aston Martin",
+        "RAI": "Alfa Romeo",
+        "RUS": "Williams",
+        "GIO": "Alfa Romeo",
+        "OCO": "Alpine",
+        "ALO": "Alpine",
+        "LAT": "Williams",
+        "MSC": "Haas",
+        "MAZ": "Haas",
+        "STR": "Aston Martin"
       }
     },
     "19": {
@@ -557,6 +733,28 @@
         "RUS": 1,
         "MSC": 1,
         "MAZ": 1
+      },
+      "equipes": {
+        "HAM": "Mercedes",
+        "VER": "Red Bull",
+        "BOT": "Mercedes",
+        "PER": "Red Bull",
+        "GAS": "AlphaTauri",
+        "SAI": "Ferrari",
+        "LEC": "Ferrari",
+        "NOR": "McLaren",
+        "RIC": "McLaren",
+        "ALO": "Alpine",
+        "OCO": "Alpine",
+        "VET": "Aston Martin",
+        "TSU": "AlphaTauri",
+        "RAI": "Alfa Romeo",
+        "GIO": "Alfa Romeo",
+        "STR": "Aston Martin",
+        "LAT": "Williams",
+        "RUS": "Williams",
+        "MSC": "Haas",
+        "MAZ": "Haas"
       }
     },
     "20": {
@@ -620,6 +818,28 @@
         "GIO": 1,
         "MSC": 1,
         "MAZ": 1
+      },
+      "equipes": {
+        "HAM": "Mercedes",
+        "VER": "Red Bull",
+        "BOT": "Mercedes",
+        "GAS": "AlphaTauri",
+        "ALO": "Alpine",
+        "NOR": "McLaren",
+        "SAI": "Ferrari",
+        "TSU": "AlphaTauri",
+        "OCO": "Alpine",
+        "VET": "Aston Martin",
+        "PER": "Red Bull",
+        "STR": "Aston Martin",
+        "LEC": "Ferrari",
+        "RIC": "McLaren",
+        "RUS": "Williams",
+        "RAI": "Alfa Romeo",
+        "LAT": "Williams",
+        "GIO": "Alfa Romeo",
+        "MSC": "Haas",
+        "MAZ": "Haas"
       }
     },
     "21": {
@@ -683,6 +903,28 @@
         "STR": 1,
         "MSC": 1,
         "MAZ": 1
+      },
+      "equipes": {
+        "HAM": "Mercedes",
+        "BOT": "Mercedes",
+        "VER": "Red Bull",
+        "LEC": "Ferrari",
+        "PER": "Red Bull",
+        "GAS": "AlphaTauri",
+        "NOR": "McLaren",
+        "TSU": "AlphaTauri",
+        "OCO": "Alpine",
+        "GIO": "Alfa Romeo",
+        "RIC": "McLaren",
+        "RAI": "Alfa Romeo",
+        "ALO": "Alpine",
+        "RUS": "Williams",
+        "SAI": "Ferrari",
+        "LAT": "Williams",
+        "VET": "Aston Martin",
+        "STR": "Aston Martin",
+        "MSC": "Haas",
+        "MAZ": "Haas"
       }
     },
     "22": {
@@ -746,6 +988,28 @@
         "RAI": 1,
         "MSC": 1,
         "MAZ": 1
+      },
+      "equipes": {
+        "VER": "Red Bull",
+        "HAM": "Mercedes",
+        "NOR": "McLaren",
+        "PER": "Red Bull",
+        "SAI": "Ferrari",
+        "BOT": "Mercedes",
+        "LEC": "Ferrari",
+        "TSU": "AlphaTauri",
+        "OCO": "Alpine",
+        "RIC": "McLaren",
+        "ALO": "Alpine",
+        "GAS": "AlphaTauri",
+        "STR": "Aston Martin",
+        "GIO": "Alfa Romeo",
+        "VET": "Aston Martin",
+        "LAT": "Williams",
+        "RUS": "Williams",
+        "RAI": "Alfa Romeo",
+        "MSC": "Haas",
+        "MAZ": "Haas"
       }
     }
   }

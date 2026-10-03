@@ -248,6 +248,10 @@ Status: ⬜ não iniciada · 🟡 em andamento · ✅ concluída
   chave de quem passou de fase sem tempo). Preenchido para 2021–2026 e copiado
   para `docs/data/<ano>/results.json` (colunas Q1/Q2/Q3 da aba Pilotos). Sem o
   campo, o site deduz pela posição (Q3 1–10; Q2 11–15, ou 11–16 em 2026+).
+  Campo opcional `equipes` (`{código: nome}`, Constructor da Jolpica sem o
+  sufixo " F1 Team" — `nome_equipe`): equipe **por rodada** (pega trocas no
+  meio do ano). Preenchido para 2021–2026; o `site.py` copia `fases` e
+  `equipes` (`RESULT_EXTRAS`) para `docs/data/<ano>/results.json`.
 - **`drivers.json` agora é real** (entry list 2026), não mock. Pilotos reserva
   sem código oficial na Jolpica são ignorados (não inventar código). O mock de
   Silverstone (Etapa 1) segue passando porque todos os códigos que usa estão na

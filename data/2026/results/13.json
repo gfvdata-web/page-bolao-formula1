@@ -51,5 +51,29 @@
     "PER": 1,
     "ALO": 1,
     "STR": 1
+  },
+  "equipes": {
+    "GAS": "Alpine",
+    "RUS": "Mercedes",
+    "PIA": "McLaren",
+    "LEC": "Ferrari",
+    "HAM": "Ferrari",
+    "VER": "Red Bull",
+    "ANT": "Mercedes",
+    "COL": "Alpine",
+    "NOR": "McLaren",
+    "LIN": "RB",
+    "BOR": "Audi",
+    "BEA": "Haas",
+    "HUL": "Audi",
+    "LAW": "Red Bull",
+    "SAI": "Williams",
+    "OCO": "Haas",
+    "TSU": "RB",
+    "ALB": "Williams",
+    "BOT": "Cadillac",
+    "PER": "Cadillac",
+    "ALO": "Aston Martin",
+    "STR": "Aston Martin"
   }
 }

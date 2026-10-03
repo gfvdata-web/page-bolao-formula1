@@ -28,6 +28,7 @@ CLI:
 
 import argparse
 import json
+import re
 import sys
 import urllib.error
 import urllib.request
@@ -212,6 +213,12 @@ def completar_fases(order: list[str], fases: dict[str, int], season: int) -> dic
     return completas
 
 
+def nome_equipe(bruto: str) -> str:
+    """Nome curto da equipe: tira o sufixo " F1 Team" da Jolpica
+    ("Alpine F1 Team" → "Alpine", "RB F1 Team" → "RB")."""
+    return re.sub(r"\s+F1 Team$", "", bruto.strip())
+
+
 def build_result(quali_json: dict, season: int, rnd: int) -> dict:
     """Monta o `results/<round>.json` (formato da Etapa 1) de um quali.
 
@@ -235,12 +242,16 @@ def build_result(quali_json: dict, season: int, rnd: int) -> dict:
     resultados = sorted(resultados, key=lambda r: int(r["position"]))
     order: list[str] = []
     fases: dict[str, int] = {}
+    equipes: dict[str, str] = {}
     for r in resultados:
         drv = r.get("Driver", {})
         code = (drv.get("code") or "").strip().upper()
         if not code:  # fallback resiliente: 3 primeiras letras do sobrenome
             code = normalize_key(drv.get("familyName", "")).replace(" ", "")[:3].upper()
         order.append(code)
+        equipe = nome_equipe(r.get("Constructor", {}).get("name") or "")
+        if equipe:
+            equipes[code] = equipe
         fase = fase_sessao(r)
         if fase:
             fases[code] = fase
@@ -260,6 +271,7 @@ def build_result(quali_json: dict, season: int, rnd: int) -> dict:
         "race": local.get("locality") or race.get("raceName", ""),
         "order": order,
         **({"fases": fases} if fases else {}),
+        **({"equipes": equipes} if equipes else {}),
     }
 
 

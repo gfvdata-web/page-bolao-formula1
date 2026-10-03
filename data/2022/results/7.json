@@ -47,5 +47,27 @@
     "STR": 1,
     "LAT": 1,
     "ZHO": 1
+  },
+  "equipes": {
+    "LEC": "Ferrari",
+    "SAI": "Ferrari",
+    "PER": "Red Bull",
+    "VER": "Red Bull",
+    "NOR": "McLaren",
+    "RUS": "Mercedes",
+    "ALO": "Alpine",
+    "HAM": "Mercedes",
+    "VET": "Aston Martin",
+    "OCO": "Alpine",
+    "TSU": "AlphaTauri",
+    "BOT": "Alfa Romeo",
+    "MAG": "Haas",
+    "RIC": "McLaren",
+    "MSC": "Haas",
+    "ALB": "Williams",
+    "GAS": "AlphaTauri",
+    "STR": "Aston Martin",
+    "LAT": "Williams",
+    "ZHO": "Alfa Romeo"
   }
 }

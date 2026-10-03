@@ -39,6 +39,9 @@ from .scoring import PlayerScore, Result, score_sheet
 # anteriores são acessadas via ?ano=YYYY e entram em "modo histórico".
 TEMPORADA_ATUAL = 2026
 
+# Chaves opcionais de results/<round>.json copiadas para docs/data/<ano>/results.json.
+RESULT_EXTRAS = ("fases", "equipes")
+
 
 def _load_json(caminho: Path) -> dict:
     return json.loads(caminho.read_text(encoding="utf-8"))
@@ -171,7 +174,9 @@ def generate(
     round_scores: dict[int, list[PlayerScore]] = {}
     round_bonus: dict[int, str] = {}
     round_order: dict[int, list[str]] = {}
-    round_fases: dict[int, dict[str, int] | None] = {}  # fase do quali (Q1/2/3) por piloto
+    # Campos opcionais do results/<round>.json repassados ao site como estão:
+    # fase do quali (Q1/2/3) e equipe de cada piloto.
+    round_extras: dict[int, dict] = {}
     round_min_score: dict[int, int] = {}
 
     for rnd in rounds:
@@ -218,7 +223,8 @@ def generate(
         round_scores[rnd] = scores
         round_bonus[rnd] = sheet.bonus_driver
         round_order[rnd] = result.order
-        round_fases[rnd] = _load_json(results_dir / f"{rnd}.json").get("fases")
+        bruto = _load_json(results_dir / f"{rnd}.json")
+        round_extras[rnd] = {k: bruto[k] for k in RESULT_EXTRAS if bruto.get(k)}
         round_min_score[rnd] = min_score
 
     # Jogadores do ranking = todo mundo que apostou em pelo menos uma rodada
@@ -474,7 +480,7 @@ def generate(
             str(info["round"]): {
                 **info,
                 "order": round_order[info["round"]],
-                **({"fases": round_fases[info["round"]]} if round_fases[info["round"]] else {}),
+                **round_extras[info["round"]],
             }
             for info in round_infos
         },

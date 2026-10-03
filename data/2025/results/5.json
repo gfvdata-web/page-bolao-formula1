@@ -47,5 +47,27 @@
     "HUL": 1,
     "OCO": 1,
     "BOR": 1
+  },
+  "equipes": {
+    "VER": "Red Bull",
+    "PIA": "McLaren",
+    "RUS": "Mercedes",
+    "LEC": "Ferrari",
+    "ANT": "Mercedes",
+    "SAI": "Williams",
+    "HAM": "Ferrari",
+    "TSU": "Red Bull",
+    "GAS": "Alpine",
+    "NOR": "McLaren",
+    "ALB": "Williams",
+    "LAW": "RB",
+    "ALO": "Aston Martin",
+    "HAD": "RB",
+    "BEA": "Haas",
+    "STR": "Aston Martin",
+    "DOO": "Alpine",
+    "HUL": "Sauber",
+    "OCO": "Haas",
+    "BOR": "Sauber"
   }
 }

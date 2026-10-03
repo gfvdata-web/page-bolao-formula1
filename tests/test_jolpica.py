@@ -94,6 +94,21 @@ class TestBuildResult(unittest.TestCase):
             J.build_result(_fx("qualifying_2026_empty.json"), 2026, 22)
 
 
+class TestEquipesQuali(unittest.TestCase):
+    """`equipes`: nome da equipe (Constructor) de cada piloto no quali."""
+
+    def test_fixture_tem_equipe_de_todos(self):
+        res = J.build_result(_fx("qualifying_2026_1.json"), 2026, 1)
+        self.assertEqual(set(res["equipes"]), set(res["order"]))
+        self.assertEqual(res["equipes"]["RUS"], "Mercedes")
+        self.assertEqual(res["equipes"]["HAD"], "Red Bull")
+
+    def test_nome_curto_sem_sufixo(self):
+        self.assertEqual(J.nome_equipe("Alpine F1 Team"), "Alpine")
+        self.assertEqual(J.nome_equipe("RB F1 Team"), "RB")
+        self.assertEqual(J.nome_equipe("Ferrari"), "Ferrari")
+
+
 class TestFasesQuali(unittest.TestCase):
     """`fases`: até que fase (Q1/Q2/Q3) cada piloto foi, como na sessão."""
 

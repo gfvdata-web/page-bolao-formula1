@@ -47,5 +47,27 @@
     "PER": 1,
     "OCO": 1,
     "ZHO": 1
+  },
+  "equipes": {
+    "SAI": "Ferrari",
+    "VER": "Red Bull",
+    "NOR": "McLaren",
+    "LEC": "Ferrari",
+    "RUS": "Mercedes",
+    "HAM": "Mercedes",
+    "MAG": "Haas",
+    "GAS": "Alpine",
+    "ALB": "Williams",
+    "HUL": "Haas",
+    "TSU": "RB",
+    "LAW": "RB",
+    "ALO": "Aston Martin",
+    "STR": "Aston Martin",
+    "BOT": "Sauber",
+    "COL": "Williams",
+    "PIA": "McLaren",
+    "PER": "Red Bull",
+    "OCO": "Alpine",
+    "ZHO": "Sauber"
   }
 }
