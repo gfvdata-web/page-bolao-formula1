@@ -1844,6 +1844,35 @@ temporadas — sub-aba "Palpites" no Ranking + card "Explore a temporada".**
   passam a filtrar só o gráfico de posição —
   `temporadaDesligados = {acumulado, rodada}`, `renderCardsFiltroTemporada`.
 
+### Etapa 8 — Navegação + análises entre temporadas 🟡
+- **Objetivo:** dar acesso fácil às temporadas antigas e criar análises entre
+  temporadas por jogador e por piloto, **sem mexer** nas abas da temporada
+  (Ranking, Rendimento, Pilotos, Hall of Fame, "Ir para" ficam como estão).
+- **Depende de:** Etapas 4 e 7 (dados de todas as temporadas em `docs/data/`).
+- **Mapa de páginas** (mesmo `index.html`, rotas por `?`, recarrega a página):
+  ```
+  /               temporada atual (sempre; intocada)
+  ?menu           hub: Temporadas (atual → /, antigas → ?ano) · Jogadores · Pilotos
+  ?jogadores      comparativo do grupo (chips: começa com os da temporada atual)
+    ?jogador=id   perfil individual (o existente)
+  ?pilotos        todos os pilotos 2021–atual, filtros temporada/equipe
+    ?piloto=COD   perfil do piloto (existente, ampliado: equipes, ano a ano)
+  ?ano=YYYY       temporada antiga (intocada)
+  ```
+- **Botão 🧭 Menu** no topo, ao lado do switch claro/escuro, em todas as páginas.
+- **Voltar (regra única):** "←" sobe um nível na árvore, independente da
+  origem: `?menu`→`/`; `?jogadores`/`?pilotos`/`?ano`→`?menu`;
+  `?jogador`→`?jogadores`; `?piloto`→`?pilotos`. Sem diferença desktop/celular.
+- **Links entre perfis:** código do piloto em "Apostas por piloto" (`?jogador`)
+  → `?piloto`; nome em "Quem mais aposta" (`?piloto`) → `?jogador`.
+- **Recorte de tempo:** por padrão ano a ano; somar só onde fizer sentido.
+- **Equipes:** gravar a equipe de cada piloto por rodada no `results.json`
+  (vem do quali na Jolpica), preenchendo 2021–atual.
+- **Código:** páginas novas em `docs/analise.js` (carregado depois do
+  `app.js`, reaproveita seus helpers globais); `app.js` só ganha o roteamento.
+- **Adiado (perguntar ao usuário após a v1):** links das tabelas da temporada
+  (ranking, Pilotos, Rendimento, Pontuação da corrida) para os perfis.
+
 ## 9. Pendências / decisões adiadas
 
 - Formato e importação dos **históricos** de anos anteriores.

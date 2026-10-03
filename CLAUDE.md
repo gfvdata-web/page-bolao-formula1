@@ -59,6 +59,7 @@ Bolão de palpites do **qualifying da F1** entre amigos. Cada um envia um palpit
 5. GitHub Actions (pipeline via `repository_dispatch`)
 6. Google Forms + Apps Script (gatilho pelo celular)
 7. Histórico (adiado)
+8. Navegação + análises entre temporadas (menu, jogadores, pilotos)
 
 Desenvolver na ordem — cada etapa depende das anteriores.
 
