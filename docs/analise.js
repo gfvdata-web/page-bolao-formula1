@@ -629,10 +629,11 @@ const estadoPilotos = {
   grafico: null,
 };
 
-// Equipe de um piloto numa rodada: dado da Jolpica (results.equipes), com o
-// mapa fixo do app.js como reserva.
+// Nome (do ano) da equipe de um piloto numa rodada: results.equipes; sem o
+// dado, a equipe principal do piloto no ano.
 function equipeNaRodada(rodada, cod, ano) {
-  return (rodada && rodada.equipes && rodada.equipes[cod]) || equipePilotoNoAno(cod, ano);
+  const chave = rodada && rodada.equipes && rodada.equipes[cod];
+  return chave ? infoEquipe(chave, ano).nome : equipePilotoNoAno(cod, ano);
 }
 
 // Estatísticas por piloto no recorte (ano ou "todos"; equipe ou "todas").
@@ -849,19 +850,13 @@ function atualizarPaginaPilotos(dados) {
 
 // ---------- Complementos do perfil do piloto (?piloto, app.js) ----------
 
-// ano -> equipes do piloto naquele ano, na ordem em que apareceram (troca no
-// meio da temporada vira duas). Fonte: results.equipes de cada rodada.
-function equipesDoPilotoPorAno(resultsPorAno, codigo) {
+// ano -> nomes das equipes do piloto naquele ano, em ordem cronológica (troca
+// no meio da temporada vira duas). Fonte: EQUIPES (todas as rodadas do ano).
+function equipesDoPilotoPorAno(codigo) {
   const porAno = new Map();
   for (const ano of anosAnalise()) {
-    const rounds = Object.values(resultsPorAno.get(ano)?.rounds || {}).sort((a, b) => a.round - b.round);
-    for (const rodada of rounds) {
-      if (!(rodada.order || []).includes(codigo)) continue;
-      const eq = equipeNaRodada(rodada, codigo, ano);
-      if (!eq) continue;
-      if (!porAno.has(ano)) porAno.set(ano, []);
-      if (!porAno.get(ano).includes(eq)) porAno.get(ano).push(eq);
-    }
+    const chaves = Object.keys(EQUIPES[ano]?.pilotos?.[codigo] || {});
+    if (chaves.length) porAno.set(ano, chaves.map((c) => infoEquipe(c, ano).nome));
   }
   return porAno;
 }

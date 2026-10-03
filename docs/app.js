@@ -1,224 +1,56 @@
 // Bolão F1 2026 — Etapa 4 (site estático, vanilla JS)
 
-// Cor aproximada por equipe 2026, mapeada por código de piloto (3 letras).
-// Puramente decorativo (identifica a equipe no círculo ao lado do código).
-const CORES_PILOTO = {
-  VER: "#3671C6", HAD: "#3671C6", TSU: "#3671C6", // Red Bull
-  NOR: "#FF8000", PIA: "#FF8000", // McLaren
-  RUS: "#27F4D2", ANT: "#27F4D2", // Mercedes
-  LEC: "#E8002D", HAM: "#E8002D", // Ferrari
-  ALB: "#64C4FF", SAI: "#64C4FF", // Williams
-  ALO: "#229971", STR: "#229971", // Aston Martin
-  GAS: "#0090FF", COL: "#0090FF", // Alpine
-  BEA: "#B6BABD", OCO: "#B6BABD", // Haas
-  LAW: "#6692FF", LIN: "#6692FF", // Racing Bulls
-  BOR: "#00E701", HUL: "#00E701", // Sauber
-  PER: "#FFD100", BOT: "#FFD100", // Cadillac
-};
+// Equipes por temporada — docs/data/equipes.json, gerado pelo site.py a partir
+// de data/equipes.json (nome e cor curados por ano) + results/<round>.json
+// (equipe de cada piloto em cada quali, da Jolpica):
+//   { ano: { equipes: { chave: {nome, cor} }, pilotos: { cod: { chave: qualis } } } }
+// chave = nome da equipe na Jolpica. Carregado no início do main().
+let EQUIPES = {};
+const COR_EQUIPE_PADRAO = "#9aa0a8";
 
-// Cores por equipe de TEMPORADAS PASSADAS, mapeadas por código de piloto.
-// Cada ano usa a grade e as cores daquele ano (não as de 2026). Puramente
-// decorativo, igual a CORES_PILOTO. Códigos fora do mapa caem no cinza padrão.
-const CORES_PILOTO_ANO = {
-  "2021": {
-    VER: "#0600EF", PER: "#0600EF",                 // Red Bull
-    HAM: "#00D2BE", BOT: "#00D2BE",                 // Mercedes
-    LEC: "#DC0000", SAI: "#DC0000",                 // Ferrari
-    NOR: "#FF8700", RIC: "#FF8700",                 // McLaren
-    ALO: "#0090FF", OCO: "#0090FF",                 // Alpine
-    GAS: "#2B4562", TSU: "#2B4562",                 // AlphaTauri
-    VET: "#006F62", STR: "#006F62",                 // Aston Martin
-    RAI: "#900000", GIO: "#900000", KUB: "#900000", // Alfa Romeo
-    RUS: "#005AFF", LAT: "#005AFF",                 // Williams
-    MSC: "#B6BABD", MAZ: "#B6BABD",                 // Haas
-  },
-  "2022": {
-    VER: "#3671C6", PER: "#3671C6",                 // Red Bull
-    LEC: "#F91536", SAI: "#F91536",                 // Ferrari
-    HAM: "#6CD3BF", RUS: "#6CD3BF",                 // Mercedes
-    NOR: "#FF8700", RIC: "#FF8700",                 // McLaren
-    ALO: "#2293D1", OCO: "#2293D1",                 // Alpine
-    GAS: "#4E7C9B", TSU: "#4E7C9B",                 // AlphaTauri
-    VET: "#2D826D", STR: "#2D826D", HUL: "#2D826D", // Aston Martin
-    ALB: "#37BEDD", LAT: "#37BEDD", DEV: "#37BEDD", // Williams
-    BOT: "#B12039", ZHO: "#B12039",                 // Alfa Romeo
-    MAG: "#B6BABD", MSC: "#B6BABD",                 // Haas
-  },
-  "2023": {
-    VER: "#3671C6", PER: "#3671C6",                 // Red Bull
-    HAM: "#27F4D2", RUS: "#27F4D2",                 // Mercedes
-    LEC: "#F91536", SAI: "#F91536",                 // Ferrari
-    NOR: "#FF8000", PIA: "#FF8000",                 // McLaren
-    ALO: "#229971", STR: "#229971",                 // Aston Martin
-    GAS: "#2293D1", OCO: "#2293D1",                 // Alpine
-    ALB: "#64C4FF", SAR: "#64C4FF",                 // Williams
-    TSU: "#5E8FAA", DEV: "#5E8FAA", RIC: "#5E8FAA", LAW: "#5E8FAA", // AlphaTauri
-    BOT: "#C92D4B", ZHO: "#C92D4B",                 // Alfa Romeo
-    MAG: "#B6BABD", HUL: "#B6BABD",                 // Haas
-  },
-  "2024": {
-    VER: "#3671C6", PER: "#3671C6",                 // Red Bull
-    LEC: "#E8002D", SAI: "#E8002D", BEA: "#E8002D", // Ferrari
-    NOR: "#FF8000", PIA: "#FF8000",                 // McLaren
-    HAM: "#27F4D2", RUS: "#27F4D2",                 // Mercedes
-    ALO: "#229971", STR: "#229971",                 // Aston Martin
-    TSU: "#6692FF", RIC: "#6692FF", LAW: "#6692FF", // RB
-    ALB: "#64C4FF", SAR: "#64C4FF", COL: "#64C4FF", // Williams
-    GAS: "#0090FF", OCO: "#0090FF", DOO: "#0090FF", // Alpine
-    MAG: "#B6BABD", HUL: "#B6BABD",                 // Haas
-    BOT: "#52E252", ZHO: "#52E252",                 // Kick Sauber
-  },
-  "2025": {
-    VER: "#3671C6", TSU: "#3671C6", LAW: "#3671C6", // Red Bull
-    NOR: "#FF8000", PIA: "#FF8000",                 // McLaren
-    LEC: "#E8002D", HAM: "#E8002D",                 // Ferrari
-    RUS: "#27F4D2", ANT: "#27F4D2",                 // Mercedes
-    ALO: "#229971", STR: "#229971",                 // Aston Martin
-    GAS: "#0090FF", DOO: "#0090FF", COL: "#0090FF", // Alpine
-    ALB: "#64C4FF", SAI: "#64C4FF",                 // Williams
-    HAD: "#6692FF",                                 // Racing Bulls
-    OCO: "#B6BABD", BEA: "#B6BABD",                 // Haas
-    HUL: "#00E701", BOR: "#00E701",                 // Sauber
-  },
-};
+function infoEquipe(chave, ano) {
+  return EQUIPES[String(ano)]?.equipes?.[chave] || { nome: chave || "", cor: COR_EQUIPE_PADRAO };
+}
 
-// Nome da equipe por código de piloto, espelhando os grupos de CORES_PILOTO
-// (temporada ativa) e CORES_PILOTO_ANO (temporadas passadas). Puramente
-// decorativo — usado para rotular o violino por ano na página do piloto.
-const EQUIPE_PILOTO = {
-  VER: "Red Bull", HAD: "Red Bull", TSU: "Red Bull",
-  NOR: "McLaren", PIA: "McLaren",
-  RUS: "Mercedes", ANT: "Mercedes",
-  LEC: "Ferrari", HAM: "Ferrari",
-  ALB: "Williams", SAI: "Williams",
-  ALO: "Aston Martin", STR: "Aston Martin",
-  GAS: "Alpine", COL: "Alpine",
-  BEA: "Haas", OCO: "Haas",
-  LAW: "Racing Bulls", LIN: "Racing Bulls",
-  BOR: "Sauber", HUL: "Sauber",
-  PER: "Cadillac", BOT: "Cadillac",
-};
+// Chaves das equipes do piloto no ano, da que ele mais correu para a que menos.
+function chavesEquipesPiloto(codigo, ano) {
+  const cont = EQUIPES[String(ano)]?.pilotos?.[codigo] || {};
+  return Object.keys(cont).sort((a, b) => cont[b] - cont[a]);
+}
 
-const EQUIPE_PILOTO_ANO = {
-  "2021": {
-    VER: "Red Bull", PER: "Red Bull",
-    HAM: "Mercedes", BOT: "Mercedes",
-    LEC: "Ferrari", SAI: "Ferrari",
-    NOR: "McLaren", RIC: "McLaren",
-    ALO: "Alpine", OCO: "Alpine",
-    GAS: "AlphaTauri", TSU: "AlphaTauri",
-    VET: "Aston Martin", STR: "Aston Martin",
-    RAI: "Alfa Romeo", GIO: "Alfa Romeo", KUB: "Alfa Romeo",
-    RUS: "Williams", LAT: "Williams",
-    MSC: "Haas", MAZ: "Haas",
-  },
-  "2022": {
-    VER: "Red Bull", PER: "Red Bull",
-    LEC: "Ferrari", SAI: "Ferrari",
-    HAM: "Mercedes", RUS: "Mercedes",
-    NOR: "McLaren", RIC: "McLaren",
-    ALO: "Alpine", OCO: "Alpine",
-    GAS: "AlphaTauri", TSU: "AlphaTauri",
-    VET: "Aston Martin", STR: "Aston Martin", HUL: "Aston Martin",
-    ALB: "Williams", LAT: "Williams", DEV: "Williams",
-    BOT: "Alfa Romeo", ZHO: "Alfa Romeo",
-    MAG: "Haas", MSC: "Haas",
-  },
-  "2023": {
-    VER: "Red Bull", PER: "Red Bull",
-    HAM: "Mercedes", RUS: "Mercedes",
-    LEC: "Ferrari", SAI: "Ferrari",
-    NOR: "McLaren", PIA: "McLaren",
-    ALO: "Aston Martin", STR: "Aston Martin",
-    GAS: "Alpine", OCO: "Alpine",
-    ALB: "Williams", SAR: "Williams",
-    TSU: "AlphaTauri", DEV: "AlphaTauri", RIC: "AlphaTauri", LAW: "AlphaTauri",
-    BOT: "Alfa Romeo", ZHO: "Alfa Romeo",
-    MAG: "Haas", HUL: "Haas",
-  },
-  "2024": {
-    VER: "Red Bull", PER: "Red Bull",
-    LEC: "Ferrari", SAI: "Ferrari", BEA: "Ferrari",
-    NOR: "McLaren", PIA: "McLaren",
-    HAM: "Mercedes", RUS: "Mercedes",
-    ALO: "Aston Martin", STR: "Aston Martin",
-    TSU: "RB", RIC: "RB", LAW: "RB",
-    ALB: "Williams", SAR: "Williams", COL: "Williams",
-    GAS: "Alpine", OCO: "Alpine", DOO: "Alpine",
-    MAG: "Haas", HUL: "Haas",
-    BOT: "Kick Sauber", ZHO: "Kick Sauber",
-  },
-  "2025": {
-    VER: "Red Bull", TSU: "Red Bull", LAW: "Red Bull",
-    NOR: "McLaren", PIA: "McLaren",
-    LEC: "Ferrari", HAM: "Ferrari",
-    RUS: "Mercedes", ANT: "Mercedes",
-    ALO: "Aston Martin", STR: "Aston Martin",
-    GAS: "Alpine", DOO: "Alpine", COL: "Alpine",
-    ALB: "Williams", SAI: "Williams",
-    HAD: "Racing Bulls",
-    OCO: "Haas", BEA: "Haas",
-    HUL: "Sauber", BOR: "Sauber",
-  },
-};
-
-// Nome da equipe de um piloto NUM ANO ESPECÍFICO — mesma lógica de fallback
-// de corPilotoNoAno.
+// Nome/cor da equipe principal (mais qualis) do piloto num ano.
 function equipePilotoNoAno(codigo, ano) {
-  const atual = String(SEASONS?.atual ?? TEMPORADA);
-  const mapa = EQUIPE_PILOTO_ANO[String(ano)] || (String(ano) === atual ? EQUIPE_PILOTO : null);
-  if (mapa && mapa[codigo]) return mapa[codigo];
-  return EQUIPE_PILOTO[codigo] || "";
+  const chave = chavesEquipesPiloto(codigo, ano)[0];
+  return chave ? infoEquipe(chave, ano).nome : "";
 }
 
-function corPiloto(codigo) {
-  const mapaAno = MODO_HISTORICO ? CORES_PILOTO_ANO[TEMPORADA] : null;
-  if (mapaAno && mapaAno[codigo]) return mapaAno[codigo];
-  return CORES_PILOTO[codigo] || "#9aa0a8";
-}
-
-// Cor da equipe de um piloto NUM ANO ESPECÍFICO (não necessariamente a
-// temporada ativa) — usado onde cada temporada de um piloto precisa da cor
-// da equipe daquele ano (ex.: violino por ano na página do piloto).
 function corPilotoNoAno(codigo, ano) {
-  const atual = String(SEASONS?.atual ?? TEMPORADA);
-  const mapa = CORES_PILOTO_ANO[String(ano)] || (String(ano) === atual ? CORES_PILOTO : null);
-  if (mapa && mapa[codigo]) return mapa[codigo];
-  return CORES_PILOTO[codigo] || "#9aa0a8";
+  const chave = chavesEquipesPiloto(codigo, ano)[0];
+  return chave ? infoEquipe(chave, ano).cor : COR_EQUIPE_PADRAO;
 }
 
-function _hexRgb(hex) {
-  const m = /^#?([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i.exec(hex || "");
-  return m ? [parseInt(m[1], 16), parseInt(m[2], 16), parseInt(m[3], 16)] : null;
+// Cor do piloto na temporada exibida.
+function corPiloto(codigo) {
+  return corPilotoNoAno(codigo, TEMPORADA);
 }
 
-function _distCor(a, b) {
-  const x = _hexRgb(a);
-  const y = _hexRgb(b);
-  if (!x || !y) return Infinity;
-  return Math.hypot(x[0] - y[0], x[1] - y[1], x[2] - y[2]);
-}
-
-// Todas as cores de equipe que um piloto usou nas temporadas do site. Cores
-// próximas (mesma equipe, tom ajustado de um ano para o outro) contam como uma
-// só; troca real de equipe entra como cor nova. Ordem cronológica.
+// Uma cor por equipe (pelo nome do ano) que o piloto defendeu nas temporadas
+// do site, incluindo troca no meio do ano; a mesma equipe em anos diferentes
+// conta uma vez, com o tom mais recente. Ordem cronológica.
 function coresEquipesPiloto(cod, anosFiltro = null) {
-  const atual = String(SEASONS?.atual ?? "");
-  let anos = (SEASONS?.temporadas || []).map((t) => String(t.ano)).sort();
+  let anos = Object.keys(EQUIPES).sort();
   if (anosFiltro) {
     const permitidos = new Set(anosFiltro.map(String));
     anos = anos.filter((a) => permitidos.has(a));
   }
-  const grupos = []; // { repr }
+  const porNome = new Map(); // nome -> cor (Map mantém a ordem de chegada)
   for (const ano of anos) {
-    const mapa = CORES_PILOTO_ANO[ano] || (ano === atual ? CORES_PILOTO : null);
-    const hex = mapa && mapa[cod];
-    if (!hex) continue;
-    const grupo = grupos.find((g) => _distCor(g.repr, hex) <= 130);
-    if (grupo) grupo.repr = hex; // mantém o tom mais recente da equipe
-    else grupos.push({ repr: hex });
+    for (const chave of Object.keys(EQUIPES[ano].pilotos?.[cod] || {})) {
+      const { nome, cor } = infoEquipe(chave, ano);
+      porNome.set(nome, cor);
+    }
   }
-  return grupos.map((g) => g.repr);
+  return [...porNome.values()];
 }
 
 // Chip do piloto com uma ou mais bolinhas (uma por equipe pela qual passou).
@@ -4005,7 +3837,7 @@ async function renderPaginaPiloto(codigo, anosSet, resultsPorAno, betsPorAno) {
   }
   const maxGrid = coletarMaxGridAnos(resultsPorAno, [...porAno.keys()]);
   const totalQuali = [...porAno.values()].reduce((s, arr) => s + arr.length, 0);
-  const equipesPorAno = equipesDoPilotoPorAno(resultsPorAno, codigo);
+  const equipesPorAno = equipesDoPilotoPorAno(codigo);
 
   container.appendChild(
     el("div", { class: "corridas-cards" }, [
@@ -4597,7 +4429,10 @@ async function main() {
   configurarIrPara();
 
   try {
-    SEASONS = await carregarJson("./data/seasons.json");
+    [SEASONS, EQUIPES] = await Promise.all([
+      carregarJson("./data/seasons.json"),
+      carregarJson("./data/equipes.json").catch(() => ({})),
+    ]);
 
     // ?menu, ?jogadores, ?pilotos (docs/analise.js)
     const rotaAnalise = rotaAnalisePedida();

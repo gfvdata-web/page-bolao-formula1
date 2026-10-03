@@ -358,8 +358,8 @@ Status: ⬜ não iniciada · 🟡 em andamento · ✅ concluída
   rodada). Rodadas em que o jogador não apostou (presentes em
   `compensated_rounds` do `standings.json`) aparecem como card "não apostou"
   com a pontuação de compensação (`min_score` da rodada). Códigos de piloto
-  exibidos com um círculo de cor por equipe (mapa fixo `CORES_PILOTO` em
-  `app.js`, decorativo — não vem dos dados). Tema claro/escuro via
+  exibidos com um círculo de cor por equipe (`corPiloto()`, base de equipes
+  da Etapa 8 — `docs/data/equipes.json`). Tema claro/escuro via
   `prefers-color-scheme`, layout responsivo (mobile-first, cards).
 
 **Decisões fixadas na Etapa 4 (não reabrir sem o usuário pedir):**
@@ -873,8 +873,7 @@ largada no quali.**
     esquerda = top6; eixo P1..maior grid visto. **Sem barra de média** (só o
     sombreado + os pontos — pedido do usuário); a média fica só no número à
     direita da linha.
-  - Helper novo `svgEl()` (namespace SVG, espelha `el()`). `CORES_PILOTO` ganhou
-    `TSU`→Red Bull (Tsunoda entrou na r12; decorativo, como o resto do mapa).
+  - Helper novo `svgEl()` (namespace SVG, espelha `el()`). Cores via `corPiloto()`.
   - **Popup ao passar o mouse numa linha** (`.pilotos-tooltip`, HTML absoluto
     dentro de `#pilotos-container` que tem `position: relative`): mostra a
     contagem por posição do piloto como mini-histograma de barras (mesmo visual
@@ -1160,12 +1159,9 @@ parser mais tolerante + alias de calendário.**
   "Temporadas" (antigo "Pódios por ano") cada ano mostra a contagem de
   jogadores. Base do cálculo em `universoJogadores()` (`acertoNum/acertoDen`).
 - **2026-09-08 (cores por temporada):** em modo histórico as bolinhas/gráficos
-  de piloto usam as cores da equipe **daquele ano**, não as de 2026. Novo mapa
-  `CORES_PILOTO_ANO` em `docs/app.js` (`{ "2021".."2025": {cod: hex} }`);
-  `corPiloto()` consulta `CORES_PILOTO_ANO[TEMPORADA]` quando `MODO_HISTORICO`,
-  senão cai em `CORES_PILOTO` (2026) e depois no cinza. Único ponto de troca —
-  todos os gráficos passam por `corPiloto()`. Cores decorativas (aproximadas),
-  não vêm dos dados. 2026 permanece inalterado.
+  de piloto usam as cores da equipe **daquele ano**. Todos os gráficos passam
+  por `corPiloto()`. (Os mapas fixos por piloto foram substituídos pela base de
+  equipes da Etapa 8.)
 
 **Análise do `f12025bolao.xlsx` (fonte dos palpites 2025):**
 - **Aba 1 "Página1"** — 138 palpites, colunas `circuito, nome, p1..p6, pos`
@@ -1897,9 +1893,20 @@ temporadas — sub-aba "Palpites" no Ranking + card "Explore a temporada".**
     `criarSelecaoCores`, `graficoLinhasAnalise`, `rerenderizarAnalise` (tema).
   - Estatísticas de piloto contam só as corridas do bolão
     (`docs/data/<ano>/results.json`).
-  - Pendência: `EQUIPE_PILOTO(_ANO)` do app.js duplica o que hoje vem em
-    `results.equipes` (ex.: 2026 diz "Sauber", o dado diz "Audi"); só serve de
-    reserva. Dá para aposentar numa limpeza futura.
+- **Base de equipes (fonte única de nome/cor):**
+  - `data/equipes.json` (editado à mão): `{ano: {chaveJolpica: {nome, cor}}}` —
+    nome e cor **daquele ano** (ex.: 2025 `RB` → "Racing Bulls", 2026 `Audi`).
+    Equipe nova/renomeada = adicionar aqui; `tests/test_equipes.py` falha se
+    alguma equipe dos resultados ficar sem nome/cor.
+  - `site.py` → `gerar_equipes()` gera `docs/data/equipes.json` em todo build:
+    `{ano: {equipes: {chave: {nome, cor}}, pilotos: {cod: {chave: qualis}}}}`,
+    contando **todas** as rodadas de `data/<ano>/results` (ordem cronológica;
+    troca no meio do ano = duas chaves).
+  - `app.js` carrega em `EQUIPES` no início do `main()`. Helpers:
+    `infoEquipe`, `chavesEquipesPiloto`, `equipePilotoNoAno` /
+    `corPilotoNoAno` (equipe principal = mais qualis no ano), `corPiloto`
+    (temporada exibida), `coresEquipesPiloto` (uma bolinha por nome de equipe).
+    Os antigos mapas fixos `CORES_PILOTO(_ANO)`/`EQUIPE_PILOTO(_ANO)` saíram.
 
 ## 9. Pendências / decisões adiadas
 

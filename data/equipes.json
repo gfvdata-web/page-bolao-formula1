@@ -1,0 +1,76 @@
+{
+  "_sobre": "Nome de exibição e cor de cada equipe por temporada. Chave = nome da equipe na Jolpica (results/<round>.json, campo equipes). Editado à mão; o site.py gera docs/data/equipes.json a partir daqui.",
+  "2021": {
+    "Alfa Romeo": { "nome": "Alfa Romeo", "cor": "#900000" },
+    "AlphaTauri": { "nome": "AlphaTauri", "cor": "#2B4562" },
+    "Alpine": { "nome": "Alpine", "cor": "#0090FF" },
+    "Aston Martin": { "nome": "Aston Martin", "cor": "#006F62" },
+    "Ferrari": { "nome": "Ferrari", "cor": "#DC0000" },
+    "Haas": { "nome": "Haas", "cor": "#B6BABD" },
+    "McLaren": { "nome": "McLaren", "cor": "#FF8700" },
+    "Mercedes": { "nome": "Mercedes", "cor": "#00D2BE" },
+    "Red Bull": { "nome": "Red Bull", "cor": "#0600EF" },
+    "Williams": { "nome": "Williams", "cor": "#005AFF" }
+  },
+  "2022": {
+    "Alfa Romeo": { "nome": "Alfa Romeo", "cor": "#B12039" },
+    "AlphaTauri": { "nome": "AlphaTauri", "cor": "#4E7C9B" },
+    "Alpine": { "nome": "Alpine", "cor": "#2293D1" },
+    "Aston Martin": { "nome": "Aston Martin", "cor": "#2D826D" },
+    "Ferrari": { "nome": "Ferrari", "cor": "#F91536" },
+    "Haas": { "nome": "Haas", "cor": "#B6BABD" },
+    "McLaren": { "nome": "McLaren", "cor": "#FF8700" },
+    "Mercedes": { "nome": "Mercedes", "cor": "#6CD3BF" },
+    "Red Bull": { "nome": "Red Bull", "cor": "#3671C6" },
+    "Williams": { "nome": "Williams", "cor": "#37BEDD" }
+  },
+  "2023": {
+    "Alfa Romeo": { "nome": "Alfa Romeo", "cor": "#C92D4B" },
+    "AlphaTauri": { "nome": "AlphaTauri", "cor": "#5E8FAA" },
+    "Alpine": { "nome": "Alpine", "cor": "#2293D1" },
+    "Aston Martin": { "nome": "Aston Martin", "cor": "#229971" },
+    "Ferrari": { "nome": "Ferrari", "cor": "#F91536" },
+    "Haas": { "nome": "Haas", "cor": "#B6BABD" },
+    "McLaren": { "nome": "McLaren", "cor": "#FF8000" },
+    "Mercedes": { "nome": "Mercedes", "cor": "#27F4D2" },
+    "Red Bull": { "nome": "Red Bull", "cor": "#3671C6" },
+    "Williams": { "nome": "Williams", "cor": "#64C4FF" }
+  },
+  "2024": {
+    "Alpine": { "nome": "Alpine", "cor": "#0090FF" },
+    "Aston Martin": { "nome": "Aston Martin", "cor": "#229971" },
+    "Ferrari": { "nome": "Ferrari", "cor": "#E8002D" },
+    "Haas": { "nome": "Haas", "cor": "#B6BABD" },
+    "McLaren": { "nome": "McLaren", "cor": "#FF8000" },
+    "Mercedes": { "nome": "Mercedes", "cor": "#27F4D2" },
+    "RB": { "nome": "RB", "cor": "#6692FF" },
+    "Red Bull": { "nome": "Red Bull", "cor": "#3671C6" },
+    "Sauber": { "nome": "Kick Sauber", "cor": "#52E252" },
+    "Williams": { "nome": "Williams", "cor": "#64C4FF" }
+  },
+  "2025": {
+    "Alpine": { "nome": "Alpine", "cor": "#0090FF" },
+    "Aston Martin": { "nome": "Aston Martin", "cor": "#229971" },
+    "Ferrari": { "nome": "Ferrari", "cor": "#E8002D" },
+    "Haas": { "nome": "Haas", "cor": "#B6BABD" },
+    "McLaren": { "nome": "McLaren", "cor": "#FF8000" },
+    "Mercedes": { "nome": "Mercedes", "cor": "#27F4D2" },
+    "RB": { "nome": "Racing Bulls", "cor": "#6692FF" },
+    "Red Bull": { "nome": "Red Bull", "cor": "#3671C6" },
+    "Sauber": { "nome": "Kick Sauber", "cor": "#00E701" },
+    "Williams": { "nome": "Williams", "cor": "#64C4FF" }
+  },
+  "2026": {
+    "Alpine": { "nome": "Alpine", "cor": "#0090FF" },
+    "Aston Martin": { "nome": "Aston Martin", "cor": "#229971" },
+    "Audi": { "nome": "Audi", "cor": "#8C1C2B" },
+    "Cadillac": { "nome": "Cadillac", "cor": "#FFD100" },
+    "Ferrari": { "nome": "Ferrari", "cor": "#E8002D" },
+    "Haas": { "nome": "Haas", "cor": "#B6BABD" },
+    "McLaren": { "nome": "McLaren", "cor": "#FF8000" },
+    "Mercedes": { "nome": "Mercedes", "cor": "#27F4D2" },
+    "RB": { "nome": "Racing Bulls", "cor": "#6692FF" },
+    "Red Bull": { "nome": "Red Bull", "cor": "#3671C6" },
+    "Williams": { "nome": "Williams", "cor": "#64C4FF" }
+  }
+}

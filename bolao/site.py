@@ -42,6 +42,9 @@ TEMPORADA_ATUAL = 2026
 # Chaves opcionais de results/<round>.json copiadas para docs/data/<ano>/results.json.
 RESULT_EXTRAS = ("fases", "equipes")
 
+# Cor de equipe sem cor curada em data/equipes.json.
+COR_EQUIPE_PADRAO = "#9aa0a8"
+
 
 def _load_json(caminho: Path) -> dict:
     return json.loads(caminho.read_text(encoding="utf-8"))
@@ -505,6 +508,8 @@ def generate(
     }
     _dump_json(docs_data / "calendar.json", calendar_doc)
 
+    gerar_equipes(data_dir, docs_dir)
+
     # --- docs/data/seasons.json (índice das temporadas disponíveis) ---
     # Varre as pastas irmãs com standings.json — assim gerar uma temporada não
     # apaga as outras do índice. O seletor de temporada do site lê este arquivo.
@@ -530,6 +535,40 @@ def generate(
         "rounds": [info["round"] for info in round_infos],
         "players": len(standings_players),
     }
+
+
+def gerar_equipes(data_dir: Path, docs_dir: Path) -> dict:
+    """Gera ``docs/data/equipes.json``: por temporada, nome/cor de cada equipe
+    (curados em ``data/equipes.json``) e as equipes de cada piloto com o número
+    de qualis por cada uma, na ordem em que apareceram (troca no meio do ano
+    vira duas entradas). Fonte das equipes: ``results/<round>.json`` de todas as
+    rodadas (não só as do bolão). Equipe sem nome/cor curados ganha o nome da
+    Jolpica e cor cinza, e é avisada no terminal.
+    """
+    arq_curadas = data_dir / "equipes.json"
+    curadas = _load_json(arq_curadas) if arq_curadas.exists() else {}
+    saida: dict[str, dict] = {}
+    for season_dir in sorted(p for p in data_dir.iterdir() if p.name.isdigit()):
+        ano = season_dir.name
+        pilotos: dict[str, dict[str, int]] = {}
+        arquivos = sorted((season_dir / "results").glob("*.json"), key=lambda p: int(p.stem))
+        for arq in arquivos:
+            for cod, equipe in _load_json(arq).get("equipes", {}).items():
+                contagem = pilotos.setdefault(cod, {})
+                contagem[equipe] = contagem.get(equipe, 0) + 1
+        if not pilotos:
+            continue
+        info = curadas.get(ano, {})
+        usadas = sorted({e for c in pilotos.values() for e in c})
+        faltando = [e for e in usadas if e not in info]
+        if faltando:
+            print(f"[aviso] data/equipes.json sem nome/cor de {faltando} em {ano}.")
+        saida[ano] = {
+            "equipes": {e: info.get(e, {"nome": e, "cor": COR_EQUIPE_PADRAO}) for e in usadas},
+            "pilotos": dict(sorted(pilotos.items())),
+        }
+    _dump_json(docs_dir / "data" / "equipes.json", saida)
+    return saida
 
 
 def main(argv: list[str] | None = None) -> int:

@@ -1,0 +1,685 @@
+{
+  "2021": {
+    "equipes": {
+      "Alfa Romeo": {
+        "nome": "Alfa Romeo",
+        "cor": "#900000"
+      },
+      "AlphaTauri": {
+        "nome": "AlphaTauri",
+        "cor": "#2B4562"
+      },
+      "Alpine": {
+        "nome": "Alpine",
+        "cor": "#0090FF"
+      },
+      "Aston Martin": {
+        "nome": "Aston Martin",
+        "cor": "#006F62"
+      },
+      "Ferrari": {
+        "nome": "Ferrari",
+        "cor": "#DC0000"
+      },
+      "Haas": {
+        "nome": "Haas",
+        "cor": "#B6BABD"
+      },
+      "McLaren": {
+        "nome": "McLaren",
+        "cor": "#FF8700"
+      },
+      "Mercedes": {
+        "nome": "Mercedes",
+        "cor": "#00D2BE"
+      },
+      "Red Bull": {
+        "nome": "Red Bull",
+        "cor": "#0600EF"
+      },
+      "Williams": {
+        "nome": "Williams",
+        "cor": "#005AFF"
+      }
+    },
+    "pilotos": {
+      "ALO": {
+        "Alpine": 22
+      },
+      "BOT": {
+        "Mercedes": 22
+      },
+      "GAS": {
+        "AlphaTauri": 22
+      },
+      "GIO": {
+        "Alfa Romeo": 22
+      },
+      "HAM": {
+        "Mercedes": 22
+      },
+      "KUB": {
+        "Alfa Romeo": 2
+      },
+      "LAT": {
+        "Williams": 22
+      },
+      "LEC": {
+        "Ferrari": 22
+      },
+      "MAZ": {
+        "Haas": 22
+      },
+      "MSC": {
+        "Haas": 21
+      },
+      "NOR": {
+        "McLaren": 22
+      },
+      "OCO": {
+        "Alpine": 22
+      },
+      "PER": {
+        "Red Bull": 22
+      },
+      "RAI": {
+        "Alfa Romeo": 20
+      },
+      "RIC": {
+        "McLaren": 22
+      },
+      "RUS": {
+        "Williams": 22
+      },
+      "SAI": {
+        "Ferrari": 22
+      },
+      "STR": {
+        "Aston Martin": 22
+      },
+      "TSU": {
+        "AlphaTauri": 22
+      },
+      "VER": {
+        "Red Bull": 22
+      },
+      "VET": {
+        "Aston Martin": 22
+      }
+    }
+  },
+  "2022": {
+    "equipes": {
+      "Alfa Romeo": {
+        "nome": "Alfa Romeo",
+        "cor": "#B12039"
+      },
+      "AlphaTauri": {
+        "nome": "AlphaTauri",
+        "cor": "#4E7C9B"
+      },
+      "Alpine": {
+        "nome": "Alpine",
+        "cor": "#2293D1"
+      },
+      "Aston Martin": {
+        "nome": "Aston Martin",
+        "cor": "#2D826D"
+      },
+      "Ferrari": {
+        "nome": "Ferrari",
+        "cor": "#F91536"
+      },
+      "Haas": {
+        "nome": "Haas",
+        "cor": "#B6BABD"
+      },
+      "McLaren": {
+        "nome": "McLaren",
+        "cor": "#FF8700"
+      },
+      "Mercedes": {
+        "nome": "Mercedes",
+        "cor": "#6CD3BF"
+      },
+      "Red Bull": {
+        "nome": "Red Bull",
+        "cor": "#3671C6"
+      },
+      "Williams": {
+        "nome": "Williams",
+        "cor": "#37BEDD"
+      }
+    },
+    "pilotos": {
+      "ALB": {
+        "Williams": 21
+      },
+      "ALO": {
+        "Alpine": 22
+      },
+      "BOT": {
+        "Alfa Romeo": 22
+      },
+      "DEV": {
+        "Williams": 1
+      },
+      "GAS": {
+        "AlphaTauri": 22
+      },
+      "HAM": {
+        "Mercedes": 22
+      },
+      "HUL": {
+        "Aston Martin": 2
+      },
+      "LAT": {
+        "Williams": 22
+      },
+      "LEC": {
+        "Ferrari": 22
+      },
+      "MAG": {
+        "Haas": 22
+      },
+      "MSC": {
+        "Haas": 22
+      },
+      "NOR": {
+        "McLaren": 22
+      },
+      "OCO": {
+        "Alpine": 22
+      },
+      "PER": {
+        "Red Bull": 22
+      },
+      "RIC": {
+        "McLaren": 22
+      },
+      "RUS": {
+        "Mercedes": 22
+      },
+      "SAI": {
+        "Ferrari": 22
+      },
+      "STR": {
+        "Aston Martin": 22
+      },
+      "TSU": {
+        "AlphaTauri": 22
+      },
+      "VER": {
+        "Red Bull": 22
+      },
+      "VET": {
+        "Aston Martin": 20
+      },
+      "ZHO": {
+        "Alfa Romeo": 22
+      }
+    }
+  },
+  "2023": {
+    "equipes": {
+      "Alfa Romeo": {
+        "nome": "Alfa Romeo",
+        "cor": "#C92D4B"
+      },
+      "AlphaTauri": {
+        "nome": "AlphaTauri",
+        "cor": "#5E8FAA"
+      },
+      "Alpine": {
+        "nome": "Alpine",
+        "cor": "#2293D1"
+      },
+      "Aston Martin": {
+        "nome": "Aston Martin",
+        "cor": "#229971"
+      },
+      "Ferrari": {
+        "nome": "Ferrari",
+        "cor": "#F91536"
+      },
+      "Haas": {
+        "nome": "Haas",
+        "cor": "#B6BABD"
+      },
+      "McLaren": {
+        "nome": "McLaren",
+        "cor": "#FF8000"
+      },
+      "Mercedes": {
+        "nome": "Mercedes",
+        "cor": "#27F4D2"
+      },
+      "Red Bull": {
+        "nome": "Red Bull",
+        "cor": "#3671C6"
+      },
+      "Williams": {
+        "nome": "Williams",
+        "cor": "#64C4FF"
+      }
+    },
+    "pilotos": {
+      "ALB": {
+        "Williams": 22
+      },
+      "ALO": {
+        "Aston Martin": 22
+      },
+      "BOT": {
+        "Alfa Romeo": 22
+      },
+      "DEV": {
+        "AlphaTauri": 10
+      },
+      "GAS": {
+        "Alpine": 22
+      },
+      "HAM": {
+        "Mercedes": 22
+      },
+      "HUL": {
+        "Haas": 22
+      },
+      "LAW": {
+        "AlphaTauri": 5
+      },
+      "LEC": {
+        "Ferrari": 22
+      },
+      "MAG": {
+        "Haas": 22
+      },
+      "NOR": {
+        "McLaren": 22
+      },
+      "OCO": {
+        "Alpine": 22
+      },
+      "PER": {
+        "Red Bull": 22
+      },
+      "PIA": {
+        "McLaren": 22
+      },
+      "RIC": {
+        "AlphaTauri": 7
+      },
+      "RUS": {
+        "Mercedes": 22
+      },
+      "SAI": {
+        "Ferrari": 22
+      },
+      "SAR": {
+        "Williams": 22
+      },
+      "STR": {
+        "Aston Martin": 22
+      },
+      "TSU": {
+        "AlphaTauri": 22
+      },
+      "VER": {
+        "Red Bull": 22
+      },
+      "ZHO": {
+        "Alfa Romeo": 22
+      }
+    }
+  },
+  "2024": {
+    "equipes": {
+      "Alpine": {
+        "nome": "Alpine",
+        "cor": "#0090FF"
+      },
+      "Aston Martin": {
+        "nome": "Aston Martin",
+        "cor": "#229971"
+      },
+      "Ferrari": {
+        "nome": "Ferrari",
+        "cor": "#E8002D"
+      },
+      "Haas": {
+        "nome": "Haas",
+        "cor": "#B6BABD"
+      },
+      "McLaren": {
+        "nome": "McLaren",
+        "cor": "#FF8000"
+      },
+      "Mercedes": {
+        "nome": "Mercedes",
+        "cor": "#27F4D2"
+      },
+      "RB": {
+        "nome": "RB",
+        "cor": "#6692FF"
+      },
+      "Red Bull": {
+        "nome": "Red Bull",
+        "cor": "#3671C6"
+      },
+      "Sauber": {
+        "nome": "Kick Sauber",
+        "cor": "#52E252"
+      },
+      "Williams": {
+        "nome": "Williams",
+        "cor": "#64C4FF"
+      }
+    },
+    "pilotos": {
+      "ALB": {
+        "Williams": 24
+      },
+      "ALO": {
+        "Aston Martin": 24
+      },
+      "BEA": {
+        "Ferrari": 1,
+        "Haas": 2
+      },
+      "BOT": {
+        "Sauber": 24
+      },
+      "COL": {
+        "Williams": 9
+      },
+      "DOO": {
+        "Alpine": 1
+      },
+      "GAS": {
+        "Alpine": 24
+      },
+      "HAM": {
+        "Mercedes": 24
+      },
+      "HUL": {
+        "Haas": 24
+      },
+      "LAW": {
+        "RB": 6
+      },
+      "LEC": {
+        "Ferrari": 24
+      },
+      "MAG": {
+        "Haas": 22
+      },
+      "NOR": {
+        "McLaren": 24
+      },
+      "OCO": {
+        "Alpine": 23
+      },
+      "PER": {
+        "Red Bull": 24
+      },
+      "PIA": {
+        "McLaren": 24
+      },
+      "RIC": {
+        "RB": 18
+      },
+      "RUS": {
+        "Mercedes": 24
+      },
+      "SAI": {
+        "Ferrari": 23
+      },
+      "SAR": {
+        "Williams": 14
+      },
+      "STR": {
+        "Aston Martin": 24
+      },
+      "TSU": {
+        "RB": 24
+      },
+      "VER": {
+        "Red Bull": 24
+      },
+      "ZHO": {
+        "Sauber": 24
+      }
+    }
+  },
+  "2025": {
+    "equipes": {
+      "Alpine": {
+        "nome": "Alpine",
+        "cor": "#0090FF"
+      },
+      "Aston Martin": {
+        "nome": "Aston Martin",
+        "cor": "#229971"
+      },
+      "Ferrari": {
+        "nome": "Ferrari",
+        "cor": "#E8002D"
+      },
+      "Haas": {
+        "nome": "Haas",
+        "cor": "#B6BABD"
+      },
+      "McLaren": {
+        "nome": "McLaren",
+        "cor": "#FF8000"
+      },
+      "Mercedes": {
+        "nome": "Mercedes",
+        "cor": "#27F4D2"
+      },
+      "RB": {
+        "nome": "Racing Bulls",
+        "cor": "#6692FF"
+      },
+      "Red Bull": {
+        "nome": "Red Bull",
+        "cor": "#3671C6"
+      },
+      "Sauber": {
+        "nome": "Kick Sauber",
+        "cor": "#00E701"
+      },
+      "Williams": {
+        "nome": "Williams",
+        "cor": "#64C4FF"
+      }
+    },
+    "pilotos": {
+      "ALB": {
+        "Williams": 24
+      },
+      "ALO": {
+        "Aston Martin": 24
+      },
+      "ANT": {
+        "Mercedes": 24
+      },
+      "BEA": {
+        "Haas": 24
+      },
+      "BOR": {
+        "Sauber": 23
+      },
+      "COL": {
+        "Alpine": 18
+      },
+      "DOO": {
+        "Alpine": 6
+      },
+      "GAS": {
+        "Alpine": 24
+      },
+      "HAD": {
+        "RB": 24
+      },
+      "HAM": {
+        "Ferrari": 24
+      },
+      "HUL": {
+        "Sauber": 24
+      },
+      "LAW": {
+        "Red Bull": 2,
+        "RB": 22
+      },
+      "LEC": {
+        "Ferrari": 24
+      },
+      "NOR": {
+        "McLaren": 24
+      },
+      "OCO": {
+        "Haas": 24
+      },
+      "PIA": {
+        "McLaren": 24
+      },
+      "RUS": {
+        "Mercedes": 24
+      },
+      "SAI": {
+        "Williams": 24
+      },
+      "STR": {
+        "Aston Martin": 24
+      },
+      "TSU": {
+        "RB": 2,
+        "Red Bull": 22
+      },
+      "VER": {
+        "Red Bull": 24
+      }
+    }
+  },
+  "2026": {
+    "equipes": {
+      "Alpine": {
+        "nome": "Alpine",
+        "cor": "#0090FF"
+      },
+      "Aston Martin": {
+        "nome": "Aston Martin",
+        "cor": "#229971"
+      },
+      "Audi": {
+        "nome": "Audi",
+        "cor": "#8C1C2B"
+      },
+      "Cadillac": {
+        "nome": "Cadillac",
+        "cor": "#FFD100"
+      },
+      "Ferrari": {
+        "nome": "Ferrari",
+        "cor": "#E8002D"
+      },
+      "Haas": {
+        "nome": "Haas",
+        "cor": "#B6BABD"
+      },
+      "McLaren": {
+        "nome": "McLaren",
+        "cor": "#FF8000"
+      },
+      "Mercedes": {
+        "nome": "Mercedes",
+        "cor": "#27F4D2"
+      },
+      "RB": {
+        "nome": "Racing Bulls",
+        "cor": "#6692FF"
+      },
+      "Red Bull": {
+        "nome": "Red Bull",
+        "cor": "#3671C6"
+      },
+      "Williams": {
+        "nome": "Williams",
+        "cor": "#64C4FF"
+      }
+    },
+    "pilotos": {
+      "ALB": {
+        "Williams": 16
+      },
+      "ALO": {
+        "Aston Martin": 16
+      },
+      "ANT": {
+        "Mercedes": 16
+      },
+      "BEA": {
+        "Haas": 15
+      },
+      "BOR": {
+        "Audi": 16
+      },
+      "BOT": {
+        "Cadillac": 16
+      },
+      "COL": {
+        "Alpine": 16
+      },
+      "GAS": {
+        "Alpine": 16
+      },
+      "HAD": {
+        "Red Bull": 13
+      },
+      "HAM": {
+        "Ferrari": 16
+      },
+      "HUL": {
+        "Audi": 16
+      },
+      "LAW": {
+        "RB": 13,
+        "Red Bull": 3
+      },
+      "LEC": {
+        "Ferrari": 16
+      },
+      "LIN": {
+        "RB": 16
+      },
+      "NOR": {
+        "McLaren": 16
+      },
+      "OCO": {
+        "Haas": 16
+      },
+      "PER": {
+        "Cadillac": 16
+      },
+      "PIA": {
+        "McLaren": 16
+      },
+      "RUS": {
+        "Mercedes": 16
+      },
+      "SAI": {
+        "Williams": 15
+      },
+      "STR": {
+        "Aston Martin": 14
+      },
+      "TSU": {
+        "RB": 3
+      },
+      "VER": {
+        "Red Bull": 15
+      }
+    }
+  }
+}
