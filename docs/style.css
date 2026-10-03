@@ -2230,3 +2230,40 @@ button.subaba[aria-selected="true"] {
   margin-top: 0.7rem;
 }
 .menu-busca .ir-para-botao { flex: 1; }
+
+/* ---------- Páginas de análise (?jogadores, ?pilotos) ---------- */
+.analise-filtros {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+.analise-anos { flex-wrap: wrap; }
+.analise-filtro-select { margin-bottom: 0; flex: 1; min-width: 10rem; }
+.analise-grafico { height: 340px; }
+
+.analise-tabela { min-width: 46rem; }
+.analise-tabela td { white-space: nowrap; }
+.analise-th { cursor: pointer; user-select: none; white-space: nowrap; }
+.analise-th:hover, .analise-th--ativa { color: var(--acento); }
+.analise-linha { cursor: pointer; }
+.analise-linha:hover td { background: var(--bg); }
+
+.analise-comparar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  border: 1px solid var(--borda);
+  border-radius: 50%;
+  background: var(--bg-card);
+  cursor: pointer;
+  padding: 0;
+}
+.analise-comparar[aria-pressed="true"] {
+  border-color: var(--cor-chip);
+  box-shadow: inset 0 0 0 1px var(--cor-chip);
+}
+.analise-comparar:not([aria-pressed="true"]) .rendimento-chip__ponto { opacity: 0.25; }

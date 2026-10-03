@@ -4212,6 +4212,7 @@ function sincronizarSwitchTema() {
 // Redesenha o que não reage sozinho à troca de tema.
 function rerenderizarGraficos() {
   if (resultsGlobais) renderPilotos(resultsGlobais);
+  rerenderizarAnalise();
 
   // Chart.js: destrói tudo; recria já o que está visível, o resto volta pela
   // inicialização preguiçosa das abas (garantir*), agora com a cor nova.
