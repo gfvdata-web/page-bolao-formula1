@@ -1696,7 +1696,7 @@ temporadas.
   bandeira do país do circuito. Na temporada atual, as corridas já em
   `standings.rounds` ficam **escurecidas** (`--passada`, grayscale+opacity); em
   `MODO_HISTORICO` **nenhuma** escurece.
-- **Bandeiras versionadas no repo:** `docs/flags/<iso2>.svg` (25 arquivos,
+- **Bandeiras versionadas no repo:** `docs/flags/<iso2>.svg` (26 arquivos,
   **Twemoji, CC-BY 4.0**, `docs/flags/ATTRIBUTION.txt`) — sem CDN/rede em
   runtime, ~37 KB somando todas, cache do navegador. `<img loading="lazy">`
   dentro do círculo (`object-fit: cover`).

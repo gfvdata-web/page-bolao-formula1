@@ -433,6 +433,7 @@ const CIRCUITOS = {
   monza:         { pais: "Itália",          iso: "it", nome: "Monza" },
   madring:       { pais: "Espanha",         iso: "es", nome: "Madring (Madri)" },
   baku:          { pais: "Azerbaijão",      iso: "az", nome: "Baku" },
+  sepang:        { pais: "Malásia",         iso: "my", nome: "Sepang" },
   marina_bay:    { pais: "Singapura",       iso: "sg", nome: "Marina Bay" },
   americas:      { pais: "Estados Unidos",  iso: "us", nome: "Circuit of the Americas" },
   rodriguez:     { pais: "México",          iso: "mx", nome: "Hermanos Rodríguez" },
