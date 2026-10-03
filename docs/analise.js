@@ -300,9 +300,323 @@ async function renderPaginaMenu() {
 
 // ---------- ?jogadores ----------
 
+const estadoJogadores = {
+  selecao: criarSelecaoCores(), // jogadores comparados (chips): tabela, gráfico e matriz
+  metrica: "posicao", // gráfico: "posicao" | "acerto" | "media"
+  ano: "todos", // recorte da tabela e da matriz
+  ordem: { chave: "pontos", asc: false },
+  grafico: null,
+};
+
+const METRICAS_JOGADOR = {
+  posicao: { rotulo: "Posição", titulo: "Posição final no ranking, por temporada" },
+  acerto: { rotulo: "Acerto", titulo: "Acerto (% do máximo possível), por temporada" },
+  media: { rotulo: "Pts/corrida", titulo: "Pontos por corrida palpitada, por temporada" },
+};
+
+// Estatísticas por jogador no recorte de anos. Base de "acerto" e "pts/corrida"
+// igual à do Hall of Fame (universoJogadores): só as corridas palpitadas, sem
+// compensação. Palpites (exatas, no top6, piloto da rodada, favoritos) vêm do
+// bets.json; ranking e pontos do standings.json; medalhas do hall_of_fame.json.
+function agregarJogadores(dados, anos) {
+  const mapa = new Map();
+  const registro = (id, nome) => {
+    if (!mapa.has(id)) {
+      mapa.set(id, {
+        id, nome, anos: [], ouro: 0, prata: 0, bronze: 0, pontos: 0,
+        corridas: 0, feitos: 0, teto: 0, posicoes: [],
+        palpites: 0, exatas: 0, noTop: 0, bonusN: 0, bonusAcertos: 0,
+        rodadasBets: 0, porPiloto: new Map(),
+      });
+    }
+    const r = mapa.get(id);
+    r.nome = nome || r.nome;
+    return r;
+  };
+  for (const a of anos) {
+    const st = dados.standingsPorAno.get(a);
+    if (!st) continue;
+    const maxPts = Number(st.format?.max_points) || 0;
+    for (const p of st.players || []) {
+      const r = registro(p.player_id, p.name);
+      r.anos.push(a);
+      r.pontos += Number(p.total ?? p.total_somado ?? 0) || 0;
+      r.posicoes.push({ ano: a, pos: p.position, de: st.players.length });
+      let feitos = Number(p.carry_points) || 0;
+      let corridas = Number(p.carry_rounds) || 0;
+      for (const v of Object.values(p.per_round || {})) {
+        feitos += Number(v) || 0;
+        corridas++;
+      }
+      r.feitos += feitos;
+      r.corridas += corridas;
+      r.teto += corridas * maxPts;
+    }
+    const podio = dados.hof.anos.find((h) => String(h.ano) === a);
+    if (podio) for (const m of ["ouro", "prata", "bronze"]) if (mapa.has(podio[m])) mapa.get(podio[m])[m]++;
+
+    for (const jogador of Object.values(dados.betsPorAno.get(a)?.players || {})) {
+      if (!mapa.has(jogador.player_id)) continue;
+      const r = mapa.get(jogador.player_id);
+      for (const rodada of Object.values(jogador.rounds || {})) {
+        r.rodadasBets++;
+        for (const det of rodada.top6_detail || []) {
+          if (!det.guess) continue;
+          r.palpites++;
+          if (det.points >= 2) r.exatas++;
+          if (det.points >= 1) r.noTop++;
+          r.porPiloto.set(det.guess, (r.porPiloto.get(det.guess) || 0) + 1);
+        }
+        if (rodada.bonus_driver && rodada.bonus_guess != null) {
+          r.bonusN++;
+          if (rodada.bonus_points > 0) r.bonusAcertos++;
+        }
+      }
+    }
+  }
+  for (const r of mapa.values()) {
+    r.acerto = r.teto ? r.feitos / r.teto : null;
+    r.media = r.corridas ? r.feitos / r.corridas : null;
+    r.posMedia = r.posicoes.length ? r.posicoes.reduce((s, p) => s + p.pos, 0) / r.posicoes.length : null;
+    r.medalhas = r.ouro + r.prata + r.bronze;
+    r.favorito = [...r.porPiloto.entries()].sort((x, y) => y[1] - x[1] || x[0].localeCompare(y[0]))[0] || null;
+  }
+  return mapa;
+}
+
 async function renderPaginaJogadores() {
   entrarModoPagina("secao-jogadores", "👥", "Jogadores", "?menu", "Menu");
-  document.getElementById("jogadores-status").textContent = "Em construção.";
+  const status = document.getElementById("jogadores-status");
+  status.textContent = "Carregando…";
+  try {
+    const dados = await carregarDadosAnalise();
+    // Começa comparando quem joga a temporada atual.
+    const atual = dados.standingsPorAno.get(String(SEASONS.atual));
+    for (const p of atual?.players || []) estadoJogadores.selecao.alternar(p.player_id);
+    status.textContent = "";
+    _rerenderAnalise = () => atualizarPaginaJogadores(dados);
+    atualizarPaginaJogadores(dados);
+  } catch (erro) {
+    erroPagina("jogadores-status", erro);
+  }
+}
+
+function atualizarPaginaJogadores(dados) {
+  const est = estadoJogadores;
+  const container = document.getElementById("jogadores-container");
+  const atualizar = () => atualizarPaginaJogadores(dados);
+  const anos = anosAnalise();
+  const todos = agregarJogadores(dados, anos);
+  const porAno = new Map(anos.map((a) => [a, agregarJogadores(dados, [a])]));
+  const ids = [...todos.keys()].sort((x, y) => todos.get(x).nome.localeCompare(todos.get(y).nome, "pt-BR"));
+  const comparados = est.selecao.itens();
+
+  // --- chips: quem entra na comparação ---
+  const chips = el("div", { class: "rendimento-jogadores" });
+  for (const id of ids) {
+    const ligado = est.selecao.tem(id);
+    const chip = el(
+      "button",
+      {
+        type: "button",
+        class: "rendimento-chip",
+        "aria-pressed": String(ligado),
+        style: ligado ? `--cor-chip:${est.selecao.cor(id)}` : "",
+      },
+      [el("span", { class: "rendimento-chip__ponto" }), todos.get(id).nome]
+    );
+    chip.addEventListener("click", () => {
+      est.selecao.alternar(id);
+      atualizar();
+    });
+    chips.appendChild(chip);
+  }
+  const acao = (rotulo, fn) => {
+    const b = el("button", { type: "button", class: "rendimento-jogadores__acao" }, [rotulo]);
+    b.addEventListener("click", () => {
+      fn();
+      atualizar();
+    });
+    return b;
+  };
+  const acoes = el("div", { class: "rendimento-jogadores-acoes" }, [
+    acao("Todos", () => ids.forEach((id) => est.selecao.tem(id) || est.selecao.alternar(id))),
+    acao(`Só ${SEASONS.atual}`, () => {
+      est.selecao.limpar();
+      for (const p of dados.standingsPorAno.get(String(SEASONS.atual))?.players || []) est.selecao.alternar(p.player_id);
+    }),
+    acao("Limpar", () => est.selecao.limpar()),
+  ]);
+
+  const intro = el("div", { class: "secao-intro" }, [
+    el("h3", {}, ["Comparativo entre jogadores"]),
+    el("p", {}, [
+      "Escolha nos chips quem entra na comparação (começa com quem joga ",
+      String(SEASONS.atual),
+      "). Toque no nome de um jogador na tabela para abrir o perfil dele.",
+    ]),
+  ]);
+
+  // --- gráfico: evolução por temporada (independe do filtro de ano) ---
+  const metrica = METRICAS_JOGADOR[est.metrica];
+  const valorMetrica = (r) =>
+    !r ? null : est.metrica === "posicao" ? r.posicoes[0]?.pos ?? null : est.metrica === "acerto" ? (r.acerto == null ? null : r.acerto * 100) : r.media;
+  const series = comparados.map((id) => ({
+    rotulo: todos.get(id).nome,
+    cor: est.selecao.cor(id),
+    dados: anos.map((a) => valorMetrica(porAno.get(a).get(id))),
+  }));
+  const trocaMetrica = el("div", { class: "temporada-modo", role: "group", "aria-label": "Métrica do gráfico" });
+  for (const [chave, m] of Object.entries(METRICAS_JOGADOR)) {
+    const ativo = chave === est.metrica;
+    const b = el(
+      "button",
+      { type: "button", class: `temporada-modo__btn${ativo ? " temporada-modo__btn--ativo" : ""}`, "aria-pressed": String(ativo) },
+      [m.rotulo]
+    );
+    b.addEventListener("click", () => {
+      est.metrica = chave;
+      atualizar();
+    });
+    trocaMetrica.appendChild(b);
+  }
+  const canvas = el("canvas");
+  const wrapGrafico = el("div", { class: "rendimento-grafico-wrap" }, [
+    el("div", { class: "temporada-grafico-cabecalho" }, [
+      el("h3", { class: "temporada-grafico-titulo" }, [metrica.titulo]),
+      trocaMetrica,
+    ]),
+    series.length
+      ? el("div", { class: "temporada-grafico-canvas analise-grafico" }, [canvas])
+      : el("p", { class: "status" }, ["Escolha ao menos um jogador nos chips."]),
+  ]);
+
+  // --- tabela comparativa (recorte de ano) ---
+  const umAno = est.ano !== "todos";
+  const recorte = umAno ? porAno.get(est.ano) : todos;
+  const linhas = comparados.map((id) => recorte.get(id)).filter(Boolean);
+  const pct = (n, d) => (d ? n / d : null);
+  const celPct = (v) => (v == null ? "—" : fmtPct(v));
+  const colunas = [
+    {
+      chave: "nome",
+      titulo: "Jogador",
+      valor: (l) => l.nome,
+      celula: (l) =>
+        el("a", { class: "analise-jogador", href: `?jogador=${encodeURIComponent(l.id)}`, style: `--cor-chip:${est.selecao.cor(l.id)}` }, [
+          el("span", { class: "rendimento-chip__ponto" }),
+          l.nome,
+        ]),
+    },
+    {
+      chave: "medalhas",
+      titulo: "Medalhas",
+      asc: false,
+      valor: (l) => l.ouro * 1e4 + l.prata * 1e2 + l.bronze,
+      celula: (l) =>
+        l.medalhas ? ["🥇".repeat(l.ouro), "🥈".repeat(l.prata), "🥉".repeat(l.bronze)].join("") : "—",
+    },
+    umAno
+      ? { chave: "posicao", titulo: "Posição", num: true, valor: (l) => l.posMedia, celula: (l) => `${l.posicoes[0].pos}º de ${l.posicoes[0].de}` }
+      : { chave: "posicao", titulo: "Pos. média", num: true, valor: (l) => l.posMedia, celula: (l) => fmt1(l.posMedia) },
+    ...(umAno ? [] : [{ chave: "anos", titulo: "Temp.", num: true, asc: false, valor: (l) => l.anos.length, celula: (l) => String(l.anos.length) }]),
+    { chave: "corridas", titulo: "Corridas", num: true, asc: false, valor: (l) => l.corridas, celula: (l) => String(l.corridas) },
+    { chave: "pontos", titulo: "Pontos", num: true, asc: false, valor: (l) => l.pontos, celula: (l) => String(l.pontos) },
+    { chave: "media", titulo: "Pts/corrida", num: true, asc: false, valor: (l) => l.media, celula: (l) => (l.media == null ? "—" : fmt2(l.media)) },
+    { chave: "acerto", titulo: "Acerto", num: true, asc: false, valor: (l) => l.acerto, celula: (l) => celPct(l.acerto) },
+    { chave: "exatas", titulo: "Exatas", num: true, asc: false, valor: (l) => pct(l.exatas, l.palpites), celula: (l) => celPct(pct(l.exatas, l.palpites)) },
+    { chave: "noTop", titulo: "No top6", num: true, asc: false, valor: (l) => pct(l.noTop, l.palpites), celula: (l) => celPct(pct(l.noTop, l.palpites)) },
+    { chave: "bonus", titulo: "Piloto rodada", num: true, asc: false, valor: (l) => pct(l.bonusAcertos, l.bonusN), celula: (l) => celPct(pct(l.bonusAcertos, l.bonusN)) },
+    {
+      chave: "favorito",
+      titulo: "Mais apostado",
+      valor: (l) => (l.favorito ? l.favorito[0] : null),
+      celula: (l) => (l.favorito ? el("span", {}, [chipPilotoEquipes(l.favorito[0], l.anos), ` ${l.favorito[1]}×`]) : "—"),
+    },
+  ];
+  const blocoTabela = el("div", {}, [
+    el("div", { class: "analise-filtros" }, [
+      seletorTemporada(est.ano, (ano) => {
+        est.ano = ano;
+        atualizar();
+      }),
+    ]),
+    linhas.length
+      ? tabelaOrdenavel(colunas, linhas, est.ordem, atualizar)
+      : el("p", { class: "status" }, ["Nenhum jogador escolhido disputou essa temporada."]),
+    el("p", { class: "analise-nota" }, [
+      "Acerto e pts/corrida contam só as corridas palpitadas (sem compensação). Exatas = palpites do top6 na posição certa; ",
+      "no top6 = palpites que caíram no top6 real (exata ou não); piloto rodada = acertos da posição exata do piloto da rodada.",
+    ]),
+  ]);
+
+  container.replaceChildren(
+    intro,
+    chips,
+    acoes,
+    wrapGrafico,
+    cardAnalise(umAno ? `Comparativo — ${est.ano}` : "Comparativo — todas as temporadas", blocoTabela),
+    cardAnalise("Em quem cada um aposta", matrizFavoritos(linhas, est.selecao))
+  );
+
+  if (est.grafico) est.grafico.destroy();
+  est.grafico = null;
+  if (series.length) {
+    const posicao = est.metrica === "posicao";
+    const maxPos = Math.max(1, ...series.flatMap((s) => s.dados.filter((v) => v != null)));
+    est.grafico = graficoLinhasAnalise(canvas, anos, series, {
+      inverter: posicao,
+      min: posicao ? 1 : undefined,
+      max: posicao ? maxPos + 1 : undefined,
+      passo: posicao ? 1 : undefined,
+      tituloY: metrica.rotulo,
+      formatar: (v) => (posicao ? `${v}º` : est.metrica === "acerto" ? `${fmt1(v)}%` : fmt2(v)),
+    });
+  }
+}
+
+// Matriz jogador × pilotos mais apostados: % das corridas palpitadas em que o
+// jogador pôs o piloto no top6 (fundo mais forte = aposta mais). Mostra onde os
+// palpites do grupo divergem.
+function matrizFavoritos(linhas, selecao) {
+  if (!linhas.length) return el("p", { class: "status" }, ["Escolha ao menos um jogador nos chips."]);
+  const total = new Map();
+  for (const l of linhas) for (const [cod, n] of l.porPiloto) total.set(cod, (total.get(cod) || 0) + n);
+  const pilotos = [...total.entries()].sort((a, b) => b[1] - a[1]).slice(0, 10).map(([cod]) => cod);
+  const tabela = el("table", { class: "corridas-tabela analise-matriz" }, [
+    el("thead", {}, [el("tr", {}, [el("th", {}, ["Jogador"]), ...pilotos.map((cod) => el("th", { class: "num" }, [cod]))])]),
+    el(
+      "tbody",
+      {},
+      linhas
+        .slice()
+        .sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR"))
+        .map((l) =>
+          el("tr", {}, [
+            el("td", {}, [
+              el("span", { class: "analise-jogador", style: `--cor-chip:${selecao.cor(l.id)}` }, [
+                el("span", { class: "rendimento-chip__ponto" }),
+                l.nome,
+              ]),
+            ]),
+            ...pilotos.map((cod) => {
+              const v = l.rodadasBets ? (l.porPiloto.get(cod) || 0) / l.rodadasBets : 0;
+              return el(
+                "td",
+                { class: "num analise-matriz__cel", style: `--intensidade:${Math.round(v * 55)}%` },
+                [v ? fmtPct(v) : "—"]
+              );
+            }),
+          ])
+        )
+    ),
+  ]);
+  return el("div", {}, [
+    el("div", { class: "rendimento-tabela-wrap" }, [tabela]),
+    el("p", { class: "analise-nota" }, [
+      "% das corridas palpitadas em que o jogador colocou o piloto no top6. Colunas: os 10 pilotos mais apostados pelos jogadores escolhidos, no recorte de temporada acima.",
+    ]),
+  ]);
 }
 
 // ---------- ?pilotos ----------
