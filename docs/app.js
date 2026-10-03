@@ -2966,7 +2966,8 @@ function renderRankingHall(hof, universo) {
   return el("div", { class: "hall-ranking-wrap" }, [tabela]);
 }
 
-function renderListaAnosHall(hof, seasons, standingsPorAno) {
+// `aqui`: temporada marcada como "Você está aqui" (null no Menu, onde nenhuma é).
+function renderListaAnosHall(hof, seasons, standingsPorAno, aqui = TEMPORADA) {
   const medalhas = { ouro: "🥇", prata: "🥈", bronze: "🥉" };
   const temporadas = seasons?.temporadas || [];
   const disponiveis = new Set(temporadas.map((t) => String(t.ano)));
@@ -2982,7 +2983,7 @@ function renderListaAnosHall(hof, seasons, standingsPorAno) {
   for (const ano of anos) {
     const chave = String(ano.ano);
     const acessar =
-      chave === String(TEMPORADA)
+      aqui != null && chave === String(aqui)
         ? el("span", { class: "hall-acessar hall-acessar--ativa" }, ["Você está aqui"])
         : disponiveis.has(chave)
         ? el("a", { class: "hall-acessar", href: chave === atual ? location.pathname : `?ano=${chave}` }, ["Acessar"])
@@ -3157,6 +3158,34 @@ function universoPilotos(resultsPorAno) {
   return universo;
 }
 
+// ---------- Páginas fora da temporada (Etapa 8) ----------
+
+// "←" do topo: sobe um nível na árvore de páginas, independente da origem
+// (?menu → /; ?ano/?jogadores/?pilotos → ?menu; ?jogador → ?jogadores;
+// ?piloto → ?pilotos).
+function mostrarVoltar(href, rotulo) {
+  const voltar = document.getElementById("btn-voltar");
+  if (!voltar) return;
+  voltar.href = href;
+  voltar.textContent = `← ${rotulo}`;
+  voltar.hidden = false;
+}
+
+// Troca a página para uma vista fora da temporada (?menu, ?jogadores,
+// ?jogador, ?pilotos, ?piloto): some com as abas e as outras seções, ajusta
+// título e mostra o "←".
+function entrarModoPagina(secaoId, icone, titulo, voltarHref, voltarRotulo) {
+  document.querySelectorAll(".secao").forEach((s) => (s.hidden = s.id !== secaoId));
+  const nav = document.querySelector("header .abas");
+  if (nav) nav.hidden = true;
+  const h1 = document.getElementById("topo-titulo");
+  if (h1 && h1.firstChild) h1.firstChild.textContent = `${icone} ${titulo}`;
+  document.title = titulo;
+  const badge = document.getElementById("hist-badge");
+  if (badge) badge.hidden = true;
+  mostrarVoltar(voltarHref, voltarRotulo);
+}
+
 // ---------- "Ir para" (switch de temas: jogador / piloto) ----------
 
 // Modal genérico de escolha (reaproveita o visual do jogador-modal). `itens` é
@@ -3212,51 +3241,48 @@ function abrirIrParaModal(titulo, itens, aoEscolher) {
 let _irParaJogadoresCache = null;
 let _irParaPilotosCache = null;
 
+// Abre a busca de jogadores (todos que já disputaram uma temporada) e navega
+// para o perfil escolhido. Usado pelo bloco "Ir para" e pelo Menu.
+async function escolherJogador() {
+  if (!_irParaJogadoresCache) {
+    const [hof, standingsPorAno] = await Promise.all([
+      carregarJson("./data/hall_of_fame.json"),
+      carregarTodasStandings(),
+    ]);
+    const universo = universoJogadores(standingsPorAno);
+    _irParaJogadoresCache = [...universo.entries()]
+      .map(([id, dados]) => ({
+        id,
+        label: dados.nome || nomeHall(hof, id),
+        sub: dados.anos.slice().sort().join(" · "),
+      }))
+      .sort((a, b) => a.label.localeCompare(b.label, "pt-BR"));
+  }
+  abrirIrParaModal("👤 Escolha um jogador", _irParaJogadoresCache, (id) => {
+    location.href = `${location.pathname}?jogador=${encodeURIComponent(id)}`;
+  });
+}
+
+// Idem para pilotos (todos que já fizeram um quali no site).
+async function escolherPiloto() {
+  if (!_irParaPilotosCache) {
+    const resultsPorAno = await carregarTodosResults();
+    const universo = universoPilotos(resultsPorAno);
+    _irParaPilotosCache = [...universo.entries()]
+      .map(([codigo, anos]) => ({ id: codigo, label: codigo, sub: [...anos].sort().join(" · ") }))
+      .sort((a, b) => a.label.localeCompare(b.label));
+  }
+  abrirIrParaModal("🏎️ Escolha um piloto", _irParaPilotosCache, (codigo) => {
+    location.href = `${location.pathname}?piloto=${encodeURIComponent(codigo)}`;
+  });
+}
+
 function configurarIrPara() {
-  const btnJogador = document.getElementById("btn-ir-jogador");
-  const btnPiloto = document.getElementById("btn-ir-piloto");
-
-  if (btnJogador) {
-    btnJogador.addEventListener("click", async () => {
-      if (!_irParaJogadoresCache) {
-        const [hof, standingsPorAno] = await Promise.all([
-          carregarJson("./data/hall_of_fame.json"),
-          carregarTodasStandings(),
-        ]);
-        const universo = universoJogadores(standingsPorAno);
-        _irParaJogadoresCache = [...universo.entries()]
-          .map(([id, dados]) => ({
-            id,
-            label: dados.nome || nomeHall(hof, id),
-            sub: dados.anos.slice().sort().join(" · "),
-          }))
-          .sort((a, b) => a.label.localeCompare(b.label, "pt-BR"));
-      }
-      abrirIrParaModal("👤 Escolha um jogador", _irParaJogadoresCache, (id) => {
-        location.href = `${location.pathname}?jogador=${encodeURIComponent(id)}`;
-      });
-    });
-  }
-
-  if (btnPiloto) {
-    btnPiloto.addEventListener("click", async () => {
-      if (!_irParaPilotosCache) {
-        const resultsPorAno = await carregarTodosResults();
-        const universo = universoPilotos(resultsPorAno);
-        _irParaPilotosCache = [...universo.entries()]
-          .map(([codigo, anos]) => ({ id: codigo, label: codigo, sub: [...anos].sort().join(" · ") }))
-          .sort((a, b) => a.label.localeCompare(b.label));
-      }
-      abrirIrParaModal("🏎️ Escolha um piloto", _irParaPilotosCache, (codigo) => {
-        location.href = `${location.pathname}?piloto=${encodeURIComponent(codigo)}`;
-      });
-    });
-  }
+  document.getElementById("btn-ir-jogador")?.addEventListener("click", escolherJogador);
+  document.getElementById("btn-ir-piloto")?.addEventListener("click", escolherPiloto);
 }
 
 // ---------- Página do jogador (histórico entre temporadas) ----------
-
-let MODO_JOGADOR = false;
 
 function jogadorPedido() {
   const p = new URLSearchParams(location.search).get("jogador");
@@ -3497,27 +3523,8 @@ function modalFechaAoClicarFora() {
 }
 
 async function renderPaginaJogador(id, hof, standingsPreload, universo) {
-  MODO_JOGADOR = true;
   const nome = (universo && universo.get(id) && universo.get(id).nome) || nomeHall(hof, id);
-
-  document.querySelectorAll(".secao").forEach((s) => (s.hidden = true));
-  const nav = document.querySelector("header .abas");
-  if (nav) nav.hidden = true;
-  const secao = document.getElementById("secao-jogador");
-  secao.hidden = false;
-
-  const titulo = document.getElementById("topo-titulo");
-  if (titulo && titulo.firstChild) titulo.firstChild.textContent = `👤 Jogador ${nome} — Histórico`;
-  document.title = `Jogador ${nome} — Histórico`;
-  const badge = document.getElementById("hist-badge");
-  if (badge) badge.hidden = true;
-  const voltar = document.getElementById("btn-voltar-temporadas");
-  if (voltar) {
-    voltar.hidden = false;
-    voltar.addEventListener("click", () => {
-      location.href = `${location.pathname}#hall`;
-    });
-  }
+  entrarModoPagina("secao-jogador", "👤", `Jogador ${nome} — Histórico`, "?jogadores", "Jogadores");
 
   const status = document.getElementById("jogador-status");
   const container = document.getElementById("jogador-container");
@@ -3628,8 +3635,6 @@ function badgesTrunfoDecepcao(agregado) {
 }
 
 // ---------- Página do piloto (histórico entre temporadas) ----------
-
-let MODO_PILOTO = false;
 
 function pilotoPedido() {
   const p = new URLSearchParams(location.search).get("piloto");
@@ -3970,26 +3975,7 @@ function renderGraficoJogadoresPorPiloto(canvas, linhas, codigo) {
 }
 
 async function renderPaginaPiloto(codigo, anosSet, resultsPorAno, betsPorAno) {
-  MODO_PILOTO = true;
-
-  document.querySelectorAll(".secao").forEach((s) => (s.hidden = true));
-  const nav = document.querySelector("header .abas");
-  if (nav) nav.hidden = true;
-  const secao = document.getElementById("secao-piloto");
-  secao.hidden = false;
-
-  const titulo = document.getElementById("topo-titulo");
-  if (titulo && titulo.firstChild) titulo.firstChild.textContent = `🏎️ Piloto ${codigo} — Histórico`;
-  document.title = `Piloto ${codigo} — Histórico`;
-  const badge = document.getElementById("hist-badge");
-  if (badge) badge.hidden = true;
-  const voltar = document.getElementById("btn-voltar-piloto");
-  if (voltar) {
-    voltar.hidden = false;
-    voltar.addEventListener("click", () => {
-      location.href = location.pathname;
-    });
-  }
+  entrarModoPagina("secao-piloto", "🏎️", `Piloto ${codigo} — Histórico`, "?pilotos", "Pilotos");
 
   const status = document.getElementById("piloto-status");
   const container = document.getElementById("piloto-container");
@@ -4509,15 +4495,7 @@ function aplicarModoHistorico() {
   document.title = `Bolão F1 ${TEMPORADA}`;
   if (badge) badge.hidden = !MODO_HISTORICO;
 
-  const atual = String(SEASONS?.atual ?? "2026");
-  const voltar = document.getElementById("btn-voltar-atual");
-  if (voltar) {
-    voltar.hidden = !MODO_HISTORICO;
-    voltar.textContent = `← Voltar para ${atual}`;
-    voltar.addEventListener("click", () => {
-      location.href = location.pathname;
-    });
-  }
+  if (MODO_HISTORICO) mostrarVoltar("?menu", "Menu");
 
   const avisos = document.getElementById("hist-avisos");
   const entrada = entradaTemporada();
@@ -4609,6 +4587,13 @@ async function main() {
 
   try {
     SEASONS = await carregarJson("./data/seasons.json");
+
+    // ?menu, ?jogadores, ?pilotos (docs/analise.js)
+    const rotaAnalise = rotaAnalisePedida();
+    if (rotaAnalise) {
+      await ROTAS_ANALISE[rotaAnalise]();
+      return;
+    }
 
     const jogId = jogadorPedido();
     if (jogId) {
@@ -4754,4 +4739,4 @@ async function main() {
   }
 }
 
-main();
+document.addEventListener("DOMContentLoaded", main);

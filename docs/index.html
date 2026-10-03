@@ -13,9 +13,11 @@
 <header class="topo">
   <div class="topo__linha">
     <h1 id="topo-titulo">🏁 Bolão F1 2026<span class="hist-badge" id="hist-badge" hidden>HISTÓRICO</span></h1>
-    <button type="button" class="hist-voltar" id="btn-voltar-atual" hidden>← Voltar para 2026</button>
-    <button type="button" class="hist-voltar" id="btn-voltar-temporadas" hidden>← Voltar para temporadas</button>
-    <button type="button" class="hist-voltar" id="btn-voltar-piloto" hidden>← Voltar</button>
+    <a class="hist-voltar" id="btn-voltar" href="./" hidden>← Voltar</a>
+    <div class="topo__acoes">
+    <a class="topo-menu" id="btn-menu" href="?menu" title="Menu: temporadas, jogadores e pilotos">
+      <span aria-hidden="true">🧭</span><span class="topo-menu__label">Menu</span>
+    </a>
     <div class="tema-switch" id="tema-switch" role="group" aria-label="Tema da página">
       <button type="button" class="tema-switch__btn" data-tema="light" aria-pressed="false">
         <span aria-hidden="true">☀️</span><span class="tema-switch__label">Claro</span>
@@ -23,6 +25,7 @@
       <button type="button" class="tema-switch__btn" data-tema="dark" aria-pressed="false">
         <span aria-hidden="true">🌙</span><span class="tema-switch__label">Escuro</span>
       </button>
+    </div>
     </div>
   </div>
   <nav class="abas" role="tablist">
@@ -293,6 +296,22 @@
     <div id="piloto-status" class="status"></div>
     <div id="piloto-container"></div>
   </section>
+
+  <!-- Páginas de navegação/análise (Etapa 8, docs/analise.js) -->
+  <section id="secao-menu" class="secao" hidden>
+    <div id="menu-status" class="status"></div>
+    <div id="menu-container"></div>
+  </section>
+
+  <section id="secao-jogadores" class="secao" hidden>
+    <div id="jogadores-status" class="status"></div>
+    <div id="jogadores-container"></div>
+  </section>
+
+  <section id="secao-pilotos-analise" class="secao" hidden>
+    <div id="pilotos-analise-status" class="status"></div>
+    <div id="pilotos-analise-container"></div>
+  </section>
 </main>
 
 <dialog id="jogador-modal" class="jogador-modal"></dialog>
@@ -304,5 +323,6 @@
 </footer>
 
 <script src="./app.js"></script>
+<script src="./analise.js"></script>
 </body>
 </html>

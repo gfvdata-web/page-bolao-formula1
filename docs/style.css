@@ -115,8 +115,35 @@ header.topo h1 {
   color: #fff;
 }
 
+/* Grupo da direita do topo: botão Menu + switch de tema. */
+.topo__acoes {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.topo-menu {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  border: 1px solid var(--borda);
+  border-radius: 999px;
+  background: var(--bg-card);
+  color: var(--texto);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.32rem 0.7rem;
+  text-decoration: none;
+}
+.topo-menu:hover { border-color: var(--acento); color: var(--acento); }
+.topo-menu--ativo { background: var(--acento); border-color: var(--acento); color: #fff; }
+.topo-menu--ativo:hover { color: #fff; }
+
 @media (max-width: 480px) {
-  .tema-switch__label { display: none; }
+  .tema-switch__label, .topo-menu__label { display: none; }
+  .topo-menu { padding: 0.32rem 0.6rem; font-size: 0.85rem; }
   .tema-switch__btn { padding: 0.32rem 0.6rem; font-size: 0.85rem; }
 }
 
@@ -1018,6 +1045,7 @@ main {
   cursor: pointer;
 }
 
+a.chamada { text-decoration: none; }
 .chamada:hover { border-color: var(--acento); }
 .chamada:hover .chamada__seta { color: var(--acento); }
 
@@ -1979,7 +2007,7 @@ button.subaba[aria-selected="true"] {
 
 .hist-voltar {
   flex-shrink: 0;
-  margin-right: auto;
+  text-decoration: none;
   border: 1px solid var(--borda);
   border-radius: 999px;
   background: var(--bg-card);
@@ -2193,3 +2221,12 @@ button.subaba[aria-selected="true"] {
   color: var(--texto-fraco);
   font-style: italic;
 }
+
+/* ---------- Menu (?menu) ---------- */
+.menu-busca {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.7rem;
+}
+.menu-busca .ir-para-botao { flex: 1; }

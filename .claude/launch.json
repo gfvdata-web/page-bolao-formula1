@@ -4,8 +4,26 @@
     {
       "name": "docs-static",
       "runtimeExecutable": "python",
-      "runtimeArgs": ["-m", "http.server", "8123", "--directory", "docs"],
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8123",
+        "--directory",
+        "docs"
+      ],
       "port": 8123
+    },
+    {
+      "name": "docs-static-2",
+      "runtimeExecutable": "python",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8124",
+        "--directory",
+        "docs"
+      ],
+      "port": 8124
     }
   ]
 }
