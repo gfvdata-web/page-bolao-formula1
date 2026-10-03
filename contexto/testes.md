@@ -1,5 +1,11 @@
 # TESTING.md — Levantamento de testabilidade (2026-09-14)
 
+> **Estado em 2026-10-03:** `python -m pytest tests/ -q` → **102 passed, 4 subtests**
+> (10 arquivos de teste; entrou `tests/test_equipes.py` na Etapa 8). O restante
+> deste documento é o levantamento de 2026-09-14, mantido como estava. As
+> referências a "CONTEXTO.md" abaixo apontam hoje para `contexto/visao-geral.md`
+> (seções 2, 3, 6) e `contexto/etapas/` (Etapa 5/Madrid etc.).
+
 > Sessão de LEVANTAMENTO apenas. Nenhum código foi alterado, nenhum teste foi
 > escrito. Este documento registra o inventário, o estado atual e um plano de
 > trabalho para sessões futuras.
