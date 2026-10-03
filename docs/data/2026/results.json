@@ -654,6 +654,50 @@
         "STR",
         "BOT"
       ]
+    },
+    "16": {
+      "round": 16,
+      "race_id": "2026-16",
+      "race": "Kuala Lumpur",
+      "circuit": "sepang",
+      "date": "2026-10-04",
+      "sprint": false,
+      "bonus_driver": "LIN",
+      "min_score": 4,
+      "bet_order": [
+        "dalla",
+        "vinicius",
+        "guilherme",
+        "caliman",
+        "ferrari",
+        "caio_l",
+        "igor",
+        "paganini"
+      ],
+      "order": [
+        "VER",
+        "HAM",
+        "HAD",
+        "ANT",
+        "LEC",
+        "NOR",
+        "PIA",
+        "RUS",
+        "GAS",
+        "BOR",
+        "LAW",
+        "ALO",
+        "SAI",
+        "STR",
+        "COL",
+        "LIN",
+        "HUL",
+        "BEA",
+        "OCO",
+        "ALB",
+        "BOT",
+        "PER"
+      ]
     }
   }
 }
