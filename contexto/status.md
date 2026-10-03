@@ -20,13 +20,13 @@ para não invadir as etapas vizinhas.
 | 5 | ✅ | `etapas/etapa-5-github-actions.md` | `pipeline.py` + workflow; códigos de saída 0/1/2; verificador; bugs de Madrid |
 | 6 | ✅ | `etapas/etapa-6-forms-apps-script.md` | Forms + Apps Script → `repository_dispatch`; PAT |
 | 7 | 🟡 | `etapas/etapa-7-historico.md` | Temporadas 2021–2025, regras por ano, modo histórico `?ano`, página `?jogador` |
-| 8 | 🟡 | `etapas/etapa-8-navegacao-analises.md` | Menu, `?jogadores`, `?pilotos`, perfis, base de equipes |
+| 8 | ✅ | `etapas/etapa-8-navegacao-analises.md` | Menu, `?jogadores`, `?pilotos`, perfis, base de equipes |
 
 ## Em aberto
 
 - **Etapa 7:** falta exibir a sinalização por rodada (`rounds_sem_palpite`,
   `total_recalculado`, `total_somado` no `standings.json`). Ver "Pendência" na
   sub-etapa 2026-09-08d.
-- **Etapa 8:** v1 entregue em 2026-10-03, **aguardando revisão do usuário**.
-  Links das tabelas da temporada para os perfis entregues no mesmo dia.
+- **Etapa 8:** concluída em 2026-10-03 (v1 revisada e aprovada pelo usuário,
+  links das tabelas da temporada para os perfis incluídos).
 - Pendências gerais e decisões adiadas: seção 9 de `visao-geral.md`.

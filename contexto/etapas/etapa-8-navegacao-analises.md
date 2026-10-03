@@ -29,7 +29,7 @@
   `app.js`, reaproveita seus helpers globais); `app.js` só ganha o roteamento.
 - **Links das tabelas da temporada para os perfis:** aprovados e entregues em
   2026-10-03 (ver "Ajuste posterior: links para perfis" no fim).
-- **Entregue v1 (2026-10-03), aguardando revisão do usuário:**
+- **Entregue v1 (2026-10-03), revisada e aprovada pelo usuário no mesmo dia:**
   - Topo: um único `#btn-voltar` (`mostrarVoltar`) + `#btn-menu`
     (`<a href="?menu">`). `entrarModoPagina()` (app.js) monta toda página fora
     da temporada. `main()` roda no `DOMContentLoaded` e despacha
