@@ -2440,6 +2440,15 @@ function contagemPorPosicao(posicoes, maxGrid) {
   return cont;
 }
 
+// Fase do quali em que o piloto parou, deduzida da posição: Q3 = top10 e os
+// demais se dividem ao meio entre Q2 e Q1 (20 carros: 11–15 / 16–20; 22 carros,
+// como em 2026: 11–16 / 17–22). `maxGrid` é o maior grid da temporada — rodadas
+// com menos classificados (ex.: alguém sem tempo) não deslocam os cortes.
+function faseQuali(pos, maxGrid) {
+  if (pos <= 10) return 3;
+  return pos <= 10 + Math.ceil((maxGrid - 10) / 2) ? 2 : 1;
+}
+
 // Um "violino" horizontal por piloto (uma linha cada), ordenados pela posição
 // média real crescente (quem larga melhor no topo). Cada violino é normalizado
 // para a mesma espessura máxima — a dispersão aparece pela largura da forma no
@@ -2456,6 +2465,7 @@ function renderPilotos(results) {
       mediana: medianaLista(posicoes),
       melhor: Math.min(...posicoes),
       pior: Math.max(...posicoes),
+      fases: posicoes.reduce((f, p) => (f[faseQuali(p, maxGrid)]++, f), [0, 0, 0, 0]),
     }))
     .sort((a, b) => a.media - b.media || a.codigo.localeCompare(b.codigo));
 
@@ -2470,7 +2480,10 @@ function renderPilotos(results) {
   const margemBase = 28;
   const larguraPlot = 560;
   const alturaLinha = 30;
-  const larguraTotal = margemEsq + larguraPlot + margemDir;
+  // Colunas Q1/Q2/Q3 (quantas vezes o piloto parou em cada fase) à direita.
+  const larguraColFase = 38;
+  const xFases = margemEsq + larguraPlot + margemDir;
+  const larguraTotal = xFases + 3 * larguraColFase + 6;
   const alturaTotal = margemTopo + pilotos.length * alturaLinha + margemBase;
 
   const xMin = 0.5;
@@ -2513,6 +2526,9 @@ function renderPilotos(results) {
       el("div", { class: "pilotos-tooltip__titulo" }, [`${piloto.codigo} · ${piloto.posicoes.length} quali`]),
       el("div", { class: "pilotos-tooltip__sub" }, [
         `média P${piloto.media.toFixed(1)} · mediana P${piloto.mediana} · melhor P${piloto.melhor} · pior P${piloto.pior}`,
+      ]),
+      el("div", { class: "pilotos-tooltip__sub" }, [
+        `Q3 ${piloto.fases[3]}× · Q2 ${piloto.fases[2]}× · Q1 ${piloto.fases[1]}×`,
       ]),
       ...linhas,
     ];
@@ -2586,10 +2602,68 @@ function renderPilotos(results) {
     }
   }
 
+  // Cabeçalho das colunas de fase (topo e base, como os rótulos P#) + divisória.
+  const xColFase = (fase) => xFases + (fase - 1) * larguraColFase + larguraColFase / 2;
+  for (let fase = 1; fase <= 3; fase++) {
+    for (const y of [margemTopo - 9, alturaTotal - margemBase + 16]) {
+      svg.appendChild(
+        svgEl(
+          "text",
+          { x: xColFase(fase), y, "text-anchor": "middle", "font-size": 10, "font-weight": 700, fill: corTexto },
+          [`Q${fase}`]
+        )
+      );
+    }
+  }
+  svg.appendChild(
+    svgEl("line", {
+      x1: xFases - 4,
+      y1: margemTopo,
+      x2: xFases - 4,
+      y2: alturaTotal - margemBase,
+      stroke: corGrade,
+      "stroke-width": 1,
+    })
+  );
+
   pilotos.forEach((piloto, i) => {
     const cy = margemTopo + i * alturaLinha + alturaLinha / 2;
     const cor = corPiloto(piloto.codigo);
     const meiaAltura = alturaLinha * 0.42;
+
+    // Contagem por fase: fundo na cor do piloto, mais forte quanto maior a
+    // fração dos quali do piloto naquela fase.
+    for (let fase = 1; fase <= 3; fase++) {
+      const n = piloto.fases[fase];
+      const cx = xColFase(fase);
+      if (n) {
+        svg.appendChild(
+          svgEl("rect", {
+            x: cx - larguraColFase / 2 + 3,
+            y: cy - alturaLinha / 2 + 4,
+            width: larguraColFase - 6,
+            height: alturaLinha - 8,
+            rx: 4,
+            fill: cor,
+            opacity: 0.12 + 0.5 * (n / piloto.posicoes.length),
+          })
+        );
+      }
+      svg.appendChild(
+        svgEl(
+          "text",
+          {
+            x: cx,
+            y: cy + 3.5,
+            "text-anchor": "middle",
+            "font-size": 11,
+            "font-weight": n ? 700 : 400,
+            fill: n ? corTextoForte : corTexto,
+          },
+          [String(n)]
+        )
+      );
+    }
     // A gaussiana nunca zera de verdade, então limitamos o contorno à janela
     // onde o piloto realmente largou (± folga) — sem isso o violino vira um
     // fio de cabelo esticado até o fim do eixo.
@@ -2661,7 +2735,9 @@ function renderPilotos(results) {
   const legenda = el("p", { class: "preferencia-legenda" }, [
     "Cada linha é um piloto (ordenados pela posição média real crescente, mostrada à direita). A forma " +
       "mostra em que posições ele mais larga nos quali já disputados; cada ponto é um quali. " +
-      `A faixa clara à esquerda é o top${FORMATO.top_n}. Passe o mouse numa linha para ver a contagem por posição.`,
+      `A faixa clara à esquerda é o top${FORMATO.top_n}. As colunas Q1/Q2/Q3 contam em que fase o piloto ` +
+      "parou (Q3 = top10; Q2 = 11º–15º, ou 11º–16º com 22 carros; o resto, Q1). " +
+      "Passe o mouse numa linha para ver a contagem por posição.",
   ]);
 
   container.replaceChildren(el("div", { class: "pilotos-scroll" }, [svg]), tooltip, legenda);
