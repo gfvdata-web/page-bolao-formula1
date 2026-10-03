@@ -2614,7 +2614,8 @@ function renderPilotos(results) {
   }
 
   // Cabeçalho das colunas de fase (topo e base, como os rótulos P#) + divisória.
-  const xColFase = (fase) => xFases + (fase - 1) * larguraColFase + larguraColFase / 2;
+  // Da esquerda para a direita: Q3, Q2, Q1.
+  const xColFase = (fase) => xFases + (3 - fase) * larguraColFase + larguraColFase / 2;
   for (let fase = 1; fase <= 3; fase++) {
     for (const y of [margemTopo - 9, alturaTotal - margemBase + 16]) {
       svg.appendChild(
@@ -2746,7 +2747,7 @@ function renderPilotos(results) {
   const legenda = el("p", { class: "preferencia-legenda" }, [
     "Cada linha é um piloto (ordenados pela posição média real crescente, mostrada à direita). A forma " +
       "mostra em que posições ele mais larga nos quali já disputados; cada ponto é um quali. " +
-      `A faixa clara à esquerda é o top${FORMATO.top_n}. As colunas Q1/Q2/Q3 contam até que fase o piloto ` +
+      `A faixa clara à esquerda é o top${FORMATO.top_n}. As colunas Q3/Q2/Q1 contam até que fase o piloto ` +
       "foi em cada quali, como aconteceu na sessão (quem correu o Q3 conta Q3 mesmo se punido depois). " +
       "Passe o mouse numa linha para ver a contagem por posição.",
   ]);
