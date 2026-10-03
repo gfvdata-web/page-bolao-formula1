@@ -171,6 +171,7 @@ def generate(
     round_scores: dict[int, list[PlayerScore]] = {}
     round_bonus: dict[int, str] = {}
     round_order: dict[int, list[str]] = {}
+    round_fases: dict[int, dict[str, int] | None] = {}  # fase do quali (Q1/2/3) por piloto
     round_min_score: dict[int, int] = {}
 
     for rnd in rounds:
@@ -217,6 +218,7 @@ def generate(
         round_scores[rnd] = scores
         round_bonus[rnd] = sheet.bonus_driver
         round_order[rnd] = result.order
+        round_fases[rnd] = _load_json(results_dir / f"{rnd}.json").get("fases")
         round_min_score[rnd] = min_score
 
     # Jogadores do ranking = todo mundo que apostou em pelo menos uma rodada
@@ -472,6 +474,7 @@ def generate(
             str(info["round"]): {
                 **info,
                 "order": round_order[info["round"]],
+                **({"fases": round_fases[info["round"]]} if round_fases[info["round"]] else {}),
             }
             for info in round_infos
         },

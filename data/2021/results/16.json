@@ -25,5 +25,27 @@
     "GIO",
     "RAI",
     "MAZ"
-  ]
+  ],
+  "fases": {
+    "HAM": 3,
+    "BOT": 3,
+    "VER": 3,
+    "LEC": 3,
+    "GAS": 3,
+    "ALO": 3,
+    "PER": 3,
+    "NOR": 3,
+    "STR": 3,
+    "TSU": 3,
+    "VET": 2,
+    "OCO": 2,
+    "RUS": 2,
+    "MSC": 2,
+    "SAI": 2,
+    "RIC": 1,
+    "LAT": 1,
+    "GIO": 1,
+    "RAI": 1,
+    "MAZ": 1
+  }
 }

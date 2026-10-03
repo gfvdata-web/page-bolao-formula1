@@ -38,7 +38,29 @@
         "LAT",
         "MAZ",
         "MSC"
-      ]
+      ],
+      "fases": {
+        "HAM": 3,
+        "BOT": 3,
+        "VER": 3,
+        "PER": 3,
+        "GAS": 3,
+        "NOR": 3,
+        "LEC": 3,
+        "OCO": 3,
+        "ALO": 3,
+        "VET": 3,
+        "RIC": 2,
+        "STR": 2,
+        "RAI": 2,
+        "GIO": 2,
+        "SAI": 2,
+        "TSU": 1,
+        "RUS": 1,
+        "LAT": 1,
+        "MAZ": 1,
+        "MSC": 1
+      }
     },
     "12": {
       "round": 12,
@@ -77,7 +99,29 @@
         "MSC",
         "RAI",
         "MAZ"
-      ]
+      ],
+      "fases": {
+        "VER": 3,
+        "RUS": 3,
+        "HAM": 3,
+        "RIC": 3,
+        "VET": 3,
+        "GAS": 3,
+        "PER": 3,
+        "BOT": 3,
+        "OCO": 3,
+        "NOR": 3,
+        "LEC": 2,
+        "LAT": 2,
+        "SAI": 2,
+        "ALO": 2,
+        "STR": 2,
+        "GIO": 1,
+        "TSU": 1,
+        "MSC": 1,
+        "RAI": 1,
+        "MAZ": 1
+      }
     },
     "13": {
       "round": 13,
@@ -117,7 +161,29 @@
         "KUB",
         "MSC",
         "MAZ"
-      ]
+      ],
+      "fases": {
+        "VER": 3,
+        "HAM": 3,
+        "BOT": 3,
+        "GAS": 3,
+        "LEC": 3,
+        "SAI": 3,
+        "GIO": 3,
+        "OCO": 3,
+        "ALO": 3,
+        "RIC": 3,
+        "RUS": 2,
+        "STR": 2,
+        "NOR": 2,
+        "LAT": 2,
+        "TSU": 2,
+        "PER": 1,
+        "VET": 1,
+        "KUB": 1,
+        "MSC": 1,
+        "MAZ": 1
+      }
     },
     "14": {
       "round": 14,
@@ -157,7 +223,29 @@
         "MSC",
         "KUB",
         "MAZ"
-      ]
+      ],
+      "fases": {
+        "BOT": 3,
+        "HAM": 3,
+        "VER": 3,
+        "NOR": 3,
+        "RIC": 3,
+        "GAS": 3,
+        "SAI": 3,
+        "LEC": 3,
+        "PER": 3,
+        "GIO": 3,
+        "VET": 2,
+        "STR": 2,
+        "ALO": 2,
+        "OCO": 2,
+        "RUS": 2,
+        "LAT": 1,
+        "TSU": 1,
+        "MSC": 1,
+        "KUB": 1,
+        "MAZ": 1
+      }
     },
     "15": {
       "round": 15,
@@ -196,7 +284,29 @@
         "GIO",
         "MAZ",
         "VER"
-      ]
+      ],
+      "fases": {
+        "NOR": 3,
+        "SAI": 3,
+        "RUS": 3,
+        "HAM": 3,
+        "RIC": 3,
+        "ALO": 3,
+        "BOT": 3,
+        "STR": 3,
+        "PER": 3,
+        "OCO": 3,
+        "VET": 2,
+        "GAS": 2,
+        "TSU": 2,
+        "LAT": 2,
+        "LEC": 2,
+        "RAI": 1,
+        "MSC": 1,
+        "GIO": 1,
+        "MAZ": 1,
+        "VER": 1
+      }
     },
     "16": {
       "round": 16,
@@ -236,7 +346,29 @@
         "GIO",
         "RAI",
         "MAZ"
-      ]
+      ],
+      "fases": {
+        "HAM": 3,
+        "BOT": 3,
+        "VER": 3,
+        "LEC": 3,
+        "GAS": 3,
+        "ALO": 3,
+        "PER": 3,
+        "NOR": 3,
+        "STR": 3,
+        "TSU": 3,
+        "VET": 2,
+        "OCO": 2,
+        "RUS": 2,
+        "MSC": 2,
+        "SAI": 2,
+        "RIC": 1,
+        "LAT": 1,
+        "GIO": 1,
+        "RAI": 1,
+        "MAZ": 1
+      }
     },
     "17": {
       "round": 17,
@@ -277,7 +409,29 @@
         "RAI",
         "MSC",
         "MAZ"
-      ]
+      ],
+      "fases": {
+        "VER": 3,
+        "HAM": 3,
+        "PER": 3,
+        "BOT": 3,
+        "LEC": 3,
+        "SAI": 3,
+        "RIC": 3,
+        "NOR": 3,
+        "GAS": 3,
+        "TSU": 3,
+        "OCO": 2,
+        "VET": 2,
+        "GIO": 2,
+        "ALO": 2,
+        "RUS": 2,
+        "STR": 1,
+        "LAT": 1,
+        "RAI": 1,
+        "MSC": 1,
+        "MAZ": 1
+      }
     },
     "18": {
       "round": 18,
@@ -318,7 +472,29 @@
         "MSC",
         "MAZ",
         "STR"
-      ]
+      ],
+      "fases": {
+        "BOT": 3,
+        "HAM": 3,
+        "VER": 3,
+        "PER": 3,
+        "GAS": 3,
+        "SAI": 3,
+        "RIC": 3,
+        "LEC": 3,
+        "TSU": 3,
+        "NOR": 3,
+        "VET": 2,
+        "RAI": 2,
+        "RUS": 2,
+        "GIO": 2,
+        "OCO": 2,
+        "ALO": 1,
+        "LAT": 1,
+        "MSC": 1,
+        "MAZ": 1,
+        "STR": 1
+      }
     },
     "19": {
       "round": 19,
@@ -359,7 +535,29 @@
         "RUS",
         "MSC",
         "MAZ"
-      ]
+      ],
+      "fases": {
+        "HAM": 3,
+        "VER": 3,
+        "BOT": 3,
+        "PER": 3,
+        "GAS": 3,
+        "SAI": 3,
+        "LEC": 3,
+        "NOR": 3,
+        "RIC": 3,
+        "ALO": 3,
+        "OCO": 2,
+        "VET": 2,
+        "TSU": 2,
+        "RAI": 2,
+        "GIO": 2,
+        "STR": 1,
+        "LAT": 1,
+        "RUS": 1,
+        "MSC": 1,
+        "MAZ": 1
+      }
     },
     "20": {
       "round": 20,
@@ -400,7 +598,29 @@
         "GIO",
         "MSC",
         "MAZ"
-      ]
+      ],
+      "fases": {
+        "HAM": 3,
+        "VER": 3,
+        "BOT": 3,
+        "GAS": 3,
+        "ALO": 3,
+        "NOR": 3,
+        "SAI": 3,
+        "TSU": 3,
+        "OCO": 3,
+        "VET": 3,
+        "PER": 2,
+        "STR": 2,
+        "LEC": 2,
+        "RIC": 2,
+        "RUS": 2,
+        "RAI": 1,
+        "LAT": 1,
+        "GIO": 1,
+        "MSC": 1,
+        "MAZ": 1
+      }
     },
     "21": {
       "round": 21,
@@ -441,7 +661,29 @@
         "STR",
         "MSC",
         "MAZ"
-      ]
+      ],
+      "fases": {
+        "HAM": 3,
+        "BOT": 3,
+        "VER": 3,
+        "LEC": 3,
+        "PER": 3,
+        "GAS": 3,
+        "NOR": 3,
+        "TSU": 3,
+        "OCO": 3,
+        "GIO": 3,
+        "RIC": 2,
+        "RAI": 2,
+        "ALO": 2,
+        "RUS": 2,
+        "SAI": 2,
+        "LAT": 1,
+        "VET": 1,
+        "STR": 1,
+        "MSC": 1,
+        "MAZ": 1
+      }
     },
     "22": {
       "round": 22,
@@ -482,7 +724,29 @@
         "RAI",
         "MSC",
         "MAZ"
-      ]
+      ],
+      "fases": {
+        "VER": 3,
+        "HAM": 3,
+        "NOR": 3,
+        "PER": 3,
+        "SAI": 3,
+        "BOT": 3,
+        "LEC": 3,
+        "TSU": 3,
+        "OCO": 3,
+        "RIC": 3,
+        "ALO": 2,
+        "GAS": 2,
+        "STR": 2,
+        "GIO": 2,
+        "VET": 2,
+        "LAT": 1,
+        "RUS": 1,
+        "RAI": 1,
+        "MSC": 1,
+        "MAZ": 1
+      }
     }
   }
 }

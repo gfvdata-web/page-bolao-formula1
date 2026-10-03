@@ -94,6 +94,48 @@ class TestBuildResult(unittest.TestCase):
             J.build_result(_fx("qualifying_2026_empty.json"), 2026, 22)
 
 
+class TestFasesQuali(unittest.TestCase):
+    """`fases`: até que fase (Q1/Q2/Q3) cada piloto foi, como na sessão."""
+
+    def test_fixture_tem_10_no_q3(self):
+        res = J.build_result(_fx("qualifying_2026_1.json"), 2026, 1)
+        self.assertEqual(set(res["fases"]), set(res["order"]))
+        self.assertEqual(sum(1 for f in res["fases"].values() if f == 3), 10)
+
+    def test_fase_pela_chave_da_sessao(self):
+        self.assertEqual(J.fase_sessao({"Q1": "1:30", "Q2": "", "Q3": ""}), 3)
+        self.assertEqual(J.fase_sessao({"Q1": "1:30", "Q2": ""}), 2)
+        self.assertEqual(J.fase_sessao({"Q1": ""}), 1)
+        self.assertIsNone(J.fase_sessao({}))
+
+    def test_sem_tempo_no_q3_e_promovido(self):
+        # Sainz em Imola 2022: bateu no Q3, a Jolpica não traz a chave Q3.
+        order = [f"P{i:02d}" for i in range(1, 21)]
+        fases = {c: (3 if i < 9 else 2 if i < 15 else 1) for i, c in enumerate(order)}
+        res = J.completar_fases(order, fases, 2022)
+        self.assertEqual(res["P10"], 3)
+        self.assertEqual(res["P15"], 2)  # Q2 também tinha 1 faltando
+        self.assertEqual(res["P16"], 1)
+
+    def test_desclassificado_mantem_fase_da_sessao(self):
+        # Correu o Q3 e foi desclassificado (último no grid): continua Q3, e
+        # quem subiu para P10 sem ter ido ao Q3 continua Q2.
+        order = [f"P{i:02d}" for i in range(1, 21)]
+        fases = {c: (3 if i < 9 else 2 if i < 14 else 1) for i, c in enumerate(order)}
+        fases["P20"] = 3
+        res = J.completar_fases(order, fases, 2024)
+        self.assertEqual(res["P20"], 3)
+        self.assertEqual(res["P10"], 2)
+        self.assertEqual(sum(1 for f in res.values() if f == 3), 10)
+
+    def test_2026_q2_vai_ate_p16(self):
+        order = [f"P{i:02d}" for i in range(1, 23)]
+        fases = {c: (3 if i < 10 else 2 if i < 15 else 1) for i, c in enumerate(order)}
+        res = J.completar_fases(order, fases, 2026)
+        self.assertEqual(res["P16"], 2)
+        self.assertEqual(res["P17"], 1)
+
+
 class TestContratoComEtapa1(unittest.TestCase):
     """O resultado gerado alimenta a pontuação da Etapa 1 sem adaptação."""
 

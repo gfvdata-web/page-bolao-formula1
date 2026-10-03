@@ -25,5 +25,27 @@
     "OCO",
     "PER",
     "GAS"
-  ]
+  ],
+  "fases": {
+    "RUS": 3,
+    "HAM": 3,
+    "NOR": 3,
+    "VER": 3,
+    "PIA": 3,
+    "HUL": 3,
+    "SAI": 3,
+    "STR": 3,
+    "ALB": 3,
+    "ALO": 3,
+    "LEC": 2,
+    "SAR": 2,
+    "TSU": 2,
+    "ZHO": 2,
+    "RIC": 2,
+    "BOT": 1,
+    "MAG": 1,
+    "OCO": 1,
+    "PER": 1,
+    "GAS": 1
+  }
 }

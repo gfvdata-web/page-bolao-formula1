@@ -25,5 +25,27 @@
     "VET",
     "GAS",
     "LAT"
-  ]
+  ],
+  "fases": {
+    "RUS": 3,
+    "SAI": 3,
+    "LEC": 3,
+    "NOR": 3,
+    "OCO": 3,
+    "ALO": 3,
+    "HAM": 3,
+    "BOT": 3,
+    "RIC": 3,
+    "VER": 3,
+    "PER": 2,
+    "ZHO": 2,
+    "MAG": 2,
+    "STR": 2,
+    "MSC": 2,
+    "TSU": 1,
+    "ALB": 1,
+    "VET": 1,
+    "GAS": 1,
+    "LAT": 1
+  }
 }

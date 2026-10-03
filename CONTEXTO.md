@@ -242,6 +242,12 @@ Status: ⬜ não iniciada · 🟡 em andamento · ✅ concluída
   Sprint — só `/qualifying`.
 - **`results/<round>.json`:** além de `race`+`order` (o que a Etapa 1 usa),
   grava metadados `race_id`, `season`, `round`, `circuit` (Etapas 3+ usam).
+  Campo opcional `fases` (`{código: 1|2|3}`): até que fase o piloto foi **na
+  sessão** (quem correu o Q3 conta Q3 mesmo se desclassificado depois), vindo
+  das chaves `Q1/Q2/Q3` da Jolpica + `completar_fases` (dados antigos omitem a
+  chave de quem passou de fase sem tempo). Preenchido para 2021–2026 e copiado
+  para `docs/data/<ano>/results.json` (colunas Q1/Q2/Q3 da aba Pilotos). Sem o
+  campo, o site deduz pela posição (Q3 1–10; Q2 11–15, ou 11–16 em 2026+).
 - **`drivers.json` agora é real** (entry list 2026), não mock. Pilotos reserva
   sem código oficial na Jolpica são ignorados (não inventar código). O mock de
   Silverstone (Etapa 1) segue passando porque todos os códigos que usa estão na

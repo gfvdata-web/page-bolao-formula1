@@ -25,5 +25,27 @@
     "KUB",
     "MSC",
     "MAZ"
-  ]
+  ],
+  "fases": {
+    "VER": 3,
+    "HAM": 3,
+    "BOT": 3,
+    "GAS": 3,
+    "LEC": 3,
+    "SAI": 3,
+    "GIO": 3,
+    "OCO": 3,
+    "ALO": 3,
+    "RIC": 3,
+    "RUS": 2,
+    "STR": 2,
+    "NOR": 2,
+    "LAT": 2,
+    "TSU": 2,
+    "PER": 1,
+    "VET": 1,
+    "KUB": 1,
+    "MSC": 1,
+    "MAZ": 1
+  }
 }

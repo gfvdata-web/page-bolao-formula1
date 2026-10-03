@@ -25,5 +25,27 @@
     "TSU",
     "SAR",
     "ZHO"
-  ]
+  ],
+  "fases": {
+    "VER": 3,
+    "LEC": 3,
+    "PER": 3,
+    "HAM": 3,
+    "NOR": 3,
+    "PIA": 3,
+    "RUS": 3,
+    "SAI": 3,
+    "ALO": 3,
+    "OCO": 3,
+    "ALB": 2,
+    "GAS": 2,
+    "RIC": 2,
+    "BOT": 2,
+    "STR": 2,
+    "HUL": 1,
+    "MAG": 1,
+    "TSU": 1,
+    "SAR": 1,
+    "ZHO": 1
+  }
 }

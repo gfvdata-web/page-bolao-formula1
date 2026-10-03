@@ -25,5 +25,27 @@
     "BOT",
     "HAM",
     "ZHO"
-  ]
+  ],
+  "fases": {
+    "NOR": 3,
+    "VER": 3,
+    "SAI": 3,
+    "LEC": 3,
+    "PIA": 3,
+    "RUS": 3,
+    "GAS": 3,
+    "ALO": 3,
+    "MAG": 3,
+    "PER": 3,
+    "TSU": 2,
+    "HUL": 2,
+    "OCO": 2,
+    "STR": 2,
+    "LAW": 2,
+    "ALB": 1,
+    "COL": 1,
+    "BOT": 1,
+    "HAM": 1,
+    "ZHO": 1
+  }
 }

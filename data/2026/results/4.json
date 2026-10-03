@@ -27,5 +27,29 @@
     "PER",
     "BOR",
     "HAD"
-  ]
+  ],
+  "fases": {
+    "ANT": 3,
+    "VER": 3,
+    "LEC": 3,
+    "NOR": 3,
+    "RUS": 3,
+    "HAM": 3,
+    "PIA": 3,
+    "COL": 3,
+    "GAS": 3,
+    "HUL": 3,
+    "LAW": 2,
+    "BEA": 2,
+    "SAI": 2,
+    "OCO": 2,
+    "ALB": 2,
+    "LIN": 2,
+    "ALO": 1,
+    "STR": 1,
+    "BOT": 1,
+    "PER": 1,
+    "BOR": 1,
+    "HAD": 3
+  }
 }

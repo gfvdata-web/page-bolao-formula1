@@ -25,5 +25,27 @@
     "MSC",
     "LAT",
     "MAZ"
-  ]
+  ],
+  "fases": {
+    "HAM": 3,
+    "VER": 3,
+    "BOT": 3,
+    "LEC": 3,
+    "OCO": 3,
+    "SAI": 3,
+    "RIC": 3,
+    "PER": 3,
+    "NOR": 3,
+    "ALO": 3,
+    "STR": 2,
+    "GAS": 2,
+    "VET": 2,
+    "GIO": 2,
+    "RUS": 2,
+    "TSU": 1,
+    "RAI": 1,
+    "MSC": 1,
+    "LAT": 1,
+    "MAZ": 1
+  }
 }

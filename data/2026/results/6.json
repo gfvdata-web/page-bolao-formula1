@@ -27,5 +27,29 @@
     "BOT",
     "ALO",
     "STR"
-  ]
+  ],
+  "fases": {
+    "ANT": 3,
+    "VER": 3,
+    "HAM": 3,
+    "LEC": 3,
+    "HAD": 3,
+    "RUS": 3,
+    "PIA": 3,
+    "NOR": 3,
+    "GAS": 3,
+    "LAW": 3,
+    "ALB": 2,
+    "SAI": 2,
+    "HUL": 2,
+    "COL": 2,
+    "LIN": 2,
+    "BOR": 2,
+    "OCO": 1,
+    "PER": 1,
+    "BEA": 1,
+    "BOT": 1,
+    "ALO": 1,
+    "STR": 1
+  }
 }

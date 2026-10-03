@@ -24,5 +24,26 @@
     "ALO",
     "PER",
     "BOT"
-  ]
+  ],
+  "fases": {
+    "RUS": 3,
+    "ANT": 3,
+    "HAD": 3,
+    "LEC": 3,
+    "PIA": 3,
+    "NOR": 3,
+    "HAM": 3,
+    "LAW": 3,
+    "LIN": 3,
+    "BOR": 3,
+    "HUL": 2,
+    "BEA": 2,
+    "OCO": 2,
+    "GAS": 2,
+    "ALB": 2,
+    "COL": 2,
+    "ALO": 1,
+    "PER": 1,
+    "BOT": 1
+  }
 }

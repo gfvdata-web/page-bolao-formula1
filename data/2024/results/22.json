@@ -25,5 +25,27 @@
     "ALB",
     "BOT",
     "STR"
-  ]
+  ],
+  "fases": {
+    "RUS": 3,
+    "SAI": 3,
+    "GAS": 3,
+    "LEC": 3,
+    "VER": 3,
+    "NOR": 3,
+    "TSU": 3,
+    "PIA": 3,
+    "HUL": 3,
+    "HAM": 3,
+    "OCO": 2,
+    "MAG": 2,
+    "ZHO": 2,
+    "COL": 2,
+    "LAW": 2,
+    "PER": 1,
+    "ALO": 1,
+    "ALB": 1,
+    "BOT": 1,
+    "STR": 1
+  }
 }

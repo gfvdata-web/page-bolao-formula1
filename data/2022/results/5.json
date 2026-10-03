@@ -25,5 +25,27 @@
     "ALB",
     "LAT",
     "OCO"
-  ]
+  ],
+  "fases": {
+    "LEC": 3,
+    "SAI": 3,
+    "VER": 3,
+    "PER": 3,
+    "BOT": 3,
+    "HAM": 3,
+    "GAS": 3,
+    "NOR": 3,
+    "TSU": 3,
+    "STR": 3,
+    "ALO": 2,
+    "RUS": 2,
+    "VET": 2,
+    "RIC": 2,
+    "MSC": 2,
+    "MAG": 1,
+    "ZHO": 1,
+    "ALB": 1,
+    "LAT": 1,
+    "OCO": 1
+  }
 }

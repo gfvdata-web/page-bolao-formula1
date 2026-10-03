@@ -27,5 +27,29 @@
     "PER",
     "ALO",
     "STR"
-  ]
+  ],
+  "fases": {
+    "ANT": 3,
+    "VER": 3,
+    "NOR": 3,
+    "RUS": 3,
+    "LEC": 3,
+    "HAM": 3,
+    "PIA": 3,
+    "LIN": 3,
+    "BOR": 3,
+    "HAD": 3,
+    "LAW": 2,
+    "GAS": 2,
+    "COL": 2,
+    "HUL": 2,
+    "SAI": 2,
+    "BEA": 2,
+    "ALB": 1,
+    "OCO": 1,
+    "BOT": 1,
+    "PER": 1,
+    "ALO": 1,
+    "STR": 1
+  }
 }

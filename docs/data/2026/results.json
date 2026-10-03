@@ -39,7 +39,28 @@
         "ALO",
         "PER",
         "BOT"
-      ]
+      ],
+      "fases": {
+        "RUS": 3,
+        "ANT": 3,
+        "HAD": 3,
+        "LEC": 3,
+        "PIA": 3,
+        "NOR": 3,
+        "HAM": 3,
+        "LAW": 3,
+        "LIN": 3,
+        "BOR": 3,
+        "HUL": 2,
+        "BEA": 2,
+        "OCO": 2,
+        "GAS": 2,
+        "ALB": 2,
+        "COL": 2,
+        "ALO": 1,
+        "PER": 1,
+        "BOT": 1
+      }
     },
     "2": {
       "round": 2,
@@ -83,7 +104,31 @@
         "BOT",
         "STR",
         "PER"
-      ]
+      ],
+      "fases": {
+        "ANT": 3,
+        "RUS": 3,
+        "HAM": 3,
+        "LEC": 3,
+        "PIA": 3,
+        "NOR": 3,
+        "GAS": 3,
+        "VER": 3,
+        "HAD": 3,
+        "BEA": 3,
+        "HUL": 2,
+        "COL": 2,
+        "OCO": 2,
+        "LAW": 2,
+        "LIN": 2,
+        "BOR": 2,
+        "SAI": 1,
+        "ALB": 1,
+        "ALO": 1,
+        "BOT": 1,
+        "STR": 1,
+        "PER": 1
+      }
     },
     "3": {
       "round": 3,
@@ -128,7 +173,31 @@
         "BOT",
         "ALO",
         "STR"
-      ]
+      ],
+      "fases": {
+        "ANT": 3,
+        "RUS": 3,
+        "PIA": 3,
+        "LEC": 3,
+        "NOR": 3,
+        "HAM": 3,
+        "GAS": 3,
+        "HAD": 3,
+        "BOR": 3,
+        "LIN": 3,
+        "VER": 2,
+        "OCO": 2,
+        "HUL": 2,
+        "LAW": 2,
+        "COL": 2,
+        "SAI": 2,
+        "ALB": 1,
+        "BEA": 1,
+        "PER": 1,
+        "BOT": 1,
+        "ALO": 1,
+        "STR": 1
+      }
     },
     "4": {
       "round": 4,
@@ -173,7 +242,31 @@
         "PER",
         "BOR",
         "HAD"
-      ]
+      ],
+      "fases": {
+        "ANT": 3,
+        "VER": 3,
+        "LEC": 3,
+        "NOR": 3,
+        "RUS": 3,
+        "HAM": 3,
+        "PIA": 3,
+        "COL": 3,
+        "GAS": 3,
+        "HUL": 3,
+        "LAW": 2,
+        "BEA": 2,
+        "SAI": 2,
+        "OCO": 2,
+        "ALB": 2,
+        "LIN": 2,
+        "ALO": 1,
+        "STR": 1,
+        "BOT": 1,
+        "PER": 1,
+        "BOR": 1,
+        "HAD": 3
+      }
     },
     "5": {
       "round": 5,
@@ -217,7 +310,31 @@
         "PER",
         "STR",
         "BOT"
-      ]
+      ],
+      "fases": {
+        "RUS": 3,
+        "ANT": 3,
+        "NOR": 3,
+        "PIA": 3,
+        "HAM": 3,
+        "VER": 3,
+        "HAD": 3,
+        "LEC": 3,
+        "LIN": 3,
+        "COL": 3,
+        "HUL": 2,
+        "LAW": 2,
+        "BOR": 2,
+        "GAS": 2,
+        "SAI": 2,
+        "BEA": 2,
+        "OCO": 1,
+        "ALB": 1,
+        "ALO": 1,
+        "PER": 1,
+        "STR": 1,
+        "BOT": 1
+      }
     },
     "6": {
       "round": 6,
@@ -260,7 +377,31 @@
         "BOT",
         "ALO",
         "STR"
-      ]
+      ],
+      "fases": {
+        "ANT": 3,
+        "VER": 3,
+        "HAM": 3,
+        "LEC": 3,
+        "HAD": 3,
+        "RUS": 3,
+        "PIA": 3,
+        "NOR": 3,
+        "GAS": 3,
+        "LAW": 3,
+        "ALB": 2,
+        "SAI": 2,
+        "HUL": 2,
+        "COL": 2,
+        "LIN": 2,
+        "BOR": 2,
+        "OCO": 1,
+        "PER": 1,
+        "BEA": 1,
+        "BOT": 1,
+        "ALO": 1,
+        "STR": 1
+      }
     },
     "7": {
       "round": 7,
@@ -302,7 +443,31 @@
         "BOT",
         "STR",
         "ALO"
-      ]
+      ],
+      "fases": {
+        "RUS": 3,
+        "HAM": 3,
+        "ANT": 3,
+        "NOR": 3,
+        "VER": 3,
+        "HAD": 3,
+        "PIA": 3,
+        "LAW": 3,
+        "HUL": 3,
+        "LEC": 3,
+        "LIN": 2,
+        "BOR": 2,
+        "COL": 2,
+        "GAS": 2,
+        "BEA": 2,
+        "SAI": 2,
+        "OCO": 1,
+        "ALB": 1,
+        "PER": 1,
+        "BOT": 1,
+        "STR": 1,
+        "ALO": 1
+      }
     },
     "8": {
       "round": 8,
@@ -345,7 +510,31 @@
         "BOT",
         "ALO",
         "STR"
-      ]
+      ],
+      "fases": {
+        "RUS": 3,
+        "LEC": 3,
+        "HAM": 3,
+        "ANT": 3,
+        "VER": 3,
+        "NOR": 3,
+        "PIA": 3,
+        "HAD": 3,
+        "LAW": 3,
+        "LIN": 3,
+        "GAS": 2,
+        "BOR": 2,
+        "BEA": 2,
+        "HUL": 2,
+        "OCO": 2,
+        "COL": 2,
+        "SAI": 1,
+        "ALB": 1,
+        "PER": 1,
+        "BOT": 1,
+        "ALO": 1,
+        "STR": 1
+      }
     },
     "9": {
       "round": 9,
@@ -389,7 +578,31 @@
         "PER",
         "STR",
         "ALO"
-      ]
+      ],
+      "fases": {
+        "ANT": 3,
+        "LEC": 3,
+        "HAM": 3,
+        "RUS": 3,
+        "HAD": 3,
+        "NOR": 3,
+        "VER": 3,
+        "PIA": 3,
+        "LIN": 3,
+        "LAW": 3,
+        "BOR": 2,
+        "GAS": 2,
+        "HUL": 2,
+        "BEA": 2,
+        "SAI": 2,
+        "ALB": 2,
+        "OCO": 1,
+        "BOT": 1,
+        "COL": 1,
+        "PER": 1,
+        "STR": 1,
+        "ALO": 1
+      }
     },
     "10": {
       "round": 10,
@@ -434,7 +647,31 @@
         "PER",
         "ALO",
         "STR"
-      ]
+      ],
+      "fases": {
+        "ANT": 3,
+        "VER": 3,
+        "NOR": 3,
+        "RUS": 3,
+        "LEC": 3,
+        "HAM": 3,
+        "PIA": 3,
+        "LIN": 3,
+        "BOR": 3,
+        "HAD": 3,
+        "LAW": 2,
+        "GAS": 2,
+        "COL": 2,
+        "HUL": 2,
+        "SAI": 2,
+        "BEA": 2,
+        "ALB": 1,
+        "OCO": 1,
+        "BOT": 1,
+        "PER": 1,
+        "ALO": 1,
+        "STR": 1
+      }
     },
     "11": {
       "round": 11,
@@ -478,7 +715,31 @@
         "STR",
         "BOT",
         "PER"
-      ]
+      ],
+      "fases": {
+        "NOR": 3,
+        "HAM": 3,
+        "LEC": 3,
+        "ANT": 3,
+        "PIA": 3,
+        "VER": 3,
+        "RUS": 3,
+        "HAD": 3,
+        "LIN": 3,
+        "HUL": 3,
+        "LAW": 2,
+        "GAS": 2,
+        "COL": 2,
+        "BOR": 2,
+        "OCO": 2,
+        "ALO": 2,
+        "BEA": 1,
+        "SAI": 1,
+        "ALB": 1,
+        "STR": 1,
+        "BOT": 1,
+        "PER": 1
+      }
     },
     "12": {
       "round": 12,
@@ -522,7 +783,31 @@
         "BEA",
         "BOT",
         "PER"
-      ]
+      ],
+      "fases": {
+        "NOR": 3,
+        "RUS": 3,
+        "ANT": 3,
+        "PIA": 3,
+        "HAM": 3,
+        "LEC": 3,
+        "VER": 3,
+        "LAW": 3,
+        "BOR": 3,
+        "LIN": 3,
+        "GAS": 2,
+        "TSU": 2,
+        "HUL": 2,
+        "COL": 2,
+        "OCO": 2,
+        "ALB": 2,
+        "SAI": 1,
+        "ALO": 1,
+        "STR": 1,
+        "BEA": 1,
+        "BOT": 1,
+        "PER": 1
+      }
     },
     "13": {
       "round": 13,
@@ -566,7 +851,31 @@
         "PER",
         "ALO",
         "STR"
-      ]
+      ],
+      "fases": {
+        "GAS": 3,
+        "RUS": 3,
+        "PIA": 3,
+        "LEC": 3,
+        "HAM": 3,
+        "VER": 3,
+        "ANT": 3,
+        "COL": 3,
+        "NOR": 3,
+        "LIN": 3,
+        "BOR": 2,
+        "BEA": 2,
+        "HUL": 2,
+        "LAW": 2,
+        "SAI": 2,
+        "OCO": 2,
+        "TSU": 1,
+        "ALB": 1,
+        "BOT": 1,
+        "PER": 1,
+        "ALO": 1,
+        "STR": 1
+      }
     },
     "14": {
       "round": 14,
@@ -607,7 +916,29 @@
         "ALO",
         "PER",
         "BOT"
-      ]
+      ],
+      "fases": {
+        "NOR": 3,
+        "ANT": 3,
+        "VER": 3,
+        "HAM": 3,
+        "LEC": 3,
+        "RUS": 3,
+        "PIA": 3,
+        "LAW": 3,
+        "COL": 3,
+        "LIN": 3,
+        "HUL": 2,
+        "BOR": 2,
+        "OCO": 2,
+        "GAS": 2,
+        "TSU": 2,
+        "ALB": 2,
+        "SAI": 1,
+        "ALO": 1,
+        "PER": 1,
+        "BOT": 1
+      }
     },
     "15": {
       "round": 15,
@@ -653,7 +984,31 @@
         "PER",
         "STR",
         "BOT"
-      ]
+      ],
+      "fases": {
+        "RUS": 3,
+        "LEC": 3,
+        "PIA": 3,
+        "HAD": 3,
+        "NOR": 3,
+        "HAM": 3,
+        "GAS": 3,
+        "VER": 3,
+        "SAI": 3,
+        "COL": 3,
+        "BEA": 2,
+        "LAW": 2,
+        "ALB": 2,
+        "OCO": 2,
+        "LIN": 2,
+        "ANT": 2,
+        "BOR": 1,
+        "HUL": 1,
+        "ALO": 1,
+        "PER": 1,
+        "STR": 1,
+        "BOT": 1
+      }
     },
     "16": {
       "round": 16,
@@ -697,7 +1052,31 @@
         "ALB",
         "BOT",
         "PER"
-      ]
+      ],
+      "fases": {
+        "VER": 3,
+        "HAM": 3,
+        "HAD": 3,
+        "ANT": 3,
+        "LEC": 3,
+        "NOR": 3,
+        "PIA": 3,
+        "RUS": 3,
+        "GAS": 3,
+        "BOR": 3,
+        "LAW": 2,
+        "ALO": 2,
+        "SAI": 2,
+        "STR": 2,
+        "COL": 2,
+        "LIN": 2,
+        "HUL": 1,
+        "BEA": 1,
+        "OCO": 1,
+        "ALB": 1,
+        "BOT": 1,
+        "PER": 1
+      }
     }
   }
 }

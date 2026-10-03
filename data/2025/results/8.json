@@ -25,5 +25,27 @@
     "GAS",
     "STR",
     "COL"
-  ]
+  ],
+  "fases": {
+    "NOR": 3,
+    "LEC": 3,
+    "PIA": 3,
+    "HAM": 3,
+    "VER": 3,
+    "HAD": 3,
+    "ALO": 3,
+    "OCO": 3,
+    "LAW": 3,
+    "ALB": 3,
+    "SAI": 2,
+    "TSU": 2,
+    "HUL": 2,
+    "RUS": 2,
+    "ANT": 2,
+    "BOR": 1,
+    "BEA": 1,
+    "GAS": 1,
+    "STR": 1,
+    "COL": 1
+  }
 }

@@ -25,5 +25,27 @@
     "TSU",
     "SAI",
     "HUL"
-  ]
+  ],
+  "fases": {
+    "NOR": 3,
+    "LEC": 3,
+    "PIA": 3,
+    "HAM": 3,
+    "RUS": 3,
+    "LAW": 3,
+    "VER": 3,
+    "BOR": 3,
+    "ANT": 3,
+    "GAS": 3,
+    "ALO": 2,
+    "ALB": 2,
+    "HAD": 2,
+    "COL": 2,
+    "BEA": 2,
+    "STR": 1,
+    "OCO": 1,
+    "TSU": 1,
+    "SAI": 1,
+    "HUL": 1
+  }
 }

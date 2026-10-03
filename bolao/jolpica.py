@@ -175,6 +175,43 @@ def build_drivers(drivers_json: dict) -> dict:
     return {"aliases": ordenado}
 
 
+def fase_sessao(resultado: dict) -> int | None:
+    """Fase mais alta (1/2/3) que o piloto disputou na sessão de quali.
+
+    A Jolpica só inclui a chave ``Q2``/``Q3`` para quem passou para aquela fase
+    (com ``""`` se não marcou tempo). Vale o que aconteceu na sessão: quem
+    disputou o Q3 conta Q3 mesmo se for desclassificado depois. ``None`` se o
+    resultado não traz nenhuma das chaves.
+    """
+    for fase in (3, 2, 1):
+        if f"Q{fase}" in resultado:
+            return fase
+    return None
+
+
+def completar_fases(order: list[str], fases: dict[str, int], season: int) -> dict[str, int]:
+    """Corrige fases omitidas pela Jolpica para quem passou de fase sem tempo.
+
+    Nos dados mais antigos, quem foi ao Q3 (ou Q2) mas não marcou tempo (batida,
+    bandeira vermelha) fica sem a chave daquela fase. A sessão sempre tem 10
+    pilotos no Q3 e 15 no Q2 (16 a partir de 2026, com 22 carros); se faltar
+    gente, promove na ordem quem está classificado dentro da faixa da fase.
+    Desclassificados que caíram para o fim do grid mantêm a fase da sessão.
+    """
+    completas = {code: fases.get(code, 1) for code in order}
+    cortes = {3: 10, 2: 16 if season >= 2026 else 15}
+    for fase in (3, 2):
+        corte = cortes[fase]
+        n = sum(1 for f in completas.values() if f >= fase)
+        for code in order[:corte]:
+            if n >= corte:
+                break
+            if completas[code] < fase:
+                completas[code] = fase
+                n += 1
+    return completas
+
+
 def build_result(quali_json: dict, season: int, rnd: int) -> dict:
     """Monta o `results/<round>.json` (formato da Etapa 1) de um quali.
 
@@ -197,12 +234,18 @@ def build_result(quali_json: dict, season: int, rnd: int) -> dict:
 
     resultados = sorted(resultados, key=lambda r: int(r["position"]))
     order: list[str] = []
+    fases: dict[str, int] = {}
     for r in resultados:
         drv = r.get("Driver", {})
         code = (drv.get("code") or "").strip().upper()
         if not code:  # fallback resiliente: 3 primeiras letras do sobrenome
             code = normalize_key(drv.get("familyName", "")).replace(" ", "")[:3].upper()
         order.append(code)
+        fase = fase_sessao(r)
+        if fase:
+            fases[code] = fase
+    if fases:
+        fases = completar_fases(order, fases, season)
 
     if not order:
         raise ResultUnavailable(f"Quali de {season} rodada {rnd} sem grid utilizável.")
@@ -216,6 +259,7 @@ def build_result(quali_json: dict, season: int, rnd: int) -> dict:
         "circuit": circuit.get("circuitId", ""),
         "race": local.get("locality") or race.get("raceName", ""),
         "order": order,
+        **({"fases": fases} if fases else {}),
     }
 
 

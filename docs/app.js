@@ -2440,13 +2440,23 @@ function contagemPorPosicao(posicoes, maxGrid) {
   return cont;
 }
 
-// Fase do quali em que o piloto parou, deduzida da posição: Q3 = top10 e os
-// demais se dividem ao meio entre Q2 e Q1 (20 carros: 11–15 / 16–20; 22 carros,
-// como em 2026: 11–16 / 17–22). `maxGrid` é o maior grid da temporada — rodadas
-// com menos classificados (ex.: alguém sem tempo) não deslocam os cortes.
-function faseQuali(pos, maxGrid) {
-  if (pos <= 10) return 3;
-  return pos <= 10 + Math.ceil((maxGrid - 10) / 2) ? 2 : 1;
+// Quantas vezes cada piloto parou em cada fase do quali (cont[1..3]). Vale o
+// que aconteceu na sessão: `rounds[].fases` (gravado da Jolpica) diz a fase mais
+// alta que o piloto disputou — quem correu o Q3 conta Q3 mesmo se desclassificado
+// depois. Sem esse campo, deduz pela posição: Q3 = 1–10; Q2 = 11–15 (até 2025,
+// 20 carros) ou 11–16 (2026+, 22 carros); o resto, Q1.
+function contarFasesQuali(results) {
+  const fimQ2 = results.season >= 2026 ? 16 : 15;
+  const porPiloto = new Map(); // codigo -> [_, q1, q2, q3]
+  for (const rodada of Object.values(results.rounds)) {
+    (rodada.order || []).forEach((codigo, indice) => {
+      const pos = indice + 1;
+      const fase = (rodada.fases && rodada.fases[codigo]) || (pos <= 10 ? 3 : pos <= fimQ2 ? 2 : 1);
+      if (!porPiloto.has(codigo)) porPiloto.set(codigo, [0, 0, 0, 0]);
+      porPiloto.get(codigo)[fase] += 1;
+    });
+  }
+  return porPiloto;
 }
 
 // Um "violino" horizontal por piloto (uma linha cada), ordenados pela posição
@@ -2456,6 +2466,7 @@ function faseQuali(pos, maxGrid) {
 function renderPilotos(results) {
   const container = document.getElementById("pilotos-container");
   const { porPiloto, maxGrid } = coletarPosicoesReais(results);
+  const fasesPorPiloto = contarFasesQuali(results);
 
   const pilotos = [...porPiloto.entries()]
     .map(([codigo, posicoes]) => ({
@@ -2465,7 +2476,7 @@ function renderPilotos(results) {
       mediana: medianaLista(posicoes),
       melhor: Math.min(...posicoes),
       pior: Math.max(...posicoes),
-      fases: posicoes.reduce((f, p) => (f[faseQuali(p, maxGrid)]++, f), [0, 0, 0, 0]),
+      fases: fasesPorPiloto.get(codigo),
     }))
     .sort((a, b) => a.media - b.media || a.codigo.localeCompare(b.codigo));
 
@@ -2735,8 +2746,8 @@ function renderPilotos(results) {
   const legenda = el("p", { class: "preferencia-legenda" }, [
     "Cada linha é um piloto (ordenados pela posição média real crescente, mostrada à direita). A forma " +
       "mostra em que posições ele mais larga nos quali já disputados; cada ponto é um quali. " +
-      `A faixa clara à esquerda é o top${FORMATO.top_n}. As colunas Q1/Q2/Q3 contam em que fase o piloto ` +
-      "parou (Q3 = top10; Q2 = 11º–15º, ou 11º–16º com 22 carros; o resto, Q1). " +
+      `A faixa clara à esquerda é o top${FORMATO.top_n}. As colunas Q1/Q2/Q3 contam até que fase o piloto ` +
+      "foi em cada quali, como aconteceu na sessão (quem correu o Q3 conta Q3 mesmo se punido depois). " +
       "Passe o mouse numa linha para ver a contagem por posição.",
   ]);
 
