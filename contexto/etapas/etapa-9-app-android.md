@@ -131,3 +131,60 @@ acompanhamento do pipeline dentro do app.
   (o app), e mudanças nesses formatos têm que continuar aditivas.
 - Na 9e: nota em `etapa-6` e em `SETUP.md` sobre o `doPost`, a `APP_CHAVE` e
   a implantação como app da web.
+
+## Sub-etapa 9a — esqueleto (2026-10-08)
+
+**Entregue** (primeira run verde: #7 do `android.yml`): projeto Gradle em `android/` (um módulo `:app`), tela "Bolão F1"
+com a versão instalada, tema Material 3 claro/escuro com as cores do site
+(`--acento` `#E10600`; sem *dynamic color*), ícone adaptável (bandeira
+quadriculada, com versão monocromática), workflow `android.yml`, regras em
+`.claude/rules/android.md`, entradas no `.gitignore` e no `.gitattributes`.
+
+**Decisões fixadas (governança do esqueleto):**
+- **Versões** (todas em `android/gradle/libs.versions.toml`): AGP 9.4.1,
+  Kotlin 2.4.21 (Kotlin embutido do AGP 9, sem o plugin `kotlin-android`),
+  Compose BOM 2026.09.00, `compileSdk`/`targetSdk` 37, `minSdk` 26, Gradle
+  9.7.1 no wrapper (jar com checksum oficial conferido e
+  `distributionSha256Sum` fixado). Referência usada: `android/compose-samples`.
+- **Ajuste ao plano — JDK 21 no CI** (o plano dizia 17): o Robolectric só
+  simula Android 15+ rodando em JDK 21. O bytecode do app continua Java 17.
+- **O CI barra o que estiver errado:** ordem testes → lint → APK; o lint
+  trata aviso como erro e o compilador Kotlin também. Ficam desligadas só as
+  checagens que mudam com a data (`GradleDependency`, `NewerVersionAvailable`,
+  `AndroidGradlePluginVersion`, `OldTargetApi`), para o mesmo commit dar
+  sempre o mesmo resultado. Se a run falhar, os relatórios de teste e lint
+  ficam como artefato `relatorios-buildN`.
+- **Testes JVM com Robolectric** (sem emulador): `HomeScreenTest` (tela nos
+  temas claro e escuro) e `MainActivityTest`, que abre o app de verdade
+  (manifest + tema + Activity). Se o app fecharia ao abrir no celular, o CI
+  fica vermelho.
+- **Versão:** `versionCode` = `github.run_number` do `android.yml` (por isso o
+  workflow não pode ser renomeado nem recriado). `versionName` no debug =
+  `dev-<sha7>-debug`, que aponta o commit exato do APK; a tela mostra versão e
+  build. Sem as variáveis do CI, o build local usa `1` / `0.0.0-dev`.
+- **Debug ao lado do oficial:** `applicationIdSuffix ".debug"` e nome
+  "Bolão F1 (debug)". **Limitação conhecida:** cada run do CI assina o debug
+  com uma chave descartável diferente, então um APK de debug **não instala
+  por cima** de outro. Para trocar de build de debug, desinstalar o anterior.
+  A atualização por cima é papel do release assinado (9b).
+- **Sem backup:** `allowBackup="false"` + `res/xml/data_extraction_rules.xml`
+  (Android 12+) + `res/xml/backup_rules.xml` (Android 8–11), todos excluindo
+  tudo. Os dados vêm do site e a chave de envio (9e) não deve ir para a nuvem.
+  O lint exige os dois XMLs.
+- **Infra de teste fixada:** o Compose puxa Espresso 3.5, que chama
+  `InputManager.getInstance()` (removido no Android 16+) e derruba os testes
+  Robolectric. A família `androidx.test` (core, espresso-core, ext-junit) é
+  declarada no catálogo com a versão atual. Os testes também precisam das
+  flags `--add-opens` recomendadas pelo Robolectric para JDK 17+ (em
+  `app/build.gradle.kts`) e usam `createComposeRule` do pacote `junit4.v2`
+  (o antigo é depreciado e o aviso quebra o build).
+- **Artefato sem zip** (`upload-artifact` com `archive: false`): o `.apk` é
+  baixado direto pelo celular, na página da run (exige estar logado no
+  GitHub). Validade de 30 dias.
+- **Cache do Gradle no CI** com `cache-provider: basic` do `setup-gradle`
+  (open source/MIT, em vez do provedor proprietário padrão).
+
+**Como atualizar uma dependência (procedimento):** mudar a linha no
+`libs.versions.toml` → commit `Etapa 9: atualiza X de A para B` → push → run
+verde. Uma dependência por commit, para saber o que quebrou se quebrar. AGP
+novo pode exigir Gradle mais novo (ver a tabela nas notas de versão do AGP).

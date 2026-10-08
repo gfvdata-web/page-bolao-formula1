@@ -30,6 +30,7 @@ para não invadir as etapas vizinhas.
   sub-etapa 2026-09-08d.
 - **Etapa 8:** concluída em 2026-10-03 (v1 revisada e aprovada pelo usuário,
   links das tabelas da temporada para os perfis incluídos).
-- **Etapa 9:** plano escrito em 2026-10-08; próxima é a sub-etapa 9a (esqueleto
-  + APK de debug). `applicationId` já confirmado.
+- **Etapa 9:** 9a (esqueleto + APK de debug pelo Actions) entregue em
+  2026-10-08; aguardando o usuário validar a instalação no celular. Próxima:
+  9b (keystore, release assinado, Release por tag).
 - Pendências gerais e decisões adiadas: seção 9 de `visao-geral.md`.

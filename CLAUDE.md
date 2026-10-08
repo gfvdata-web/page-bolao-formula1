@@ -70,6 +70,9 @@ também tem o histórico 2021–2025. Em produção (GitHub Pages), operado pelo
   ⚠ `calendar` sobrescreve os aliases manuais do `calendar.json`.
 - `python -m bolao.historico build --season AAAA [--check-only]` — temporadas antigas.
 - Site local: preview `docs-static` do `.claude/launch.json` (porta 8123).
+- App Android: build só no Actions (`android.yml`; acompanhar com
+  `gh run watch`). Local é opcional (JDK 21 + Android SDK):
+  `cd android && ./gradlew testDebugUnitTest lintDebug assembleDebug`.
 
 ## Estrutura
 
@@ -80,7 +83,7 @@ também tem o histórico 2021–2025. Em produção (GitHub Pages), operado pelo
   `analise.js`, `style.css`, `flags/`, `data/` (gerado). Não colocar `.md` aqui.
 - `.github/` — workflow do pipeline e scripts.
 - `google-apps-script/` — `Code.gs` + `SETUP.md`.
-- `android/` — app Android nativo (Etapa 9; ainda a criar na sub-etapa 9a).
+- `android/` — app Android nativo (Etapa 9): projeto Gradle, módulo `:app`.
 - `contexto/` — documentação do projeto (este índice aponta para ela).
 - `historico_wpp/` — export do WhatsApp, **fora do Git** (privacidade).
 
@@ -112,7 +115,7 @@ Todos em `contexto/`. "§" = seção; títulos entre aspas = bloco em negrito no
 | Modo histórico `?ano`, faixa de bandeiras | `etapa-7` "Sub-etapa 2026-09-08d", "Ajustes 2026-09-08g" |
 | Perfis `?jogador` / `?piloto`, "Ir para" | `etapa-7` "Sub-etapa 2026-09-08e" e ajustes; `etapa-4` "bloco \"Ir para\""; `etapa-8` |
 | Navegação `?menu`, `?jogadores`, `?pilotos`, `analise.js` | `etapa-8` |
-| App Android (Kotlin/Compose): arquitetura, envio de palpite via `doPost`, build/assinatura, sub-etapas | `etapa-9` |
+| App Android (Kotlin/Compose): arquitetura, envio de palpite via `doPost`, build/assinatura, sub-etapas | `etapa-9`; governança do esqueleto (versões, CI, testes, versionCode): `etapa-9` "Sub-etapa 9a" |
 | Testes: levantamento e plano em lotes | `testes.md` |
 
 ## Regras sob demanda (carregadas sozinhas ao abrir arquivos da área)
@@ -121,6 +124,7 @@ Todos em `contexto/`. "§" = seção; títulos entre aspas = bloco em negrito no
 - `.claude/rules/python.md` — `bolao/`, `tests/`
 - `.claude/rules/dados.md` — `data/`, `docs/data/`
 - `.claude/rules/automacao.md` — `.github/`, `google-apps-script/`, `bolao/pipeline.py`
+- `.claude/rules/android.md` — `android/`, `.github/workflows/android.yml`
 
 ## Convenções
 
