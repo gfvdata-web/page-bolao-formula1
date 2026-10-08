@@ -1,7 +1,7 @@
 package io.github.gfvdataweb.bolaof1.ui.home
 
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import io.github.gfvdataweb.bolaof1.ui.theme.BolaoF1Theme
 import org.junit.Rule
