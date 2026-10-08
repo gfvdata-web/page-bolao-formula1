@@ -21,6 +21,7 @@ para não invadir as etapas vizinhas.
 | 6 | ✅ | `etapas/etapa-6-forms-apps-script.md` | Forms + Apps Script → `repository_dispatch`; PAT |
 | 7 | 🟡 | `etapas/etapa-7-historico.md` | Temporadas 2021–2025, regras por ano, modo histórico `?ano`, página `?jogador` |
 | 8 | ✅ | `etapas/etapa-8-navegacao-analises.md` | Menu, `?jogadores`, `?pilotos`, perfis, base de equipes |
+| 9 | 🟡 | `etapas/etapa-9-app-android.md` | App Android nativo (Kotlin/Compose), APK via Releases, envio de palpite pelo app |
 
 ## Em aberto
 
@@ -29,4 +30,6 @@ para não invadir as etapas vizinhas.
   sub-etapa 2026-09-08d.
 - **Etapa 8:** concluída em 2026-10-03 (v1 revisada e aprovada pelo usuário,
   links das tabelas da temporada para os perfis incluídos).
+- **Etapa 9:** plano escrito em 2026-10-08; próxima é a sub-etapa 9a (esqueleto
+  + APK de debug). Confirmar o `applicationId` antes.
 - Pendências gerais e decisões adiadas: seção 9 de `visao-geral.md`.

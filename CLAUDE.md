@@ -80,6 +80,7 @@ também tem o histórico 2021–2025. Em produção (GitHub Pages), operado pelo
   `analise.js`, `style.css`, `flags/`, `data/` (gerado). Não colocar `.md` aqui.
 - `.github/` — workflow do pipeline e scripts.
 - `google-apps-script/` — `Code.gs` + `SETUP.md`.
+- `android/` — app Android nativo (Etapa 9; ainda a criar na sub-etapa 9a).
 - `contexto/` — documentação do projeto (este índice aponta para ela).
 - `historico_wpp/` — export do WhatsApp, **fora do Git** (privacidade).
 
@@ -111,6 +112,7 @@ Todos em `contexto/`. "§" = seção; títulos entre aspas = bloco em negrito no
 | Modo histórico `?ano`, faixa de bandeiras | `etapa-7` "Sub-etapa 2026-09-08d", "Ajustes 2026-09-08g" |
 | Perfis `?jogador` / `?piloto`, "Ir para" | `etapa-7` "Sub-etapa 2026-09-08e" e ajustes; `etapa-4` "bloco \"Ir para\""; `etapa-8` |
 | Navegação `?menu`, `?jogadores`, `?pilotos`, `analise.js` | `etapa-8` |
+| App Android (Kotlin/Compose): arquitetura, envio de palpite via `doPost`, build/assinatura, sub-etapas | `etapa-9` |
 | Testes: levantamento e plano em lotes | `testes.md` |
 
 ## Regras sob demanda (carregadas sozinhas ao abrir arquivos da área)
