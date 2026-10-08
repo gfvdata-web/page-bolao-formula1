@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Mesmas cores do site (docs/style.css: --acento, --bg). -->
+    <!-- Mesmas cores do site (tokens acento e bg de docs/style.css). -->
     <color name="acento">#E10600</color>
     <color name="fundo_claro">#F5F6F8</color>
     <color name="fundo_escuro">#14161A</color>
