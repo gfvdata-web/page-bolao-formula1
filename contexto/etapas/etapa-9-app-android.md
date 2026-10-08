@@ -55,7 +55,7 @@ android/
   vêm de `equipes.json`.
 - **Compatibilidade:** `minSdk 26` (Android 8), `targetSdk` igual à versão
   atual. Nome: **Bolão F1**. `applicationId`: `io.github.gfvdataweb.bolaof1`
-  (*a confirmar com o usuário na 9a; depois de publicado não muda*).
+  (confirmado pelo usuário em 2026-10-08; depois de publicado não muda).
 
 ## Envio do palpite
 

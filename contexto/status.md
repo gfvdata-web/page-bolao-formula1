@@ -31,5 +31,5 @@ para não invadir as etapas vizinhas.
 - **Etapa 8:** concluída em 2026-10-03 (v1 revisada e aprovada pelo usuário,
   links das tabelas da temporada para os perfis incluídos).
 - **Etapa 9:** plano escrito em 2026-10-08; próxima é a sub-etapa 9a (esqueleto
-  + APK de debug). Confirmar o `applicationId` antes.
+  + APK de debug). `applicationId` já confirmado.
 - Pendências gerais e decisões adiadas: seção 9 de `visao-geral.md`.
