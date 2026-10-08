@@ -32,5 +32,6 @@ para não invadir as etapas vizinhas.
   links das tabelas da temporada para os perfis incluídos).
 - **Etapa 9:** 9a (esqueleto + APK de debug pelo Actions) entregue em
   2026-10-08; aguardando o usuário validar a instalação no celular. Próxima:
-  9b (keystore, release assinado, Release por tag).
+  9b (keystore, release assinado, Release por tag). Antes dela: decidir sobre
+  a verificação de desenvolvedor do Android (ver "Ponto em aberto" na etapa-9).
 - Pendências gerais e decisões adiadas: seção 9 de `visao-geral.md`.

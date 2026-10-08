@@ -188,3 +188,15 @@ quadriculada, com versão monocromática), workflow `android.yml`, regras em
 `libs.versions.toml` → commit `Etapa 9: atualiza X de A para B` → push → run
 verde. Uma dependência por commit, para saber o que quebrou se quebrar. AGP
 novo pode exigir Gradle mais novo (ver a tabela nas notas de versão do AGP).
+
+**Ponto em aberto (2026-10-08) — verificação de desenvolvedor do Android:**
+desde 30/09/2026, no Brasil, celulares Android certificados só instalam
+normalmente apps de **desenvolvedor verificado**. App não registrado ainda
+instala por ADB ou pelo **"fluxo avançado"** (configuração única: modo
+desenvolvedor, reinício e espera de 24 h; depois o aviso "desenvolvedor não
+verificado" tem "Instalar mesmo assim"). O APK de debug da 9a muda de chave a
+cada run, então só instala por esses caminhos. **Decidir antes da 9b** se
+registra uma conta gratuita de *distribuição limitada* (até 20 aparelhos, sem
+documento nem taxa), cadastrando o `applicationId` e a chave do keystore de
+release, ou se cada pessoa usa o fluxo avançado. Não muda a decisão de
+distribuir por APK fora da Play Store.
