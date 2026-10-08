@@ -1,0 +1,93 @@
+name: Android — app
+
+# Build oficial do app (Etapa 9). Roda só quando o app ou este workflow mudam;
+# o pipeline do bolão (pipeline.yml) não é afetado.
+on:
+  push:
+    branches: [main]
+    paths:
+      - "android/**"
+      - ".github/workflows/android.yml"
+  pull_request:
+    paths:
+      - "android/**"
+      - ".github/workflows/android.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Push novo cancela o build anterior ainda em andamento do mesmo ramo.
+concurrency:
+  group: android-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Testes, lint e APK de debug
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: android
+    env:
+      # versionCode = número desta run: só cresce, então cada APK novo é
+      # "mais novo" para o Android. O versionName é montado no passo "Versão".
+      ORG_GRADLE_PROJECT_bolaoVersionCode: ${{ github.run_number }}
+      APK: bolao-f1-debug-build${{ github.run_number }}.apk
+    steps:
+      - uses: actions/checkout@v7
+
+      # JDK 21: o Robolectric exige 21 para simular Android 15+. O bytecode do
+      # app continua Java 17 (compileOptions em app/build.gradle.kts).
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      # Também confere o checksum do gradle-wrapper.jar contra a lista oficial.
+      - uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-provider: basic
+
+      - name: Versão
+        run: echo "ORG_GRADLE_PROJECT_bolaoVersionName=dev-${GITHUB_SHA::7}" >> "$GITHUB_ENV"
+
+      - name: Testes (JVM + Robolectric)
+        run: ./gradlew testDebugUnitTest
+
+      - name: Lint
+        run: ./gradlew lintDebug
+
+      - name: Monta APK de debug
+        run: |
+          ./gradlew assembleDebug
+          mkdir -p ../saida
+          cp app/build/outputs/apk/debug/app-debug.apk "../saida/$APK"
+
+      # archive: false → o artefato é o próprio .apk (sem .zip), baixável
+      # direto pelo celular na página da run.
+      - name: Publica APK como artefato
+        uses: actions/upload-artifact@v7
+        with:
+          path: saida/${{ env.APK }}
+          archive: false
+          retention-days: 30
+
+      - name: Resumo
+        run: |
+          {
+            echo "### Bolão F1 — APK de debug"
+            echo ""
+            echo "- Arquivo: \`$APK\`"
+            echo "- Versão: \`${ORG_GRADLE_PROJECT_bolaoVersionName}-debug\` · build ${ORG_GRADLE_PROJECT_bolaoVersionCode}"
+            echo "- Baixe em **Artifacts**, no fim desta página."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Relatórios de testes e lint (só se falhar)
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: relatorios-build${{ github.run_number }}
+          path: android/app/build/reports/
+          retention-days: 14
