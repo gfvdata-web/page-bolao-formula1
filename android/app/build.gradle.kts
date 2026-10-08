@@ -74,6 +74,19 @@ kotlin {
 }
 
 tasks.withType<Test>().configureEach {
+    // JDK 17+ fecha as classes internas do Java; o Robolectric precisa delas
+    // (lista recomendada em robolectric.org/getting-started).
+    jvmArgs(
+        "--add-opens=java.base/java.lang=ALL-UNNAMED",
+        "--add-opens=java.base/java.util=ALL-UNNAMED",
+        "--add-opens=java.base/java.io=ALL-UNNAMED",
+        "--add-opens=java.base/java.net=ALL-UNNAMED",
+        "--add-opens=java.base/java.security=ALL-UNNAMED",
+        "--add-opens=java.base/java.text=ALL-UNNAMED",
+        "--add-opens=java.base/jdk.internal.access=ALL-UNNAMED",
+        "--add-opens=java.desktop/java.awt.font=ALL-UNNAMED",
+        "--add-opens=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED",
+    )
     testLogging {
         events("failed")
         exceptionFormat = TestExceptionFormat.FULL
