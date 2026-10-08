@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Bandeira quadriculada no centro da área segura (66dp) do ícone adaptável. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="@color/branco"
+        android:pathData="M31,31h3v46h-3z" />
+    <path
+        android:fillColor="@color/branco"
+        android:pathData="M35,33h7v7h-7zM49,33h7v7h-7zM63,33h7v7h-7zM42,40h7v7h-7zM56,40h7v7h-7zM70,40h7v7h-7zM35,47h7v7h-7zM49,47h7v7h-7zM63,47h7v7h-7zM42,54h7v7h-7zM56,54h7v7h-7zM70,54h7v7h-7z" />
+    <path
+        android:fillColor="@color/xadrez_escuro"
+        android:pathData="M42,33h7v7h-7zM56,33h7v7h-7zM70,33h7v7h-7zM35,40h7v7h-7zM49,40h7v7h-7zM63,40h7v7h-7zM42,47h7v7h-7zM56,47h7v7h-7zM70,47h7v7h-7zM35,54h7v7h-7zM49,54h7v7h-7zM63,54h7v7h-7z" />
+</vector>

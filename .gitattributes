@@ -3,3 +3,8 @@
 # quem editar no Windows.
 *.sh text eol=lf
 *.yml text eol=lf
+# Gradle wrapper (app Android, Etapa 9): o script Unix roda no runner Linux
+# (LF), o .bat é do Windows (CRLF) e o .jar é binário (sem conversão).
+gradlew text eol=lf
+*.bat text eol=crlf
+*.jar binary

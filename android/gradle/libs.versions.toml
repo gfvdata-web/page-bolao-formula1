@@ -1,0 +1,42 @@
+# Catálogo de versões do app Android — fonte ÚNICA de versões.
+# Nenhum build.gradle.kts escreve número de versão: tudo vem daqui (libs.*).
+# Atualizar = mudar a linha aqui, deixar o CI rodar (testes + lint + APK) e
+# só então commitar. Regras: .claude/rules/android.md.
+
+[versions]
+# Níveis de SDK do Android (minSdk 26 = Android 8; target = versão atual).
+minSdk = "26"
+compileSdk = "37"
+targetSdk = "37"
+
+# Ferramentas de build. AGP 9.4 exige Gradle >= 9.6 (wrapper em
+# gradle/wrapper/gradle-wrapper.properties) e JDK >= 17.
+androidGradlePlugin = "9.4.1"
+# Kotlin embutido do AGP 9: o plugin do compilador Compose usa esta mesma
+# versão e puxa o kotlin-gradle-plugin correspondente.
+kotlin = "2.4.21"
+
+# Bibliotecas
+androidx-activity-compose = "1.13.0"
+androidx-compose-bom = "2026.09.00"
+
+# Testes
+junit = "4.13.2"
+robolectric = "4.17"
+
+[libraries]
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity-compose" }
+# O BOM fixa juntas as versões de todas as bibliotecas Compose abaixo (sem version.ref).
+androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "androidx-compose-bom" }
+androidx-compose-material3 = { module = "androidx.compose.material3:material3" }
+androidx-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+androidx-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+androidx-compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
+androidx-compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
+
+junit = { module = "junit:junit", version.ref = "junit" }
+robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

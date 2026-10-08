@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:locale="pt">
+    <!-- Nome no ícone do celular (o debug troca em src/debug). -->
+    <string name="app_name">Bolão F1</string>
+    <string name="home_titulo">Bolão F1</string>
+    <string name="home_subtitulo">Palpites do qualifying da F1 entre amigos</string>
+    <string name="home_versao">Versão %1$s · build %2$d</string>
+</resources>
