@@ -750,7 +750,7 @@ temporadas — sub-aba "Palpites" no Ranking + card "Explore a temporada".**
   passam a filtrar só o gráfico de posição —
   `temporadaDesligados = {acumulado, rodada}`, `renderCardsFiltroTemporada`.
 
-**Ajuste posterior (2026-10-09): sub-aba "Ponto extra" no Ranking.**
+**Ajuste posterior (2026-10-09): sub-aba Ponto extra no Ranking.**
 - Ordem: **Geral · Corridas · Palpites · Ponto extra · Simulador** (· Regras nas
   passadas); chamada ⭐ no card "Explore" na mesma posição.
   `#subsecao-ranking-pontoextra` → `renderPontoExtra(standings, bets, results)`

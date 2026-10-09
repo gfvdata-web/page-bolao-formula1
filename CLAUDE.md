@@ -111,7 +111,7 @@ Todos em `contexto/`. "§" = seção; títulos entre aspas = bloco em negrito no
 | Pipeline, workflow, códigos de saída 0/1/2, verificador | `etapa-5` |
 | Google Forms, Apps Script, token | `etapa-6`; `google-apps-script/SETUP.md` |
 | Front-end: arquitetura, helpers, tema claro/escuro | `etapa-4` "Mapa do front-end" (visão inicial, desatualizada nos detalhes), "switch de tema"; Chart.js: `etapa-4` "Importante (bug de layout" |
-| Abas da temporada (Ranking: Geral/Corridas/Palpites/Ponto extra/Simulador; Rendimento; Pilotos) | `etapa-4` (blocos "Ajuste posterior"); estado mais recente das abas: `etapa-4` "abas padronizadas", "Ajustes seguintes (2026-09-27)" e "sub-aba \"Ponto extra\"" |
+| Abas da temporada (Ranking: Geral/Corridas/Palpites/Ponto extra/Simulador; Rendimento; Pilotos) | `etapa-4` (blocos "Ajuste posterior"); estado mais recente das abas: `etapa-4` "abas padronizadas", "Ajustes seguintes (2026-09-27)" e "sub-aba Ponto extra" |
 | Hall of Fame | `etapa-4` "aba Hall of Fame"; `etapa-7` "Hall of Fame — switch", "Sub-etapa 2026-09-08e/f" |
 | Modo histórico `?ano`, faixa de bandeiras | `etapa-7` "Sub-etapa 2026-09-08d", "Ajustes 2026-09-08g" |
 | Perfis `?jogador` / `?piloto`, "Ir para" | `etapa-7` "Sub-etapa 2026-09-08e" e ajustes; `etapa-4` "bloco \"Ir para\""; `etapa-8` |
