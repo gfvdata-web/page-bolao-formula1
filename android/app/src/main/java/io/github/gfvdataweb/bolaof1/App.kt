@@ -11,6 +11,7 @@ import io.github.gfvdataweb.bolaof1.data.EnviaPalpite
 import io.github.gfvdataweb.bolaof1.data.EnvioPeloAppsScript
 import io.github.gfvdataweb.bolaof1.data.FonteRemota
 import io.github.gfvdataweb.bolaof1.data.TemporadaRepositorio
+import io.github.gfvdataweb.bolaof1.data.VerificadorDeAtualizacao
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.OkHttpClient
@@ -21,6 +22,9 @@ import java.util.concurrent.TimeUnit
 object Enderecos {
     /** JSONs publicados pelo site (GitHub Pages), mesma pasta que o site lê. */
     const val DADOS_DO_SITE = "https://gfvdata-web.github.io/page-bolao-formula1/data/"
+
+    /** API pública dos Releases (aviso de nova versão, 9f). */
+    const val RELEASES = "https://api.github.com/repos/gfvdata-web/page-bolao-formula1/releases?per_page=20"
 }
 
 /**
@@ -30,6 +34,7 @@ object Enderecos {
 class AppContainer(
     contexto: Context,
     urlDosDados: HttpUrl = Enderecos.DADOS_DO_SITE.toHttpUrl(),
+    urlDosReleases: HttpUrl = Enderecos.RELEASES.toHttpUrl(),
 ) {
     private val contextoDoApp = contexto.applicationContext
 
@@ -51,6 +56,8 @@ class AppContainer(
     }
 
     val envio: EnviaPalpite = EnvioPeloAppsScript(clienteHttp)
+
+    val verificadorDeAtualizacao = VerificadorDeAtualizacao(clienteHttp, urlDosReleases)
 }
 
 /** Os testes trocam o contêiner (ex.: site local) sobrescrevendo [criarContainer]. */

@@ -12,6 +12,11 @@ plugins {
 val appVersionCode = providers.gradleProperty("bolaoVersionCode").map(String::toInt).getOrElse(1)
 val appVersionName = providers.gradleProperty("bolaoVersionName").getOrElse("0.0.0-dev")
 
+// Assinatura do release (9b): só no CI, com o keystore vindo dos secrets
+// (ANDROID_KEYSTORE_*). Sem essas variáveis o release sai sem assinatura, que
+// não instala — de propósito: APK oficial só sai do Actions.
+val keystoreDoRelease = providers.environmentVariable("ANDROID_KEYSTORE_ARQUIVO")
+
 android {
     namespace = "io.github.gfvdataweb.bolaof1"
     compileSdk = libs.versions.compileSdk.get().toInt()
@@ -25,6 +30,18 @@ android {
         versionName = appVersionName
     }
 
+    signingConfigs {
+        if (keystoreDoRelease.isPresent) {
+            create("release") {
+                storeFile = file(keystoreDoRelease.get())
+                storeType = "pkcs12"
+                storePassword = providers.environmentVariable("ANDROID_KEYSTORE_SENHA").get()
+                keyAlias = providers.environmentVariable("ANDROID_KEY_ALIAS").get()
+                keyPassword = providers.environmentVariable("ANDROID_KEY_SENHA").get()
+            }
+        }
+    }
+
     buildTypes {
         debug {
             // O debug instala ao lado do app oficial (outro id, nome "(debug)").
@@ -32,7 +49,9 @@ android {
             versionNameSuffix = "-debug"
         }
         release {
-            // Assinatura e Release por tag: sub-etapa 9b.
+            signingConfig = signingConfigs.findByName("release")
+            // Sem R8 na v1: o APK de release roda o mesmo código que os testes
+            // exercitam no debug (minificação fica para quando o tamanho importar).
             isMinifyEnabled = false
         }
     }

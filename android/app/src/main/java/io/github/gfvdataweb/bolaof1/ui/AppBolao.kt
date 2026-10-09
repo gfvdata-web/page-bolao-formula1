@@ -1,6 +1,7 @@
 package io.github.gfvdataweb.bolaof1.ui
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -21,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -43,6 +45,9 @@ import io.github.gfvdataweb.bolaof1.ui.enviar.EnviarViewModel
 import io.github.gfvdataweb.bolaof1.ui.palpites.PalpitesTela
 import io.github.gfvdataweb.bolaof1.ui.ranking.RankingTela
 import io.github.gfvdataweb.bolaof1.ui.temporada.TemporadaViewModel
+import io.github.gfvdataweb.bolaof1.ui.versao.AvisoDeNovaVersao
+import io.github.gfvdataweb.bolaof1.ui.versao.SituacaoDaVersao
+import io.github.gfvdataweb.bolaof1.ui.versao.VersaoViewModel
 import kotlinx.serialization.Serializable
 
 // Rotas da navegação (type-safe: cada tela é um objeto serializável).
@@ -80,6 +85,10 @@ fun AppBolao(container: AppContainer, versao: String, build: Int) {
     val estado by temporadaViewModel.estado.collectAsStateWithLifecycle()
     val entradaAtual by navegacao.currentBackStackEntryAsState()
     val emConfiguracoes = entradaAtual?.destination?.hasRoute(RotaConfiguracoes::class) == true
+    val versaoViewModel: VersaoViewModel = viewModel(factory = VersaoViewModel.fabrica(container.verificadorDeAtualizacao, build))
+    val estadoDaVersao by versaoViewModel.estado.collectAsStateWithLifecycle()
+    val navegador = LocalUriHandler.current
+    val baixarNovaVersao = { estadoDaVersao.publicada?.let { navegador.openUri(it.urlDoApk) } }
 
     Scaffold(
         topBar = {
@@ -122,38 +131,45 @@ fun AppBolao(container: AppContainer, versao: String, build: Int) {
             }
         },
     ) { espaco ->
-        NavHost(navegacao, startDestination = RotaRanking, modifier = Modifier.padding(espaco)) {
-            composable<RotaRanking> {
-                ConteudoComDados(estado, temporadaViewModel::atualizar) { RankingTela(it) }
+        Column(Modifier.padding(espaco)) {
+            val publicada = estadoDaVersao.publicada
+            if (estadoDaVersao.mostrarAviso && publicada != null) {
+                AvisoDeNovaVersao(publicada, aoBaixar = { baixarNovaVersao() }, aoDispensar = versaoViewModel::dispensar)
             }
-            composable<RotaCorridas> {
-                ConteudoComDados(estado, temporadaViewModel::atualizar) { CorridasTela(it) }
-            }
-            composable<RotaPalpites> {
-                ConteudoComDados(estado, temporadaViewModel::atualizar) { PalpitesTela(it) }
-            }
-            composable<RotaEnviar> {
-                val enviar: EnviarViewModel = viewModel(factory = EnviarViewModel.fabrica(container.envio, container.configuracoes))
-                val estadoDoEnvio by enviar.estado.collectAsStateWithLifecycle()
-                EnviarTela(
-                    estado = estadoDoEnvio,
-                    aoMudarTexto = enviar::mudarTexto,
-                    aoMudarRodada = enviar::mudarRodada,
-                    aoEnviar = enviar::enviar,
-                    aoAbrirConfiguracoes = { navegacao.navigate(RotaConfiguracoes) { launchSingleTop = true } },
-                )
-            }
-            composable<RotaConfiguracoes> {
-                val configuracoes: ConfiguracoesViewModel = viewModel(factory = ConfiguracoesViewModel.fabrica(container.configuracoes))
-                val estadoDasConfiguracoes by configuracoes.estado.collectAsStateWithLifecycle()
-                ConfiguracoesTela(
-                    estado = estadoDasConfiguracoes,
-                    aoMudarUrl = configuracoes::mudarUrl,
-                    aoMudarChave = configuracoes::mudarChave,
-                    aoSalvar = configuracoes::salvar,
-                    versao = versao,
-                    build = build,
-                )
+            NavHost(navegacao, startDestination = RotaRanking, modifier = Modifier.weight(1f)) {
+                composable<RotaRanking> {
+                    ConteudoComDados(estado, temporadaViewModel::atualizar) { RankingTela(it) }
+                }
+                composable<RotaCorridas> {
+                    ConteudoComDados(estado, temporadaViewModel::atualizar) { CorridasTela(it) }
+                }
+                composable<RotaPalpites> {
+                    ConteudoComDados(estado, temporadaViewModel::atualizar) { PalpitesTela(it) }
+                }
+                composable<RotaEnviar> {
+                    val enviar: EnviarViewModel = viewModel(factory = EnviarViewModel.fabrica(container.envio, container.configuracoes))
+                    val estadoDoEnvio by enviar.estado.collectAsStateWithLifecycle()
+                    EnviarTela(
+                        estado = estadoDoEnvio,
+                        aoMudarTexto = enviar::mudarTexto,
+                        aoMudarRodada = enviar::mudarRodada,
+                        aoEnviar = enviar::enviar,
+                        aoAbrirConfiguracoes = { navegacao.navigate(RotaConfiguracoes) { launchSingleTop = true } },
+                    )
+                }
+                composable<RotaConfiguracoes> {
+                    val configuracoes: ConfiguracoesViewModel = viewModel(factory = ConfiguracoesViewModel.fabrica(container.configuracoes))
+                    val estadoDasConfiguracoes by configuracoes.estado.collectAsStateWithLifecycle()
+                    ConfiguracoesTela(
+                        estado = estadoDasConfiguracoes,
+                        aoMudarUrl = configuracoes::mudarUrl,
+                        aoMudarChave = configuracoes::mudarChave,
+                        aoSalvar = configuracoes::salvar,
+                        versao = versao,
+                        build = build,
+                        extras = { SituacaoDaVersao(estadoDaVersao, aoBaixar = { baixarNovaVersao() }) },
+                    )
+                }
             }
         }
     }

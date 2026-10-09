@@ -9,6 +9,7 @@ import io.github.gfvdataweb.bolaof1.apoio.TemporadaReal
 import io.github.gfvdataweb.bolaof1.data.ErroDeDados
 import io.github.gfvdataweb.bolaof1.data.EstadoDados
 import io.github.gfvdataweb.bolaof1.data.Temporada
+import io.github.gfvdataweb.bolaof1.data.VersaoPublicada
 import io.github.gfvdataweb.bolaof1.ui.comum.ConteudoComDados
 import io.github.gfvdataweb.bolaof1.ui.configuracoes.ConfiguracoesTela
 import io.github.gfvdataweb.bolaof1.ui.configuracoes.EstadoDasConfiguracoes
@@ -20,6 +21,7 @@ import io.github.gfvdataweb.bolaof1.ui.ranking.RankingTela
 import io.github.gfvdataweb.bolaof1.ui.temporada.palpitesDaRodada
 import io.github.gfvdataweb.bolaof1.ui.temporada.rodadasPontuadas
 import io.github.gfvdataweb.bolaof1.ui.theme.BolaoF1Theme
+import io.github.gfvdataweb.bolaof1.ui.versao.AvisoDeNovaVersao
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Rule
@@ -124,5 +126,17 @@ class TelasTest {
         // A chave começa mascarada (o mascaramento é visual; a semântica guarda o texto).
         compose.onNodeWithText("Mostrar").performClick()
         compose.onNodeWithText("Ocultar").assertIsDisplayed()
+    }
+
+    @Test
+    fun avisoDeNovaVersaoOfereceBaixar() {
+        var baixou = false
+        val publicada = VersaoPublicada("0.2.0", build = 20, urlDoApk = "https://exemplo/apk", urlDaPagina = "")
+        compose.setContent {
+            BolaoF1Theme { AvisoDeNovaVersao(publicada, aoBaixar = { baixou = true }, aoDispensar = {}) }
+        }
+        compose.onNodeWithText("Nova versão 0.2.0 disponível").assertIsDisplayed()
+        compose.onNodeWithText("Baixar").performClick()
+        assertTrue(baixou)
     }
 }

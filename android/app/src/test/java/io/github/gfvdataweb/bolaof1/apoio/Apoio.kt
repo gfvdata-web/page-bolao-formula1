@@ -61,6 +61,9 @@ class SiteLocal : Closeable {
 
     val urlDosDados: HttpUrl get() = servidor.url("/data/")
 
+    /** Sem Releases publicados no site local (responde 404): o app não mostra aviso. */
+    val urlDosReleases: HttpUrl get() = servidor.url("/releases")
+
     override fun close() = servidor.close()
 }
 
@@ -71,5 +74,6 @@ object SiteDeTeste {
 
 /** App usado nos testes Robolectric do app inteiro: lê do site local. */
 class BolaoAppDeTeste : BolaoApp() {
-    override fun criarContainer(): AppContainer = AppContainer(this, SiteDeTeste.site.urlDosDados)
+    override fun criarContainer(): AppContainer =
+        AppContainer(this, SiteDeTeste.site.urlDosDados, SiteDeTeste.site.urlDosReleases)
 }

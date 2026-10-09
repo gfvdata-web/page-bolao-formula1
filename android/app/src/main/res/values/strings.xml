@@ -76,4 +76,13 @@
     <string name="config_salvo">Salvo.</string>
     <string name="config_sobre">Sobre</string>
     <string name="config_versao">Versão %1$s · build %2$d</string>
+
+    <!-- Aviso de nova versão -->
+    <string name="versao_nova">Nova versão %1$s disponível</string>
+    <string name="versao_nova_dica">Baixe e instale por cima desta.</string>
+    <string name="baixar">Baixar</string>
+    <string name="agora_nao">Agora não</string>
+    <string name="versao_baixar">Baixar a versão %1$s</string>
+    <string name="versao_em_dia">Esta é a versão oficial mais recente.</string>
+    <string name="versao_sem_info">Não foi possível consultar a versão mais recente.</string>
 </resources>

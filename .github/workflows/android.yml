@@ -6,6 +6,9 @@ name: Android — app
 on:
   push:
     branches: [main]
+    # Tag app-vX.Y.Z publica o APK assinado num Release (job "publicar").
+    # Filtro de paths não vale para tags.
+    tags: ["app-v*"]
     paths:
       - "android/**"
       - ".github/workflows/android.yml"
@@ -98,3 +101,94 @@ jobs:
           name: relatorios-build${{ github.run_number }}
           path: android/app/build/reports/
           retention-days: 14
+
+  # Release oficial (9b): só em tag app-vX.Y.Z e só depois do job "build"
+  # (testes + lint) passar no mesmo commit. Único job com permissão de escrita.
+  publicar:
+    name: Release assinado
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/app-v')
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+    defaults:
+      run:
+        working-directory: android
+    env:
+      ORG_GRADLE_PROJECT_bolaoVersionCode: ${{ github.run_number }}
+      # Impressão digital SHA-256 do certificado da chave de release (dado
+      # público). O APK só é publicado se estiver assinado por ESTA chave: uma
+      # chave diferente impediria a atualização por cima no celular.
+      CERTIFICADO_SHA256: afa06a9aba9e80c48e76f490ab437a66b61762d29c30592106889f5610319978
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-provider: basic
+
+      - name: Versão a partir da tag
+        run: |
+          VERSAO="${GITHUB_REF_NAME#app-v}"
+          if ! [[ "$VERSAO" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::A tag precisa ser app-vX.Y.Z (recebida: $GITHUB_REF_NAME)"
+            exit 1
+          fi
+          {
+            echo "VERSAO=$VERSAO"
+            echo "ORG_GRADLE_PROJECT_bolaoVersionName=$VERSAO"
+            echo "APK=bolao-f1-v$VERSAO-build$GITHUB_RUN_NUMBER.apk"
+          } >> "$GITHUB_ENV"
+
+      - name: Keystore (dos secrets)
+        env:
+          KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_B64 }}
+        run: |
+          if [ -z "$KEYSTORE_B64" ]; then
+            echo "::error::Secret ANDROID_KEYSTORE_B64 não configurado"
+            exit 1
+          fi
+          printf '%s' "$KEYSTORE_B64" | base64 -d > "$RUNNER_TEMP/release.p12"
+          echo "ANDROID_KEYSTORE_ARQUIVO=$RUNNER_TEMP/release.p12" >> "$GITHUB_ENV"
+
+      - name: Monta APK de release assinado
+        env:
+          ANDROID_KEYSTORE_SENHA: ${{ secrets.ANDROID_KEYSTORE_SENHA }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_SENHA: ${{ secrets.ANDROID_KEY_SENHA }}
+        run: |
+          ./gradlew assembleRelease
+          mkdir -p ../saida
+          cp app/build/outputs/apk/release/app-release.apk "../saida/$APK"
+
+      - name: Confere a assinatura
+        run: |
+          APKSIGNER="$(ls -d "$ANDROID_HOME"/build-tools/*/ | sort -V | tail -1)apksigner"
+          "$APKSIGNER" verify --print-certs "../saida/$APK" | tee assinatura.txt
+          if ! grep -qi "certificate SHA-256 digest: $CERTIFICADO_SHA256" assinatura.txt; then
+            echo "::error::APK não está assinado pela chave oficial do Bolão F1"
+            exit 1
+          fi
+
+      - name: Publica o Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          NOTAS="App Android do Bolão F1, versão $VERSAO (build $GITHUB_RUN_NUMBER). Baixe o arquivo .apk abaixo pelo celular e instale: ele atualiza por cima da versão anterior, sem perder nada."
+          gh release create "$GITHUB_REF_NAME" "../saida/$APK" --repo "$GITHUB_REPOSITORY" --title "Bolão F1 $VERSAO" --notes "$NOTAS"
+          {
+            echo "### Bolão F1 $VERSAO publicado"
+            echo ""
+            echo "- Release: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/tag/$GITHUB_REF_NAME"
+            echo "- Arquivo: \`$APK\` · assinado pela chave oficial"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Apaga o keystore do runner
+        if: always()
+        run: rm -f "$RUNNER_TEMP/release.p12"
