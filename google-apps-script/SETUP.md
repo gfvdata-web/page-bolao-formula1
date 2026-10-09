@@ -103,12 +103,50 @@ gerar um novo token (passo 1) e atualizar só a propriedade `GITHUB_TOKEN`
 (passo 4) — nada mais muda. Depois, atualizar a data de expiração e o
 lembrete em `contexto/visao-geral.md`.
 
+## 8. Envio pelo app Android (Etapa 9e)
+
+O app manda o palpite direto para o script (função `doPost`), sem passar pelo
+Forms. O Forms continua funcionando em paralelo; o payload enviado ao GitHub é
+o mesmo.
+
+1. **Criar a chave do app:** em ⚙️ Configurações do projeto → Propriedades do
+   script, adicionar `APP_CHAVE` com um texto aleatório longo (40+ letras e
+   números; dá para gerar no gerenciador de senhas). Quem tiver essa chave
+   consegue enviar palpites — não compartilhar no grupo.
+2. **Publicar como app da web:** no editor, **Implantar** → **Nova
+   implantação** → ⚙️ tipo **App da Web**:
+   - Descrição: `app Android`
+   - Executar como: **Eu** (a conta dona do script, que tem o `GITHUB_TOKEN`)
+   - Quem pode acessar: **Qualquer pessoa** (o app não faz login no Google; a
+     proteção é a `APP_CHAVE`)
+   - **Implantar** e autorizar, se pedir. Copiar a **URL do app da web**
+     (termina em `/exec`).
+3. **No app:** ⚙️ Configurações → colar a URL e a chave → **Salvar**.
+4. **Testar sem disparar nada:** no editor, executar
+   `testarDoPostChaveErrada` e ver no log `{"ok":false,"erro":"Chave de envio
+   inválida."}`. Depois, enviar um palpite real pelo app e conferir o run
+   novo na aba Actions.
+
+**Ao mudar o `Code.gs` depois:** colar o código novo e ir em **Implantar** →
+**Gerenciar implantações** → ✏️ editar a implantação `app Android` → Versão
+**Nova versão** → Implantar. Assim a URL continua a mesma (uma "Nova
+implantação" criaria outra URL, e o app teria que ser reconfigurado).
+
+**Trocar a chave** (ex.: vazou): mudar `APP_CHAVE` nas Propriedades e digitar
+a nova no app. Não precisa reimplantar.
+
 ## Solução de problemas
 
 - **E-mail de falha recebido:** confira a mensagem de erro (geralmente token
   inválido/expirado ou permissão errada). Corrigir o `GITHUB_TOKEN` nas
   Propriedades do script e reenviar o Forms, ou disparar `workflow_dispatch`
   (retry) manualmente na aba Actions do GitHub para a rodada correspondente.
+- **App diz "chave de envio inválida":** a chave digitada no app não é igual à
+  `APP_CHAVE` (espaços sobrando contam).
+- **App diz "resposta inesperada":** em geral a implantação não está com acesso
+  "Qualquer pessoa" (o Google devolve uma página de login em vez do JSON) ou a
+  URL não é a do app da web (`/exec`). Conferir na aba Actions se o palpite
+  entrou antes de reenviar.
 - **Nada acontece ao enviar o Forms:** conferir se o gatilho `onFormSubmit`
   está mesmo criado (passo 5) e se os títulos das perguntas batem com
   `Code.gs`.

@@ -50,3 +50,13 @@
 - Nenhuma mudança no pipeline Python, no workflow do Actions nem no
   front-end — a Etapa 6 só adiciona `google-apps-script/` como novo
   disparador do evento `novo_palpite` já existente.
+
+**Nota (Etapa 9e, 2026-10-08) — envio pelo app Android:** `Code.gs` ganhou
+`doPost` (app da web, acesso "Qualquer pessoa", executa como o dono) que
+reaproveita `dispararRepositoryDispatch` + `avisarPainel` com o **mesmo**
+`client_payload {texto, round?}` do `onFormSubmit` — o contrato com a Etapa 5
+não muda. Proteção pela propriedade `APP_CHAVE` (digitada no app, nunca no
+APK). Chave errada/texto vazio só voltam `{ok:false, erro}` (sem e-mail);
+falha no GitHub ou `APP_CHAVE` ausente mandam o e-mail de `notificarErro`.
+Implantação e troca de chave: `google-apps-script/SETUP.md`, passo 8.
+Detalhes do lado do app: `etapa-9-app-android.md`.

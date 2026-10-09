@@ -10,8 +10,13 @@
  *   GITHUB_TOKEN  — fine-grained PAT, repos page-bolao-formula1 e painel-status,
  *                   "Contents: Read and write"
  *   ALERTA_EMAIL  — (opcional) e-mail para avisos de falha; sem isso usa o dono do script
+ *   APP_CHAVE     — (app Android, Etapa 9e) chave longa aleatória exigida no doPost
  *
  * Trigger necessário (Extensões > Gatilhos): onFormSubmit, do tipo "From form" / "On form submit".
+ *
+ * App Android (Etapa 9e): o doPost recebe o palpite pelo app, com o MESMO
+ * client_payload do Forms. Exige "Implantar > App da Web" (executar como você,
+ * acesso "Qualquer pessoa"); a proteção é a APP_CHAVE. Ver SETUP.md, passo 8.
  */
 
 const GITHUB_OWNER = 'gfvdata-web';
@@ -57,6 +62,59 @@ function onFormSubmit(e) {
     throw erro;
   }
   avisarPainel();
+}
+
+/**
+ * Envio pelo app Android (Etapa 9e). Corpo JSON: {chave, texto, round?}.
+ * Responde JSON {ok: true} ou {ok: false, erro}. Chave errada ou texto vazio
+ * só voltam o erro para o app (sem e-mail); falha ao avisar o GitHub manda o
+ * mesmo e-mail do Forms.
+ */
+function doPost(e) {
+  let pedido;
+  try {
+    pedido = JSON.parse((e && e.postData && e.postData.contents) || '');
+  } catch (erro) {
+    return responderJson({ ok: false, erro: 'O pedido não veio em JSON.' });
+  }
+
+  const chaveEsperada = PropertiesService.getScriptProperties().getProperty('APP_CHAVE');
+  if (!chaveEsperada) {
+    const erro = new Error('Propriedade APP_CHAVE não configurada (Propriedades do script).');
+    notificarErro(erro);
+    return responderJson({ ok: false, erro: erro.message });
+  }
+  if (!pedido || typeof pedido.chave !== 'string' || pedido.chave !== chaveEsperada) {
+    return responderJson({ ok: false, erro: 'Chave de envio inválida.' });
+  }
+
+  const texto = typeof pedido.texto === 'string' ? pedido.texto : '';
+  if (!texto.trim()) {
+    return responderJson({ ok: false, erro: 'O texto do palpite está vazio.' });
+  }
+
+  // Mesmo client_payload do onFormSubmit (contrato com o pipeline, Etapa 5).
+  const clientPayload = { texto: texto };
+  if (pedido.round !== undefined && pedido.round !== null && pedido.round !== '') {
+    const rodadaNum = parseInt(pedido.round, 10);
+    if (!isNaN(rodadaNum)) {
+      clientPayload.round = rodadaNum;
+    }
+  }
+
+  try {
+    dispararRepositoryDispatch(GITHUB_REPO, GITHUB_EVENT_TYPE, clientPayload);
+  } catch (erro) {
+    notificarErro(erro);
+    return responderJson({ ok: false, erro: 'Falha ao avisar o GitHub: ' + erro.message });
+  }
+  avisarPainel();
+  return responderJson({ ok: true });
+}
+
+function responderJson(objeto) {
+  return ContentService.createTextOutput(JSON.stringify(objeto))
+    .setMimeType(ContentService.MimeType.JSON);
 }
 
 function avisarPainel() {
@@ -155,4 +213,13 @@ function testarDisparoManual() {
  */
 function testarAvisoPainel() {
   dispararRepositoryDispatch(PAINEL_REPO, PAINEL_EVENT_TYPE, {});
+}
+
+/**
+ * Teste do doPost sem disparar nada: simula um pedido com chave errada e
+ * mostra a resposta no log (deve ser ok: false, "Chave de envio inválida.").
+ */
+function testarDoPostChaveErrada() {
+  const resposta = doPost({ postData: { contents: JSON.stringify({ chave: 'errada', texto: 'teste' }) } });
+  Logger.log(resposta.getContent());
 }
