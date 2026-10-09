@@ -18,6 +18,12 @@
   — total do projeto: **53**.
 
 **Formatos novos definidos aqui (a Etapa 4 consome estes; não reabrir):**
+
+> **Nota (Etapa 9c, 2026-10-08):** `docs/data/` tem um **segundo consumidor**, o
+> app Android (`android/.../data/modelo/Modelos.kt`). Mudanças nesses formatos
+> têm que continuar **aditivas** (campo novo pode; renomear/remover/mudar tipo
+> quebra o app instalado). O CI do app (`android.yml`) lê os JSONs reais a cada
+> mudança em `docs/data/**` e acusa formato incompatível.
 - **`messages/<round>.txt`:** texto bruto do WhatsApp, um arquivo por rodada. O
   nome do arquivo é a rodada; a Etapa 3 confere batendo com `resolve_race` do
   cabeçalho. Uma rodada só entra na consolidação se tiver **messages + results**.

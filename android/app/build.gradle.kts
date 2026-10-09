@@ -3,6 +3,7 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 // Versão do app. O CI injeta os dois valores (ORG_GRADLE_PROJECT_bolaoVersionCode
@@ -87,6 +88,11 @@ tasks.withType<Test>().configureEach {
         "--add-opens=java.desktop/java.awt.font=ALL-UNNAMED",
         "--add-opens=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED",
     )
+    // Os testes de dados leem os JSONs reais publicados pelo site (docs/data):
+    // se o formato mudar de um jeito que quebra o app, o CI acusa.
+    val dadosDoSite = rootProject.file("../docs/data")
+    inputs.dir(dadosDoSite).withPathSensitivity(PathSensitivity.RELATIVE).withPropertyName("dadosDoSite")
+    systemProperty("bolao.dadosDoSite", dadosDoSite.absolutePath)
     testLogging {
         events("failed")
         exceptionFormat = TestExceptionFormat.FULL
@@ -98,6 +104,9 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.okhttp)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 
@@ -108,4 +117,6 @@ dependencies {
     testImplementation(libs.androidx.test.core)
     testImplementation(libs.androidx.test.espresso.core)
     testImplementation(libs.androidx.test.ext.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.okhttp.mockwebserver)
 }

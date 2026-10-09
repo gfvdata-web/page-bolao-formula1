@@ -1,17 +1,22 @@
 name: Android — app
 
-# Build oficial do app (Etapa 9). Roda só quando o app ou este workflow mudam;
-# o pipeline do bolão (pipeline.yml) não é afetado.
+# Build oficial do app (Etapa 9). Roda quando o app, este workflow ou os dados
+# do site mudam; o pipeline do bolão (pipeline.yml) não é afetado. Commits do
+# próprio pipeline (feitos com GITHUB_TOKEN) não disparam outros workflows.
 on:
   push:
     branches: [main]
     paths:
       - "android/**"
       - ".github/workflows/android.yml"
+      # Os testes do app leem os JSONs reais do site (formato é contrato).
+      - "docs/data/**"
   pull_request:
     paths:
       - "android/**"
       - ".github/workflows/android.yml"
+      # Os testes do app leem os JSONs reais do site (formato é contrato).
+      - "docs/data/**"
   workflow_dispatch:
 
 permissions:
