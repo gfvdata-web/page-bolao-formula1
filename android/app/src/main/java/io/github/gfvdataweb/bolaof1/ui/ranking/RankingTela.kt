@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -18,7 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.github.gfvdataweb.bolaof1.R
 import io.github.gfvdataweb.bolaof1.data.Temporada
@@ -30,7 +28,7 @@ import java.time.ZoneId
 
 /** Aba Ranking (Geral): resumo da temporada e a classificação. */
 @Composable
-fun RankingTela(temporada: Temporada, rodape: String, modifier: Modifier = Modifier) {
+fun RankingTela(temporada: Temporada, modifier: Modifier = Modifier) {
     val linhas = linhasDoRanking(temporada)
     LazyColumn(modifier, contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         item { ResumoDaTemporada(temporada) }
@@ -41,15 +39,6 @@ fun RankingTela(temporada: Temporada, rodape: String, modifier: Modifier = Modif
                     LinhaDoRanking(linha)
                 }
             }
-        }
-        items(listOf(rodape)) {
-            Text(
-                it,
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth(),
-            )
         }
     }
 }

@@ -3,6 +3,7 @@ package io.github.gfvdataweb.bolaof1
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import io.github.gfvdataweb.bolaof1.apoio.BolaoAppDeTeste
@@ -45,5 +46,12 @@ class MainActivityTest {
         compose.onNodeWithText("Corridas").performClick()
         val ultima = temporada.classificacao.rodadas.maxBy { it.numero }
         esperarTexto("R${ultima.numero} · ${ultima.corrida}")
+    }
+
+    @Test
+    fun configuracoesMostraAVersaoInstalada() {
+        esperarTexto(temporada.classificacao.jogadores.first().nome)
+        compose.onNodeWithContentDescription("Configurações").performClick()
+        esperarTexto("Versão ${BuildConfig.VERSION_NAME} · build ${BuildConfig.VERSION_CODE}")
     }
 }

@@ -4,12 +4,14 @@
     <string name="app_name">Bolão F1</string>
     <string name="app_titulo">Bolão F1</string>
     <string name="titulo_com_ano">Bolão F1 %1$d</string>
-    <string name="rodape_versao">Bolão F1 · versão %1$s · build %2$d</string>
+    <string name="voltar">Voltar</string>
+    <string name="cancelar">Cancelar</string>
 
     <!-- Abas -->
     <string name="aba_ranking">Ranking</string>
     <string name="aba_corridas">Corridas</string>
     <string name="aba_palpites">Palpites</string>
+    <string name="aba_enviar">Enviar</string>
 
     <!-- Estado dos dados -->
     <string name="atualizado">Atualizado %1$s</string>
@@ -43,4 +45,35 @@
     <string name="sem_rodadas">Nenhuma rodada pontuada ainda.</string>
     <string name="bonus_com_real">Piloto da rodada: chutou P%1$d, foi P%2$d · +%3$d</string>
     <string name="bonus_sem_real">Piloto da rodada: chutou P%1$d, sem posição · +%2$d</string>
+
+    <!-- Enviar palpite -->
+    <string name="envio_nao_configurado">Para enviar palpites, configure antes a URL e a chave de envio.</string>
+    <string name="abrir_configuracoes">Abrir configurações</string>
+    <string name="envio_texto">Texto do palpite</string>
+    <string name="envio_texto_dica">Cole aqui a mensagem do WhatsApp</string>
+    <string name="envio_rodada">Rodada (opcional)</string>
+    <string name="envio_rodada_dica">Em branco: o bolão descobre a rodada pela mensagem.</string>
+    <string name="envio_rodada_invalida">Rodada de 1 a %1$d.</string>
+    <string name="envio_botao">Enviar palpite</string>
+    <string name="envio_confirmar_titulo">Enviar este palpite?</string>
+    <string name="envio_confirmar_texto">Ele vai para o bolão como se fosse enviado pelo Forms.</string>
+    <string name="envio_confirmar_sim">Enviar</string>
+    <string name="envio_ok">Palpite enviado! O site atualiza sozinho depois que o resultado do quali sair.</string>
+    <string name="envio_recusado">Envio recusado: %1$s</string>
+    <string name="envio_falha_rede">Sem conexão. O palpite pode não ter chegado: confira no site ou na aba Actions do GitHub antes de reenviar.</string>
+    <string name="envio_resposta_inesperada">Resposta inesperada do Apps Script. Confira a URL nas configurações e, antes de reenviar, veja se o palpite entrou.</string>
+
+    <!-- Configurações -->
+    <string name="config_titulo">Configurações</string>
+    <string name="config_envio_titulo">Envio de palpites</string>
+    <string name="config_envio_explicacao">URL do app da web do Apps Script (termina em /exec) e a chave de envio (APP_CHAVE). Ficam só neste celular. Sem elas, o app serve só para consulta.</string>
+    <string name="config_url">URL do envio</string>
+    <string name="config_url_invalida">Precisa ser um endereço https.</string>
+    <string name="config_chave">Chave de envio</string>
+    <string name="mostrar">Mostrar</string>
+    <string name="ocultar">Ocultar</string>
+    <string name="salvar">Salvar</string>
+    <string name="config_salvo">Salvo.</string>
+    <string name="config_sobre">Sobre</string>
+    <string name="config_versao">Versão %1$s · build %2$d</string>
 </resources>

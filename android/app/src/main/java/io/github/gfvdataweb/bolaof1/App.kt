@@ -2,7 +2,13 @@ package io.github.gfvdataweb.bolaof1
 
 import android.app.Application
 import android.content.Context
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import androidx.datastore.preferences.preferencesDataStoreFile
 import io.github.gfvdataweb.bolaof1.data.CacheDeArquivos
+import io.github.gfvdataweb.bolaof1.data.Configuracoes
+import io.github.gfvdataweb.bolaof1.data.ConfiguracoesNoAparelho
+import io.github.gfvdataweb.bolaof1.data.EnviaPalpite
+import io.github.gfvdataweb.bolaof1.data.EnvioPeloAppsScript
 import io.github.gfvdataweb.bolaof1.data.FonteRemota
 import io.github.gfvdataweb.bolaof1.data.TemporadaRepositorio
 import okhttp3.HttpUrl
@@ -25,6 +31,8 @@ class AppContainer(
     contexto: Context,
     urlDosDados: HttpUrl = Enderecos.DADOS_DO_SITE.toHttpUrl(),
 ) {
+    private val contextoDoApp = contexto.applicationContext
+
     val clienteHttp: OkHttpClient = OkHttpClient.Builder()
         .connectTimeout(15, TimeUnit.SECONDS)
         .readTimeout(30, TimeUnit.SECONDS)
@@ -34,6 +42,15 @@ class AppContainer(
         fonte = FonteRemota(clienteHttp, urlDosDados),
         cache = CacheDeArquivos(File(contexto.filesDir, "dados-do-site")),
     )
+
+    /** URL e chave do envio, guardadas no aparelho (criado só quando usado: um DataStore por arquivo). */
+    val configuracoes: Configuracoes by lazy {
+        ConfiguracoesNoAparelho(
+            PreferenceDataStoreFactory.create { contextoDoApp.preferencesDataStoreFile("configuracoes") },
+        )
+    }
+
+    val envio: EnviaPalpite = EnvioPeloAppsScript(clienteHttp)
 }
 
 /** Os testes trocam o contêiner (ex.: site local) sobrescrevendo [criarContainer]. */
