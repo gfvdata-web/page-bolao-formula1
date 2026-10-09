@@ -44,6 +44,7 @@
       <button class="subaba" data-subaba="geral" role="tab" aria-selected="true">Geral</button>
       <button class="subaba" data-subaba="corridas" role="tab" aria-selected="false">Corridas</button>
       <button class="subaba" data-subaba="palpites" role="tab" aria-selected="false">Palpites</button>
+      <button class="subaba" data-subaba="pontoextra" role="tab" aria-selected="false">Ponto extra</button>
       <button class="subaba" data-subaba="simulador" role="tab" aria-selected="false">Simulador</button>
       <button class="subaba" data-subaba="regras" role="tab" aria-selected="false" hidden>Regras</button>
     </nav>
@@ -83,6 +84,11 @@
           <button type="button" class="chamada" data-ir-aba="ranking" data-ir-subaba="palpites">
             <span class="chamada__icone" aria-hidden="true">📋</span>
             <span class="chamada__texto"><strong>Palpites</strong><span>Veja o histórico de palpites de cada jogador que competiu</span></span>
+            <span class="chamada__seta" aria-hidden="true">›</span>
+          </button>
+          <button type="button" class="chamada" data-ir-aba="ranking" data-ir-subaba="pontoextra">
+            <span class="chamada__icone" aria-hidden="true">⭐</span>
+            <span class="chamada__texto"><strong>Ponto extra</strong><span>Quantas vezes cada piloto foi o da rodada e quem cravou a posição dele</span></span>
             <span class="chamada__seta" aria-hidden="true">›</span>
           </button>
           <button type="button" class="chamada" data-ir-aba="ranking" data-ir-subaba="simulador">
@@ -175,6 +181,12 @@
         </div>
       </div>
       <div id="temporada-matriz-container" class="temporada-matriz-container"></div>
+    </div>
+
+    <div id="subsecao-ranking-pontoextra" class="subsecao" hidden role="tabpanel">
+      <h2 class="subsecao-titulo">Ponto extra — piloto da rodada</h2>
+      <div id="pontoextra-status" class="status"></div>
+      <div id="pontoextra-container"></div>
     </div>
 
     <div id="subsecao-ranking-simulador" class="subsecao" hidden role="tabpanel">

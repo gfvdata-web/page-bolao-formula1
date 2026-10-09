@@ -3936,6 +3936,252 @@ async function renderPaginaPiloto(codigo, anosSet, resultsPorAno, betsPorAno) {
   container.appendChild(el("div", { class: "rendimento-tabela-wrap" }, [tabela]));
 }
 
+// ---------- Ponto extra (Ranking / Ponto extra) ----------
+
+// Piloto da rodada ao longo da temporada: quantas vezes cada piloto foi o
+// escolhido (com a rodada, a bandeira e onde ele largou) e quem cravou a
+// posição. Só existe em temporadas com bônus (FORMATO.bonus) — nas outras a
+// sub-aba some. Tudo sai de standings/bets/results, sem dado novo.
+function coletarPontoExtra(standings, bets, results) {
+  const rodadas = (standings.rounds || [])
+    .filter((r) => r.bonus_driver)
+    .slice()
+    .sort((a, b) => a.round - b.round)
+    .map((r) => {
+      const ordem = results?.rounds?.[String(r.round)]?.order || [];
+      const idx = ordem.indexOf(r.bonus_driver);
+      return { ...r, realPos: idx >= 0 ? idx + 1 : null, palpites: 0, acertos: [] };
+    });
+  const porRound = new Map(rodadas.map((r) => [r.round, r]));
+
+  const jogadores = new Map(); // player_id -> {id, name, palpites, acertos[], trave, pontos}
+  for (const jogador of Object.values(bets.players)) {
+    for (const rd of Object.values(jogador.rounds)) {
+      const rodada = porRound.get(rd.round);
+      if (!rodada || rd.bonus_guess == null) continue;
+      if (!jogadores.has(jogador.player_id)) {
+        jogadores.set(jogador.player_id, {
+          id: jogador.player_id, name: jogador.name, palpites: 0, acertos: [], trave: 0, pontos: 0,
+        });
+      }
+      const j = jogadores.get(jogador.player_id);
+      j.palpites++;
+      rodada.palpites++;
+      const real = rd.bonus_real_pos ?? rodada.realPos;
+      if (rd.bonus_points > 0) {
+        j.acertos.push({ rodada, pos: rd.bonus_guess });
+        j.pontos += rd.bonus_points;
+        rodada.acertos.push(j.name);
+      } else if (real != null && Math.abs(Number(rd.bonus_guess) - real) === 1) {
+        j.trave++;
+      }
+    }
+  }
+
+  const porPiloto = new Map(); // cod -> [rodadas]
+  for (const r of rodadas) {
+    if (!porPiloto.has(r.bonus_driver)) porPiloto.set(r.bonus_driver, []);
+    porPiloto.get(r.bonus_driver).push(r);
+  }
+  return { rodadas, jogadores, porPiloto };
+}
+
+function pePercentual(parte, todo) {
+  return todo ? `${Math.round((parte / todo) * 100)}%` : "—";
+}
+
+function peBandeira(rodada) {
+  const info = CIRCUITOS[rodada.circuit];
+  return info?.iso
+    ? el("img", { class: "pe-bandeira", src: `./flags/${info.iso}.svg`, alt: "", loading: "lazy", "aria-hidden": "true" })
+    : el("span", { class: "pe-bandeira", "aria-hidden": "true" }, ["🏁"]);
+}
+
+function peTile(valor, rotulo, extra) {
+  return el("div", { class: "pe-tile" }, [
+    el("span", { class: "pe-tile__valor" }, [valor]),
+    el("span", { class: "pe-tile__rotulo" }, [rotulo]),
+    extra ? el("span", { class: "pe-tile__extra" }, [extra]) : null,
+  ]);
+}
+
+// Um "bloco" por rodada em que o piloto foi o escolhido: bandeira, rodada,
+// onde ele largou e, se alguém cravou, quantos.
+function peBlocoRodada(r) {
+  const n = r.acertos.length;
+  const pais = CIRCUITOS[r.circuit]?.pais || r.race;
+  const titulo =
+    `R${r.round} · ${r.race} (${pais})\n${r.bonus_driver} largou ${r.realPos ? `P${r.realPos}` : "sem posição"}` +
+    `\n${n ? `${n} de ${r.palpites} cravaram: ${r.acertos.join(", ")}` : `ninguém cravou (${r.palpites} palpites)`}`;
+  return el("span", { class: "pe-rodada" + (n ? " pe-rodada--acerto" : ""), title: titulo }, [
+    peBandeira(r),
+    el("span", { class: "pe-rodada__info" }, [
+      el("strong", {}, [`R${r.round}`]),
+      el("span", {}, [r.realPos ? `P${r.realPos}` : "—"]),
+    ]),
+    n ? el("span", { class: "pe-rodada__acertos", "aria-label": `${n} acertos` }, [String(n)]) : null,
+  ]);
+}
+
+function renderPontoExtra(standings, bets, results) {
+  const container = document.getElementById("pontoextra-container");
+  const status = document.getElementById("pontoextra-status");
+  if (!container) return;
+  const { rodadas, jogadores, porPiloto } = coletarPontoExtra(standings, bets, results);
+  if (!rodadas.length) {
+    status.textContent = "Nenhuma rodada com piloto da rodada ainda.";
+    container.replaceChildren();
+    return;
+  }
+  status.hidden = true;
+
+  const bp = FORMATO.bonus_points;
+  const totalPalpites = rodadas.reduce((s, r) => s + r.palpites, 0);
+  const totalAcertos = rodadas.reduce((s, r) => s + r.acertos.length, 0);
+  const pilotos = [...porPiloto.entries()].sort(
+    (a, b) => b[1].length - a[1].length || a[0].localeCompare(b[0])
+  );
+  const maxVezes = pilotos[0][1].length;
+  const maisEscolhidos = pilotos.filter(([, rs]) => rs.length === maxVezes).map(([cod]) => cod);
+
+  // Resumo
+  const resumo = el("div", { class: "pe-tiles" }, [
+    peTile(String(rodadas.length), rodadas.length === 1 ? "rodada" : "rodadas"),
+    peTile(String(porPiloto.size), "pilotos diferentes"),
+    peTile(
+      String(totalAcertos),
+      totalAcertos === 1 ? "acerto" : "acertos",
+      `${pePercentual(totalAcertos, totalPalpites)} dos ${totalPalpites} palpites`
+    ),
+    maxVezes === 1
+      ? peTile("1×", "cada piloto", "ninguém se repetiu")
+      : peTile(
+          `${maxVezes}×`,
+          maisEscolhidos.length > 1 ? "mais escolhidos" : "mais escolhido",
+          maisEscolhidos.length > 4 ? `${maisEscolhidos.length} pilotos empatados` : maisEscolhidos.join(" · ")
+        ),
+  ]);
+
+  // Quantas vezes cada piloto foi o escolhido
+  const lista = el(
+    "div",
+    { class: "pe-pilotos" },
+    pilotos.map(([cod, rs]) => {
+      const equipe = equipePilotoNoAno(cod, TEMPORADA);
+      return el("div", { class: "pe-piloto", style: `--cor-equipe:${corPiloto(cod)}` }, [
+        el("div", { class: "pe-piloto__nome" }, [
+          el("span", { class: "pe-piloto__cod" }, [cod]),
+          equipe ? el("span", { class: "pe-piloto__equipe" }, [equipe]) : null,
+        ]),
+        el("span", { class: "pe-piloto__qtd" }, [`${rs.length}×`]),
+        el("div", { class: "pe-piloto__rodadas" }, rs.map(peBlocoRodada)),
+      ]);
+    })
+  );
+  const cardPilotos = el("div", { class: "pe-card" }, [
+    el("h3", { class: "temporada-grafico-titulo" }, ["Quantas vezes cada piloto foi o da rodada"]),
+    el("p", { class: "pe-card__nota" }, [
+      "Cada bloco é uma rodada: bandeira, número da rodada e onde o piloto largou. O selo ",
+      el("span", { class: "pe-legenda-acerto" }, ["N"]),
+      " conta quantos jogadores cravaram a posição.",
+    ]),
+    lista,
+  ]);
+
+  // Como os jogadores pontuaram
+  const ordenados = [...jogadores.values()].sort(
+    (a, b) => b.pontos - a.pontos || a.id.localeCompare(b.id)
+  );
+  const pontuaram = ordenados.filter((j) => j.acertos.length);
+  const zerados = ordenados.filter((j) => !j.acertos.length);
+  const semAcerto = rodadas.filter((r) => !r.acertos.length).length;
+  const maisAcertada = rodadas
+    .filter((r) => r.acertos.length)
+    .sort((a, b) => b.acertos.length - a.acertos.length || a.round - b.round)[0];
+  const pilotosAcertados = new Set(pontuaram.flatMap((j) => j.acertos.map((a) => a.rodada.bonus_driver)));
+
+  const frases = [
+    el("p", {}, [
+      "Foram ",
+      el("strong", {}, [`${totalAcertos} ${totalAcertos === 1 ? "acerto" : "acertos"}`]),
+      ` em ${totalPalpites} palpites (${pePercentual(totalAcertos, totalPalpites)}), `,
+      `de ${pontuaram.length} ${pontuaram.length === 1 ? "jogador" : "jogadores"}`,
+      pilotosAcertados.size ? ` em ${pilotosAcertados.size} ${pilotosAcertados.size === 1 ? "piloto" : "pilotos"}` : "",
+      `. Cada acerto vale ${bp} ${bp === 1 ? "ponto" : "pontos"}.`,
+    ]),
+  ];
+  if (pontuaram.length) {
+    const lider = pontuaram.filter((j) => j.pontos === pontuaram[0].pontos);
+    frases.push(
+      el("p", {}, [
+        lider.length > 1 ? "Mais acertos: " : "Quem mais acertou: ",
+        el("strong", {}, [lider.map((j) => j.name).join(", ")]),
+        ` (${lider[0].acertos.length}).`,
+        semAcerto ? ` Em ${semAcerto} de ${rodadas.length} rodadas ninguém cravou.` : " Toda rodada teve pelo menos um acerto.",
+      ])
+    );
+  }
+  if (maisAcertada && maisAcertada.acertos.length > 1) {
+    frases.push(
+      el("p", {}, [
+        "Rodada mais certeira: ",
+        el("strong", {}, [`R${maisAcertada.round} ${maisAcertada.race}`]),
+        ` — ${maisAcertada.bonus_driver} em ${maisAcertada.realPos ? `P${maisAcertada.realPos}` : "?"}, `,
+        `${maisAcertada.acertos.length} de ${maisAcertada.palpites} cravaram.`,
+      ])
+    );
+  }
+
+  const cardsJogadores = el(
+    "div",
+    { class: "pe-jogadores" },
+    pontuaram.map((j) =>
+      el("div", { class: "pe-jogador" }, [
+        el("div", { class: "pe-jogador__topo" }, [
+          el("span", { class: "pe-jogador__nome" }, [j.name]),
+          el("span", { class: "ponto-badge ponto-2" }, [`+${j.pontos}`]),
+        ]),
+        el("div", { class: "pe-jogador__meta" }, [
+          `${j.acertos.length} de ${j.palpites} palpites (${pePercentual(j.acertos.length, j.palpites)})`,
+          j.trave ? ` · ${j.trave} na trave (±1)` : "",
+        ]),
+        el(
+          "div",
+          { class: "pe-jogador__acertos" },
+          j.acertos.map(({ rodada, pos }) =>
+            el(
+              "span",
+              {
+                class: "pe-acerto",
+                style: `--cor-equipe:${corPiloto(rodada.bonus_driver)}`,
+                title: `R${rodada.round} · ${rodada.race}: ${rodada.bonus_driver} em P${pos}`,
+              },
+              [peBandeira(rodada), el("strong", {}, [rodada.bonus_driver]), el("span", {}, [`P${pos}`])]
+            )
+          )
+        ),
+      ])
+    )
+  );
+
+  const cardJogadores = el("div", { class: "pe-card" }, [
+    el("h3", { class: "temporada-grafico-titulo" }, ["Como os jogadores pontuaram"]),
+    el("div", { class: "pe-texto" }, frases),
+    pontuaram.length ? cardsJogadores : null,
+    zerados.length
+      ? el("p", { class: "pe-zerados" }, [
+          el("strong", {}, ["Sem acerto: "]),
+          zerados
+            .map((j) => `${j.name} (${j.palpites} ${j.palpites === 1 ? "palpite" : "palpites"}${j.trave ? `, ${j.trave} na trave` : ""})`)
+            .join(" · "),
+        ])
+      : null,
+    el("p", { class: "pe-card__nota" }, ["Na trave = errou a posição do piloto por um lugar."]),
+  ]);
+
+  container.replaceChildren(resumo, cardPilotos, cardJogadores);
+}
+
 // ---------- Abas ----------
 
 // Chart.js não recupera bem de ser inicializado num canvas ainda escondido
@@ -4042,6 +4288,7 @@ function configurarSubAbasRanking() {
     geral: document.getElementById("subsecao-ranking-geral"),
     palpites: document.getElementById("subsecao-ranking-palpites"),
     corridas: document.getElementById("subsecao-ranking-corridas"),
+    pontoextra: document.getElementById("subsecao-ranking-pontoextra"),
     simulador: document.getElementById("subsecao-ranking-simulador"),
     regras: document.getElementById("subsecao-ranking-regras"),
   };
@@ -4516,6 +4763,10 @@ async function main() {
     const standings = await carregarJson(caminhoDados("standings"));
     FORMATO = standings.format || FORMATO;
     aplicarModoHistorico();
+    // Sub-aba "Ponto extra" só existe em temporada com piloto da rodada.
+    if (!FORMATO.bonus) {
+      document.querySelector('#secao-ranking button.subaba[data-subaba="pontoextra"]').hidden = true;
+    }
     configurarRecolherCorrida();
     configurarChamadas();
     renderRegras();
@@ -4580,6 +4831,8 @@ async function main() {
       renderPreferenciaPiloto(selectPreferencia.value, bets, results);
     });
     renderPreferenciaPiloto("todos", bets, results);
+
+    if (FORMATO.bonus) renderPontoExtra(standings, bets, results);
 
     rendimentoBets = bets;
     rendimentoJogadores = ordemJogadores(bets);

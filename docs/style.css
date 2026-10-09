@@ -1099,6 +1099,222 @@ a.chamada { text-decoration: none; }
 }
 
 #subsecao-ranking-palpites .temporada-grafico-wrap { margin-top: 1.4rem; }
+
+/* Ranking / Ponto extra — piloto da rodada na temporada */
+
+.pe-tiles {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.pe-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  padding: 0.75rem 0.85rem;
+  background: var(--bg-card);
+  border-radius: 10px;
+  box-shadow: var(--sombra);
+  border-top: 3px solid var(--acento);
+  min-width: 0;
+}
+
+.pe-tile__valor {
+  font-size: 1.55rem;
+  font-weight: 800;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+.pe-tile__rotulo {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--texto-fraco);
+}
+
+.pe-tile__extra {
+  font-size: 0.75rem;
+  color: var(--texto);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.pe-card {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: var(--bg-card);
+  border-radius: 10px;
+  box-shadow: var(--sombra);
+}
+
+.pe-card .temporada-grafico-titulo { margin-bottom: 0.3rem; }
+
+.pe-card__nota {
+  margin: 0 0 0.7rem;
+  font-size: 0.76rem;
+  color: var(--texto-fraco);
+  line-height: 1.4;
+}
+.pe-card__nota:last-child { margin: 0.8rem 0 0; }
+
+.pe-pilotos { display: flex; flex-direction: column; }
+
+.pe-piloto {
+  display: grid;
+  grid-template-columns: 6.5rem 2.2rem 1fr;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.55rem 0 0.55rem 0.65rem;
+  border-left: 4px solid var(--cor-equipe);
+  border-bottom: 1px solid var(--borda);
+}
+.pe-piloto:last-child { border-bottom: none; }
+
+.pe-piloto__nome { display: flex; flex-direction: column; min-width: 0; }
+.pe-piloto__cod { font-weight: 800; font-size: 0.95rem; letter-spacing: 0.02em; }
+.pe-piloto__equipe {
+  font-size: 0.7rem;
+  color: var(--texto-fraco);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pe-piloto__rodadas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  padding: 0.35rem 0.4rem 0 0;
+}
+
+.pe-piloto__qtd {
+  font-size: 1.15rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.pe-rodada {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-width: 4.3rem;
+  padding: 0.25rem 0.55rem 0.25rem 0.3rem;
+  border-radius: 7px;
+  background: color-mix(in srgb, var(--cor-equipe) 14%, var(--bg-card));
+  border: 1px solid color-mix(in srgb, var(--cor-equipe) 45%, transparent);
+  cursor: help;
+}
+
+.pe-bandeira {
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 1px solid var(--borda);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+}
+
+.pe-rodada__info {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+.pe-rodada__info strong { font-size: 0.72rem; }
+.pe-rodada__info span { font-size: 0.7rem; color: var(--texto-fraco); }
+
+.pe-rodada__acertos,
+.pe-legenda-acerto {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.1rem;
+  height: 1.1rem;
+  padding: 0 0.25rem;
+  border-radius: 999px;
+  background: var(--ok2-bg);
+  color: var(--ok2);
+  border: 1px solid var(--ok2);
+  font-size: 0.66rem;
+  font-weight: 800;
+}
+
+.pe-rodada__acertos {
+  position: absolute;
+  top: -0.45rem;
+  right: -0.4rem;
+}
+
+.pe-texto p {
+  margin: 0.25rem 0;
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.pe-jogadores {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 0.5rem;
+  margin-top: 0.8rem;
+}
+
+.pe-jogador {
+  padding: 0.6rem 0.7rem;
+  border: 1px solid var(--borda);
+  border-radius: 8px;
+  background: var(--bg);
+}
+
+.pe-jogador__topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+.pe-jogador__nome { font-weight: 700; font-size: 0.9rem; }
+.pe-jogador__meta { font-size: 0.74rem; color: var(--texto-fraco); margin-top: 0.1rem; }
+
+.pe-jogador__acertos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-top: 0.5rem;
+}
+
+.pe-acerto {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.15rem 0.5rem 0.15rem 0.2rem;
+  border-radius: 999px;
+  background: var(--bg-card);
+  border: 1px solid color-mix(in srgb, var(--cor-equipe) 55%, var(--borda));
+  font-size: 0.74rem;
+  font-variant-numeric: tabular-nums;
+}
+.pe-acerto .pe-bandeira { width: 1.05rem; height: 1.05rem; }
+.pe-acerto span { color: var(--texto-fraco); }
+
+.pe-zerados {
+  margin: 0.8rem 0 0;
+  font-size: 0.8rem;
+  color: var(--texto-fraco);
+  line-height: 1.45;
+}
+.pe-zerados strong { color: var(--texto); }
+
+@media (max-width: 600px) {
+  .pe-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pe-piloto { grid-template-columns: 4.4rem 2rem 1fr; gap: 0.45rem; }
+}
 .temporada-cards--no-grafico { margin: 0.6rem 0 0.8rem; }
 
 /* Regras de pontuação (Ranking) */

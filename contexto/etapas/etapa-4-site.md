@@ -749,3 +749,20 @@ temporadas — sub-aba "Palpites" no Ranking + card "Explore a temporada".**
   (`#temporada-cards-rodada`, todos ligados no início). Os cards de Corridas
   passam a filtrar só o gráfico de posição —
   `temporadaDesligados = {acumulado, rodada}`, `renderCardsFiltroTemporada`.
+
+**Ajuste posterior (2026-10-09): sub-aba "Ponto extra" no Ranking.**
+- Ordem: **Geral · Corridas · Palpites · Ponto extra · Simulador** (· Regras nas
+  passadas); chamada ⭐ no card "Explore" na mesma posição.
+  `#subsecao-ranking-pontoextra` → `renderPontoExtra(standings, bets, results)`
+  (`coletarPontoExtra` faz as contas). Só front-end, nenhum formato novo.
+- Conteúdo: 4 cards de resumo (rodadas, pilotos diferentes, acertos/% dos
+  palpites, mais escolhido) → "Quantas vezes cada piloto foi o da rodada" (uma
+  linha por piloto, borda na cor da equipe, um bloco por rodada com bandeira,
+  `R<n>` e onde o piloto largou + selo verde com nº de acertos; ordem vezes desc,
+  depois código) → "Como os jogadores pontuaram" (texto curto + card por
+  jogador que acertou: chips piloto/posição/bandeira, % e "na trave" = errou
+  por 1 posição; quem zerou numa linha só).
+- Acerto = `bonus_points > 0` em `bets.json`; palpite conta se `bonus_guess`
+  existe numa rodada com `bonus_driver`. Rodada sem `bonus_driver` (Abu Dhabi
+  2024) fica fora. Temporada sem bônus (`!FORMATO.bonus`, 2021–2023): botão
+  oculto (a chamada some junto via `configurarChamadas`).
