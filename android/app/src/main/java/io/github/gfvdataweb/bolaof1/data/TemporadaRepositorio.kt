@@ -108,21 +108,6 @@ class TemporadaRepositorio(
         temporada to agora
     }
 
-    private fun montar(textos: Map<String, String>): Temporada {
-        val temporadas = json.decodeFromString<Temporadas>(textos.getValue(SEASONS))
-        val ano = temporadas.atual
-        val equipesPorAno = json.decodeFromString<Map<String, EquipesDoAno>>(textos.getValue(EQUIPES))
-        return Temporada(
-            ano = ano,
-            info = temporadas.temporadas.firstOrNull { it.ano == ano },
-            classificacao = json.decodeFromString(textos.getValue("$ano/$STANDINGS")),
-            resultados = json.decodeFromString(textos.getValue("$ano/$RESULTS")),
-            palpites = json.decodeFromString(textos.getValue("$ano/$BETS")),
-            calendario = json.decodeFromString(textos.getValue("$ano/$CALENDAR")),
-            equipes = equipesPorAno[ano.toString()] ?: EquipesDoAno(),
-        )
-    }
-
     companion object {
         /** Campos novos nos JSONs do site não podem quebrar o app. */
         val json = Json { ignoreUnknownKeys = true }
@@ -133,6 +118,22 @@ class TemporadaRepositorio(
         const val RESULTS = "results.json"
         const val BETS = "bets.json"
         const val CALENDAR = "calendar.json"
+
+        /** Lê e confere o conjunto de textos (caminho → JSON) de uma temporada. */
+        internal fun montar(textos: Map<String, String>): Temporada {
+            val temporadas = json.decodeFromString<Temporadas>(textos.getValue(SEASONS))
+            val ano = temporadas.atual
+            val equipesPorAno = json.decodeFromString<Map<String, EquipesDoAno>>(textos.getValue(EQUIPES))
+            return Temporada(
+                ano = ano,
+                info = temporadas.temporadas.firstOrNull { it.ano == ano },
+                classificacao = json.decodeFromString(textos.getValue("$ano/$STANDINGS")),
+                resultados = json.decodeFromString(textos.getValue("$ano/$RESULTS")),
+                palpites = json.decodeFromString(textos.getValue("$ano/$BETS")),
+                calendario = json.decodeFromString(textos.getValue("$ano/$CALENDAR")),
+                equipes = equipesPorAno[ano.toString()] ?: EquipesDoAno(),
+            )
+        }
 
         fun caminhosDoAno(ano: Int) = listOf(STANDINGS, RESULTS, BETS, CALENDAR).map { "$ano/$it" }
     }

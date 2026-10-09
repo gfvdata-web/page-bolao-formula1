@@ -2,7 +2,45 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:locale="pt">
     <!-- Nome no ícone do celular (o debug troca em src/debug). -->
     <string name="app_name">Bolão F1</string>
-    <string name="home_titulo">Bolão F1</string>
-    <string name="home_subtitulo">Palpites do qualifying da F1 entre amigos</string>
-    <string name="home_versao">Versão %1$s · build %2$d</string>
+    <string name="app_titulo">Bolão F1</string>
+    <string name="titulo_com_ano">Bolão F1 %1$d</string>
+    <string name="rodape_versao">Bolão F1 · versão %1$s · build %2$d</string>
+
+    <!-- Abas -->
+    <string name="aba_ranking">Ranking</string>
+    <string name="aba_corridas">Corridas</string>
+    <string name="aba_palpites">Palpites</string>
+
+    <!-- Estado dos dados -->
+    <string name="atualizado">Atualizado %1$s</string>
+    <string name="offline_dados_salvos">Sem conexão com o site · dados salvos %1$s</string>
+    <string name="formato_dados_salvos">O site mudou e o app precisa de atualização · dados salvos %1$s</string>
+    <string name="idade_agora">agora mesmo</string>
+    <string name="idade_minutos">há %1$d min</string>
+    <string name="idade_horas">há %1$d h</string>
+    <string name="idade_data">em %1$s</string>
+    <string name="erro_sem_dados">Não foi possível baixar os dados do site. Confira a internet e tente de novo.</string>
+    <string name="erro_formato">O site publicou dados num formato que esta versão do app não entende. Atualize o app.</string>
+    <string name="tentar_de_novo">Tentar de novo</string>
+
+    <!-- Ranking -->
+    <string name="resumo_corridas">%1$d de %2$d corridas</string>
+    <string name="proximo_quali">Próximo quali: R%1$d %2$s · %3$s</string>
+    <string name="ranking_detalhe">média %1$.1f · %2$d corridas</string>
+    <string name="ranking_compensacao">" · +%1$d compensação"</string>
+    <string name="pontos">%1$d pts</string>
+
+    <!-- Corridas e palpites -->
+    <string name="rodada_titulo">R%1$d · %2$s</string>
+    <string name="rodada_curta">R%1$d</string>
+    <string name="data_sprint">%1$s · sprint</string>
+    <string name="posicao">P%1$d</string>
+    <string name="piloto_da_rodada">Piloto da rodada: %1$s</string>
+    <string name="piloto_da_rodada_pos">Piloto da rodada: %1$s, P%2$d</string>
+    <string name="piloto_da_rodada_sem_pos">Piloto da rodada: %1$s, sem posição</string>
+    <string name="sem_palpite">%1$s (sem palpite)</string>
+    <string name="toque_para_ver_pontos">Toque para ver os pontos</string>
+    <string name="sem_rodadas">Nenhuma rodada pontuada ainda.</string>
+    <string name="bonus_com_real">Piloto da rodada: chutou P%1$d, foi P%2$d · +%3$d</string>
+    <string name="bonus_sem_real">Piloto da rodada: chutou P%1$d, sem posição · +%2$d</string>
 </resources>

@@ -1,5 +1,6 @@
 package io.github.gfvdataweb.bolaof1.data
 
+import io.github.gfvdataweb.bolaof1.apoio.DadosDoSite
 import io.github.gfvdataweb.bolaof1.data.modelo.Calendario
 import io.github.gfvdataweb.bolaof1.data.modelo.Classificacao
 import io.github.gfvdataweb.bolaof1.data.modelo.EquipesDoAno
@@ -11,7 +12,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.io.File
 
 /**
  * Lê os JSONs REAIS de docs/data (os mesmos que o site publica) com os modelos
@@ -81,13 +81,4 @@ class DadosDoSiteTest {
             }
         }
     }
-}
-
-/** Acesso aos JSONs reais de docs/data (pasta passada pelo Gradle). */
-object DadosDoSite {
-    val pasta: File = File(
-        checkNotNull(System.getProperty("bolao.dadosDoSite")) { "Rode pelo Gradle (propriedade bolao.dadosDoSite)" },
-    )
-
-    fun texto(caminho: String): String = File(pasta, caminho).readText()
 }

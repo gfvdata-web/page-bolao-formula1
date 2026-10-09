@@ -1,11 +1,9 @@
 package io.github.gfvdataweb.bolaof1.data
 
+import io.github.gfvdataweb.bolaof1.apoio.DadosDoSite
+import io.github.gfvdataweb.bolaof1.apoio.SiteLocal
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
-import mockwebserver3.Dispatcher
-import mockwebserver3.MockResponse
-import mockwebserver3.MockWebServer
-import mockwebserver3.RecordedRequest
 import okhttp3.OkHttpClient
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -28,29 +26,15 @@ class TemporadaRepositorioTest {
     @get:Rule
     val pasta = TemporaryFolder()
 
-    private val site = MockWebServer()
-
-    /** Troca o conteúdo servido para um caminho (ex.: JSON quebrado). */
-    private val substituicoes = mutableMapOf<String, String>()
-    private var siteForaDoAr = false
+    private val site = SiteLocal()
     private var agora = 1_000_000L
 
     private lateinit var repositorio: TemporadaRepositorio
 
     @Before
     fun prepara() {
-        site.dispatcher = object : Dispatcher() {
-            override fun dispatch(request: RecordedRequest): MockResponse {
-                if (siteForaDoAr) return MockResponse(code = 503)
-                val caminho = request.url.encodedPath.removePrefix("/data/")
-                substituicoes[caminho]?.let { return MockResponse(body = it) }
-                val arquivo = File(DadosDoSite.pasta, caminho)
-                return if (arquivo.isFile) MockResponse(body = arquivo.readText()) else MockResponse(code = 404)
-            }
-        }
-        site.start()
         repositorio = TemporadaRepositorio(
-            fonte = FonteRemota(OkHttpClient(), site.url("/data/")),
+            fonte = FonteRemota(OkHttpClient(), site.urlDosDados),
             cache = CacheDeArquivos(File(pasta.root, "cache")),
             relogio = { agora },
         )
@@ -82,7 +66,7 @@ class TemporadaRepositorioTest {
     @Test
     fun semInternet_mostraOCacheComAvisoDeFalha() = runTest {
         repositorio.observar().toList() // primeiro uso, com internet
-        siteForaDoAr = true
+        site.foraDoAr = true
         agora = 9_000_000L
 
         val estados = repositorio.observar().toList()
@@ -98,7 +82,7 @@ class TemporadaRepositorioTest {
 
     @Test
     fun semInternetESemCache_avisaSemDados() = runTest {
-        siteForaDoAr = true
+        site.foraDoAr = true
         val final = repositorio.observar().toList().last()
         assertNull(final.dados)
         assertEquals(ErroDeDados.FALHA_NO_DOWNLOAD, final.erro)
@@ -107,14 +91,14 @@ class TemporadaRepositorioTest {
     @Test
     fun jsonQuebradoNoSite_naoEstragaOCache() = runTest {
         val primeiro = checkNotNull(repositorio.observar().toList().last().dados)
-        substituicoes["${primeiro.ano}/standings.json"] = "{ isto não é json"
+        site.substituicoes["${primeiro.ano}/standings.json"] = "{ isto não é json"
         agora = 9_000_000L
 
         val comErro = repositorio.observar().toList().last()
         assertEquals(ErroDeDados.FORMATO_INESPERADO, comErro.erro)
         assertEquals(1_000_000L, comErro.atualizadoEm)
 
-        siteForaDoAr = true
+        site.foraDoAr = true
         val doCache = repositorio.observar().toList().first()
         assertEquals(primeiro, doCache.dados)
     }
@@ -123,7 +107,7 @@ class TemporadaRepositorioTest {
     fun campoNovoNoJson_naoQuebraOApp() = runTest {
         val ano = checkNotNull(repositorio.observar().toList().last().dados).ano
         val original = File(DadosDoSite.pasta, "$ano/standings.json").readText()
-        substituicoes["$ano/standings.json"] = original.replaceFirst("{", "{\"campo_que_ainda_nao_existe\": [1, 2],")
+        site.substituicoes["$ano/standings.json"] = original.replaceFirst("{", "{\"campo_que_ainda_nao_existe\": [1, 2],")
 
         val final = repositorio.observar().toList().last()
         assertNull(final.erro)

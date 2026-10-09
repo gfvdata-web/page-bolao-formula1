@@ -5,6 +5,7 @@ import android.content.Context
 import io.github.gfvdataweb.bolaof1.data.CacheDeArquivos
 import io.github.gfvdataweb.bolaof1.data.FonteRemota
 import io.github.gfvdataweb.bolaof1.data.TemporadaRepositorio
+import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.OkHttpClient
 import java.io.File
@@ -20,24 +21,30 @@ object Enderecos {
  * Contêiner de dependências manual (sem Hilt na v1): cria cada peça uma vez e
  * entrega para as telas. Nos testes, as peças são montadas à mão com dublês.
  */
-class AppContainer(contexto: Context) {
+class AppContainer(
+    contexto: Context,
+    urlDosDados: HttpUrl = Enderecos.DADOS_DO_SITE.toHttpUrl(),
+) {
     val clienteHttp: OkHttpClient = OkHttpClient.Builder()
         .connectTimeout(15, TimeUnit.SECONDS)
         .readTimeout(30, TimeUnit.SECONDS)
         .build()
 
     val temporadaRepositorio = TemporadaRepositorio(
-        fonte = FonteRemota(clienteHttp, Enderecos.DADOS_DO_SITE.toHttpUrl()),
+        fonte = FonteRemota(clienteHttp, urlDosDados),
         cache = CacheDeArquivos(File(contexto.filesDir, "dados-do-site")),
     )
 }
 
-class BolaoApp : Application() {
+/** Os testes trocam o contêiner (ex.: site local) sobrescrevendo [criarContainer]. */
+open class BolaoApp : Application() {
     lateinit var container: AppContainer
         private set
 
     override fun onCreate() {
         super.onCreate()
-        container = AppContainer(this)
+        container = criarContainer()
     }
+
+    protected open fun criarContainer(): AppContainer = AppContainer(this)
 }

@@ -81,11 +81,13 @@ jobs:
 
       - name: Resumo
         run: |
+          TESTES=$(cat app/build/test-results/testDebugUnitTest/*.xml | grep -o '<testsuite [^>]*' | grep -o ' tests="[0-9]*"' | grep -o '[0-9]*' | awk '{s+=$1} END {print s+0}')
           {
             echo "### Bolão F1 — APK de debug"
             echo ""
             echo "- Arquivo: \`$APK\`"
             echo "- Versão: \`${ORG_GRADLE_PROJECT_bolaoVersionName}-debug\` · build ${ORG_GRADLE_PROJECT_bolaoVersionCode}"
+            echo "- Testes: **$TESTES passaram** · lint sem avisos"
             echo "- Baixe em **Artifacts**, no fim desta página."
           } >> "$GITHUB_STEP_SUMMARY"
 
