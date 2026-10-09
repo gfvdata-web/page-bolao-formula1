@@ -111,7 +111,7 @@ class TelasTest {
     }
 
     @Test
-    fun configuracoesMostraAVersaoEEscondeAChave() {
+    fun configuracoesMostraAVersaoEAlternaAChave() {
         compose.setContent {
             BolaoF1Theme {
                 ConfiguracoesTela(
@@ -121,8 +121,8 @@ class TelasTest {
             }
         }
         compose.onNodeWithText("Versão 1.2.3 · build 42").assertIsDisplayed()
-        compose.onNodeWithText("segredo").assertDoesNotExist()
+        // A chave começa mascarada (o mascaramento é visual; a semântica guarda o texto).
         compose.onNodeWithText("Mostrar").performClick()
-        compose.onNodeWithText("segredo").assertExists()
+        compose.onNodeWithText("Ocultar").assertIsDisplayed()
     }
 }
