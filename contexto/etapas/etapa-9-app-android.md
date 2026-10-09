@@ -249,6 +249,10 @@ cadastrados. Certificado SHA-256 (público):
 `afa06a9aba9e80c48e76f490ab437a66b61762d29c30592106889f5610319978` — o job
 `publicar` recusa APK assinado por outra chave. Release sem R8 na v1 (o APK
 oficial roda o mesmo código que os testes exercitam).
+**Chave compartilhada (2026-10-08):** o app Android do Painel de Status
+(`gfvdata-web/painel-status`, pasta `android/`, feito no molde deste) assina
+com **este mesmo keystore**; os 4 secrets foram cadastrados também lá. Perder o
+keystore afeta os dois apps. Detalhes do painel: README dele, "App Android".
 
 **9f — aviso de versão:** `VerificadorDeAtualizacao` lê
 `/repos/.../releases?per_page=20` sem token, considera só tags `app-v*` que
