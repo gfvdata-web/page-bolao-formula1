@@ -200,3 +200,70 @@ registra uma conta gratuita de *distribuição limitada* (até 20 aparelhos, sem
 documento nem taxa), cadastrando o `applicationId` e a chave do keystore de
 release, ou se cada pessoa usa o fluxo avançado. Não muda a decisão de
 distribuir por APK fora da Play Store.
+
+## Sub-etapas 9b–9f (2026-10-08)
+
+Feitas em sequência a pedido do usuário, antes de ele validar a 9a no
+celular (validação no aparelho pendente para todas). Ordem real: 9c → 9d →
+9e → 9b → 9f, para a primeira versão oficial já sair com o aviso de versão.
+
+**9c — dados** (`data/`): modelos `kotlinx.serialization` em
+`data/modelo/Modelos.kt` (nomes do JSON em `@SerialName`, todo campo não
+identitário com padrão, `ignoreUnknownKeys`); `FonteRemota` (OkHttp),
+`CacheDeArquivos` (gravação atômica em `filesDir/dados-do-site/`, mesmo
+caminho do site) e `TemporadaRepositorio` (*stale-while-revalidate*). **O
+cache só é trocado quando todos os arquivos chegam e são lidos** — JSON
+quebrado no site nunca apaga o último conjunto bom. Os testes leem os JSONs
+reais de `docs/data` (propriedade `bolao.dadosDoSite` passada pelo Gradle) e
+conferem as contas das regras atuais (total = rodadas + compensação). O
+`android.yml` também roda quando `docs/data/**` muda (nota na etapa-3).
+
+**9d — telas** (`ui/`): `AppBolao` com barra superior (⚙️ Configurações) e
+barra inferior Ranking · Corridas · Palpites · Enviar; navegação type-safe
+(objetos `@Serializable`). Um `TemporadaViewModel` no escopo da Activity
+alimenta as três abas da temporada (um download só). Regras de exibição em
+funções puras (`ui/temporada/Apresentacao.kt`): ordem de jogadores do site
+(pontos desc, `player_id` asc), quem não apostou aparece com o `min_score`
+em itálico "(sem palpite)", cores 2/1/0 iguais às do site, cor de equipe por
+rodada. Linha "Atualizado há X" e aviso de dados salvos quando o site não
+responde; tela de erro com "Tentar de novo"; puxar para atualizar. Textos de
+idade sem `<plurals>` ("há 5 min", "há 3 h", data) para o app ficar em
+português qualquer que seja o idioma do celular.
+
+**9e — envio** (`data/EnvioDePalpite.kt`, `ui/enviar`, `ui/configuracoes`):
+POST `{chave, texto, round?}` para o `doPost`, seguindo o 302 do Google.
+Resultados distintos: enviado · recusado (motivo do script) · falha de rede ·
+resposta inesperada (ex.: página de login quando a implantação não é
+"Qualquer pessoa"); nos dois últimos o app avisa para conferir antes de
+reenviar (o palpite pode ter entrado). Confirmação antes de enviar; rodada
+opcional 1–30. URL (só https) e chave no DataStore do aparelho, nunca no
+APK. A versão instalada fica na seção "Sobre" das Configurações. Lado do
+Apps Script: nota na etapa-6 e `SETUP.md` passo 8.
+
+**9b — release assinado:** keystore PKCS12 (RSA 4096, validade 100 anos,
+alias `bolaof1`) gerado com `openssl` **fora do repositório**, em
+`Documents/BolaoF1-assinatura-app/` na máquina do usuário (com `LEIA-ME.txt`
+das senhas; **backup pendente pelo usuário**). Secrets
+`ANDROID_KEYSTORE_B64`/`_SENHA`/`ANDROID_KEY_ALIAS`/`ANDROID_KEY_SENHA`
+cadastrados. Certificado SHA-256 (público):
+`afa06a9aba9e80c48e76f490ab437a66b61762d29c30592106889f5610319978` — o job
+`publicar` recusa APK assinado por outra chave. Release sem R8 na v1 (o APK
+oficial roda o mesmo código que os testes exercitam).
+
+**9f — aviso de versão:** `VerificadorDeAtualizacao` lê
+`/repos/.../releases?per_page=20` sem token, considera só tags `app-v*` que
+não sejam rascunho/pré-release e acha o build pelo nome do APK
+(`bolao-f1-vX.Y.Z-buildN.apk`, contrato com o `android.yml`). Avisa se o
+build publicado for maior que o instalado; qualquer falha = sem aviso.
+
+**Como publicar uma versão nova (procedimento):**
+1. Commit(s) no `main` com a run do `android.yml` verde.
+2. `git tag -a app-vX.Y.Z -m "…"` no commit e `git push origin app-vX.Y.Z`.
+3. O job `publicar` roda depois de testes e lint, assina, confere a chave e
+   cria o Release. Quem tem o app vê o aviso na próxima abertura.
+- Versão: X.Y.Z segue o tamanho da mudança (Z correção, Y função nova, X
+  mudança grande). O versionCode é o número da run e só cresce.
+
+**Publicadas:** `app-v0.1.0` (build 13, primeira versão oficial) e
+`app-v0.1.1` (mesmo código, só para validar a atualização por cima e o
+aviso de versão no celular).

@@ -73,6 +73,7 @@ também tem o histórico 2021–2025. Em produção (GitHub Pages), operado pelo
 - App Android: build só no Actions (`android.yml`; acompanhar com
   `gh run watch`). Local é opcional (JDK 21 + Android SDK):
   `cd android && ./gradlew testDebugUnitTest lintDebug assembleDebug`.
+  Versão oficial: tag `app-vX.Y.Z` (procedimento em `etapa-9` "Sub-etapas 9b–9f").
 
 ## Estrutura
 
@@ -115,7 +116,7 @@ Todos em `contexto/`. "§" = seção; títulos entre aspas = bloco em negrito no
 | Modo histórico `?ano`, faixa de bandeiras | `etapa-7` "Sub-etapa 2026-09-08d", "Ajustes 2026-09-08g" |
 | Perfis `?jogador` / `?piloto`, "Ir para" | `etapa-7` "Sub-etapa 2026-09-08e" e ajustes; `etapa-4` "bloco \"Ir para\""; `etapa-8` |
 | Navegação `?menu`, `?jogadores`, `?pilotos`, `analise.js` | `etapa-8` |
-| App Android (Kotlin/Compose): arquitetura, envio de palpite via `doPost`, build/assinatura, sub-etapas | `etapa-9`; governança do esqueleto (versões, CI, testes, versionCode): `etapa-9` "Sub-etapa 9a" |
+| App Android (Kotlin/Compose): arquitetura, envio de palpite via `doPost`, build/assinatura, sub-etapas | `etapa-9`; governança do esqueleto (versões, CI, testes, versionCode): `etapa-9` "Sub-etapa 9a"; dados, telas, envio, assinatura, aviso de versão e como publicar: `etapa-9` "Sub-etapas 9b–9f" |
 | Testes: levantamento e plano em lotes | `testes.md` |
 
 ## Regras sob demanda (carregadas sozinhas ao abrir arquivos da área)

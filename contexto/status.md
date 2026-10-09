@@ -30,8 +30,10 @@ para não invadir as etapas vizinhas.
   sub-etapa 2026-09-08d.
 - **Etapa 8:** concluída em 2026-10-03 (v1 revisada e aprovada pelo usuário,
   links das tabelas da temporada para os perfis incluídos).
-- **Etapa 9:** 9a (esqueleto + APK de debug pelo Actions) entregue em
-  2026-10-08; aguardando o usuário validar a instalação no celular. Próxima:
-  9b (keystore, release assinado, Release por tag). Antes dela: decidir sobre
-  a verificação de desenvolvedor do Android (ver "Ponto em aberto" na etapa-9).
+- **Etapa 9:** 9a–9f implementadas em 2026-10-08 (CI verde; `app-v0.1.0` e
+  `app-v0.1.1` publicadas). Falta o usuário: validar no celular (instalar a
+  0.1.0 e atualizar por cima para a 0.1.1), fazer backup do keystore,
+  publicar o `doPost` (SETUP.md passo 8) e testar um envio ponta a ponta, e
+  decidir sobre a verificação de desenvolvedor do Android (ver "Ponto em
+  aberto" na etapa-9). Etapa fica 🟡 até essa validação.
 - Pendências gerais e decisões adiadas: seção 9 de `visao-geral.md`.

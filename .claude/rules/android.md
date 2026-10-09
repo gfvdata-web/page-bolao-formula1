@@ -29,12 +29,20 @@ paths:
 - **`versionCode` = `github.run_number` do `android.yml`**: nunca fixar à mão,
   e **não renomear nem recriar o workflow** (a contagem recomeçaria e as
   atualizações deixariam de instalar por cima).
+- **Versão oficial = tag `app-vX.Y.Z`** num commit com run verde (procedimento
+  na etapa-9). O job `publicar` só aceita APK assinado pela chave oficial
+  (SHA-256 em `android.yml`); nunca trocar a chave nem o nome do APK
+  (`bolao-f1-vX.Y.Z-buildN.apk` é lido pelo aviso de versão do app).
 - **Kotlin embutido do AGP 9:** não aplicar `org.jetbrains.kotlin.android`. O
   CI usa JDK 21 (Robolectric); o bytecode do app é Java 17.
 - Textos de tela em `res/values/strings.xml` (pt-BR), não literais no Kotlin.
 - **Segredos fora do app e do Git:** o PAT nunca entra no app; keystore e
   senhas só nos secrets do repositório (9b); a `APP_CHAVE` é digitada no app,
   não vai no APK (9e).
+- Regras de tela em funções puras testáveis (`ui/temporada/Apresentacao.kt`);
+  telas recebem estado pronto e callbacks (sem buscar dados sozinhas).
+- Testes que precisam de rede usam servidor local (`apoio/SiteLocal`,
+  MockWebServer); o app de teste (`BolaoAppDeTeste`) aponta para ele.
 - JSON do site lido com `ignoreUnknownKeys = true`; os formatos de `docs/data/`
   só mudam de forma aditiva (o app é um segundo consumidor).
 
