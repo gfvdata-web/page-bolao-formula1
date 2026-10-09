@@ -766,3 +766,6 @@ temporadas — sub-aba "Palpites" no Ranking + card "Explore a temporada".**
   existe numa rodada com `bonus_driver`. Rodada sem `bonus_driver` (Abu Dhabi
   2024) fica fora. Temporada sem bônus (`!FORMATO.bonus`, 2021–2023): botão
   oculto (a chamada some junto via `configurarChamadas`).
+- Ajuste (2026-10-09): blocos mostram **P (onde largou) em cima, R embaixo**;
+  pop-ups dos blocos e dos chips de acerto usam `ligarDicaHall` (mesmo visual
+  dos tooltips do Chart.js, instantâneo) — nada de `title` nativo.

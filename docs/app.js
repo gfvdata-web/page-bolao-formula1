@@ -4005,22 +4005,24 @@ function peTile(valor, rotulo, extra) {
   ]);
 }
 
-// Um "bloco" por rodada em que o piloto foi o escolhido: bandeira, rodada,
-// onde ele largou e, se alguém cravou, quantos.
+// Um "bloco" por rodada em que o piloto foi o escolhido: bandeira, onde ele
+// largou, a rodada e, se alguém cravou, quantos. Pop-up = o do Hall of Fame
+// (mesmo visual dos tooltips dos gráficos).
 function peBlocoRodada(r) {
   const n = r.acertos.length;
   const pais = CIRCUITOS[r.circuit]?.pais || r.race;
-  const titulo =
+  const dica =
     `R${r.round} · ${r.race} (${pais})\n${r.bonus_driver} largou ${r.realPos ? `P${r.realPos}` : "sem posição"}` +
-    `\n${n ? `${n} de ${r.palpites} cravaram: ${r.acertos.join(", ")}` : `ninguém cravou (${r.palpites} palpites)`}`;
-  return el("span", { class: "pe-rodada" + (n ? " pe-rodada--acerto" : ""), title: titulo }, [
+    `\n${n ? `${n} de ${r.palpites} cravaram: ${r.acertos.join(", ")}` : `Ninguém cravou (${r.palpites} palpites)`}`;
+  const bloco = el("span", { class: "pe-rodada" + (n ? " pe-rodada--acerto" : "") }, [
     peBandeira(r),
     el("span", { class: "pe-rodada__info" }, [
-      el("strong", {}, [`R${r.round}`]),
-      el("span", {}, [r.realPos ? `P${r.realPos}` : "—"]),
+      el("strong", {}, [r.realPos ? `P${r.realPos}` : "—"]),
+      el("span", {}, [`R${r.round}`]),
     ]),
     n ? el("span", { class: "pe-rodada__acertos", "aria-label": `${n} acertos` }, [String(n)]) : null,
   ]);
+  return ligarDicaHall(bloco, dica);
 }
 
 function renderPontoExtra(standings, bets, results) {
@@ -4081,7 +4083,7 @@ function renderPontoExtra(standings, bets, results) {
   const cardPilotos = el("div", { class: "pe-card" }, [
     el("h3", { class: "temporada-grafico-titulo" }, ["Quantas vezes cada piloto foi o da rodada"]),
     el("p", { class: "pe-card__nota" }, [
-      "Cada bloco é uma rodada: bandeira, número da rodada e onde o piloto largou. O selo ",
+      "Cada bloco é uma rodada: bandeira, onde o piloto largou e o número da rodada. O selo",
       el("span", { class: "pe-legenda-acerto" }, ["N"]),
       " conta quantos jogadores cravaram a posição.",
     ]),
@@ -4149,14 +4151,13 @@ function renderPontoExtra(standings, bets, results) {
           "div",
           { class: "pe-jogador__acertos" },
           j.acertos.map(({ rodada, pos }) =>
-            el(
-              "span",
-              {
-                class: "pe-acerto",
-                style: `--cor-equipe:${corPiloto(rodada.bonus_driver)}`,
-                title: `R${rodada.round} · ${rodada.race}: ${rodada.bonus_driver} em P${pos}`,
-              },
-              [peBandeira(rodada), el("strong", {}, [rodada.bonus_driver]), el("span", {}, [`P${pos}`])]
+            ligarDicaHall(
+              el("span", { class: "pe-acerto", style: `--cor-equipe:${corPiloto(rodada.bonus_driver)}` }, [
+                peBandeira(rodada),
+                el("strong", {}, [rodada.bonus_driver]),
+                el("span", {}, [`P${pos}`]),
+              ]),
+              `R${rodada.round} · ${rodada.race}\n${j.name} cravou ${rodada.bonus_driver} em P${pos}`
             )
           )
         ),
