@@ -70,11 +70,14 @@ enquanto a Jolpica não publica o quali.**
   quando ela foi resolvida pelo cabeçalho.
 - **Workflow:** o passo que commita roda **antes** do verificador (a mensagem
   do WhatsApp fica salva na hora, aconteça o que acontecer). Se a CLI saiu `2`,
-  o passo *Verificador* entra num laço: dorme `INTERVALO_SEGUNDOS` (1800 = 30
-  min), chama `pipeline retry <rodada>` e sai do laço commitando assim que
-  conseguir; até `MAX_TENTATIVAS` (10) → **5 h de vigília** dentro da própria
+  o passo *Verificador* entra num laço: dorme `INTERVALO_SEGUNDOS` (era 1800 = 30
+  min; hoje 300, ver ajuste abaixo), chama `pipeline retry <rodada>` e sai do laço commitando assim que
+  conseguir; até `MAX_TENTATIVAS` (era 10; hoje 60) → **5 h de vigília** dentro da própria
   run disparada pelo Forms (`timeout-minutes: 330`). Esgotou sem resultado →
   `::error::` e job **vermelho de propósito**, para o GitHub mandar e-mail.
+  *Ajuste posterior (2026-10-10):* intervalo reduzido para **300 s (5 min) ×
+  60 tentativas** — mesma vigília de 5 h, mas o resultado entra no site até
+  5 min depois de sair na Jolpica (antes podia demorar até 30 min).
 - **Por que dentro da run e não um `schedule:` (cron):** cron do GitHub atrasa
   10–30 min, pode pular execução e é **desativado após 60 dias** sem atividade
   no repo. Minutos de Actions são gratuitos em repositório público, então

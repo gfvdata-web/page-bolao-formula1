@@ -17,9 +17,9 @@ permissions:
 
 env:
   # Verificador: intervalo entre consultas à Jolpica e quantas vezes tentar
-  # antes de desistir (30 min x 10 = 5 h de vigília depois do envio do Forms).
-  INTERVALO_SEGUNDOS: 1800
-  MAX_TENTATIVAS: 10
+  # antes de desistir (5 min x 60 = 5 h de vigília depois do envio do Forms).
+  INTERVALO_SEGUNDOS: 300
+  MAX_TENTATIVAS: 60
 
 jobs:
   pipeline:
