@@ -56,9 +56,9 @@ Isso torna obrigatória uma **trilha mínima**, mesmo com a migração completa 
 | # | Item | Por quê |
 |---|---|---|
 | a | App lê `https://bolaof1.gfvdata.com/data/` (Cloudflare Pages, mesmo conteúdo de `docs/`) em vez do `github.io` (`Enderecos.DADOS_DO_SITE`, `App.kt`) | O `github.io` some |
-| b | APK publicado fora do GitHub Releases: **R2 com domínio público** (ex.: `apps.gfvdata.com/bolao/…`), enviado pelo `android.yml` com wrangler (token da Cloudflare como secret do repo) | Release de repo privado não baixa sem login |
-| b' | Situação em 2026-10-13: o R2 ainda não está habilitado na conta (erro 10042; quem habilita é o usuário, no painel). Depois disso, a central cria **um bucket compartilhado `apps`**, com o domínio `apps.gfvdata.com` e um prefixo por app (`bolao/`), e repassa o nome e a URL base | (a), (c) e (d) não dependem disso |
-| c | Aviso de versão lendo um **`versao.json`** no mesmo lugar, em vez da API de Releases (`Enderecos.RELEASES`, `Atualizacoes.kt`) | Mesma razão |
+| b | APK publicado fora do GitHub Releases: **KV pelo Worker**, modelo do painel-status (commit `0b1e18c`; skill `apk-distribution`). O `android.yml` confere a assinatura e envia `PUT /api/app/<nome>.apk` (o Worker guarda só os 3 mais novos; limite de 25 MiB por valor no KV) com um token de envio como secret do repo; o app baixa de `bolaof1.gfvdata.com/app/` | Release de repo privado não baixa sem login |
+| b' | **R2 descartado** (decisão fixa do portfólio, 2026-10-13): exige cartão e cobra o excedente. Um plano anterior previa um bucket compartilhado `apps` em `apps.gfvdata.com`; não será feito. O Worker que serve o APK e o `versao.json` é o da trilha mínima e sai com a implementação (precisa do OK do usuário; ver `Cloudfare/CLAUDE.md`) | (a), (c) e (d) fazem parte da mesma trilha |
+| c | Aviso de versão lendo um **`versao.json`** servido pelo mesmo Worker (`bolaof1.gfvdata.com/app/versao.json`, guardado no D1), em vez da API de Releases (`Enderecos.RELEASES`, `Atualizacoes.kt`) | Mesma razão |
 | d | Verificador fora do `sleep` do Actions | Repo privado tem **2.000 min/mês** (somados entre os privados). A vigília de até 5 h gastou ~475 min em 30 dias (só a run de 2026-10-10 ficou 301 min). |
 | e | Painel-status passa a usar token para ler os workflows | Feito pela sessão do painel, não aqui |
 
