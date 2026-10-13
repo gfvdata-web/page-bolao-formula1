@@ -1,5 +1,14 @@
 # TESTING.md — Levantamento de testabilidade (2026-09-14)
 
+> **Estado em 2026-10-13:** `bash scripts/check` roda a suíte inteira (pytest +
+> `node --test` do Apps Script + sintaxe de Python/JS/JSON) sem rede e sem tokens,
+> ~15 s; o `.githooks/pre-commit` o executa antes de cada commit. Entraram
+> `test_site_estatico` (HTML/JS/CSS), `test_dados_publicados` (contrato JSON ↔ JS e
+> `docs/data/` igual ao gerado), `test_regras_temporadas`, `test_jolpica_rede` (rede
+> mockada), `test_automacao` (workflow e scripts do Actions), `test_cli_historico` e
+> `code_gs.test.mjs`. Sem teste: app Android (build só no Actions) e a renderização
+> do front (exige navegador). O inventário "Cobertura:" fica no topo do `scripts/check`.
+>
 > **Estado em 2026-10-03:** `python -m pytest tests/ -q` → **102 passed, 4 subtests**
 > (10 arquivos de teste; entrou `tests/test_equipes.py` na Etapa 8). O restante
 > deste documento é o levantamento de 2026-09-14, mantido como estava. As

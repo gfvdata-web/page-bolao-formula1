@@ -1,0 +1,138 @@
+#!/usr/bin/env bash
+# Checagem do Bolão F1, sem rede, sem tokens e sem navegador.
+#   scripts/check            completo: sintaxe + JSON + toda a suíte (tests/)
+#   scripts/check <arquivo>  rápido: só o que vale para aquele arquivo
+# Silencioso quando passa; sai com 1 e uma mensagem curta quando falha.
+# Chamado pelo hook global (~/.claude/hooks/run-check.sh) após cada edição e
+# pelo .githooks/pre-commit (modo completo) antes de cada commit.
+#
+# Cobertura (cada linha tem teste; ver tests/):
+#  Site (docs/)
+#   - index.html: hrefs/srcs locais, ids únicos, ordem dos scripts ........ test_site_estatico.py
+#   - app.js/analise.js: node --check (aqui) + ids usados existem no HTML ... test_site_estatico.py
+#   - abas (Ranking/Rendimento/Pilotos/Hall) e sub-abas (Geral, Corridas,
+#     Palpites, Ponto extra, Simulador, Regras; Preferência, Rendimento) ... test_site_estatico.py
+#   - rotas ?ano ?jogador ?piloto ?menu ?jogadores ?pilotos + links ......... test_site_estatico.py
+#   - bandeiras (docs/flags) x circuitos dos calendários .................... test_site_estatico.py
+#   - style.css: chaves, tokens var(--x), tema escuro nos dois seletores .... test_site_estatico.py
+#   - JSON lidos pelo JS: standings, bets, results, calendar, seasons,
+#     equipes, hall_of_fame, regras (campos, tipos, coerência) .............. test_dados_publicados.py
+#   - docs/data/ == o que bolao.site gera de data/ (nada defasado) ......... test_dados_publicados.py
+#  Regras e geração de dados (bolao/)
+#   - parser da mensagem do WhatsApp ........................................ test_parser.py
+#   - normalização de pilotos/jogadores ..................................... test_normalize.py
+#   - pontuação 2/1/0 + bônus; formatos por temporada 2021-2026 ............. test_scoring.py, test_regras_temporadas.py
+#   - compensação, desempate, saldo inicial, placar publicado, ranking final  test_site.py, test_regras_temporadas.py
+#   - calendário e resolução de corrida ..................................... test_calendar.py
+#   - equipes/cores por piloto e ano ........................................ test_equipes.py
+#   - Jolpica: build_* com fixtures + fetch_*/CLI com rede mockada .......... test_jolpica.py, test_jolpica_rede.py
+#   - pipeline (run/retry, códigos de saída 0/1/2, --json) .................. test_pipeline.py, test_jolpica_rede.py
+#   - histórico 2021-2025 (WhatsApp, planilhas, conferência) ................ test_whatsapp_import.py, test_historico.py, test_cli_historico.py
+#   - CLIs bolao.cli / bolao.site build / bolao.historico ................... test_cli_historico.py
+#   - data/ (cadastros, resultados, mensagens) .............................. test_cli_historico.py
+#  Automação e integrações
+#   - workflow pipeline.yml + scripts do Actions (registra-estado, commit-push) test_automacao.py
+#   - Apps Script (Forms/app -> repository_dispatch) ......................... code_gs.test.mjs (node --test) + node --check
+#   - este inventário em dia com módulos/páginas/testes; pre-commit e regra no CLAUDE.md  test_inventario.py
+#  Sem teste
+#   - app Android (android/, android.yml) ... (sem teste: build só no Actions; sem JDK local)
+#   - renderização/gráficos/interação do JS . (sem teste: exige navegador; só sintaxe, ids e contrato de dados)
+#   - Google Forms, GitHub Pages, Jolpica real, WhatsApp real ... (sem teste: serviços externos; cobertos por mocks/fixtures)
+cd "$(dirname "$0")/.." || exit 1
+export PYTHONDONTWRITEBYTECODE=1 NODE_OPTIONS="--disable-warning=ExperimentalWarning"
+alvo="$(printf '%s' "${1:-}" | sed 's#\\#/#g')"; alvo="${alvo#"$(pwd -W 2>/dev/null || pwd)/"}"; alvo="${alvo#"$(pwd)/"}"
+falhas=0
+tmp="$(mktemp -d)"; trap 'rm -rf "$tmp"' EXIT
+
+# Roda um comando em silêncio; se falhar, mostra o final da saída.
+rodar() {
+  local rotulo="$1"; shift
+  if ! "$@" >"$tmp/saida" 2>&1; then
+    echo "FALHOU: $rotulo"
+    tail -n 40 "$tmp/saida"
+    falhas=1
+  fi
+}
+
+checar_py() {
+  python -c '
+import ast, sys
+erro = 0
+for f in sys.argv[1:]:
+    try:
+        ast.parse(open(f, encoding="utf-8").read(), f)
+    except SyntaxError as e:
+        print(f"{f}:{e.lineno}: {e.msg}"); erro = 1
+sys.exit(erro)' "$@" || falhas=1
+}
+
+checar_json() {
+  python -c '
+import json, sys
+erro = 0
+for f in sys.argv[1:]:
+    try:
+        json.load(open(f, encoding="utf-8"))
+    except Exception as e:
+        print(f"JSON inválido: {f}: {e}"); erro = 1
+sys.exit(erro)' "$@" || falhas=1
+}
+
+checar_js() {
+  for f in "$@"; do
+    saida="$(node --check "$f" 2>&1)" || { echo "$saida" | head -8; falhas=1; }
+  done
+}
+
+# Code.gs não é .js para o node: confere a sintaxe numa cópia temporária.
+checar_gs() {
+  cp google-apps-script/Code.gs "$tmp/Code.js"
+  saida="$(node --check "$tmp/Code.js" 2>&1)" \
+    || { echo "$saida" | head -8 | sed 's#[^ ]*Code\.js#google-apps-script/Code.gs#'; falhas=1; }
+}
+
+pytest_em() { rodar "pytest $*" python -m pytest -q --tb=short -p no:cacheprovider "$@"; }
+node_test() { rodar "node --test $*" node --test "$@"; }
+
+case "$alvo" in
+  "")
+    checar_py bolao/*.py tests/*.py
+    mapfile -t jsons < <(find data docs/data -name '*.json')
+    checar_json "${jsons[@]}" .claude/launch.json
+    checar_js docs/app.js docs/analise.js
+    checar_gs
+    pytest_em tests
+    node_test tests/code_gs.test.mjs
+    ;;
+  bolao/normalize.py)        checar_py "$alvo"; pytest_em tests/test_normalize.py tests/test_parser.py ;;
+  bolao/parser.py)           checar_py "$alvo"; pytest_em tests/test_parser.py tests/test_whatsapp_import.py tests/test_historico.py tests/test_scoring.py tests/test_site.py ;;
+  bolao/scoring.py)          checar_py "$alvo"; pytest_em tests/test_scoring.py tests/test_regras_temporadas.py tests/test_site.py ;;
+  bolao/formats.py)          checar_py "$alvo"; pytest_em tests/test_regras_temporadas.py tests/test_site.py tests/test_dados_publicados.py ;;
+  bolao/calendar.py)         checar_py "$alvo"; pytest_em tests/test_calendar.py tests/test_pipeline.py ;;
+  bolao/jolpica.py)          checar_py "$alvo"; pytest_em tests/test_jolpica.py tests/test_jolpica_rede.py tests/test_equipes.py ;;
+  bolao/site.py)             checar_py "$alvo"; pytest_em tests/test_site.py tests/test_regras_temporadas.py tests/test_equipes.py tests/test_dados_publicados.py tests/test_pipeline.py tests/test_cli_historico.py ;;
+  bolao/pipeline.py)         checar_py "$alvo"; pytest_em tests/test_pipeline.py tests/test_jolpica_rede.py tests/test_automacao.py ;;
+  bolao/historico.py|bolao/whatsapp_import.py)
+                             checar_py "$alvo"; pytest_em tests/test_historico.py tests/test_whatsapp_import.py tests/test_cli_historico.py ;;
+  bolao/cli.py)              checar_py "$alvo"; pytest_em tests/test_cli_historico.py tests/test_scoring.py ;;
+  bolao/*.py)                checar_py "$alvo"; pytest_em tests ;;
+  tests/test_inventario.py)  checar_py "$alvo"; pytest_em "$alvo" ;;
+  tests/test_*.py)           checar_py "$alvo"; pytest_em "$alvo" tests/test_inventario.py ;;
+  tests/*.py)                checar_py "$alvo"; pytest_em tests ;;
+  tests/*.test.mjs)          checar_js "$alvo"; node_test "$alvo" ;;
+  tests/fixtures/*)          pytest_em tests ;;
+  docs/app.js|docs/analise.js)
+                             checar_js "$alvo"; pytest_em tests/test_site_estatico.py tests/test_dados_publicados.py -k "Campos or Js or Ids or Rotas or Abas" ;;
+  docs/index.html|docs/style.css|docs/flags/*)
+                             pytest_em tests/test_site_estatico.py ;;
+  docs/data/*.json)          checar_json "$alvo"; pytest_em tests/test_dados_publicados.py ;;
+  data/*.json)               checar_json "$alvo"; pytest_em tests/test_dados_publicados.py tests/test_cli_historico.py ;;
+  data/*|contexto/*|historico_wpp/*) : ;;
+  google-apps-script/Code.gs) checar_gs; node_test tests/code_gs.test.mjs ;;
+  .github/workflows/pipeline.yml|.github/scripts/*|scripts/check)
+                             pytest_em tests/test_automacao.py ;;
+  android/*|.github/workflows/android.yml)
+                             : ;;  # (sem teste: build só no Actions)
+  *)                         : ;;
+esac
+exit $falhas

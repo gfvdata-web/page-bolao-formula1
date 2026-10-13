@@ -30,8 +30,11 @@ paths:
   seus helpers); o `app.js` só ganha o roteamento. As abas da temporada atual
   ficam como estão, salvo pedido do usuário.
 - Antes de mudar o gerador Python, confirme se o dado já existe em `docs/data/`.
-- Não há teste automatizado do front: verifique no preview `docs-static`
-  (claro/escuro e largura de celular quando mexer em layout).
+- `tests/test_site_estatico.py` e `tests/test_dados_publicados.py` conferem ids,
+  abas, rotas, bandeiras, tokens de CSS e o contrato dos JSON que o JS lê: **id,
+  aba, rota ou campo de dado novo entra no teste junto**. Não há teste da
+  renderização: verifique no preview `docs-static` (claro/escuro e largura de
+  celular quando mexer em layout).
 
 Detalhes e histórico das telas: mapa "Onde está cada tema" no `CLAUDE.md`
 (`contexto/etapas/etapa-4-site.md`, `etapa-7-historico.md`, `etapa-8-navegacao-analises.md`).

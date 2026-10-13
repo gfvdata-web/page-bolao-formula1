@@ -45,6 +45,12 @@ também tem o histórico 2021–2025. Em produção (GitHub Pages), operado pelo
 - Mudança de status em `contexto/status.md` vai **no mesmo commit** do trabalho.
 - Ao final de cada bloco de trabalho, deixe a árvore **limpa** (tudo commitado).
 - Não commitar segredos nem artefatos (já cobertos pelo `.gitignore`).
+- **Funcionalidade nova ou alterada entra com teste** no `scripts/check`/`tests/`
+  **no mesmo commit** (inventário "Cobertura:" no topo do `scripts/check`: toda
+  aba, JSON, rota ou integração nova ganha uma linha e um teste; o que não dá
+  para testar sem rede/navegador fica marcado "(sem teste: motivo)"). Rodar
+  `bash scripts/check` antes de commitar (o pre-commit faz isso). Se um teste
+  existente falhar, **não** "consertar" a regra de negócio para passar: relatar.
 - **Não fazer `push`** por conta própria — só quando o usuário pedir.
 - Commits feitos pelo Claude terminam com o trailer `Co-Authored-By` que o
   Claude Code indicar na sessão.
@@ -63,7 +69,13 @@ também tem o histórico 2021–2025. Em produção (GitHub Pages), operado pelo
 
 ## Comandos
 
-- `python -m pytest tests/ -q` — testes offline (~1–2 s).
+- `bash scripts/check` — **todos** os testes, offline e sem tokens (~15 s): sintaxe,
+  JSON, `node --check` do site, suíte `tests/` (pytest) e `node --test` do Apps
+  Script. `bash scripts/check <arquivo>` roda só o que vale para o arquivo (é o
+  que o hook de edição chama). O `.githooks/pre-commit` roda o completo e
+  bloqueia o commit se falhar (`git config core.hooksPath .githooks` já está
+  ligado; em clone novo, `bash ~/.claude/hooks/instalar-testes.sh .`).
+- `python -m pytest tests/ -q` — só a parte Python da suíte.
 - `python -m bolao.site build [--season AAAA]` — regenera `docs/data/` a partir de `data/`.
 - `python -m bolao.pipeline run|retry <rodada>` — o que o Actions executa.
 - `python -m bolao.jolpica calendar|drivers|result N|results [--season AAAA]` —
@@ -78,7 +90,11 @@ também tem o histórico 2021–2025. Em produção (GitHub Pages), operado pelo
 ## Estrutura
 
 - `bolao/` — núcleo Python, só stdlib (parser, scoring, jolpica, site, pipeline…).
-- `tests/` — `unittest.TestCase` rodados via pytest; `tests/fixtures/`.
+- `scripts/check` — roda tudo sem rede/tokens (ver "Comandos"); `.githooks/` — pre-commit.
+- `tests/` — `unittest.TestCase` rodados via pytest (+ `code_gs.test.mjs` no
+  `node --test`); `tests/fixtures/`. Cobrem parser, pontuação, geração dos dados,
+  contrato dos JSON ↔ JS, páginas/abas/rotas/ids do site, pipeline com rede
+  mockada, histórico e Apps Script.
 - `data/` — entradas e intermediários por temporada (`data/<ano>/`), versionados.
 - `docs/` — **o site publicado** (GitHub Pages): `index.html`, `app.js`,
   `analise.js`, `style.css`, `flags/`, `data/` (gerado). Não colocar `.md` aqui.
