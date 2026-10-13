@@ -57,6 +57,7 @@ Isso torna obrigatória uma **trilha mínima**, mesmo com a migração completa 
 |---|---|---|
 | a | App lê `https://bolaof1.gfvdata.com/data/` (Cloudflare Pages, mesmo conteúdo de `docs/`) em vez do `github.io` (`Enderecos.DADOS_DO_SITE`, `App.kt`) | O `github.io` some |
 | b | APK publicado fora do GitHub Releases: **R2 com domínio público** (ex.: `apps.gfvdata.com/bolao/…`), enviado pelo `android.yml` com wrangler (token da Cloudflare como secret do repo) | Release de repo privado não baixa sem login |
+| b' | Situação em 2026-10-13: o R2 ainda não está habilitado na conta (erro 10042; quem habilita é o usuário, no painel). Depois disso, a central cria **um bucket compartilhado `apps`**, com o domínio `apps.gfvdata.com` e um prefixo por app (`bolao/`), e repassa o nome e a URL base | (a), (c) e (d) não dependem disso |
 | c | Aviso de versão lendo um **`versao.json`** no mesmo lugar, em vez da API de Releases (`Enderecos.RELEASES`, `Atualizacoes.kt`) | Mesma razão |
 | d | Verificador fora do `sleep` do Actions | Repo privado tem **2.000 min/mês** (somados entre os privados). A vigília de até 5 h gastou ~475 min em 30 dias (só a run de 2026-10-10 ficou 301 min). |
 | e | Painel-status passa a usar token para ler os workflows | Feito pela sessão do painel, não aqui |
