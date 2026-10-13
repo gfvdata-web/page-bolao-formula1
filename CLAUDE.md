@@ -118,6 +118,7 @@ Todos em `contexto/`. "§" = seção; títulos entre aspas = bloco em negrito no
 | Navegação `?menu`, `?jogadores`, `?pilotos`, `analise.js` | `etapa-8` |
 | App Android (Kotlin/Compose): arquitetura, envio de palpite via `doPost`, build/assinatura, sub-etapas | `etapa-9`; governança do esqueleto (versões, CI, testes, versionCode): `etapa-9` "Sub-etapa 9a"; dados, telas, envio, assinatura, aviso de versão e como publicar: `etapa-9` "Sub-etapas 9b–9f" |
 | Testes: levantamento e plano em lotes | `testes.md` |
+| Migração futura para Cloudflare (Workers + D1): avaliação, premissas, plano em fases | `plano-futuro-cloudflare.md` |
 
 ## Regras sob demanda (carregadas sozinhas ao abrir arquivos da área)
 
