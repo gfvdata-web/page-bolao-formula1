@@ -52,6 +52,9 @@ também tem o histórico 2021–2025. Em produção (GitHub Pages), operado pelo
   `bash scripts/check` antes de commitar (o pre-commit faz isso). Se um teste
   existente falhar, **não** "consertar" a regra de negócio para passar: relatar.
 - **Não fazer `push`** por conta própria — só quando o usuário pedir.
+- Deploy: automático no push para `main` (Cloudflare Pages `bolao-formula1`, integração Git →
+  https://bolaof1.gfvdata.com/). Nada a rodar à mão; depois do push (pedido), conferir o site
+  no ar com o agente `site-checker`.
 - Commits feitos pelo Claude terminam com o trailer `Co-Authored-By` que o
   Claude Code indicar na sessão.
 
