@@ -186,6 +186,8 @@ Movido para `contexto/status.md` (status e próximos passos) e
 - **Estatísticas** extras do site (backlog do item 7).
 - **Backend na Cloudflare** (Workers + D1): avaliado e adiado em 2026-10-13,
   com o funcionamento do bolão mantido igual. Ver `plano-futuro-cloudflare.md`.
+  O repo vai virar privado e o GitHub Pages será desligado: a **trilha mínima**
+  (app sem `github.io`/Releases, verificador fora do `sleep`) está no mesmo arquivo.
 
 ## 10. Setup
 

@@ -37,6 +37,47 @@ Com o funcionamento igual, o ganho é pequeno:
 envio, o app consulta o site até a rodada aparecer pontuada e avisa
 "pontuado" ou "aguardando resultado oficial". Não precisa de servidor novo.
 
+## Requisito novo (2026-10-13): repo privado e GitHub Pages desligado
+
+Decisão do usuário, recebida pela sessão central "Sites online: GitHub Pages e
+Cloudflare": `page-bolao-formula1` vira **privado** e o GitHub Pages dele é
+**desligado** (vale também para `painel-status` e `fonte-meios-pagamento`).
+
+**Ordem combinada:**
+1. Este projeto deixa os itens abaixo prontos.
+2. A versão nova do app é instalada nos celulares.
+3. Só então a sessão central desliga o Pages e torna o repo privado.
+
+**Não desligar o Pages nem mudar a visibilidade a partir daqui.** Ao terminar,
+avisar a sessão central.
+
+Isso torna obrigatória uma **trilha mínima**, mesmo com a migração completa adiada:
+
+| # | Item | Por quê |
+|---|---|---|
+| a | App lê `https://bolaof1.gfvdata.com/data/` (Cloudflare Pages, mesmo conteúdo de `docs/`) em vez do `github.io` (`Enderecos.DADOS_DO_SITE`, `App.kt`) | O `github.io` some |
+| b | APK publicado fora do GitHub Releases: **R2 com domínio público** (ex.: `apps.gfvdata.com/bolao/…`), enviado pelo `android.yml` com wrangler (token da Cloudflare como secret do repo) | Release de repo privado não baixa sem login |
+| c | Aviso de versão lendo um **`versao.json`** no mesmo lugar, em vez da API de Releases (`Enderecos.RELEASES`, `Atualizacoes.kt`) | Mesma razão |
+| d | Verificador fora do `sleep` do Actions | Repo privado tem **2.000 min/mês** (somados entre os privados). A vigília de até 5 h gastou ~475 min em 30 dias (só a run de 2026-10-10 ficou 301 min). |
+| e | Painel-status passa a usar token para ler os workflows | Feito pela sessão do painel, não aqui |
+
+- **Atenção (a–c):** a 0.1.1 instalada procura atualização no Releases. Depois
+  que o repo ficar privado, ela não acha mais nada. A versão nova precisa ser
+  **instalada à mão, uma vez, antes da virada**.
+- **Proposta para (d), mantendo Python e o funcionamento:** um Worker pequeno
+  só com Cron, sem D1 nem reescrita.
+  - O pipeline grava a rodada pendente num arquivo publicado pelo site.
+  - O Cron (a cada 5 min) consulta a Jolpica e, quando o quali sai, dispara o
+    `workflow_dispatch` (retry) com um PAT em `wrangler secret`.
+  - O Actions roda então só ~1 min por rodada.
+  - Mexe na regra "verificador re-tenta dentro da própria run"
+    (`.claude/rules/automacao.md`, etapa-5): registrar lá quando for feito.
+  - Alternativa sem Cloudflare: `schedule:` no Actions. Gasta pelo menos 1 min
+    por disparo, então é pior.
+- **Também conferir:** o build do Cloudflare Pages (integração Git) precisa
+  continuar com acesso ao repo depois de privado. As runs do `android.yml`
+  passam a contar minutos.
+
 ## Se for retomado — o que já foi avaliado
 
 **Linguagem: TypeScript no Worker, Python como auditor.**
