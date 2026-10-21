@@ -1,6 +1,7 @@
 package io.github.gfvdataweb.bolaof1.ui
 
 import io.github.gfvdataweb.bolaof1.apoio.TemporadaReal
+import io.github.gfvdataweb.bolaof1.ui.temporada.EstadoDoCartao
 import io.github.gfvdataweb.bolaof1.ui.temporada.cartoesDasCorridas
 import io.github.gfvdataweb.bolaof1.ui.temporada.deveOferecerVoltarParaAtual
 import io.github.gfvdataweb.bolaof1.ui.temporada.linhasDoRanking
@@ -76,6 +77,13 @@ class ApresentacaoTest {
         // Sem dados ainda: vale o pedido do usuário.
         assertTrue(deveOferecerVoltarParaAtual(null, 2025))
         assertFalse(deveOferecerVoltarParaAtual(null, null))
+    }
+
+    @Test
+    fun cartaoDaCorridaAvancaFechadoPontosPalpitesEVolta() {
+        assertEquals(EstadoDoCartao.PONTOS, EstadoDoCartao.FECHADO.proximo())
+        assertEquals(EstadoDoCartao.PALPITES, EstadoDoCartao.PONTOS.proximo())
+        assertEquals(EstadoDoCartao.FECHADO, EstadoDoCartao.PALPITES.proximo())
     }
 
     @Test

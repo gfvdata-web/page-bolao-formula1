@@ -74,6 +74,19 @@ class MainActivityTest {
     }
 
     @Test
+    fun hallDeFameLevaParaORankingDoAnoEscolhido() {
+        esperarTexto(temporada.classificacao.jogadores.first().nome)
+        compose.onNodeWithText("Hall of Fame").performClick()
+        esperarTexto("Temporadas")
+        compose.onNodeWithText("Temporadas").performClick()
+        esperarTexto("2025")
+        compose.onNodeWithText("2025").performClick()
+
+        esperarTexto("Bolão F1 2025")
+        esperarTexto("Voltar a ${temporada.atual}")
+    }
+
+    @Test
     fun trocaParaAAbaCorridas() {
         esperarTexto(temporada.classificacao.jogadores.first().nome)
         compose.onNodeWithText("Corridas").performClick()

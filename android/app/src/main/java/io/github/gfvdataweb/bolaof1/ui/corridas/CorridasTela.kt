@@ -19,10 +19,10 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -34,19 +34,31 @@ import io.github.gfvdataweb.bolaof1.data.Temporada
 import io.github.gfvdataweb.bolaof1.ui.comum.Piloto
 import io.github.gfvdataweb.bolaof1.ui.comum.dataCurta
 import io.github.gfvdataweb.bolaof1.ui.temporada.CartaoCorrida
+import io.github.gfvdataweb.bolaof1.ui.temporada.EstadoDoCartao
 import io.github.gfvdataweb.bolaof1.ui.temporada.cartoesDasCorridas
+import io.github.gfvdataweb.bolaof1.ui.temporada.palpitesDaRodada
 
-/** Aba Corridas: resultado do quali e pontos de cada jogador, por rodada. */
+/** Guarda o estado de cada cartão (rodada → estado) como pares número/ordinal. */
+private val SaverDosEstados = listSaver<MutableState<Map<Int, EstadoDoCartao>>, Int>(
+    save = { estado -> estado.value.flatMap { (numero, valor) -> listOf(numero, valor.ordinal) } },
+    restore = { pares ->
+        mutableStateOf(pares.chunked(2).associate { (numero, ordinal) -> numero to EstadoDoCartao.entries[ordinal] })
+    },
+)
+
+/** Aba Corridas: resultado do quali; o toque mostra os pontos e depois os palpites de cada rodada. */
 @Composable
 fun CorridasTela(temporada: Temporada, modifier: Modifier = Modifier) {
     val cartoes = cartoesDasCorridas(temporada)
-    // A rodada mais recente começa aberta; o toque abre/fecha as outras.
-    var abertas by rememberSaveable { mutableStateOf(listOfNotNull(cartoes.firstOrNull()?.numero)) }
+    // A rodada mais recente começa nos pontos; as outras, fechadas.
+    val estados = rememberSaveable(saver = SaverDosEstados) {
+        mutableStateOf(cartoes.firstOrNull()?.let { mapOf(it.numero to EstadoDoCartao.PONTOS) }.orEmpty())
+    }
     LazyColumn(modifier, contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         items(cartoes, key = { it.numero }) { cartao ->
-            val aberta = cartao.numero in abertas
-            CartaoDaCorrida(cartao, aberta) {
-                abertas = if (aberta) abertas - cartao.numero else abertas + cartao.numero
+            val estado = estados.value[cartao.numero] ?: EstadoDoCartao.FECHADO
+            CartaoDaCorrida(temporada, cartao, estado) {
+                estados.value = estados.value + (cartao.numero to estado.proximo())
             }
         }
     }
@@ -54,7 +66,7 @@ fun CorridasTela(temporada: Temporada, modifier: Modifier = Modifier) {
 
 @OptIn(ExperimentalLayoutApi::class) // FlowRow
 @Composable
-private fun CartaoDaCorrida(cartao: CartaoCorrida, aberta: Boolean, aoTocar: () -> Unit) {
+private fun CartaoDaCorrida(temporada: Temporada, cartao: CartaoCorrida, estado: EstadoDoCartao, aoTocar: () -> Unit) {
     Card(Modifier.fillMaxWidth().clickable(onClick = aoTocar)) {
         Column(Modifier.padding(16.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -92,33 +104,50 @@ private fun CartaoDaCorrida(cartao: CartaoCorrida, aberta: Boolean, aoTocar: () 
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
-            if (aberta) {
-                Spacer(Modifier.height(8.dp))
-                HorizontalDivider(color = MaterialTheme.colorScheme.outline)
-                cartao.pontos.forEach { jogador ->
-                    Row(Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
-                        Text(
-                            if (jogador.compensado) stringResource(R.string.sem_palpite, jogador.nome) else jogador.nome,
-                            style = MaterialTheme.typography.bodyMedium,
-                            fontStyle = if (jogador.compensado) FontStyle.Italic else FontStyle.Normal,
-                            color = if (jogador.compensado) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onSurface,
-                            modifier = Modifier.weight(1f),
-                        )
-                        Text(
-                            stringResource(R.string.pontos, jogador.pontos),
-                            style = MaterialTheme.typography.bodyMedium,
-                            fontWeight = FontWeight.Medium,
-                        )
+            when (estado) {
+                EstadoDoCartao.FECHADO -> Unit
+                EstadoDoCartao.PONTOS -> {
+                    Spacer(Modifier.height(8.dp))
+                    HorizontalDivider(color = MaterialTheme.colorScheme.outline)
+                    cartao.pontos.forEach { jogador ->
+                        Row(Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
+                            Text(
+                                if (jogador.compensado) stringResource(R.string.sem_palpite, jogador.nome) else jogador.nome,
+                                style = MaterialTheme.typography.bodyMedium,
+                                fontStyle = if (jogador.compensado) FontStyle.Italic else FontStyle.Normal,
+                                color = if (jogador.compensado) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onSurface,
+                                modifier = Modifier.weight(1f),
+                            )
+                            Text(
+                                stringResource(R.string.pontos, jogador.pontos),
+                                style = MaterialTheme.typography.bodyMedium,
+                                fontWeight = FontWeight.Medium,
+                            )
+                        }
                     }
                 }
-            } else {
-                Spacer(Modifier.height(4.dp))
-                Text(
-                    stringResource(R.string.toque_para_ver_pontos),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.primary,
-                )
+                EstadoDoCartao.PALPITES -> {
+                    Spacer(Modifier.height(8.dp))
+                    val rodada = palpitesDaRodada(temporada, cartao.numero)
+                    if (rodada != null) {
+                        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            rodada.palpites.forEach { CartaoDoPalpite(it, rodada.temBonus) }
+                        }
+                    }
+                }
             }
+            Spacer(Modifier.height(4.dp))
+            Text(
+                stringResource(
+                    when (estado) {
+                        EstadoDoCartao.FECHADO -> R.string.toque_para_ver_pontos
+                        EstadoDoCartao.PONTOS -> R.string.toque_para_ver_palpites
+                        EstadoDoCartao.PALPITES -> R.string.toque_para_fechar
+                    },
+                ),
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.primary,
+            )
         }
     }
 }

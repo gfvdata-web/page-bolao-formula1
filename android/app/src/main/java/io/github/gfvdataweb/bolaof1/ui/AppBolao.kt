@@ -6,9 +6,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.automirrored.filled.Send
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -44,7 +45,9 @@ import io.github.gfvdataweb.bolaof1.ui.configuracoes.ConfiguracoesViewModel
 import io.github.gfvdataweb.bolaof1.ui.corridas.CorridasTela
 import io.github.gfvdataweb.bolaof1.ui.enviar.EnviarTela
 import io.github.gfvdataweb.bolaof1.ui.enviar.EnviarViewModel
-import io.github.gfvdataweb.bolaof1.ui.palpites.PalpitesTela
+import io.github.gfvdataweb.bolaof1.ui.hall.HallOfFameTela
+import io.github.gfvdataweb.bolaof1.ui.hall.HistoricoViewModel
+import io.github.gfvdataweb.bolaof1.ui.rendimento.RendimentoTela
 import io.github.gfvdataweb.bolaof1.ui.ranking.RankingTela
 import io.github.gfvdataweb.bolaof1.ui.temporada.TemporadaViewModel
 import io.github.gfvdataweb.bolaof1.ui.temporada.deveOferecerVoltarParaAtual
@@ -61,7 +64,10 @@ object RotaRanking
 object RotaCorridas
 
 @Serializable
-object RotaPalpites
+object RotaRendimento
+
+@Serializable
+object RotaHall
 
 @Serializable
 object RotaEnviar
@@ -74,7 +80,8 @@ private data class Aba(val rota: Any, @param:StringRes val rotulo: Int, val icon
 private val ABAS = listOf(
     Aba(RotaRanking, R.string.aba_ranking, Icons.Filled.Star),
     Aba(RotaCorridas, R.string.aba_corridas, Icons.Filled.DateRange),
-    Aba(RotaPalpites, R.string.aba_palpites, Icons.AutoMirrored.Filled.List),
+    Aba(RotaRendimento, R.string.aba_rendimento, Icons.Filled.Check),
+    Aba(RotaHall, R.string.aba_hall, Icons.Filled.Favorite),
     Aba(RotaEnviar, R.string.aba_enviar, Icons.AutoMirrored.Filled.Send),
 )
 
@@ -86,6 +93,9 @@ fun AppBolao(container: AppContainer, versao: String, build: Int) {
     // Escopo da Activity: as três abas da temporada dividem um único download.
     val temporadaViewModel: TemporadaViewModel = viewModel(factory = TemporadaViewModel.fabrica(container.temporadaRepositorio))
     val estado by temporadaViewModel.estado.collectAsStateWithLifecycle()
+    // Também no escopo da Activity: o histórico é baixado uma vez, para a aba Hall of Fame.
+    val historicoViewModel: HistoricoViewModel = viewModel(factory = HistoricoViewModel.fabrica(container.historicoRepositorio))
+    val estadoDoHistorico by historicoViewModel.estado.collectAsStateWithLifecycle()
     val anoEscolhido by temporadaViewModel.anoEscolhido.collectAsStateWithLifecycle()
     val entradaAtual by navegacao.currentBackStackEntryAsState()
     val emConfiguracoes = entradaAtual?.destination?.hasRoute(RotaConfiguracoes::class) == true
@@ -159,8 +169,19 @@ fun AppBolao(container: AppContainer, versao: String, build: Int) {
                 composable<RotaCorridas> {
                     ConteudoComDados(estado, temporadaViewModel::atualizar) { CorridasTela(it) }
                 }
-                composable<RotaPalpites> {
-                    ConteudoComDados(estado, temporadaViewModel::atualizar) { PalpitesTela(it) }
+                composable<RotaRendimento> {
+                    ConteudoComDados(estado, temporadaViewModel::atualizar) { RendimentoTela(it) }
+                }
+                composable<RotaHall> {
+                    ConteudoComDados(estadoDoHistorico, historicoViewModel::atualizar) { historico ->
+                        HallOfFameTela(
+                            historico,
+                            aoAbrirAno = { ano ->
+                                if (ano == historico.atual) temporadaViewModel.voltarParaAtual() else temporadaViewModel.abrirAno(ano)
+                                navegacao.irParaAba(RotaRanking)
+                            },
+                        )
+                    }
                 }
                 composable<RotaEnviar> {
                     val enviar: EnviarViewModel = viewModel(factory = EnviarViewModel.fabrica(container.envio, container.configuracoes))

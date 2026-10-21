@@ -10,6 +10,7 @@ import io.github.gfvdataweb.bolaof1.data.ConfiguracoesNoAparelho
 import io.github.gfvdataweb.bolaof1.data.EnviaPalpite
 import io.github.gfvdataweb.bolaof1.data.EnvioPeloAppsScript
 import io.github.gfvdataweb.bolaof1.data.FonteRemota
+import io.github.gfvdataweb.bolaof1.data.HistoricoRepositorio
 import io.github.gfvdataweb.bolaof1.data.TemporadaRepositorio
 import io.github.gfvdataweb.bolaof1.data.VerificadorDeAtualizacao
 import okhttp3.HttpUrl
@@ -47,10 +48,13 @@ class AppContainer(
         .readTimeout(30, TimeUnit.SECONDS)
         .build()
 
-    val temporadaRepositorio = TemporadaRepositorio(
-        fonte = FonteRemota(clienteHttp, urlDosDados, urlDaReserva),
-        cache = CacheDeArquivos(File(contexto.filesDir, "dados-do-site")),
-    )
+    // A temporada e o histórico leem da mesma fonte e dividem o mesmo cache.
+    private val fonteDosDados = FonteRemota(clienteHttp, urlDosDados, urlDaReserva)
+    private val cacheDosDados = CacheDeArquivos(File(contexto.filesDir, "dados-do-site"))
+
+    val temporadaRepositorio = TemporadaRepositorio(fonteDosDados, cacheDosDados)
+
+    val historicoRepositorio = HistoricoRepositorio(fonteDosDados, cacheDosDados)
 
     /** URL e chave do envio, guardadas no aparelho (criado só quando usado: um DataStore por arquivo). */
     val configuracoes: Configuracoes by lazy {

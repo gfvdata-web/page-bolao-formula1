@@ -2,6 +2,8 @@ package io.github.gfvdataweb.bolaof1.apoio
 
 import io.github.gfvdataweb.bolaof1.AppContainer
 import io.github.gfvdataweb.bolaof1.BolaoApp
+import io.github.gfvdataweb.bolaof1.data.Historico
+import io.github.gfvdataweb.bolaof1.data.HistoricoRepositorio
 import io.github.gfvdataweb.bolaof1.data.Temporada
 import io.github.gfvdataweb.bolaof1.data.TemporadaRepositorio
 import io.github.gfvdataweb.bolaof1.data.modelo.Temporadas
@@ -33,6 +35,17 @@ object TemporadaReal {
         val caminhos = listOf(TemporadaRepositorio.SEASONS, TemporadaRepositorio.EQUIPES) +
             TemporadaRepositorio.caminhosDoAno(ano)
         TemporadaRepositorio.montar(caminhos.associateWith { DadosDoSite.texto(it) })
+    }
+}
+
+/** O histórico (todos os anos + Hall of Fame) montado direto dos arquivos reais (sem rede). */
+object HistoricoReal {
+    val historico: Historico by lazy {
+        val anos = TemporadaRepositorio.json.decodeFromString<Temporadas>(DadosDoSite.texto(TemporadaRepositorio.SEASONS))
+            .temporadas.map { it.ano }
+        val caminhos = listOf(TemporadaRepositorio.SEASONS, HistoricoRepositorio.HALL_OF_FAME) +
+            anos.map { HistoricoRepositorio.caminhoDoRanking(it) }
+        HistoricoRepositorio.montar(caminhos.associateWith { DadosDoSite.texto(it) })
     }
 }
 

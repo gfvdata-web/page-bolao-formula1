@@ -12,7 +12,8 @@
     <!-- Abas -->
     <string name="aba_ranking">Ranking</string>
     <string name="aba_corridas">Corridas</string>
-    <string name="aba_palpites">Palpites</string>
+    <string name="aba_rendimento">Rendimento</string>
+    <string name="aba_hall">Hall of Fame</string>
     <string name="aba_enviar">Enviar</string>
 
     <!-- Estado dos dados -->
@@ -34,19 +35,43 @@
     <string name="ranking_compensacao">" · +%1$d compensação"</string>
     <string name="pontos">%1$d pts</string>
 
-    <!-- Corridas e palpites -->
+    <!-- Corridas (pontos e palpites de cada rodada) -->
     <string name="rodada_titulo">R%1$d · %2$s</string>
-    <string name="rodada_curta">R%1$d</string>
     <string name="data_sprint">%1$s · sprint</string>
     <string name="posicao">P%1$d</string>
-    <string name="piloto_da_rodada">Piloto da rodada: %1$s</string>
     <string name="piloto_da_rodada_pos">Piloto da rodada: %1$s, P%2$d</string>
     <string name="piloto_da_rodada_sem_pos">Piloto da rodada: %1$s, sem posição</string>
     <string name="sem_palpite">%1$s (sem palpite)</string>
     <string name="toque_para_ver_pontos">Toque para ver os pontos</string>
-    <string name="sem_rodadas">Nenhuma rodada pontuada ainda.</string>
+    <string name="toque_para_ver_palpites">Toque para ver os palpites</string>
+    <string name="toque_para_fechar">Toque para fechar</string>
     <string name="bonus_com_real">Piloto da rodada: chutou P%1$d, foi P%2$d · +%3$d</string>
     <string name="bonus_sem_real">Piloto da rodada: chutou P%1$d, sem posição · +%2$d</string>
+
+    <!-- Rendimento -->
+    <string name="rendimento_por_piloto">Por piloto</string>
+    <string name="rendimento_por_jogador">Por jogador</string>
+    <string name="rendimento_explicacao_piloto">Pontos que cada piloto rende por aposta de top %1$d. Filtre os jogadores para comparar com a média geral.</string>
+    <string name="rendimento_explicacao_jogador">Pontos por aposta de cada jogador. Filtre os pilotos para ver só as apostas neles.</string>
+    <string name="rendimento_filtro_todos">Todos</string>
+    <string name="rendimento_sem_selecao">Selecione ao menos um item.</string>
+    <string name="rendimento_sem_apostas">Sem palpites registrados.</string>
+    <string name="rendimento_media">%1$.2f</string>
+    <string name="rendimento_diferenca_acima">▲ %1$.2f</string>
+    <string name="rendimento_diferenca_abaixo">▼ %1$.2f</string>
+    <string name="rendimento_apostas">%1$d apostas</string>
+
+    <!-- Hall of Fame -->
+    <string name="hall_jogadores">Jogadores</string>
+    <string name="hall_temporadas">Temporadas</string>
+    <string name="hall_medalhas">%1$d 🥇  %2$d 🥈  %3$d 🥉</string>
+    <string name="hall_detalhe">%1$d temporadas · %2$d pts · acerto %3$s</string>
+    <string name="hall_acerto">%1$.1f%%</string>
+    <string name="hall_sem_acerto">-</string>
+    <string name="hall_podio">🥇 %1$s  🥈 %2$s  🥉 %3$s</string>
+    <string name="hall_em_andamento">em andamento</string>
+    <string name="hall_numero_jogadores">%1$d jogadores</string>
+    <string name="hall_vazio">Sem dados do histórico ainda.</string>
 
     <!-- Enviar palpite -->
     <string name="envio_nao_configurado">Para enviar palpites, configure antes a URL e a chave de envio.</string>

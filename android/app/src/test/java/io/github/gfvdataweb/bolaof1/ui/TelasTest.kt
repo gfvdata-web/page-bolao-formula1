@@ -2,9 +2,12 @@ package io.github.gfvdataweb.bolaof1.ui
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotEnabled
+import androidx.compose.ui.test.assertDoesNotExist
+import androidx.compose.ui.test.assertExists
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import io.github.gfvdataweb.bolaof1.apoio.HistoricoReal
 import io.github.gfvdataweb.bolaof1.apoio.TemporadaReal
 import io.github.gfvdataweb.bolaof1.data.ErroDeDados
 import io.github.gfvdataweb.bolaof1.data.EstadoDados
@@ -16,8 +19,11 @@ import io.github.gfvdataweb.bolaof1.ui.configuracoes.EstadoDasConfiguracoes
 import io.github.gfvdataweb.bolaof1.ui.corridas.CorridasTela
 import io.github.gfvdataweb.bolaof1.ui.enviar.EnviarTela
 import io.github.gfvdataweb.bolaof1.ui.enviar.EstadoDoEnvio
-import io.github.gfvdataweb.bolaof1.ui.palpites.PalpitesTela
+import io.github.gfvdataweb.bolaof1.ui.hall.HallOfFameTela
 import io.github.gfvdataweb.bolaof1.ui.ranking.RankingTela
+import io.github.gfvdataweb.bolaof1.ui.rendimento.RendimentoTela
+import io.github.gfvdataweb.bolaof1.ui.temporada.linhasPorJogador
+import io.github.gfvdataweb.bolaof1.ui.temporada.linhasPorPiloto
 import io.github.gfvdataweb.bolaof1.ui.temporada.palpitesDaRodada
 import io.github.gfvdataweb.bolaof1.ui.temporada.rodadasPontuadas
 import io.github.gfvdataweb.bolaof1.ui.theme.BolaoF1Theme
@@ -52,10 +58,43 @@ class TelasTest {
     }
 
     @Test
-    fun palpitesMostraQuemMaisPontuouNaRodadaMaisRecente() {
-        compose.setContent { BolaoF1Theme(escuro = false) { PalpitesTela(temporada) } }
+    fun corridaPassaPorPontosPalpitesEFechaACadaToque() {
+        compose.setContent { BolaoF1Theme(escuro = false) { CorridasTela(temporada) } }
+        val ultima = temporada.classificacao.rodadas.maxBy { it.numero }
+        val titulo = "R${ultima.numero} · ${ultima.corrida}"
         val rodada = checkNotNull(palpitesDaRodada(temporada, rodadasPontuadas(temporada).first()))
-        compose.onNodeWithText(rodada.palpites.first().nome).assertIsDisplayed()
+
+        // A rodada mais recente começa nos pontos.
+        compose.onNodeWithText("Toque para ver os palpites").assertExists()
+        compose.onNodeWithText(titulo).performClick()
+
+        compose.onNodeWithText("Toque para fechar").assertExists()
+        compose.onNodeWithText(rodada.palpites.first().nome).assertExists()
+
+        compose.onNodeWithText(titulo).performClick()
+        compose.onNodeWithText("Toque para fechar").assertDoesNotExist()
+        compose.onNodeWithText("Toque para ver os palpites").assertDoesNotExist()
+    }
+
+    @Test
+    fun rendimentoMostraOsPilotosEAlternaParaJogadores() {
+        compose.setContent { BolaoF1Theme(escuro = false) { RendimentoTela(temporada) } }
+        val melhor = linhasPorPiloto(temporada.palpites, null).first()
+        compose.onNodeWithText(melhor.codigo).assertExists()
+
+        compose.onNodeWithText("Por jogador").performClick()
+        compose.onNodeWithText(linhasPorJogador(temporada.palpites, null).first().nome).assertExists()
+    }
+
+    @Test
+    fun hallDeFameAbreOAnoEscolhidoNaListaDeTemporadas() {
+        var aberto: Int? = null
+        compose.setContent {
+            BolaoF1Theme { HallOfFameTela(HistoricoReal.historico, aoAbrirAno = { aberto = it }) }
+        }
+        compose.onNodeWithText("Temporadas").performClick()
+        compose.onNodeWithText("2025").performClick()
+        assertEquals(2025, aberto)
     }
 
     @Test

@@ -76,6 +76,9 @@ data class JogadorClassificado(
     @SerialName("per_round") val pontosPorRodada: Map<String, Int> = emptyMap(),
     @SerialName("compensated_rounds") val rodadasCompensadas: List<Int> = emptyList(),
     @SerialName("compensation_total") val pontosCompensacao: Int = 0,
+    /** 2021: pontos e corridas palpitadas sem detalhe por rodada (saldo das rodadas 1–10). */
+    @SerialName("carry_points") val pontosAcumulados: Int = 0,
+    @SerialName("carry_rounds") val rodadasAcumuladas: Int = 0,
 )
 
 /** `<ano>/results.json`: grid real do quali por rodada. */

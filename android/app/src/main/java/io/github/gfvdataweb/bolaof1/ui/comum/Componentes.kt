@@ -17,6 +17,9 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
@@ -30,22 +33,21 @@ import androidx.compose.ui.unit.dp
 import io.github.gfvdataweb.bolaof1.R
 import io.github.gfvdataweb.bolaof1.data.ErroDeDados
 import io.github.gfvdataweb.bolaof1.data.EstadoDados
-import io.github.gfvdataweb.bolaof1.data.Temporada
 import io.github.gfvdataweb.bolaof1.ui.theme.LocalCoresDosPontos
 import java.time.ZoneId
 
 /**
- * Moldura comum das abas da temporada: carregando, erro sem dados, ou o
+ * Moldura comum das abas com dados do site (temporada, histórico): carregando, erro sem dados, ou o
  * conteúdo com "puxar para atualizar" e a linha de quando os dados são.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ConteudoComDados(
-    estado: EstadoDados<Temporada>,
+fun <T : Any> ConteudoComDados(
+    estado: EstadoDados<T>,
     aoAtualizar: () -> Unit,
     modifier: Modifier = Modifier,
     agora: () -> Long = System::currentTimeMillis,
-    conteudo: @Composable (Temporada) -> Unit,
+    conteudo: @Composable (T) -> Unit,
 ) {
     val temporada = estado.dados
     when {
@@ -86,7 +88,7 @@ private fun SemDados(erro: ErroDeDados?, aoTentarDeNovo: () -> Unit, modifier: M
 }
 
 @Composable
-private fun LinhaDeAtualizacao(estado: EstadoDados<Temporada>, agora: Long) {
+private fun LinhaDeAtualizacao(estado: EstadoDados<*>, agora: Long) {
     val quando = estado.atualizadoEm ?: return
     val idade = when (val idade = idadeDosDados(agora, quando, ZoneId.systemDefault())) {
         Idade.AgoraMesmo -> stringResource(R.string.idade_agora)
@@ -151,5 +153,21 @@ fun corDosPontos(pontos: Int): Color {
         2 -> cores.dois
         1 -> cores.um
         else -> cores.zeroTexto
+    }
+}
+
+/** Alternador de modos no topo de uma tela (ex.: "Por piloto | Por jogador"). */
+@OptIn(ExperimentalMaterial3Api::class) // SegmentedButton, conforme a versão do material3
+@Composable
+fun SeletorDeModo(opcoes: List<String>, selecionado: Int, aoEscolher: (Int) -> Unit, modifier: Modifier = Modifier) {
+    SingleChoiceSegmentedButtonRow(modifier.fillMaxWidth()) {
+        opcoes.forEachIndexed { indice, texto ->
+            SegmentedButton(
+                selected = indice == selecionado,
+                onClick = { aoEscolher(indice) },
+                shape = SegmentedButtonDefaults.itemShape(index = indice, count = opcoes.size),
+                label = { Text(texto) },
+            )
+        }
     }
 }

@@ -16,6 +16,15 @@ import io.github.gfvdataweb.bolaof1.data.modelo.Rodada
 fun deveOferecerVoltarParaAtual(dados: Temporada?, anoEscolhido: Int?): Boolean =
     if (dados != null) dados.ano < dados.atual else anoEscolhido != null
 
+/** Estado de um cartão da aba Corridas: cada toque avança um (FECHADO → PONTOS → PALPITES → FECHADO). */
+enum class EstadoDoCartao {
+    FECHADO,
+    PONTOS,
+    PALPITES;
+
+    fun proximo(): EstadoDoCartao = entries[(ordinal + 1) % entries.size]
+}
+
 data class LinhaRanking(
     val posicao: Int,
     val id: String,
