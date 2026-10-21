@@ -1,18 +1,21 @@
 package io.github.gfvdataweb.bolaof1.ui
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import io.github.gfvdataweb.bolaof1.apoio.HistoricoReal
 import io.github.gfvdataweb.bolaof1.apoio.StatusDoPainel
-import io.github.gfvdataweb.bolaof1.data.PipelineRepositorio
-import io.github.gfvdataweb.bolaof1.ui.enviar.EstadoDoPipeline
-import io.github.gfvdataweb.bolaof1.ui.enviar.SecaoDoPipeline
 import io.github.gfvdataweb.bolaof1.apoio.TemporadaReal
 import io.github.gfvdataweb.bolaof1.data.ErroDeDados
 import io.github.gfvdataweb.bolaof1.data.EstadoDados
+import io.github.gfvdataweb.bolaof1.data.PipelineRepositorio
 import io.github.gfvdataweb.bolaof1.data.Temporada
 import io.github.gfvdataweb.bolaof1.data.VersaoPublicada
 import io.github.gfvdataweb.bolaof1.ui.comum.ConteudoComDados
@@ -21,6 +24,8 @@ import io.github.gfvdataweb.bolaof1.ui.configuracoes.EstadoDasConfiguracoes
 import io.github.gfvdataweb.bolaof1.ui.corridas.CorridasTela
 import io.github.gfvdataweb.bolaof1.ui.enviar.EnviarTela
 import io.github.gfvdataweb.bolaof1.ui.enviar.EstadoDoEnvio
+import io.github.gfvdataweb.bolaof1.ui.enviar.EstadoDoPipeline
+import io.github.gfvdataweb.bolaof1.ui.enviar.SecaoDoPipeline
 import io.github.gfvdataweb.bolaof1.ui.hall.HallOfFameTela
 import io.github.gfvdataweb.bolaof1.ui.ranking.RankingTela
 import io.github.gfvdataweb.bolaof1.ui.rendimento.RendimentoTela
@@ -141,12 +146,17 @@ class TelasTest {
     @Test
     fun pipelineMostraRodadaEtapasEOLinkDaExecucao() {
         val site = PipelineRepositorio.extrairDoBolao(StatusDoPainel.texto)
-        compose.setContent { BolaoF1Theme { SecaoDoPipeline(EstadoDoPipeline(site = site)) } }
+        compose.setContent {
+            BolaoF1Theme {
+                // A seção é mais alta que a tela padrão do Robolectric: rola como na aba Enviar.
+                Column(Modifier.verticalScroll(rememberScrollState())) { SecaoDoPipeline(EstadoDoPipeline(site = site)) }
+            }
+        }
 
         compose.onNodeWithText("Última atualização").assertIsDisplayed()
         compose.onNodeWithText("Rodada 17").assertIsDisplayed()
         compose.onNodeWithText("Palpites lidos e rodada identificada").assertIsDisplayed()
-        compose.onNodeWithText("Ver execução").assertIsDisplayed()
+        compose.onNodeWithText("Ver execução").performScrollTo().assertIsDisplayed()
         compose.onNodeWithText("Não foi possível ver o andamento").assertDoesNotExist()
     }
 
