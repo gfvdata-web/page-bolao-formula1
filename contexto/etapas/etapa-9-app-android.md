@@ -270,7 +270,7 @@ build publicado for maior que o instalado; qualquer falha = sem aviso.
 
 **Publicadas:** `app-v0.1.0` (build 13, primeira versão oficial) e
 `app-v0.1.1` (mesmo código, só para validar a atualização por cima e o
-aviso de versão no celular).
+aviso de versão no celular) e `app-v0.2.0` (build 19, sub-etapa 9g).
 
 ## Sub-etapa 9g — app mais perto do site (2026-10-21)
 

@@ -37,5 +37,6 @@ para não invadir as etapas vizinhas.
   decidir sobre a verificação de desenvolvedor do Android (ver "Ponto em
   aberto" na etapa-9). Etapa fica 🟡 até essa validação.
   9g (2026-10-21, abas Rendimento/Hall of Fame, temporadas antigas, pipeline
-  na aba Enviar) commitada; falta push, run verde e a tag `app-v0.2.0`.
+  na aba Enviar) publicada como `app-v0.2.0` (build 19, run verde); falta
+  validar no celular.
 - Pendências gerais e decisões adiadas: seção 9 de `visao-geral.md`.
