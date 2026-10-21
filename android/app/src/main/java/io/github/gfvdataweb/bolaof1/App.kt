@@ -11,6 +11,7 @@ import io.github.gfvdataweb.bolaof1.data.EnviaPalpite
 import io.github.gfvdataweb.bolaof1.data.EnvioPeloAppsScript
 import io.github.gfvdataweb.bolaof1.data.FonteRemota
 import io.github.gfvdataweb.bolaof1.data.HistoricoRepositorio
+import io.github.gfvdataweb.bolaof1.data.PipelineRepositorio
 import io.github.gfvdataweb.bolaof1.data.TemporadaRepositorio
 import io.github.gfvdataweb.bolaof1.data.VerificadorDeAtualizacao
 import okhttp3.HttpUrl
@@ -27,6 +28,10 @@ object Enderecos {
     /** Mesma pasta no GitHub Pages: reserva se o domínio principal falhar. */
     const val DADOS_DO_SITE_RESERVA = "https://gfvdata-web.github.io/page-bolao-formula1/data/"
 
+    /** Painel de status (andamento do pipeline do bolão); raiz do painel, com reserva no Pages. */
+    const val PAINEL = "https://painel.gfvdata.com/"
+    const val PAINEL_RESERVA = "https://painel-status.pages.dev/"
+
     /** API pública dos Releases (aviso de nova versão, 9f). */
     const val RELEASES = "https://api.github.com/repos/gfvdata-web/page-bolao-formula1/releases?per_page=20"
 }
@@ -40,6 +45,8 @@ class AppContainer(
     urlDosDados: HttpUrl = Enderecos.DADOS_DO_SITE.toHttpUrl(),
     urlDosReleases: HttpUrl = Enderecos.RELEASES.toHttpUrl(),
     urlDaReserva: HttpUrl? = Enderecos.DADOS_DO_SITE_RESERVA.toHttpUrl(),
+    urlDoPainel: HttpUrl = Enderecos.PAINEL.toHttpUrl(),
+    urlDoPainelReserva: HttpUrl? = Enderecos.PAINEL_RESERVA.toHttpUrl(),
 ) {
     private val contextoDoApp = contexto.applicationContext
 
@@ -55,6 +62,8 @@ class AppContainer(
     val temporadaRepositorio = TemporadaRepositorio(fonteDosDados, cacheDosDados)
 
     val historicoRepositorio = HistoricoRepositorio(fonteDosDados, cacheDosDados)
+
+    val pipelineRepositorio = PipelineRepositorio(FonteRemota(clienteHttp, urlDoPainel, urlDoPainelReserva))
 
     /** URL e chave do envio, guardadas no aparelho (criado só quando usado: um DataStore por arquivo). */
     val configuracoes: Configuracoes by lazy {

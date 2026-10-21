@@ -22,12 +22,16 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -38,6 +42,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import io.github.gfvdataweb.bolaof1.AppContainer
+import io.github.gfvdataweb.bolaof1.data.ResultadoDoEnvio
 import io.github.gfvdataweb.bolaof1.R
 import io.github.gfvdataweb.bolaof1.ui.comum.ConteudoComDados
 import io.github.gfvdataweb.bolaof1.ui.configuracoes.ConfiguracoesTela
@@ -45,6 +50,8 @@ import io.github.gfvdataweb.bolaof1.ui.configuracoes.ConfiguracoesViewModel
 import io.github.gfvdataweb.bolaof1.ui.corridas.CorridasTela
 import io.github.gfvdataweb.bolaof1.ui.enviar.EnviarTela
 import io.github.gfvdataweb.bolaof1.ui.enviar.EnviarViewModel
+import io.github.gfvdataweb.bolaof1.ui.enviar.PipelineViewModel
+import io.github.gfvdataweb.bolaof1.ui.enviar.deveContinuarAcompanhando
 import io.github.gfvdataweb.bolaof1.ui.hall.HallOfFameTela
 import io.github.gfvdataweb.bolaof1.ui.hall.HistoricoViewModel
 import io.github.gfvdataweb.bolaof1.ui.rendimento.RendimentoTela
@@ -54,6 +61,7 @@ import io.github.gfvdataweb.bolaof1.ui.temporada.deveOferecerVoltarParaAtual
 import io.github.gfvdataweb.bolaof1.ui.versao.AvisoDeNovaVersao
 import io.github.gfvdataweb.bolaof1.ui.versao.SituacaoDaVersao
 import io.github.gfvdataweb.bolaof1.ui.versao.VersaoViewModel
+import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable
 
 // Rotas da navegação (type-safe: cada tela é um objeto serializável).
@@ -186,11 +194,15 @@ fun AppBolao(container: AppContainer, versao: String, build: Int) {
                 composable<RotaEnviar> {
                     val enviar: EnviarViewModel = viewModel(factory = EnviarViewModel.fabrica(container.envio, container.configuracoes))
                     val estadoDoEnvio by enviar.estado.collectAsStateWithLifecycle()
+                    val pipeline: PipelineViewModel = viewModel(factory = PipelineViewModel.fabrica(container.pipelineRepositorio))
+                    val estadoDoPipeline by pipeline.estado.collectAsStateWithLifecycle()
+                    AcompanharPipeline(pipeline, enviado = estadoDoEnvio.resultado == ResultadoDoEnvio.Enviado)
                     EnviarTela(
                         estado = estadoDoEnvio,
                         aoMudarTexto = enviar::mudarTexto,
                         aoMudarRodada = enviar::mudarRodada,
                         aoEnviar = enviar::enviar,
+                        pipeline = estadoDoPipeline,
                         aoAbrirConfiguracoes = { navegacao.navigate(RotaConfiguracoes) { launchSingleTop = true } },
                     )
                 }
@@ -207,6 +219,33 @@ fun AppBolao(container: AppContainer, versao: String, build: Int) {
                         extras = { SituacaoDaVersao(estadoDaVersao, aoBaixar = { baixarNovaVersao() }) },
                     )
                 }
+            }
+        }
+    }
+}
+
+/** Pausa entre as consultas ao painel enquanto o pipeline está em curso. */
+private const val INTERVALO_DO_PIPELINE_MS = 60_000L
+
+/** Consultas extras depois de um envio com sucesso (o pipeline demora a aparecer como em curso). */
+private const val CONSULTAS_APOS_ENVIO = 5
+
+/**
+ * Consulta o painel ao entrar na aba e logo após um envio com sucesso; depois, a
+ * cada 60 s enquanto o pipeline estiver em curso. Só roda com a tela visível
+ * (a aba na composição e o app em primeiro plano).
+ */
+@Composable
+private fun AcompanharPipeline(pipeline: PipelineViewModel, enviado: Boolean) {
+    val ciclo = LocalLifecycleOwner.current.lifecycle
+    LaunchedEffect(enviado) {
+        ciclo.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            pipeline.atualizar()
+            var extras = if (enviado) CONSULTAS_APOS_ENVIO else 0
+            while (true) {
+                delay(INTERVALO_DO_PIPELINE_MS)
+                if (deveContinuarAcompanhando(pipeline.estado.value.site) || extras > 0) pipeline.atualizar()
+                if (extras > 0) extras--
             }
         }
     }

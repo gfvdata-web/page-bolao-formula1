@@ -90,6 +90,24 @@
     <string name="envio_falha_rede">Sem conexão. O palpite pode não ter chegado: confira no site ou na aba Actions do GitHub antes de reenviar.</string>
     <string name="envio_resposta_inesperada">Resposta inesperada do Apps Script. Confira a URL nas configurações e, antes de reenviar, veja se o palpite entrou.</string>
 
+    <!-- Andamento do pipeline (aba Enviar) -->
+    <string name="pipeline_titulo">Última atualização</string>
+    <string name="pipeline_rodada">Rodada %1$d</string>
+    <string name="pipeline_ver_execucao">Ver execução</string>
+    <string name="pipeline_falha">Não foi possível ver o andamento</string>
+    <string name="etapa_ok">concluída</string>
+    <string name="etapa_andamento">em andamento</string>
+    <string name="etapa_aguardando">aguardando</string>
+    <string name="etapa_erro">falhou</string>
+    <string name="etapa_pendente">não iniciada</string>
+    <string name="etapa_pulado">não se aplica</string>
+    <string name="etapa_quando">%1$s · %2$s</string>
+    <string name="marca_ok" translatable="false">✓</string>
+    <string name="marca_andamento" translatable="false">…</string>
+    <string name="marca_aguardando" translatable="false">⏳</string>
+    <string name="marca_erro" translatable="false">✕</string>
+    <string name="marca_pulado" translatable="false">–</string>
+
     <!-- Configurações -->
     <string name="config_titulo">Configurações</string>
     <string name="config_envio_titulo">Envio de palpites</string>

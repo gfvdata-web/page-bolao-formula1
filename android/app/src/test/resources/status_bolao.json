@@ -1,0 +1,64 @@
+{
+  "meta": {
+    "gerado_em": "2026-10-21T12:00:59.613277+00:00",
+    "descricao": "Status de atualizaÃ§Ã£o de dados e acesso dos sites gfvdata-web"
+  },
+  "sites": [
+    {
+      "slug": "bolao_f1",
+      "nome": "BolÃ£o F1",
+      "rodada_mais_recente": 17,
+      "em_vigilia": false,
+      "ultima_execucao_pipeline": {
+        "id": 38165341232,
+        "evento": "workflow_dispatch",
+        "status": "completed",
+        "conclusao": "success",
+        "criado_em": "2026-10-11T18:48:15Z",
+        "atualizado_em": "2026-10-11T18:48:31Z",
+        "url": "https://github.com/gfvdata-web/page-bolao-formula1/actions/runs/38165341232"
+      },
+      "etapas_pipeline": [
+        {
+          "chave": "forms",
+          "titulo": "Palpites enviados (Google Forms)",
+          "estado": "pulado",
+          "detalhe": "Re-tentativa manual no GitHub â€” nÃ£o houve envio novo pelo Forms.",
+          "quando": "2026-10-11T18:48:15Z"
+        },
+        {
+          "chave": "leitura",
+          "titulo": "Palpites lidos e rodada identificada",
+          "estado": "ok",
+          "detalhe": "Palpites gravados no repositÃ³rio.",
+          "quando": "2026-10-11T18:48:26Z"
+        },
+        {
+          "chave": "resultado",
+          "titulo": "Resultado oficial do quali (Jolpica)",
+          "estado": "ok",
+          "detalhe": "JÃ¡ estava publicado no momento do envio.",
+          "quando": "2026-10-11T18:48:26Z"
+        },
+        {
+          "chave": "pontuacao",
+          "titulo": "PontuaÃ§Ã£o calculada",
+          "estado": "ok",
+          "detalhe": "",
+          "quando": "2026-10-11T18:48:26Z"
+        },
+        {
+          "chave": "pagina",
+          "titulo": "PÃ¡gina atualizada (GitHub Pages)",
+          "estado": "ok",
+          "detalhe": "Placar novo no ar.",
+          "quando": "2026-10-11T18:49:11Z"
+        }
+      ],
+      "site_no_ar": {
+        "ok": true,
+        "status_http": 200
+      }
+    }
+  ]
+}

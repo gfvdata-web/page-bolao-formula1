@@ -173,6 +173,39 @@ data class Equipe(
     val cor: String,
 )
 
+/**
+ * Recorte do `dados/status.json` do painel (painel-status) para o card do Bolão F1
+ * (slug `bolao_f1`): o andamento do pipeline que o envio de palpite dispara.
+ */
+@Serializable
+data class SitePipeline(
+    val slug: String = "",
+    @SerialName("rodada_mais_recente") val rodada: Int? = null,
+    @SerialName("em_vigilia") val emVigilia: Boolean = false,
+    @SerialName("ultima_execucao_pipeline") val execucao: ExecucaoDoPipeline? = null,
+    @SerialName("etapas_pipeline") val etapas: List<EtapaDoPipeline> = emptyList(),
+)
+
+@Serializable
+data class ExecucaoDoPipeline(
+    /** Do GitHub Actions: queued | in_progress | completed. */
+    val status: String? = null,
+    val conclusao: String? = null,
+    @SerialName("criado_em") val criadoEm: String? = null,
+    val url: String? = null,
+)
+
+@Serializable
+data class EtapaDoPipeline(
+    val chave: String = "",
+    val titulo: String = "",
+    /** ok | andamento | aguardando | erro | pendente | pulado */
+    val estado: String = "",
+    val detalhe: String = "",
+    /** ISO-8601 (UTC). */
+    val quando: String? = null,
+)
+
 /** `hall_of_fame.json` (escrito à mão): pódio de cada temporada fechada. */
 @Serializable
 data class HallOfFame(

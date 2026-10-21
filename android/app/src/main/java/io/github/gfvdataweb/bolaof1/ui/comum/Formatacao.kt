@@ -3,6 +3,7 @@ package io.github.gfvdataweb.bolaof1.ui.comum
 import io.github.gfvdataweb.bolaof1.data.modelo.Calendario
 import java.time.Instant
 import java.time.LocalDate
+import java.time.OffsetDateTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -19,6 +20,11 @@ private val QUALI = DateTimeFormatter.ofPattern("EEE dd/MM · HH:mm", PT_BR)
 /** `2026-09-13` → `13/09`; texto inesperado volta como veio. */
 fun dataCurta(isoData: String): String =
     runCatching { LocalDate.parse(isoData).format(DIA_MES) }.getOrDefault(isoData)
+
+/** `2026-10-11T18:48:26Z` → `11/10 15:48` no fuso do celular; null se não der para ler. */
+fun horarioLocal(iso: String?, fuso: ZoneId): String? =
+    iso?.let { runCatching { OffsetDateTime.parse(it).toInstant() }.getOrNull() }
+        ?.atZone(fuso)?.format(DIA_MES_HORA)
 
 /** Idade dos dados exibidos, para a linha "atualizado há…". */
 sealed interface Idade {

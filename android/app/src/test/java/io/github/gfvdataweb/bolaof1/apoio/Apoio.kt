@@ -38,6 +38,11 @@ object TemporadaReal {
     }
 }
 
+/** Recorte real do `dados/status.json` do painel (card do Bolão F1), em `src/test/resources`. */
+object StatusDoPainel {
+    val texto: String by lazy { checkNotNull(StatusDoPainel::class.java.getResource("/status_bolao.json")).readText() }
+}
+
 /** O histórico (todos os anos + Hall of Fame) montado direto dos arquivos reais (sem rede). */
 object HistoricoReal {
     val historico: Historico by lazy {
@@ -63,6 +68,11 @@ class SiteLocal : Closeable {
         dispatcher = object : Dispatcher() {
             override fun dispatch(request: RecordedRequest): MockResponse {
                 if (foraDoAr) return MockResponse(code = 503)
+                if (request.url.encodedPath.startsWith("/painel/")) {
+                    // Painel de status: só o que o teste pôs em `substituicoes` ("painel/dados/status.json").
+                    val chave = request.url.encodedPath.removePrefix("/")
+                    return substituicoes[chave]?.let { MockResponse(body = it) } ?: MockResponse(code = 404)
+                }
                 val caminho = request.url.encodedPath.removePrefix("/data/")
                 substituicoes[caminho]?.let { return MockResponse(body = it) }
                 val arquivo = File(DadosDoSite.pasta, caminho)
@@ -73,6 +83,9 @@ class SiteLocal : Closeable {
     }
 
     val urlDosDados: HttpUrl get() = servidor.url("/data/")
+
+    /** Raiz do painel de status (andamento do pipeline) neste servidor. */
+    val urlDoPainel: HttpUrl get() = servidor.url("/painel/")
 
     /** Sem Releases publicados no site local (responde 404): o app não mostra aviso. */
     val urlDosReleases: HttpUrl get() = servidor.url("/releases")
@@ -88,5 +101,12 @@ object SiteDeTeste {
 /** App usado nos testes Robolectric do app inteiro: lê do site local. */
 class BolaoAppDeTeste : BolaoApp() {
     override fun criarContainer(): AppContainer =
-        AppContainer(this, SiteDeTeste.site.urlDosDados, SiteDeTeste.site.urlDosReleases, urlDaReserva = null)
+        AppContainer(
+            this,
+            SiteDeTeste.site.urlDosDados,
+            SiteDeTeste.site.urlDosReleases,
+            urlDaReserva = null,
+            urlDoPainel = SiteDeTeste.site.urlDoPainel,
+            urlDoPainelReserva = null,
+        )
 }

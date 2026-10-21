@@ -36,4 +36,6 @@ para não invadir as etapas vizinhas.
   publicar o `doPost` (SETUP.md passo 8) e testar um envio ponta a ponta, e
   decidir sobre a verificação de desenvolvedor do Android (ver "Ponto em
   aberto" na etapa-9). Etapa fica 🟡 até essa validação.
+  9g (2026-10-21, abas Rendimento/Hall of Fame, temporadas antigas, pipeline
+  na aba Enviar) commitada; falta push, run verde e a tag `app-v0.2.0`.
 - Pendências gerais e decisões adiadas: seção 9 de `visao-geral.md`.

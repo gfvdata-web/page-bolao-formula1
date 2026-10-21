@@ -8,6 +8,10 @@ import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import io.github.gfvdataweb.bolaof1.apoio.HistoricoReal
+import io.github.gfvdataweb.bolaof1.apoio.StatusDoPainel
+import io.github.gfvdataweb.bolaof1.data.PipelineRepositorio
+import io.github.gfvdataweb.bolaof1.ui.enviar.EstadoDoPipeline
+import io.github.gfvdataweb.bolaof1.ui.enviar.SecaoDoPipeline
 import io.github.gfvdataweb.bolaof1.apoio.TemporadaReal
 import io.github.gfvdataweb.bolaof1.data.ErroDeDados
 import io.github.gfvdataweb.bolaof1.data.EstadoDados
@@ -134,6 +138,25 @@ class TelasTest {
         compose.onNodeWithText("Enviar palpite").assertIsNotEnabled()
         compose.onNodeWithText("Abrir configurações").performClick()
         assertTrue(abriu)
+    }
+
+    @Test
+    fun pipelineMostraRodadaEtapasEOLinkDaExecucao() {
+        val site = PipelineRepositorio.extrairDoBolao(StatusDoPainel.texto)
+        compose.setContent { BolaoF1Theme { SecaoDoPipeline(EstadoDoPipeline(site = site)) } }
+
+        compose.onNodeWithText("Última atualização").assertIsDisplayed()
+        compose.onNodeWithText("Rodada 17").assertIsDisplayed()
+        compose.onNodeWithText("Palpites lidos e rodada identificada").assertIsDisplayed()
+        compose.onNodeWithText("Ver execução").assertIsDisplayed()
+        compose.onNodeWithText("Não foi possível ver o andamento").assertDoesNotExist()
+    }
+
+    @Test
+    fun pipelineComFalhaAvisaDiscretamenteSemTitulo() {
+        compose.setContent { BolaoF1Theme { SecaoDoPipeline(EstadoDoPipeline(falhou = true)) } }
+        compose.onNodeWithText("Não foi possível ver o andamento").assertIsDisplayed()
+        compose.onNodeWithText("Última atualização").assertDoesNotExist()
     }
 
     @Test

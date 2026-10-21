@@ -118,13 +118,13 @@ App: tela "Palpite" (texto colado do WhatsApp + rodada opcional)
 | 9e | `doPost` + `APP_CHAVE` no Apps Script (com `SETUP.md` atualizado), tela **Palpite**, tela **Configurações** (chave) | Palpite enviado pelo app atualiza o site (ponta a ponta) |
 | 9f | Aviso de nova versão via Releases | Publicar uma versão nova e ver o aviso aparecer |
 
-**Depois da v1 (fora do escopo agora, em ordem provável):** Rendimento (os
-gráficos exigem uma biblioteca Compose, como Vico, ou desenho em Canvas),
-Pilotos, Hall of Fame, temporadas antigas e perfis (`?ano`, `?jogador`,
-`?piloto`, menu da Etapa 8), Simulador, validação do palpite antes do envio,
-**notificação push** (Firebase Cloud Messaging com tópico único, disparado
-pelo fim do `pipeline.yml`: "quali pontuado, você fez X pts") e o
-acompanhamento do pipeline dentro do app.
+**Depois da v1 (fora do escopo agora, em ordem provável):** gráficos do
+Rendimento (biblioteca Compose, como Vico, ou desenho em Canvas), Pilotos,
+perfis (`?jogador`, `?piloto`, menu da Etapa 8), Simulador, validação do
+palpite antes do envio e **notificação push** (Firebase Cloud Messaging com
+tópico único, disparado pelo fim do `pipeline.yml`: "quali pontuado, você fez
+X pts"). Temporadas antigas, Rendimento (tabelas), Hall of Fame e
+acompanhamento do pipeline entraram na 9g.
 
 **Notas para registrar quando acontecer:**
 - Na 9c: nota em `etapa-3`. `docs/data/` passa a ter um segundo consumidor
@@ -271,3 +271,34 @@ build publicado for maior que o instalado; qualquer falha = sem aviso.
 **Publicadas:** `app-v0.1.0` (build 13, primeira versão oficial) e
 `app-v0.1.1` (mesmo código, só para validar a atualização por cima e o
 aviso de versão no celular).
+
+## Sub-etapa 9g — app mais perto do site (2026-10-21)
+
+Pedido do usuário: o app ganhar o que o site tem além da temporada atual.
+**Decisões fixadas (não reabrir sem o usuário pedir):**
+- **Barra inferior:** Ranking · Corridas · Rendimento · Hall of Fame · Enviar.
+  A aba Palpites saiu: o cartão de Corridas cicla **fechado → pontos →
+  palpites → fechado** a cada toque (a rodada mais recente abre em pontos).
+- **Temporadas antigas:** entrada pelo Hall of Fame, switch **Jogadores |
+  Temporadas** (o mesmo do site, `etapa-7` "Hall of Fame — switch"). Tocar num
+  ano abre o app inteiro nele (Ranking, Corridas, Rendimento): título "Bolão F1
+  <ano>" e botão "Voltar a <atual>" na barra superior (o voltar do sistema faz
+  o mesmo). Enviar fica sempre na temporada atual. Ano antigo com cache
+  completo não é baixado de novo (`TemporadaRepositorio.observar(ano)`).
+- **Rendimento:** porte de `coletarRendimento` e companhia (`docs/app.js`),
+  modos Por piloto / Por jogador com chips de filtro; sem gráfico (barra
+  simples), só tabelas nesta versão.
+- **Hall of Fame:** `HistoricoRepositorio` lê `hall_of_fame.json` + o
+  `standings.json` de todos os anos (Participações, Pontos, Acerto como
+  `universoJogadores()`).
+- **Endereço dos dados:** `https://bolaof1.gfvdata.com/data/`, com o GitHub
+  Pages como reserva (`FonteRemota` tenta a reserva em falha de rede/HTTP), para
+  o app sobreviver ao desligamento do Pages (`plano-futuro-cloudflare.md`).
+- **Pipeline na aba Enviar:** lê o card `bolao_f1` de
+  `https://painel.gfvdata.com/dados/status.json` (reserva
+  `painel-status.pages.dev`), o mesmo passo a passo do painel-status
+  (`src/etapas_bolao.py`); não depende do repo ser público. Recarrega a cada
+  1 min enquanto há etapa em andamento e a aba está visível. **O app do Bolão
+  passou a ser consumidor desse `status.json`**: mudança nos campos de
+  `etapas_pipeline` precisa ser aditiva.
+
