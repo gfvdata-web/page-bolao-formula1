@@ -1,6 +1,5 @@
 package io.github.gfvdataweb.bolaof1
 
-import androidx.compose.ui.test.assertDoesNotExist
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.lifecycle.ViewModelProvider
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
