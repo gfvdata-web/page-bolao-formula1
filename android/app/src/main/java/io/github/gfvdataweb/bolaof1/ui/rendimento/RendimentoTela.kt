@@ -61,8 +61,8 @@ fun RendimentoTela(temporada: Temporada, modifier: Modifier = Modifier) {
     val pilotos = pilotosApostados(palpites)
     // As seleções dos filtros recomeçam a cada ano.
     var modo by rememberSaveable { mutableStateOf(ModoDoRendimento.PILOTO) }
-    val jogadoresEscolhidos = rememberSaveable(temporada.ano) { mutableStateOf(ArrayList(jogadores.map { it.first })) }
-    val pilotosEscolhidos = rememberSaveable(temporada.ano) { mutableStateOf(ArrayList(pilotos)) }
+    val jogadoresEscolhidos = rememberSaveable(temporada.ano) { mutableStateOf<List<String>>(jogadores.map { it.first }) }
+    val pilotosEscolhidos = rememberSaveable(temporada.ano) { mutableStateOf<List<String>>(pilotos.toList()) }
 
     val porPiloto = modo == ModoDoRendimento.PILOTO
     val todos = if (porPiloto) jogadores.map { it.first } else pilotos
@@ -93,7 +93,7 @@ fun RendimentoTela(temporada: Temporada, modifier: Modifier = Modifier) {
             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 FilterChip(
                     selected = escolhidos.value.size == todos.size,
-                    onClick = { escolhidos.value = ArrayList(todos) },
+                    onClick = { escolhidos.value = todos.toList() },
                     label = { Text(stringResource(R.string.rendimento_filtro_todos)) },
                 )
                 val rotulos = if (porPiloto) jogadores.toMap() else pilotos.associateWith { it }
@@ -101,9 +101,7 @@ fun RendimentoTela(temporada: Temporada, modifier: Modifier = Modifier) {
                     FilterChip(
                         selected = chave in escolhidos.value,
                         onClick = {
-                            escolhidos.value = ArrayList(
-                                if (chave in escolhidos.value) escolhidos.value - chave else escolhidos.value + chave,
-                            )
+                            escolhidos.value = if (chave in escolhidos.value) escolhidos.value - chave else escolhidos.value + chave
                         },
                         label = { Text(rotulos[chave] ?: chave) },
                     )

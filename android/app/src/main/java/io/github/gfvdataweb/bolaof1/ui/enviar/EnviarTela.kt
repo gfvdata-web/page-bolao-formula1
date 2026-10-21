@@ -39,8 +39,8 @@ fun EnviarTela(
     aoMudarRodada: (String) -> Unit,
     aoEnviar: () -> Unit,
     aoAbrirConfiguracoes: () -> Unit,
-    pipeline: EstadoDoPipeline = EstadoDoPipeline(),
     modifier: Modifier = Modifier,
+    pipeline: EstadoDoPipeline = EstadoDoPipeline(),
 ) {
     var confirmando by rememberSaveable { mutableStateOf(false) }
 
