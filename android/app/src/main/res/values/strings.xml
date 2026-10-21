@@ -5,6 +5,8 @@
     <string name="app_titulo">Bolão F1</string>
     <string name="titulo_com_ano">Bolão F1 %1$d</string>
     <string name="voltar">Voltar</string>
+    <string name="voltar_para_ano">Voltar a %1$d</string>
+    <string name="voltar_para_atual">Voltar à atual</string>
     <string name="cancelar">Cancelar</string>
 
     <!-- Abas -->

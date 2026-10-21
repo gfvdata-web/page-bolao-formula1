@@ -4,6 +4,7 @@ import io.github.gfvdataweb.bolaof1.apoio.DadosDoSite
 import io.github.gfvdataweb.bolaof1.data.modelo.Calendario
 import io.github.gfvdataweb.bolaof1.data.modelo.Classificacao
 import io.github.gfvdataweb.bolaof1.data.modelo.EquipesDoAno
+import io.github.gfvdataweb.bolaof1.data.modelo.HallOfFame
 import io.github.gfvdataweb.bolaof1.data.modelo.Palpites
 import io.github.gfvdataweb.bolaof1.data.modelo.Resultados
 import io.github.gfvdataweb.bolaof1.data.modelo.Temporadas
@@ -53,6 +54,34 @@ class DadosDoSiteTest {
                     val equipe = rodada.equipes[piloto]
                     assertNotNull("$ano R${rodada.numero}: $piloto sem cor de equipe", equipe?.let { doAno.equipes[it] })
                 }
+            }
+        }
+    }
+
+    /** Cada ano de seasons.json (2021–2026, com top 5, sem bônus ou compensação) monta como [Temporada]. */
+    @Test
+    fun montaTodasAsTemporadasPublicadas() {
+        assertTrue("esperava 2021–2026", temporadas.temporadas.map { it.ano }.containsAll((2021..2026).toList()))
+        for (info in temporadas.temporadas) {
+            val caminhos = listOf(TemporadaRepositorio.SEASONS, TemporadaRepositorio.EQUIPES) +
+                TemporadaRepositorio.caminhosDoAno(info.ano)
+            val temporada = TemporadaRepositorio.montar(caminhos.associateWith { DadosDoSite.texto(it) }, info.ano)
+            assertEquals(info.ano, temporada.ano)
+            assertEquals(info.ano, temporada.classificacao.temporada)
+            assertEquals(info, temporada.info)
+            assertEquals(temporadas.atual, temporada.atual)
+            assertEquals(temporadas.temporadas.map { it.ano }.sortedDescending(), temporada.anos)
+            assertTrue("ranking de ${info.ano} vazio", temporada.classificacao.jogadores.isNotEmpty())
+        }
+    }
+
+    @Test
+    fun hallOfFameELidoEOsIdsTemNome() {
+        val hall = json.decodeFromString<HallOfFame>(DadosDoSite.texto("hall_of_fame.json"))
+        assertTrue(hall.anos.isNotEmpty())
+        for (podio in hall.anos) {
+            for (id in listOfNotNull(podio.ouro, podio.prata, podio.bronze)) {
+                assertTrue("${podio.ano}: $id sem nome", hall.nomes.containsKey(id))
             }
         }
     }

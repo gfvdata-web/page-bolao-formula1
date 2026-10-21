@@ -20,8 +20,11 @@ import java.util.concurrent.TimeUnit
 
 /** Endereços externos que o app conhece. O PAT do GitHub nunca entra aqui. */
 object Enderecos {
-    /** JSONs publicados pelo site (GitHub Pages), mesma pasta que o site lê. */
-    const val DADOS_DO_SITE = "https://gfvdata-web.github.io/page-bolao-formula1/data/"
+    /** JSONs publicados pelo site (domínio próprio, Cloudflare Pages), mesma pasta que o site lê. */
+    const val DADOS_DO_SITE = "https://bolaof1.gfvdata.com/data/"
+
+    /** Mesma pasta no GitHub Pages: reserva se o domínio principal falhar. */
+    const val DADOS_DO_SITE_RESERVA = "https://gfvdata-web.github.io/page-bolao-formula1/data/"
 
     /** API pública dos Releases (aviso de nova versão, 9f). */
     const val RELEASES = "https://api.github.com/repos/gfvdata-web/page-bolao-formula1/releases?per_page=20"
@@ -35,6 +38,7 @@ class AppContainer(
     contexto: Context,
     urlDosDados: HttpUrl = Enderecos.DADOS_DO_SITE.toHttpUrl(),
     urlDosReleases: HttpUrl = Enderecos.RELEASES.toHttpUrl(),
+    urlDaReserva: HttpUrl? = Enderecos.DADOS_DO_SITE_RESERVA.toHttpUrl(),
 ) {
     private val contextoDoApp = contexto.applicationContext
 
@@ -44,7 +48,7 @@ class AppContainer(
         .build()
 
     val temporadaRepositorio = TemporadaRepositorio(
-        fonte = FonteRemota(clienteHttp, urlDosDados),
+        fonte = FonteRemota(clienteHttp, urlDosDados, urlDaReserva),
         cache = CacheDeArquivos(File(contexto.filesDir, "dados-do-site")),
     )
 

@@ -2,10 +2,12 @@ package io.github.gfvdataweb.bolaof1.ui
 
 import io.github.gfvdataweb.bolaof1.apoio.TemporadaReal
 import io.github.gfvdataweb.bolaof1.ui.temporada.cartoesDasCorridas
+import io.github.gfvdataweb.bolaof1.ui.temporada.deveOferecerVoltarParaAtual
 import io.github.gfvdataweb.bolaof1.ui.temporada.linhasDoRanking
 import io.github.gfvdataweb.bolaof1.ui.temporada.palpitesDaRodada
 import io.github.gfvdataweb.bolaof1.ui.temporada.rodadasPontuadas
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -65,6 +67,15 @@ class ApresentacaoTest {
         rodada.palpites.zipWithNext().forEach { (a, b) ->
             assertTrue("${a.id} antes de ${b.id}", a.total > b.total || (a.total == b.total && a.id < b.id))
         }
+    }
+
+    @Test
+    fun voltarParaAtualSoAparecePertoDeUmAnoPassado() {
+        assertFalse(deveOferecerVoltarParaAtual(temporada, null))
+        assertTrue(deveOferecerVoltarParaAtual(temporada.copy(ano = temporada.atual - 1), 2025))
+        // Sem dados ainda: vale o pedido do usuário.
+        assertTrue(deveOferecerVoltarParaAtual(null, 2025))
+        assertFalse(deveOferecerVoltarParaAtual(null, null))
     }
 
     @Test

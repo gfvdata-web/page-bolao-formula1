@@ -169,3 +169,20 @@ data class Equipe(
     val nome: String,
     val cor: String,
 )
+
+/** `hall_of_fame.json` (escrito à mão): pódio de cada temporada fechada. */
+@Serializable
+data class HallOfFame(
+    val anos: List<PodioDoAno> = emptyList(),
+    /** id do jogador → nome de exibição. */
+    val nomes: Map<String, String> = emptyMap(),
+)
+
+/** Ouro, prata e bronze (ids de jogador) de um ano; null se o lugar não existe. */
+@Serializable
+data class PodioDoAno(
+    val ano: Int,
+    val ouro: String? = null,
+    val prata: String? = null,
+    val bronze: String? = null,
+)

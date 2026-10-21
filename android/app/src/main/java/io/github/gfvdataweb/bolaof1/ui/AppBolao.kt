@@ -1,5 +1,6 @@
 package io.github.gfvdataweb.bolaof1.ui
 
+import androidx.activity.compose.BackHandler
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -16,6 +17,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -45,6 +47,7 @@ import io.github.gfvdataweb.bolaof1.ui.enviar.EnviarViewModel
 import io.github.gfvdataweb.bolaof1.ui.palpites.PalpitesTela
 import io.github.gfvdataweb.bolaof1.ui.ranking.RankingTela
 import io.github.gfvdataweb.bolaof1.ui.temporada.TemporadaViewModel
+import io.github.gfvdataweb.bolaof1.ui.temporada.deveOferecerVoltarParaAtual
 import io.github.gfvdataweb.bolaof1.ui.versao.AvisoDeNovaVersao
 import io.github.gfvdataweb.bolaof1.ui.versao.SituacaoDaVersao
 import io.github.gfvdataweb.bolaof1.ui.versao.VersaoViewModel
@@ -83,10 +86,14 @@ fun AppBolao(container: AppContainer, versao: String, build: Int) {
     // Escopo da Activity: as três abas da temporada dividem um único download.
     val temporadaViewModel: TemporadaViewModel = viewModel(factory = TemporadaViewModel.fabrica(container.temporadaRepositorio))
     val estado by temporadaViewModel.estado.collectAsStateWithLifecycle()
+    val anoEscolhido by temporadaViewModel.anoEscolhido.collectAsStateWithLifecycle()
     val entradaAtual by navegacao.currentBackStackEntryAsState()
     val emConfiguracoes = entradaAtual?.destination?.hasRoute(RotaConfiguracoes::class) == true
     val versaoViewModel: VersaoViewModel = viewModel(factory = VersaoViewModel.fabrica(container.verificadorDeAtualizacao, build))
     val estadoDaVersao by versaoViewModel.estado.collectAsStateWithLifecycle()
+    val oferecerVoltar = deveOferecerVoltarParaAtual(estado.dados, anoEscolhido)
+    // Sem isto, o "voltar" do sistema sairia do app em vez de voltar à temporada atual.
+    BackHandler(enabled = oferecerVoltar && !emConfiguracoes) { temporadaViewModel.voltarParaAtual() }
     val navegador = LocalUriHandler.current
     val baixarNovaVersao = { estadoDaVersao.publicada?.let { navegador.openUri(it.urlDoApk) } }
 
@@ -110,6 +117,15 @@ fun AppBolao(container: AppContainer, versao: String, build: Int) {
                     }
                 },
                 actions = {
+                    if (oferecerVoltar && !emConfiguracoes) {
+                        TextButton(onClick = temporadaViewModel::voltarParaAtual) {
+                            val atual = estado.dados?.atual
+                            Text(
+                                if (atual != null) stringResource(R.string.voltar_para_ano, atual)
+                                else stringResource(R.string.voltar_para_atual),
+                            )
+                        }
+                    }
                     if (!emConfiguracoes) {
                         IconButton(onClick = { navegacao.navigate(RotaConfiguracoes) { launchSingleTop = true } }) {
                             Icon(Icons.Filled.Settings, contentDescription = stringResource(R.string.config_titulo))

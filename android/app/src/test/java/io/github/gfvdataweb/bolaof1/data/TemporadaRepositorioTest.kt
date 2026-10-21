@@ -113,4 +113,62 @@ class TemporadaRepositorioTest {
         assertNull(final.erro)
         assertTrue(checkNotNull(final.dados).classificacao.jogadores.isNotEmpty())
     }
+
+    @Test
+    fun anoPassadoEBaixadoELidoPeloAno() = runTest {
+        val estados = repositorio.observar(2025).toList()
+
+        assertEquals(2, estados.size)
+        val final = estados[1]
+        assertNull(final.erro)
+        val temporada = checkNotNull(final.dados)
+        assertEquals(2025, temporada.ano)
+        assertEquals(2025, temporada.classificacao.temporada)
+        assertTrue(temporada.atual > 2025)
+        assertTrue(2025 in temporada.anos)
+    }
+
+    @Test
+    fun todosOsAnosPublicadosSaoObservaveis() = runTest {
+        val anos = checkNotNull(repositorio.observar().toList().last().dados).anos
+        assertTrue(anos.containsAll((2021..2026).toList()))
+        for (ano in anos) {
+            val final = repositorio.observar(ano).toList().last()
+            assertNull("erro em $ano", final.erro)
+            assertEquals(ano, checkNotNull(final.dados).ano)
+        }
+    }
+
+    @Test
+    fun anoPassadoComCacheCompletoNaoBaixaDeNovo() = runTest {
+        repositorio.observar(2024).toList() // baixa e guarda
+        site.foraDoAr = true // se tentasse baixar, daria erro
+        agora = 9_000_000L
+
+        val estados = repositorio.observar(2024).toList()
+
+        assertEquals(1, estados.size)
+        assertFalse(estados[0].atualizando)
+        assertNull(estados[0].erro)
+        assertEquals(1_000_000L, estados[0].atualizadoEm)
+        assertEquals(2024, checkNotNull(estados[0].dados).ano)
+    }
+
+    @Test
+    fun anoAtualContinuaAtualizandoMesmoComCache() = runTest {
+        val atual = checkNotNull(repositorio.observar().toList().last().dados).atual
+        val estados = repositorio.observar(atual).toList()
+        assertEquals(2, estados.size)
+        assertTrue(estados[0].atualizando)
+    }
+
+    @Test
+    fun cacheDeOutroAnoNaoServePeloAtual() = runTest {
+        repositorio.observar(2024).toList()
+        site.foraDoAr = true
+        // O cache tem seasons.json e 2024, mas não os arquivos do ano atual.
+        val estados = repositorio.observar().toList()
+        assertNull(estados[0].dados)
+        assertEquals(ErroDeDados.FALHA_NO_DOWNLOAD, estados.last().erro)
+    }
 }

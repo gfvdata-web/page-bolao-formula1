@@ -8,6 +8,14 @@ import io.github.gfvdataweb.bolaof1.data.modelo.Rodada
 // Android): as regras de exibição ficam testadas em JVM puro. Ordenação de
 // jogadores igual à do site: pontos desc, depois player_id asc.
 
+/**
+ * Oferece "voltar à temporada atual" quando se está vendo um ano passado. Com
+ * os dados na mão vale o que eles dizem; enquanto o ano escolhido ainda carrega
+ * (sem dados), vale o pedido do usuário.
+ */
+fun deveOferecerVoltarParaAtual(dados: Temporada?, anoEscolhido: Int?): Boolean =
+    if (dados != null) dados.ano < dados.atual else anoEscolhido != null
+
 data class LinhaRanking(
     val posicao: Int,
     val id: String,

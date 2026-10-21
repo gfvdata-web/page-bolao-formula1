@@ -75,5 +75,5 @@ object SiteDeTeste {
 /** App usado nos testes Robolectric do app inteiro: lê do site local. */
 class BolaoAppDeTeste : BolaoApp() {
     override fun criarContainer(): AppContainer =
-        AppContainer(this, SiteDeTeste.site.urlDosDados, SiteDeTeste.site.urlDosReleases)
+        AppContainer(this, SiteDeTeste.site.urlDosDados, SiteDeTeste.site.urlDosReleases, urlDaReserva = null)
 }

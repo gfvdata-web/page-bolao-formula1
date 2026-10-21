@@ -20,9 +20,13 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import java.io.IOException
 
-/** Tudo o que as telas da temporada atual precisam, já lido e conferido. */
+/** Tudo o que as telas de uma temporada precisam, já lido e conferido. */
 data class Temporada(
     val ano: Int,
+    /** Temporada atual do site (`seasons.json`); [ano] menor que ela = temporada passada. */
+    val atual: Int,
+    /** Anos publicados, do mais novo para o mais antigo. */
+    val anos: List<Int>,
     val info: InfoTemporada?,
     val classificacao: Classificacao,
     val resultados: Resultados,
@@ -44,10 +48,11 @@ data class EstadoDados<T>(
 enum class ErroDeDados { FALHA_NO_DOWNLOAD, FORMATO_INESPERADO }
 
 /**
- * Dados da temporada atual com *stale-while-revalidate*: entrega o cache na
+ * Dados de uma temporada (por padrão a atual) com *stale-while-revalidate*: entrega o cache na
  * hora e depois tenta baixar tudo de novo. O cache só é substituído quando
  * **todos** os arquivos chegaram e foram lidos sem erro — um JSON quebrado no
- * site nunca apaga o último conjunto bom.
+ * site nunca apaga o último conjunto bom. Temporada passada com cache completo
+ * não é baixada de novo (os dados de um ano fechado não mudam).
  */
 class TemporadaRepositorio(
     private val fonte: FonteRemota,
@@ -55,13 +60,18 @@ class TemporadaRepositorio(
     private val relogio: () -> Long = System::currentTimeMillis,
     private val io: CoroutineDispatcher = Dispatchers.IO,
 ) {
-    fun observar(): Flow<EstadoDados<Temporada>> = flow {
-        val guardado = withContext(io) { lerDoCache() }
+    /** [ano] null = a temporada atual de `seasons.json`. */
+    fun observar(ano: Int? = null): Flow<EstadoDados<Temporada>> = flow {
+        val guardado = withContext(io) { lerDoCache(ano) }
+        if (ano != null && guardado != null && ano < guardado.first.atual) {
+            emit(EstadoDados(guardado.first, guardado.second, atualizando = false, erro = null))
+            return@flow
+        }
         emit(EstadoDados(guardado?.first, guardado?.second, atualizando = true, erro = null))
 
         // O emit fica fora do try: exceções de quem coleta não podem ser engolidas aqui.
         val estado = try {
-            val (temporada, baixadoEm) = withContext(io) { baixarESalvar() }
+            val (temporada, baixadoEm) = withContext(io) { baixarESalvar(ano) }
             EstadoDados(temporada, baixadoEm, atualizando = false, erro = null)
         } catch (e: CancellationException) {
             throw e
@@ -75,7 +85,7 @@ class TemporadaRepositorio(
         emit(estado)
     }
 
-    private fun lerDoCache(): Pair<Temporada, Long>? = try {
+    private fun lerDoCache(anoPedido: Int?): Pair<Temporada, Long>? = try {
         val textos = mutableMapOf<String, String>()
         var maisAntigo = Long.MAX_VALUE
         val ler = { caminho: String ->
@@ -84,10 +94,11 @@ class TemporadaRepositorio(
             textos[caminho] = guardado.texto
             guardado.texto
         }
-        val ano = json.decodeFromString<Temporadas>(ler(SEASONS)).atual
+        val temporadas = json.decodeFromString<Temporadas>(ler(SEASONS))
+        val ano = anoPedido ?: temporadas.atual
         caminhosDoAno(ano).forEach { ler(it) }
         ler(EQUIPES)
-        montar(textos) to maisAntigo
+        montar(textos, ano) to maisAntigo
     } catch (e: NoSuchElementException) {
         null // cache incompleto: ainda não houve um download completo
     } catch (e: SerializationException) {
@@ -96,13 +107,13 @@ class TemporadaRepositorio(
         null
     }
 
-    private suspend fun baixarESalvar(): Pair<Temporada, Long> = coroutineScope {
+    private suspend fun baixarESalvar(anoPedido: Int?): Pair<Temporada, Long> = coroutineScope {
         val textoSeasons = fonte.baixarTexto(SEASONS)
-        val ano = json.decodeFromString<Temporadas>(textoSeasons).atual
+        val ano = anoPedido ?: json.decodeFromString<Temporadas>(textoSeasons).atual
         val caminhos = caminhosDoAno(ano) + EQUIPES
         val baixados = caminhos.map { caminho -> async { caminho to fonte.baixarTexto(caminho) } }
         val textos = mapOf(SEASONS to textoSeasons) + baixados.map { it.await() }
-        val temporada = montar(textos) // valida tudo antes de mexer no cache
+        val temporada = montar(textos, ano) // valida tudo antes de mexer no cache
         val agora = relogio()
         textos.forEach { (caminho, texto) -> cache.salvar(caminho, texto, agora) }
         temporada to agora
@@ -119,13 +130,15 @@ class TemporadaRepositorio(
         const val BETS = "bets.json"
         const val CALENDAR = "calendar.json"
 
-        /** Lê e confere o conjunto de textos (caminho → JSON) de uma temporada. */
-        internal fun montar(textos: Map<String, String>): Temporada {
+        /** Lê e confere o conjunto de textos (caminho → JSON) de uma temporada ([anoPedido] null = a atual). */
+        internal fun montar(textos: Map<String, String>, anoPedido: Int? = null): Temporada {
             val temporadas = json.decodeFromString<Temporadas>(textos.getValue(SEASONS))
-            val ano = temporadas.atual
+            val ano = anoPedido ?: temporadas.atual
             val equipesPorAno = json.decodeFromString<Map<String, EquipesDoAno>>(textos.getValue(EQUIPES))
             return Temporada(
                 ano = ano,
+                atual = temporadas.atual,
+                anos = temporadas.temporadas.map { it.ano }.sortedDescending(),
                 info = temporadas.temporadas.firstOrNull { it.ano == ano },
                 classificacao = json.decodeFromString(textos.getValue("$ano/$STANDINGS")),
                 resultados = json.decodeFromString(textos.getValue("$ano/$RESULTS")),
