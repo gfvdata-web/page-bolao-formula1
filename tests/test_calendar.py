@@ -65,3 +65,12 @@ class TestResolveRace(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestCalendarioPublicado2026(unittest.TestCase):
+    def test_cota_resolve_austin(self):
+        # Bug real (rodada de Austin): cabeçalho "COTA 2026" não casava com nada.
+        import json
+
+        cal = json.loads((RAIZ / "data" / "2026" / "calendar.json").read_text(encoding="utf-8"))
+        self.assertEqual(resolve_race("COTA 2026", cal)["round"], 18)
