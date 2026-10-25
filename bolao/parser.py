@@ -70,6 +70,7 @@ _FILLER_BONUS = {
     "sorteado",
     "sorteada",
     "sorteio",
+    "bonus",
     "da",
     "vez",
 }

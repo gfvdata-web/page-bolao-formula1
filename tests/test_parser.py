@@ -62,6 +62,13 @@ class TestParseMensagensReais(unittest.TestCase):
         sheet = parse_sheet(texto, DRIVERS)
         self.assertEqual(sheet.bonus_driver, "ALO")
 
+    def test_piloto_bonus(self):
+        # Bug real (rodada de Austin): "Piloto Bônus: Bearman" — "bônus" não
+        # era enfeite e o piloto virava "BON" (fallback das 3 primeiras letras).
+        texto = "Corrida\nPiloto Bônus: Bearman\n\nJoao\nVER\nNOR\nRUS\nHAM\nANT\nPIA\nP1\n"
+        sheet = parse_sheet(texto, DRIVERS)
+        self.assertEqual(sheet.bonus_driver, "BEA")
+
     def test_linha_em_branco_apos_o_nome(self):
         texto = (
             "Corrida\nPiloto Hamilton\n\n"

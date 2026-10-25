@@ -67,6 +67,11 @@ class TestBuildDrivers(unittest.TestCase):
         self.assertEqual(self.aliases["lewis hamilton"], "HAM")
         self.assertEqual(self.aliases["george russell"], "RUS")
 
+    def test_primeiro_nome_quando_unico(self):
+        # Bug real (rodada de Austin): "LANDO" virava "LAN" (3 primeiras letras).
+        self.assertEqual(self.aliases["lando"], "NOR")
+        self.assertEqual(self.aliases["lewis"], "HAM")
+
     def test_reservas_sem_codigo_sao_ignorados(self):
         # 'paul_aron' e outros reservas não têm código oficial -> não entram.
         self.assertNotIn("paul aron", self.aliases)

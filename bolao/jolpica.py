@@ -158,6 +158,7 @@ def build_drivers(drivers_json: dict) -> dict:
         raise JolpicaError("Entry list vazia (temporada sem pilotos?).")
 
     aliases: dict[str, str] = {}
+    primeiros: dict[str, set[str]] = {}
     for p in pilotos:
         code = (p.get("code") or "").strip().upper()
         if not code:
@@ -168,6 +169,13 @@ def build_drivers(drivers_json: dict) -> dict:
             chave = normalize_key(bruto)
             if chave:
                 aliases[chave] = code
+        primeiro = normalize_key(nome)
+        if primeiro:
+            primeiros.setdefault(primeiro, set()).add(code)
+    # Primeiro nome ("Lando") só quando é único na entry list e não colide.
+    for primeiro, codes in primeiros.items():
+        if len(codes) == 1 and primeiro not in aliases:
+            aliases[primeiro] = next(iter(codes))
 
     if not aliases:
         raise JolpicaError("Nenhum piloto com código oficial na entry list.")
