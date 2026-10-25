@@ -611,74 +611,74 @@
     },
     "pilotos": {
       "ALB": {
-        "Williams": 17
+        "Williams": 18
       },
       "ALO": {
-        "Aston Martin": 17
+        "Aston Martin": 18
       },
       "ANT": {
-        "Mercedes": 17
+        "Mercedes": 18
       },
       "BEA": {
-        "Haas": 16
+        "Haas": 17
       },
       "BOR": {
-        "Audi": 17
+        "Audi": 18
       },
       "BOT": {
-        "Cadillac": 17
+        "Cadillac": 18
       },
       "COL": {
-        "Alpine": 17
+        "Alpine": 18
       },
       "GAS": {
-        "Alpine": 17
+        "Alpine": 18
       },
       "HAD": {
-        "Red Bull": 14
+        "Red Bull": 15
       },
       "HAM": {
-        "Ferrari": 17
+        "Ferrari": 18
       },
       "HUL": {
-        "Audi": 17
+        "Audi": 18
       },
       "LAW": {
-        "RB": 14,
+        "RB": 15,
         "Red Bull": 3
       },
       "LEC": {
-        "Ferrari": 17
+        "Ferrari": 18
       },
       "LIN": {
-        "RB": 17
+        "RB": 18
       },
       "NOR": {
-        "McLaren": 17
+        "McLaren": 18
       },
       "OCO": {
-        "Haas": 17
+        "Haas": 18
       },
       "PER": {
-        "Cadillac": 17
+        "Cadillac": 18
       },
       "PIA": {
-        "McLaren": 17
+        "McLaren": 18
       },
       "RUS": {
-        "Mercedes": 17
+        "Mercedes": 18
       },
       "SAI": {
-        "Williams": 16
+        "Williams": 17
       },
       "STR": {
-        "Aston Martin": 15
+        "Aston Martin": 16
       },
       "TSU": {
         "RB": 3
       },
       "VER": {
-        "Red Bull": 16
+        "Red Bull": 17
       }
     }
   }

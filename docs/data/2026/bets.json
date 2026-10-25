@@ -760,6 +760,69 @@
           "bonus_real_pos": 16,
           "bonus_points": 0,
           "total": 5
+        },
+        "18": {
+          "round": 18,
+          "race_id": "2026-18",
+          "race": "Austin",
+          "top6": [
+            "LEC",
+            "ANT",
+            "VER",
+            "HAM",
+            "RUS",
+            "NOR"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "LEC",
+              "real": "ANT",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "ANT",
+              "real": "VER",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "VER",
+              "real": "HAD",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "HAM",
+              "real": "LEC",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 5,
+              "guess": "RUS",
+              "real": "HAM",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "NOR",
+              "real": "RUS",
+              "points": 0,
+              "reason": "fora"
+            }
+          ],
+          "top6_points": 5,
+          "bonus_driver": "BEA",
+          "bonus_guess": 11,
+          "bonus_real_pos": 16,
+          "bonus_points": 0,
+          "total": 5
         }
       }
     },
@@ -2914,6 +2977,69 @@
           "bonus_real_pos": 18,
           "bonus_points": 0,
           "total": 8
+        },
+        "18": {
+          "round": 18,
+          "race_id": "2026-18",
+          "race": "Austin",
+          "top6": [
+            "VER",
+            "LEC",
+            "ANT",
+            "RUS",
+            "HAM",
+            "PIA"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "VER",
+              "real": "ANT",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "LEC",
+              "real": "VER",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "ANT",
+              "real": "HAD",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "RUS",
+              "real": "LEC",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 5,
+              "guess": "HAM",
+              "real": "HAM",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 6,
+              "guess": "PIA",
+              "real": "RUS",
+              "points": 0,
+              "reason": "fora"
+            }
+          ],
+          "top6_points": 6,
+          "bonus_driver": "BEA",
+          "bonus_guess": 15,
+          "bonus_real_pos": 16,
+          "bonus_points": 0,
+          "total": 6
         }
       }
     },
@@ -3991,6 +4117,69 @@
           "bonus_real_pos": 18,
           "bonus_points": 0,
           "total": 8
+        },
+        "18": {
+          "round": 18,
+          "race_id": "2026-18",
+          "race": "Austin",
+          "top6": [
+            "ANT",
+            "VER",
+            "LEC",
+            "HAM",
+            "NOR",
+            "RUS"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "ANT",
+              "real": "ANT",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 2,
+              "guess": "VER",
+              "real": "VER",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 3,
+              "guess": "LEC",
+              "real": "HAD",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "HAM",
+              "real": "LEC",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 5,
+              "guess": "NOR",
+              "real": "HAM",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 6,
+              "guess": "RUS",
+              "real": "RUS",
+              "points": 2,
+              "reason": "exata"
+            }
+          ],
+          "top6_points": 8,
+          "bonus_driver": "BEA",
+          "bonus_guess": 13,
+          "bonus_real_pos": 16,
+          "bonus_points": 0,
+          "total": 8
         }
       }
     },
@@ -4501,6 +4690,69 @@
           "bonus_real_pos": 18,
           "bonus_points": 1,
           "total": 8
+        },
+        "18": {
+          "round": 18,
+          "race_id": "2026-18",
+          "race": "Austin",
+          "top6": [
+            "VER",
+            "LEC",
+            "ANT",
+            "HAM",
+            "RUS",
+            "NOR"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "VER",
+              "real": "ANT",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "LEC",
+              "real": "VER",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "ANT",
+              "real": "HAD",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "HAM",
+              "real": "LEC",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 5,
+              "guess": "RUS",
+              "real": "HAM",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "NOR",
+              "real": "RUS",
+              "points": 0,
+              "reason": "fora"
+            }
+          ],
+          "top6_points": 5,
+          "bonus_driver": "BEA",
+          "bonus_guess": 12,
+          "bonus_real_pos": 16,
+          "bonus_points": 0,
+          "total": 5
         }
       }
     },
@@ -5011,6 +5263,69 @@
           "bonus_real_pos": 3,
           "bonus_points": 0,
           "total": 4
+        },
+        "18": {
+          "round": 18,
+          "race_id": "2026-18",
+          "race": "Austin",
+          "top6": [
+            "VER",
+            "ANT",
+            "LEC",
+            "RUS",
+            "NOR",
+            "HAM"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "VER",
+              "real": "ANT",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "ANT",
+              "real": "VER",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "LEC",
+              "real": "HAD",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "RUS",
+              "real": "LEC",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 5,
+              "guess": "NOR",
+              "real": "HAM",
+              "points": 0,
+              "reason": "fora"
+            },
+            {
+              "pos": 6,
+              "guess": "HAM",
+              "real": "RUS",
+              "points": 1,
+              "reason": "no top6"
+            }
+          ],
+          "top6_points": 5,
+          "bonus_driver": "BEA",
+          "bonus_guess": 16,
+          "bonus_real_pos": 16,
+          "bonus_points": 1,
+          "total": 6
         }
       }
     },
@@ -6088,6 +6403,69 @@
           "bonus_real_pos": 18,
           "bonus_points": 0,
           "total": 5
+        },
+        "18": {
+          "round": 18,
+          "race_id": "2026-18",
+          "race": "Austin",
+          "top6": [
+            "VER",
+            "LEC",
+            "ANT",
+            "RUS",
+            "HAM",
+            "NOR"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "VER",
+              "real": "ANT",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "LEC",
+              "real": "VER",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "ANT",
+              "real": "HAD",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "RUS",
+              "real": "LEC",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 5,
+              "guess": "HAM",
+              "real": "HAM",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 6,
+              "guess": "NOR",
+              "real": "RUS",
+              "points": 0,
+              "reason": "fora"
+            }
+          ],
+          "top6_points": 6,
+          "bonus_driver": "BEA",
+          "bonus_guess": 14,
+          "bonus_real_pos": 16,
+          "bonus_points": 0,
+          "total": 6
         }
       }
     },
@@ -7492,6 +7870,69 @@
           "bonus_real_pos": 18,
           "bonus_points": 0,
           "total": 7
+        },
+        "18": {
+          "round": 18,
+          "race_id": "2026-18",
+          "race": "Austin",
+          "top6": [
+            "ANT",
+            "LEC",
+            "VER",
+            "HAM",
+            "RUS",
+            "NOR"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "ANT",
+              "real": "ANT",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 2,
+              "guess": "LEC",
+              "real": "VER",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 3,
+              "guess": "VER",
+              "real": "HAD",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "HAM",
+              "real": "LEC",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 5,
+              "guess": "RUS",
+              "real": "HAM",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 6,
+              "guess": "NOR",
+              "real": "RUS",
+              "points": 0,
+              "reason": "fora"
+            }
+          ],
+          "top6_points": 6,
+          "bonus_driver": "BEA",
+          "bonus_guess": 12,
+          "bonus_real_pos": 16,
+          "bonus_points": 0,
+          "total": 6
         }
       }
     },
@@ -8569,6 +9010,69 @@
           "bonus_real_pos": 18,
           "bonus_points": 0,
           "total": 8
+        },
+        "18": {
+          "round": 18,
+          "race_id": "2026-18",
+          "race": "Austin",
+          "top6": [
+            "LEC",
+            "VER",
+            "ANT",
+            "RUS",
+            "HAM",
+            "PIA"
+          ],
+          "top6_detail": [
+            {
+              "pos": 1,
+              "guess": "LEC",
+              "real": "ANT",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 2,
+              "guess": "VER",
+              "real": "VER",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 3,
+              "guess": "ANT",
+              "real": "HAD",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 4,
+              "guess": "RUS",
+              "real": "LEC",
+              "points": 1,
+              "reason": "no top6"
+            },
+            {
+              "pos": 5,
+              "guess": "HAM",
+              "real": "HAM",
+              "points": 2,
+              "reason": "exata"
+            },
+            {
+              "pos": 6,
+              "guess": "PIA",
+              "real": "RUS",
+              "points": 0,
+              "reason": "fora"
+            }
+          ],
+          "top6_points": 7,
+          "bonus_driver": "BEA",
+          "bonus_guess": 11,
+          "bonus_real_pos": 16,
+          "bonus_points": 0,
+          "total": 7
         }
       }
     }
