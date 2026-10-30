@@ -1,0 +1,27 @@
+// Worker do app Android do Bolão F1 (Etapa 9, trilha mínima do contexto/plano-futuro-cloudflare.md):
+// o APK (no KV) e o versao.json (no D1), em bolaof1.gfvdata.com/app/. O site continua no
+// Cloudflare Pages (projeto bolao-formula1, mesmo domínio): este Worker roda como *route* só
+// em /app/* e /api/app/*, na frente do Pages; o resto do domínio nem passa por aqui.
+// Só serviços do plano grátis que param no limite em vez de cobrar (sem R2).
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "bolao-f1-app",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-01",
+  "observability": { "enabled": true },
+  "workers_dev": false,
+  "routes": [
+    { "pattern": "bolaof1.gfvdata.com/app/*", "zone_name": "gfvdata.com" },
+    { "pattern": "bolaof1.gfvdata.com/api/app/*", "zone_name": "gfvdata.com" }
+  ],
+  "d1_databases": [
+    {
+      "binding": "BANCO",
+      "database_name": "bolao-f1-app",
+      "database_id": "f435ef27-6191-43f2-8faf-f285c1fac269",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "kv_namespaces": [{ "binding": "APKS", "id": "056ab904de154f81ac07c4bdb0bc1069" }]
+  // Segredo (wrangler secret put): TOKEN_ENVIO, o mesmo do secret BOLAO_TOKEN_ENVIO no GitHub.
+}

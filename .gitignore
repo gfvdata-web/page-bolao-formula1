@@ -35,3 +35,9 @@ android/captures/
 *.keystore
 *.apk
 *.aab
+
+# Worker (worker/): dependências e cache local do wrangler
+node_modules/
+.wrangler/
+.dev.vars
+worker/worker-configuration.d.ts

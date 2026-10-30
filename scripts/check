@@ -32,10 +32,17 @@
 #   - data/ (cadastros, resultados, mensagens) .............................. test_cli_historico.py
 #  Automação e integrações
 #   - workflow pipeline.yml + scripts do Actions (registra-estado, commit-push) test_automacao.py
+#   - docs/data/pendentes.json (rodadas sem resultado) ....................... test_pipeline.py, test_dados_publicados.py
+#   - Worker bolao-vigia (vigia/, Cron 5 min): pendentes.json -> Jolpica ->
+#     workflow_dispatch do pipeline.yml; alerta de 6 h ...................... vigia.test.mjs (node --test) + node --check
 #   - Apps Script (Forms/app -> repository_dispatch) ......................... code_gs.test.mjs (node --test) + node --check
+#   - Worker do app (worker/): /app/versao.json (D1), APK (KV, só os 3 mais
+#     novos, 25 MiB), PUT /api/app/ com token, padrão do nome do APK ......... worker.test.mjs (node --test) + tsc
+#   - android.yml: job publicar envia APK + versao.json ao Worker, sem Release  test_publicacao_app.py
 #   - este inventário em dia com módulos/páginas/testes; pre-commit e regra no CLAUDE.md  test_inventario.py
 #  Sem teste
-#   - app Android (android/, android.yml) ... (sem teste: build só no Actions; sem JDK local)
+#   - app Android (android/) ... (sem teste: build só no Actions; sem JDK local; testes JVM rodam lá)
+#   - Worker publicado, route no domínio do Pages ... (sem teste: Cloudflare real; conferir com curl após o deploy)
 #   - renderização/gráficos/interação do JS . (sem teste: exige navegador; só sintaxe, ids e contrato de dados)
 #   - Google Forms, GitHub Pages, Jolpica real, WhatsApp real ... (sem teste: serviços externos; cobertos por mocks/fixtures)
 cd "$(dirname "$0")/.." || exit 1
@@ -94,15 +101,24 @@ checar_gs() {
 pytest_em() { rodar "pytest $*" python -m pytest -q --tb=short -p no:cacheprovider "$@"; }
 node_test() { rodar "node --test $*" node --test "$@"; }
 
+# Tipos do Worker (worker/). Precisa de: npm ci --prefix worker && npx --prefix worker wrangler types
+checar_ts() {
+  if [ ! -f worker/node_modules/.bin/tsc ] || [ ! -f worker/worker-configuration.d.ts ]; then
+    echo "FALHOU: tsc do worker ausente (rodar: npm ci --prefix worker && (cd worker && npx wrangler types))"; falhas=1; return
+  fi
+  (cd worker && npx --no-install tsc --noEmit --pretty false 2>&1 | head -20; exit "${PIPESTATUS[0]}") || falhas=1
+}
+
 case "$alvo" in
   "")
     checar_py bolao/*.py tests/*.py
     mapfile -t jsons < <(find data docs/data -name '*.json')
     checar_json "${jsons[@]}" .claude/launch.json
-    checar_js docs/app.js docs/analise.js
+    checar_js docs/app.js docs/analise.js vigia/src/index.js
     checar_gs
     pytest_em tests
-    node_test tests/code_gs.test.mjs
+    node_test tests/code_gs.test.mjs tests/worker.test.mjs tests/vigia.test.mjs
+    checar_ts
     ;;
   bolao/normalize.py)        checar_py "$alvo"; pytest_em tests/test_normalize.py tests/test_parser.py ;;
   bolao/parser.py)           checar_py "$alvo"; pytest_em tests/test_parser.py tests/test_whatsapp_import.py tests/test_historico.py tests/test_scoring.py tests/test_site.py ;;
@@ -131,8 +147,13 @@ case "$alvo" in
   google-apps-script/Code.gs) checar_gs; node_test tests/code_gs.test.mjs ;;
   .github/workflows/pipeline.yml|.github/scripts/*|scripts/check)
                              pytest_em tests/test_automacao.py ;;
-  android/*|.github/workflows/android.yml)
-                             : ;;  # (sem teste: build só no Actions)
+  vigia/src/*.js)            checar_js "$alvo"; node_test tests/vigia.test.mjs ;;
+  vigia/*)                   node_test tests/vigia.test.mjs ;;
+  worker/src/*.ts)           checar_ts; node_test tests/worker.test.mjs ;;
+  worker/*)                  checar_ts ;;
+  .github/workflows/android.yml)
+                             pytest_em tests/test_publicacao_app.py ;;
+  android/*)                 : ;;  # (sem teste: build só no Actions)
   *)                         : ;;
 esac
 exit $falhas

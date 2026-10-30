@@ -6,8 +6,9 @@ name: Android — app
 on:
   push:
     branches: [main]
-    # Tag app-vX.Y.Z publica o APK assinado num Release (job "publicar").
-    # Filtro de paths não vale para tags.
+    # Tag app-vX.Y.Z publica o APK assinado (job "publicar") no Worker do app
+    # (bolaof1.gfvdata.com/app/, de onde o app se atualiza); não há GitHub Release
+    # (repositório vai ficar privado). Filtro de paths não vale para tags.
     tags: ["app-v*"]
     paths:
       - "android/**"
@@ -102,16 +103,15 @@ jobs:
           path: android/app/build/reports/
           retention-days: 14
 
-  # Release oficial (9b): só em tag app-vX.Y.Z e só depois do job "build"
-  # (testes + lint) passar no mesmo commit. Único job com permissão de escrita.
+  # Versão oficial (9b): só em tag app-vX.Y.Z e só depois do job "build"
+  # (testes + lint) passar no mesmo commit. Publica só no Worker do app (sem
+  # GitHub Release), então não precisa de escrita no repositório.
   publicar:
-    name: Release assinado
+    name: APK assinado (Worker)
     needs: build
     if: startsWith(github.ref, 'refs/tags/app-v')
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    permissions:
-      contents: write
     defaults:
       run:
         working-directory: android
@@ -176,16 +176,35 @@ jobs:
             exit 1
           fi
 
-      - name: Publica o Release
+      # Único destino do APK (sem GitHub Release). O app consulta
+      # bolaof1.gfvdata.com/app/versao.json e baixa o APK de lá (worker/src/index.ts).
+      # O Worker só aceita o versao.json depois que o APK citado chegou.
+      - name: Publica no Worker do app (APK + app/versao.json)
         env:
-          GH_TOKEN: ${{ github.token }}
+          BOLAO_TOKEN_ENVIO: ${{ secrets.BOLAO_TOKEN_ENVIO }}
+          BASE: https://bolaof1.gfvdata.com
         run: |
-          NOTAS="App Android do Bolão F1, versão $VERSAO (build $GITHUB_RUN_NUMBER). Baixe o arquivo .apk abaixo pelo celular e instale: ele atualiza por cima da versão anterior, sem perder nada."
-          gh release create "$GITHUB_REF_NAME" "../saida/$APK" --repo "$GITHUB_REPOSITORY" --title "Bolão F1 $VERSAO" --notes "$NOTAS"
+          if [ -z "$BOLAO_TOKEN_ENVIO" ]; then
+            echo "::error::Secret BOLAO_TOKEN_ENVIO não configurado"
+            exit 1
+          fi
+          TAMANHO=$(stat -c %s "../saida/$APK")
+          if [ "$TAMANHO" -gt $((25 * 1024 * 1024)) ]; then
+            echo "::error::APK com $TAMANHO bytes passa do limite de 25 MiB do KV"
+            exit 1
+          fi
+          NOTAS="Bolão F1 $VERSAO (build $GITHUB_RUN_NUMBER). Instale por cima da versão anterior, sem perder nada."
+          AUTH="Authorization: Bearer $BOLAO_TOKEN_ENVIO"
+          curl --fail-with-body -sS -X PUT -H "$AUTH" -H "Content-Type: application/vnd.android.package-archive"             --data-binary "@../saida/$APK" "$BASE/api/app/$APK"
+          echo
+          jq -n --arg versao "$VERSAO" --argjson build "$GITHUB_RUN_NUMBER" --arg apk "$APK"             --arg notas "$NOTAS" --arg publicado_em "$(date -u +%Y-%m-%dT%H:%M:%SZ)"             '{versao: $versao, build: $build, apk: $apk, notas: $notas, publicado_em: $publicado_em}' > versao.json
+          curl --fail-with-body -sS -X PUT -H "$AUTH" -H "Content-Type: application/json"             --data-binary @versao.json "$BASE/api/app/versao.json"
+          echo
+          curl --fail -sS -o /dev/null "$BASE/app/$APK"
           {
             echo "### Bolão F1 $VERSAO publicado"
             echo ""
-            echo "- Release: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/tag/$GITHUB_REF_NAME"
+            echo "- Download: $BASE/app/$APK"
             echo "- Arquivo: \`$APK\` · assinado pela chave oficial"
           } >> "$GITHUB_STEP_SUMMARY"
 
