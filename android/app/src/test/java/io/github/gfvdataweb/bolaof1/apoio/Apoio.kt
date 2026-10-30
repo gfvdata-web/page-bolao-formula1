@@ -87,8 +87,8 @@ class SiteLocal : Closeable {
     /** Raiz do painel de status (andamento do pipeline) neste servidor. */
     val urlDoPainel: HttpUrl get() = servidor.url("/painel/")
 
-    /** Sem Releases publicados no site local (responde 404): o app não mostra aviso. */
-    val urlDosReleases: HttpUrl get() = servidor.url("/releases")
+    /** Sem versao.json publicado no site local (responde 404): o app não mostra aviso. */
+    val urlDaVersao: HttpUrl get() = servidor.url("/app/versao.json")
 
     override fun close() = servidor.close()
 }
@@ -104,7 +104,7 @@ class BolaoAppDeTeste : BolaoApp() {
         AppContainer(
             this,
             SiteDeTeste.site.urlDosDados,
-            SiteDeTeste.site.urlDosReleases,
+            SiteDeTeste.site.urlDaVersao,
             urlDaReserva = null,
             urlDoPainel = SiteDeTeste.site.urlDoPainel,
             urlDoPainelReserva = null,

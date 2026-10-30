@@ -201,7 +201,7 @@ class TelasTest {
     @Test
     fun avisoDeNovaVersaoOfereceBaixar() {
         var baixou = false
-        val publicada = VersaoPublicada("0.2.0", build = 20, urlDoApk = "https://exemplo/apk", urlDaPagina = "")
+        val publicada = VersaoPublicada("0.2.0", build = 20, urlDoApk = "https://exemplo/apk", notas = "")
         compose.setContent {
             BolaoF1Theme { AvisoDeNovaVersao(publicada, aoBaixar = { baixou = true }, aoDispensar = {}) }
         }

@@ -104,6 +104,13 @@ também tem o histórico 2021–2025. Em produção (GitHub Pages), operado pelo
 - `.github/` — workflow do pipeline e scripts.
 - `google-apps-script/` — `Code.gs` + `SETUP.md`.
 - `android/` — app Android nativo (Etapa 9): projeto Gradle, módulo `:app`.
+- `worker/` — Worker `bolao-f1-app` (route em `bolaof1.gfvdata.com/app/*`): APK no KV e
+  `versao.json` no D1 (etapa-9 "Sub-etapa 9h"). Deploy manual, só com OK:
+  `npx --prefix worker wrangler deploy --config worker/wrangler.jsonc`.
+- `vigia/` — Worker `bolao-vigia`, só Cron de 5 min (JS puro, sem npm): lê
+  `docs/data/pendentes.json` no ar, consulta a Jolpica e dispara o retry do
+  `pipeline.yml` quando o quali sai (etapa-5 "Ajuste posterior (2026-10-30)").
+  Deploy manual, só com OK: `npx --yes wrangler@4.150.0 deploy --config vigia/wrangler.jsonc`.
 - `contexto/` — documentação do projeto (este índice aponta para ela).
 - `historico_wpp/` — export do WhatsApp, **fora do Git** (privacidade).
 
@@ -127,7 +134,7 @@ Todos em `contexto/`. "§" = seção; títulos entre aspas = bloco em negrito no
 | `hall_of_fame.json`, `regras.json` (escritos à mão) | `etapa-4` "aba Hall of Fame"; `etapa-7` "Ajustes 2026-09-08d" |
 | Equipes por piloto/ano (nome e cor) | `etapa-8` "Base de equipes" |
 | Jolpica-F1 (API, `fetch_*`/`build_*`) | `etapa-2` |
-| Pipeline, workflow, códigos de saída 0/1/2, verificador | `etapa-5` |
+| Pipeline, workflow, códigos de saída 0/1/2, verificador | `etapa-5`; vigia no Cron da Cloudflare + `pendentes.json`: `etapa-5` "Ajuste posterior (2026-10-30)" |
 | Google Forms, Apps Script, token | `etapa-6`; `google-apps-script/SETUP.md` |
 | Front-end: arquitetura, helpers, tema claro/escuro | `etapa-4` "Mapa do front-end" (visão inicial, desatualizada nos detalhes), "switch de tema"; Chart.js: `etapa-4` "Importante (bug de layout" |
 | Abas da temporada (Ranking: Geral/Corridas/Palpites/Ponto extra/Simulador; Rendimento; Pilotos) | `etapa-4` (blocos "Ajuste posterior"); estado mais recente das abas: `etapa-4` "abas padronizadas", "Ajustes seguintes (2026-09-27)" e "sub-aba Ponto extra" |

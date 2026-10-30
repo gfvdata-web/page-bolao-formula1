@@ -32,8 +32,11 @@ object Enderecos {
     const val PAINEL = "https://painel.gfvdata.com/"
     const val PAINEL_RESERVA = "https://painel-status.pages.dev/"
 
-    /** API pública dos Releases (aviso de nova versão, 9f). */
-    const val RELEASES = "https://api.github.com/repos/gfvdata-web/page-bolao-formula1/releases?per_page=20"
+    /**
+     * Versão oficial mais recente do app (aviso de nova versão, 9f), no Worker do app
+     * (worker/src/index.ts); o APK fica ao lado, em `app/`. Sem reserva: o GitHub Releases saiu.
+     */
+    const val VERSAO = "https://bolaof1.gfvdata.com/app/versao.json"
 }
 
 /**
@@ -43,7 +46,7 @@ object Enderecos {
 class AppContainer(
     contexto: Context,
     urlDosDados: HttpUrl = Enderecos.DADOS_DO_SITE.toHttpUrl(),
-    urlDosReleases: HttpUrl = Enderecos.RELEASES.toHttpUrl(),
+    urlDaVersao: HttpUrl = Enderecos.VERSAO.toHttpUrl(),
     urlDaReserva: HttpUrl? = Enderecos.DADOS_DO_SITE_RESERVA.toHttpUrl(),
     urlDoPainel: HttpUrl = Enderecos.PAINEL.toHttpUrl(),
     urlDoPainelReserva: HttpUrl? = Enderecos.PAINEL_RESERVA.toHttpUrl(),
@@ -74,7 +77,7 @@ class AppContainer(
 
     val envio: EnviaPalpite = EnvioPeloAppsScript(clienteHttp)
 
-    val verificadorDeAtualizacao = VerificadorDeAtualizacao(clienteHttp, urlDosReleases)
+    val verificadorDeAtualizacao = VerificadorDeAtualizacao(clienteHttp, urlDaVersao)
 }
 
 /** Os testes trocam o contêiner (ex.: site local) sobrescrevendo [criarContainer]. */

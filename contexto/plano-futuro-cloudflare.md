@@ -56,23 +56,23 @@ Isso torna obrigatória uma **trilha mínima**, mesmo com a migração completa 
 | # | Item | Por quê |
 |---|---|---|
 | a | App lê `https://bolaof1.gfvdata.com/data/` (Cloudflare Pages, mesmo conteúdo de `docs/`) em vez do `github.io` (`Enderecos.DADOS_DO_SITE`, `App.kt`) | O `github.io` some |
-| b | APK publicado fora do GitHub Releases: **KV pelo Worker**, modelo do painel-status (commit `0b1e18c`; skill `apk-distribution`). O `android.yml` confere a assinatura e envia `PUT /api/app/<nome>.apk` (o Worker guarda só os 3 mais novos; limite de 25 MiB por valor no KV) com um token de envio como secret do repo; o app baixa de `bolaof1.gfvdata.com/app/` | Release de repo privado não baixa sem login |
+| b | APK publicado fora do GitHub Releases: **KV pelo Worker**, modelo do painel-status (commit `0b1e18c`; skill `apk-distribution`). O `android.yml` confere a assinatura e envia `PUT /api/app/<nome>.apk` (o Worker guarda só os 3 mais novos; limite de 25 MiB por valor no KV) com um token de envio como secret do repo; o app baixa de `bolaof1.gfvdata.com/app/`. **Feito em 2026-10-30** (Worker `bolao-f1-app`, `worker/`; etapa-9 "Sub-etapa 9h") | Release de repo privado não baixa sem login |
 | b' | **R2 descartado** (decisão fixa do portfólio, 2026-10-13): exige cartão e cobra o excedente. Um plano anterior previa um bucket compartilhado `apps` em `apps.gfvdata.com`; não será feito. O Worker que serve o APK e o `versao.json` é o da trilha mínima e sai com a implementação (precisa do OK do usuário; ver `Cloudfare/CLAUDE.md`) | (a), (c) e (d) fazem parte da mesma trilha |
-| c | Aviso de versão lendo um **`versao.json`** servido pelo mesmo Worker (`bolaof1.gfvdata.com/app/versao.json`, guardado no D1), em vez da API de Releases (`Enderecos.RELEASES`, `Atualizacoes.kt`) | Mesma razão |
-| d | Verificador fora do `sleep` do Actions | Repo privado tem **2.000 min/mês** (somados entre os privados). A vigília de até 5 h gastou ~475 min em 30 dias (só a run de 2026-10-10 ficou 301 min). |
+| c | Aviso de versão lendo um **`versao.json`** servido pelo mesmo Worker (`bolaof1.gfvdata.com/app/versao.json`, guardado no D1), em vez da API de Releases (`Enderecos.RELEASES`, `Atualizacoes.kt`). **Feito em 2026-10-30** (`Enderecos.VERSAO`, `app-v0.3.0`) | Mesma razão |
+| d | Verificador fora do `sleep` do Actions. **Implementado em 2026-10-30** (Worker `bolao-vigia`, `vigia/`; `docs/data/pendentes.json`; etapa-5 "Ajuste posterior (2026-10-30)"); deploy e secret dependem do OK do usuário | Repo privado tem **2.000 min/mês** (somados entre os privados). A vigília de até 5 h gastou ~475 min em 30 dias (só a run de 2026-10-10 ficou 301 min). |
 | e | Painel-status passa a usar token para ler os workflows | Feito pela sessão do painel, não aqui |
 
 - **Atenção (a–c):** a 0.1.1 instalada procura atualização no Releases. Depois
   que o repo ficar privado, ela não acha mais nada. A versão nova precisa ser
   **instalada à mão, uma vez, antes da virada**.
-- **Proposta para (d), mantendo Python e o funcionamento:** um Worker pequeno
-  só com Cron, sem D1 nem reescrita.
+- **(d), mantendo Python e o funcionamento** (feito como proposto; detalhes na
+  etapa-5): um Worker pequeno só com Cron, sem D1 nem reescrita.
   - O pipeline grava a rodada pendente num arquivo publicado pelo site.
   - O Cron (a cada 5 min) consulta a Jolpica e, quando o quali sai, dispara o
     `workflow_dispatch` (retry) com um PAT em `wrangler secret`.
   - O Actions roda então só ~1 min por rodada.
-  - Mexe na regra "verificador re-tenta dentro da própria run"
-    (`.claude/rules/automacao.md`, etapa-5): registrar lá quando for feito.
+  - A regra "verificador re-tenta dentro da própria run" foi trocada em
+    `.claude/rules/automacao.md` e na etapa-5.
   - Alternativa sem Cloudflare: `schedule:` no Actions. Gasta pelo menos 1 min
     por disparo, então é pior.
 - **Também conferir:** o build do Cloudflare Pages (integração Git) precisa

@@ -254,6 +254,10 @@ oficial roda o mesmo código que os testes exercitam).
 com **este mesmo keystore**; os 4 secrets foram cadastrados também lá. Perder o
 keystore afeta os dois apps. Detalhes do painel: README dele, "App Android".
 
+**Ajuste posterior (2026-10-30):** a partir da `app-v0.3.0` o APK e o aviso
+de versão saem do GitHub Releases e vão para o Worker do app; ver "Sub-etapa
+9h". O texto de 9f e o procedimento abaixo descrevem as versões até a 0.2.0.
+
 **9f — aviso de versão:** `VerificadorDeAtualizacao` lê
 `/repos/.../releases?per_page=20` sem token, considera só tags `app-v*` que
 não sejam rascunho/pré-release e acha o build pelo nome do APK
@@ -264,7 +268,8 @@ build publicado for maior que o instalado; qualquer falha = sem aviso.
 1. Commit(s) no `main` com a run do `android.yml` verde.
 2. `git tag -a app-vX.Y.Z -m "…"` no commit e `git push origin app-vX.Y.Z`.
 3. O job `publicar` roda depois de testes e lint, assina, confere a chave e
-   cria o Release. Quem tem o app vê o aviso na próxima abertura.
+   envia o APK e o `versao.json` ao Worker do app (até a 0.2.0: criava o
+   Release). Quem tem o app vê o aviso na próxima abertura.
 - Versão: X.Y.Z segue o tamanho da mudança (Z correção, Y função nova, X
   mudança grande). O versionCode é o número da run e só cresce.
 
@@ -301,4 +306,37 @@ Pedido do usuário: o app ganhar o que o site tem além da temporada atual.
   1 min enquanto há etapa em andamento e a aba está visível. **O app do Bolão
   passou a ser consumidor desse `status.json`**: mudança nos campos de
   `etapas_pipeline` precisa ser aditiva.
+
+## Sub-etapa 9h — APK e aviso de versão pelo Worker (2026-10-30)
+
+Itens (b) e (c) da trilha mínima de `plano-futuro-cloudflare.md`: o repo vai
+ficar privado e Release de repo privado não baixa sem login. Modelo: Worker do
+painel-status (commit `0b1e18c` lá; skill `apk-distribution`).
+**Decisões fixadas (não reabrir sem o usuário pedir):**
+- **Worker `bolao-f1-app`** (`worker/`, TypeScript, sem dependências em
+  runtime) como **route** em `bolaof1.gfvdata.com/app/*` e `/api/app/*`, na
+  frente do Cloudflare Pages (que segue servindo o site no mesmo domínio). Sem
+  `workers.dev`. Sem assets: fora dessas rotas responde 404.
+- **APK no KV** (binding `APKS`), só os **3 mais novos** pelo build, limite de
+  **25 MiB** (o job falha antes de enviar se passar). **`versao.json` no D1**
+  (`bolao-f1-app`, tabela `arquivos`, chave `app/versao.json`), só aceito se
+  `versao`/`build` baterem com o nome do APK e o APK já estiver no KV. Sem R2.
+- **Rotas:** `GET /app/versao.json`, `GET /app/bolao-f1-vX.Y.Z-buildN.apk`,
+  `PUT /api/app/<nome>` com `Authorization: Bearer TOKEN_ENVIO` (secret do
+  Worker) = secret `BOLAO_TOKEN_ENVIO` do repo.
+- **`android.yml`** (sem renomear): job `publicar` sem `contents: write`,
+  confere a assinatura, faz `PUT` do APK, depois do `versao.json`
+  (`{versao, build, apk, notas, publicado_em}`) e baixa o APK de volta.
+- **App:** `Enderecos.VERSAO = https://bolaof1.gfvdata.com/app/versao.json`
+  (sem reserva); `VerificadorDeAtualizacao` tira versão e build do **nome do
+  APK** e monta o link ao lado do `versao.json` (nunca segue link de fora).
+  `VersaoPublicada.urlDaPagina` virou `notas`.
+- **A 0.2.0 instalada continua procurando no Releases:** a 0.3.0 é instalada
+  **à mão, uma vez** (link direto do Worker), antes da virada do repo.
+- Testes: `tests/worker.test.mjs` (D1/KV em memória) + `tsc`;
+  `tests/test_publicacao_app.py` (job publicar ↔ Worker ↔ app);
+  `VerificadorDeAtualizacaoTest` (JVM).
+- **Deploy do Worker é manual** (`npx --prefix worker wrangler deploy --config
+  worker/wrangler.jsonc`), raro; a primeira vez cria KV/D1 e aplica a
+  migração (`wrangler d1 migrations apply bolao-f1-app --remote`).
 

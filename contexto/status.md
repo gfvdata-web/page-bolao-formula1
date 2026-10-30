@@ -21,7 +21,7 @@ para não invadir as etapas vizinhas.
 | 6 | ✅ | `etapas/etapa-6-forms-apps-script.md` | Forms + Apps Script → `repository_dispatch`; PAT |
 | 7 | 🟡 | `etapas/etapa-7-historico.md` | Temporadas 2021–2025, regras por ano, modo histórico `?ano`, página `?jogador` |
 | 8 | ✅ | `etapas/etapa-8-navegacao-analises.md` | Menu, `?jogadores`, `?pilotos`, perfis, base de equipes |
-| 9 | 🟡 | `etapas/etapa-9-app-android.md` | App Android nativo (Kotlin/Compose), APK via Releases, envio de palpite pelo app |
+| 9 | 🟡 | `etapas/etapa-9-app-android.md` | App Android nativo (Kotlin/Compose), APK pelo Worker (até a 0.2.0, Releases), envio de palpite pelo app |
 
 ## Em aberto
 
@@ -39,4 +39,8 @@ para não invadir as etapas vizinhas.
   9g (2026-10-21, abas Rendimento/Hall of Fame, temporadas antigas, pipeline
   na aba Enviar) publicada como `app-v0.2.0` (build 19, run verde); falta
   validar no celular.
+  9h (2026-10-30): APK no KV e `versao.json` no D1 pelo Worker `bolao-f1-app`
+  (`bolaof1.gfvdata.com/app/`), itens b/c do `plano-futuro-cloudflare.md`.
+  Publicada como `app-v0.3.0`; falta instalar a 0.3.0 à mão nos celulares
+  (a 0.2.0 só procura no Releases).
 - Pendências gerais e decisões adiadas: seção 9 de `visao-geral.md`.
