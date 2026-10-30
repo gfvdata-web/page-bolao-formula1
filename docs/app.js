@@ -4025,6 +4025,49 @@ function peBlocoRodada(r) {
   return ligarDicaHall(bloco, dica);
 }
 
+// Todos os pilotos da temporada agrupados pela equipe principal (EQUIPES do
+// ano), com os blocos das rodadas em que cada um foi o escolhido. Piloto que
+// nunca foi — e equipe sem nenhum escolhido — fica em cinza. Escolhido sem
+// equipe conhecida cai em "Outros", para nada sumir.
+function peGradeEquipes(porPiloto) {
+  const grupos = new Map(); // chave -> {nome, cor, pilotos: [{cod, rs}], vezes}
+  const grupo = (chave) => {
+    if (!grupos.has(chave)) {
+      const info = chave ? infoEquipe(chave, TEMPORADA) : { nome: "Outros", cor: COR_EQUIPE_PADRAO };
+      grupos.set(chave, { ...info, pilotos: [], vezes: 0 });
+    }
+    return grupos.get(chave);
+  };
+  const cods = new Set([...Object.keys(EQUIPES[String(TEMPORADA)]?.pilotos || {}), ...porPiloto.keys()]);
+  for (const cod of cods) {
+    const g = grupo(chavesEquipesPiloto(cod, TEMPORADA)[0] || "");
+    const rs = porPiloto.get(cod) || [];
+    g.pilotos.push({ cod, rs });
+    g.vezes += rs.length;
+  }
+  const equipes = [...grupos.values()].sort((a, b) => b.vezes - a.vezes || a.nome.localeCompare(b.nome));
+  return el(
+    "div",
+    { class: "pe-equipes" },
+    equipes.map((g) => {
+      g.pilotos.sort((a, b) => b.rs.length - a.rs.length || a.cod.localeCompare(b.cod));
+      return el("div", { class: "pe-equipe" + (g.vezes ? "" : " pe-equipe--nunca"), style: `--cor-equipe:${g.cor}` }, [
+        el("div", { class: "pe-equipe__topo" }, [
+          el("span", { class: "pe-equipe__nome" }, [g.nome]),
+          el("span", { class: "pe-equipe__qtd" }, [g.vezes ? `${g.vezes}×` : "—"]),
+        ]),
+        ...g.pilotos.map(({ cod, rs }) =>
+          el("div", { class: "pe-equipe__piloto" + (rs.length ? "" : " pe-equipe__piloto--nunca") }, [
+            el("span", { class: "pe-equipe__cod" }, [cod]),
+            el("span", { class: "pe-equipe__vezes" }, [rs.length ? `${rs.length}×` : "—"]),
+            rs.length ? el("div", { class: "pe-equipe__rodadas" }, rs.map(peBlocoRodada)) : null,
+          ])
+        ),
+      ]);
+    })
+  );
+}
+
 function renderPontoExtra(standings, bets, results) {
   const container = document.getElementById("pontoextra-container");
   const status = document.getElementById("pontoextra-status");
@@ -4065,29 +4108,14 @@ function renderPontoExtra(standings, bets, results) {
   ]);
 
   // Quantas vezes cada piloto foi o escolhido
-  const lista = el(
-    "div",
-    { class: "pe-pilotos" },
-    pilotos.map(([cod, rs]) => {
-      const equipe = equipePilotoNoAno(cod, TEMPORADA);
-      return el("div", { class: "pe-piloto", style: `--cor-equipe:${corPiloto(cod)}` }, [
-        el("div", { class: "pe-piloto__nome" }, [
-          el("span", { class: "pe-piloto__cod" }, [cod]),
-          equipe ? el("span", { class: "pe-piloto__equipe" }, [equipe]) : null,
-        ]),
-        el("span", { class: "pe-piloto__qtd" }, [`${rs.length}×`]),
-        el("div", { class: "pe-piloto__rodadas" }, rs.map(peBlocoRodada)),
-      ]);
-    })
-  );
   const cardPilotos = el("div", { class: "pe-card" }, [
     el("h3", { class: "temporada-grafico-titulo" }, ["Quantas vezes cada piloto foi o da rodada"]),
     el("p", { class: "pe-card__nota" }, [
       "Cada bloco é uma rodada: bandeira, onde o piloto largou e o número da rodada. O selo",
       el("span", { class: "pe-legenda-acerto" }, ["N"]),
-      " conta quantos jogadores cravaram a posição.",
+      " conta quantos jogadores cravaram a posição. Em cinza, quem nunca foi o da rodada.",
     ]),
-    lista,
+    peGradeEquipes(porPiloto),
   ]);
 
   // Como os jogadores pontuaram

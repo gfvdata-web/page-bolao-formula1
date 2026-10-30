@@ -1160,40 +1160,65 @@ a.chamada { text-decoration: none; }
 }
 .pe-card__nota:last-child { margin: 0.8rem 0 0; }
 
-.pe-pilotos { display: flex; flex-direction: column; }
-
-.pe-piloto {
+.pe-equipes {
   display: grid;
-  grid-template-columns: 6.5rem 2.2rem 1fr;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: 0.7rem;
+}
+
+.pe-equipe {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.5rem 0.6rem 0.4rem;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--cor-equipe) 6%, var(--bg-card));
+  border: 1px solid var(--borda);
+  border-top: 4px solid var(--cor-equipe);
+}
+.pe-equipe--nunca {
+  opacity: 0.45;
+  filter: grayscale(1);
+  border-top-color: var(--borda);
+}
+
+.pe-equipe__topo {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.15rem;
+}
+.pe-equipe__nome { font-weight: 800; font-size: 0.85rem; }
+.pe-equipe__qtd {
+  font-size: 1rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.pe-equipe__piloto {
+  display: grid;
+  grid-template-columns: 2.6rem 1.6rem 1fr;
   align-items: center;
-  gap: 0.6rem;
-  padding: 0.55rem 0 0.55rem 0.65rem;
-  border-left: 4px solid var(--cor-equipe);
-  border-bottom: 1px solid var(--borda);
+  gap: 0.4rem;
+  min-height: 2.2rem;
+  padding: 0.3rem 0;
+  border-top: 1px solid var(--borda);
 }
-.pe-piloto:last-child { border-bottom: none; }
-
-.pe-piloto__nome { display: flex; flex-direction: column; min-width: 0; }
-.pe-piloto__cod { font-weight: 800; font-size: 0.95rem; letter-spacing: 0.02em; }
-.pe-piloto__equipe {
-  font-size: 0.7rem;
+.pe-equipe__piloto--nunca { opacity: 0.4; filter: grayscale(1); min-height: 0; }
+.pe-equipe--nunca .pe-equipe__piloto--nunca { opacity: 1; }
+.pe-equipe__cod { font-weight: 800; font-size: 0.85rem; letter-spacing: 0.02em; }
+.pe-equipe__vezes {
+  font-size: 0.8rem;
+  font-weight: 700;
   color: var(--texto-fraco);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  font-variant-numeric: tabular-nums;
 }
-
-.pe-piloto__rodadas {
+.pe-equipe__rodadas {
   display: flex;
   flex-wrap: wrap;
   gap: 0.45rem;
   padding: 0.35rem 0.4rem 0 0;
-}
-
-.pe-piloto__qtd {
-  font-size: 1.15rem;
-  font-weight: 800;
-  font-variant-numeric: tabular-nums;
 }
 
 .pe-rodada {
@@ -1313,7 +1338,13 @@ a.chamada { text-decoration: none; }
 
 @media (max-width: 600px) {
   .pe-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .pe-piloto { grid-template-columns: 4.4rem 2rem 1fr; gap: 0.45rem; }
+  /* Celular: 2 equipes por linha; blocos das rodadas embaixo do piloto. */
+  .pe-equipes { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.5rem; }
+  .pe-equipe { padding: 0.45rem 0.45rem 0.35rem; }
+  .pe-equipe__nome { font-size: 0.8rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pe-equipe__piloto { grid-template-columns: auto 1fr; gap: 0.1rem 0.4rem; min-height: 0; }
+  .pe-equipe__rodadas { grid-column: 1 / -1; gap: 0.5rem 0.4rem; padding: 0.4rem 0.3rem 0.1rem 0; }
+  .pe-equipe .pe-rodada { min-width: 0; padding-right: 0.4rem; }
 }
 .temporada-cards--no-grafico { margin: 0.6rem 0 0.8rem; }
 

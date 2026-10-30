@@ -769,3 +769,11 @@ temporadas — sub-aba "Palpites" no Ranking + card "Explore a temporada".**
 - Ajuste (2026-10-09): blocos mostram **P (onde largou) em cima, R embaixo**;
   pop-ups dos blocos e dos chips de acerto usam `ligarDicaHall` (mesmo visual
   dos tooltips do Chart.js, instantâneo) — nada de `title` nativo.
+- Ajuste (2026-10-30): "Quantas vezes cada piloto…" deixou de ser lista e virou
+  **grade por equipe** (`peGradeEquipes`): todos os pilotos de `EQUIPES[ano]`,
+  cada um na equipe principal (`chavesEquipesPiloto(...)[0]`), com os mesmos
+  blocos de rodada. Piloto que nunca foi o da rodada e equipe sem nenhum
+  escolhido ficam em cinza; escolhido sem equipe conhecida cai em "Outros".
+  Ordem: equipes por vezes desc, depois nome; pilotos idem, depois código.
+  Desktop `auto-fill minmax(15rem)`; celular 2 colunas com os blocos embaixo
+  do código do piloto.
