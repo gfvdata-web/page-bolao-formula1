@@ -138,6 +138,24 @@ class TestParseErros(unittest.TestCase):
         with self.assertRaises(ParseError):
             parse_sheet(texto, DRIVERS)
 
+    def test_bloco_com_piloto_faltando_diz_quem_e_quantos(self):
+        # Caso real (México 2026): "Ferrari" mandou só 5 pilotos.
+        texto = (
+            "Bolão Qualify *Mexico*\nPiloto da vez *Norris*\n\n"
+            "Ferrari \n\nLec\nAnt\nVer\nHam\nRus\nP6\n\n"
+            "Filipe\nNOR\nLEC\nANT\nVER\nRUS\nHAM\nP3\n"
+        )
+        with self.assertRaises(ParseError) as ctx:
+            parse_sheet(texto, DRIVERS)
+        msg = str(ctx.exception)
+        self.assertIn("Palpite de 'Ferrari' com 5 pilotos (esperado 6): falta 1 piloto", msg)
+
+    def test_bloco_com_varios_pilotos_faltando(self):
+        texto = "Corrida\nPiloto Hamilton\n\nJoao\nVER\nNOR\nRUS\nP1\n"
+        with self.assertRaises(ParseError) as ctx:
+            parse_sheet(texto, DRIVERS)
+        self.assertIn("Palpite de 'Joao' com 3 pilotos (esperado 6): faltam 3 pilotos", str(ctx.exception))
+
     def test_bonus_invalido(self):
         texto = "Corrida\nPiloto Hamilton\n\nJoao\nVER\nNOR\nRUS\nHAM\nANT\nPIA\nPX\n"
         with self.assertRaises(ParseError):

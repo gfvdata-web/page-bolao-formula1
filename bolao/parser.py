@@ -178,6 +178,23 @@ def _fecha_bloco_sem_bonus(
     )
 
 
+def _msg_bloco_errado(bloco: list[str], top_n: int) -> str:
+    """Erro legível de bloco ``nome + pilotos + P#`` com pilotos a menos.
+
+    Diz de quem é o palpite e quantos pilotos faltam, para corrigir o texto
+    pelo celular sem precisar contar linhas. (Pilotos a mais não chegam aqui:
+    o bloco fecha sozinho com ``nome + top_n`` linhas.)
+    """
+    nome = bloco[0].strip()
+    pilotos = len(bloco) - 2  # tira o nome e a linha P#
+    dif = top_n - pilotos
+    ajuste = f"falta{'m' if dif > 1 else ''} {dif} piloto{'s' if dif > 1 else ''}"
+    return (
+        f"Palpite de {nome!r} com {pilotos} pilotos (esperado {top_n}): {ajuste}. "
+        f"Bloco de jogador com {len(bloco)} linhas (esperado {top_n + 2}): {bloco!r}"
+    )
+
+
 def _parse_players(
     corpo: list[str], driver_aliases: dict, player_aliases: dict, top_n: int = 6
 ) -> list[Bet]:
@@ -207,10 +224,7 @@ def _parse_players(
         buffer = []
         esperado = top_n + 2  # nome + top_n pilotos + linha P#
         if len(bloco) != esperado:
-            raise ParseError(
-                f"Bloco de jogador com {len(bloco)} linhas "
-                f"(esperado {esperado}): {bloco!r}"
-            )
+            raise ParseError(_msg_bloco_errado(bloco, top_n))
         nome = bloco[0]
         top6 = [normalize_driver(c, driver_aliases) for c in bloco[1 : 1 + top_n]]
         bonus_guess = _parse_bonus_guess(bloco[-1], nome)
