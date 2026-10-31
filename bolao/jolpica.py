@@ -331,7 +331,7 @@ def fetch_all_results(
 def _write_json(caminho: Path, dados: dict) -> None:
     caminho.parent.mkdir(parents=True, exist_ok=True)
     caminho.write_text(
-        json.dumps(dados, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+        json.dumps(dados, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n"
     )
 
 

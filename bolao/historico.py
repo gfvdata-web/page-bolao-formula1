@@ -188,7 +188,7 @@ def build(
                 linhas_rodada.get("circuito", race["race"]), quem, palps, fmt
             )
             messages_dir.mkdir(parents=True, exist_ok=True)
-            (messages_dir / f"{rnd}.txt").write_text(texto, encoding="utf-8")
+            (messages_dir / f"{rnd}.txt").write_text(texto, encoding="utf-8", newline="\n")
         rounds_ok.append(rnd)
 
     return {"rounds": rounds_ok, "avisos": avisos}

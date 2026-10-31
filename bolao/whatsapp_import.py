@@ -740,7 +740,7 @@ def escreve_raw(
         if tipo:
             partes.append(f"\n----- [{tipo}] -----\n{_bloco_mensagem(msg)}\n")
             n += 1
-    destino.write_text("".join(partes), encoding="utf-8")
+    destino.write_text("".join(partes), encoding="utf-8", newline="\n")
     return n
 
 
@@ -770,7 +770,7 @@ def escreve_palpites_finais(
                 )
             for aviso in rb.avisos:
                 partes.append(f"  [aviso] {aviso}\n")
-    destino.write_text("".join(partes), encoding="utf-8")
+    destino.write_text("".join(partes), encoding="utf-8", newline="\n")
 
 
 def escreve_classificacoes(
@@ -806,7 +806,7 @@ def escreve_classificacoes(
                     f"{item.points:4d}{extra}\n"
                 )
             n += 1
-    destino.write_text("".join(partes), encoding="utf-8")
+    destino.write_text("".join(partes), encoding="utf-8", newline="\n")
     return n
 
 
@@ -950,7 +950,7 @@ def escreve_placar_publicado(
     }
     destino = data_dir / str(season) / "placar_publicado.json"
     destino.write_text(
-        json.dumps(dados, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+        json.dumps(dados, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n"
     )
     return destino
 
@@ -1054,7 +1054,7 @@ def escreve_conferencia(
         partes.append(
             f"\n  Resumo {season}: {acertos}/{total} conferências batem ({pct:.0f}%).\n"
         )
-    destino.write_text("".join(partes), encoding="utf-8")
+    destino.write_text("".join(partes), encoding="utf-8", newline="\n")
 
 
 def escreve_saldo_inicial(
@@ -1147,7 +1147,7 @@ def escreve_saldo_inicial(
     }
     destino = data_dir / str(season) / "saldo_inicial.json"
     destino.write_text(
-        json.dumps(dados, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+        json.dumps(dados, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n"
     )
     return dados
 

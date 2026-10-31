@@ -43,7 +43,7 @@ def _load_aliases(caminho: Path) -> dict:
 def _write_json(caminho: Path, dados: dict) -> None:
     caminho.parent.mkdir(parents=True, exist_ok=True)
     caminho.write_text(
-        json.dumps(dados, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+        json.dumps(dados, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n"
     )
 
 
@@ -83,7 +83,7 @@ def run(
 
     msg_path = data_dir / str(season) / "messages" / f"{round_}.txt"
     msg_path.parent.mkdir(parents=True, exist_ok=True)
-    msg_path.write_text(texto, encoding="utf-8")
+    msg_path.write_text(texto, encoding="utf-8", newline="\n")
 
     status_resultado = fetch_result_if_missing(round_, season, data_dir)
     resumo_site = generate(data_dir, docs_dir, season)
