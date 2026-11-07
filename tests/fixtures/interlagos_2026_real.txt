@@ -1,0 +1,92 @@
+Bolão Qualify *Interlagos*
+Piloto *Bortoleto + Camara*
+
+Guilherme
+ANT
+NOR
+VER
+RUS
+LEC
+HAM
+P9 BOR
+P14 CAM
+
+Paganini
+VER
+ANT
+NOR
+LEC
+HAM
+RUS
+P10 BOR
+P17 CAM
+
+Vinícius 
+VER
+ANT
+NOR
+RUS
+HAM
+LEC
+P10 BOR
+P16 CAM
+
+Ferrari 
+Ver
+Ant
+Ham
+Lec
+Nor
+Rus
+P10 Bor
+P15 Cam
+
+Filipe
+Ver
+Ant
+Ham
+Nor
+Lec
+Had
+P10 Bor
+P16 Cam
+
+Dalla
+VER
+ANT
+RUS
+NOR
+HAM
+LEC
+P10
+P17
+
+Caio
+ANT
+NOR
+VER
+RUS
+PIA
+HAM
+BOR P9
+CAM P16
+
+Francez
+Ver
+Ham
+Ant
+Rus
+Nor
+Pia
+BOR p7
+Cam 17
+
+Caliman
+ANT
+VER
+NOR
+RUS
+HAM
+LEC
+P10 Bor
+P15 Cam

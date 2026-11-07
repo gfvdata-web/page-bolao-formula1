@@ -99,5 +99,12 @@ Regra e formato da mensagem: `visao-geral.md` §2 "Exceção". Genérico para N 
   `data/drivers.json` (a Jolpica não dá código a ele; o resultado usa as 3
   primeiras letras do sobrenome = `CAM`). ⚠ `python -m bolao.jolpica drivers`
   regrava o arquivo e apaga esses aliases.
+- **Correção no mesmo dia (1º envio real falhou):** quase todos escreveram o
+  piloto junto do chute (`P9 BOR`, `BOR P9`, `Cam 17`, `BOR p7`) e o leitor só
+  aceitava `P#` puro, desalinhando os blocos. Agora a linha de chute aceita
+  posição + nome em qualquer ordem **se o nome for de um piloto da rodada**; o
+  chute vai para esse piloto (mesmo fora da ordem); os sem nome ocupam as vagas
+  livres na ordem do cabeçalho; dois chutes para o mesmo piloto = `ParseError`.
+  Mensagem real em `tests/fixtures/interlagos_2026_real.txt`.
 - Testes: `tests/test_dois_pilotos.py` (+ fixture) e contrato em
   `test_dados_publicados.py` (máximo por rodada). Site: `etapa-4` mesma data.

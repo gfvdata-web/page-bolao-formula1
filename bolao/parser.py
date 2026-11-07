@@ -34,6 +34,10 @@ do piloto lista todos, separados por ``e``/``,``/``&``/``+``/``/``
 (``Piloto da vez *Bortoleto* e *Camara*``), e cada jogador fecha o bloco com
 **uma linha ``P#`` por piloto, na ordem do cabeçalho**. Faltou um ``P#`` → esse
 chute vale 0 (como o ``P#`` esquecido). Com um piloto só, nada muda.
+
+A linha do chute pode trazer **o piloto junto**, em qualquer ordem (``P9 BOR``,
+``BOR P9``, ``Cam 17``), desde que o nome seja de um piloto da rodada: aí o chute
+vai para esse piloto, mesmo fora da ordem do cabeçalho.
 """
 
 import re
@@ -104,6 +108,34 @@ _GUESS_RE = re.compile(r"^[pP]?\d{1,2}$")
 # Grade máxima de 2026 (11 equipes x 2). Acima disso o chute nunca casa (0 pt),
 # mas ainda é aceito para preservar o palpite original do jogador.
 _MAX_GRID = 22
+
+
+# Chute com o piloto junto: "P9 BOR", "BOR P9", "Cam 17", "BOR p7".
+_GUESS_NOME_RE = re.compile(
+    r"^(?:(?P<p1>[pP]?\d{1,2})\s+(?P<n1>\D.*)|(?P<n2>.*\D)\s+(?P<p2>[pP]?\d{1,2}))$"
+)
+
+
+def _guess_line(
+    linha: str, bonus_codes: list[str], driver_aliases: dict
+) -> tuple[str | None, str] | None:
+    """Reconhece uma linha de chute; devolve ``(piloto ou None, texto do P#)``.
+
+    ``P10`` -> ``(None, "P10")``. ``P10 Bor``/``BOR P10`` -> ``("BOR", "P10")``,
+    só se o nome for de um piloto da rodada (senão não é chute: ``None``).
+    """
+    limpa = linha.strip().strip("*_").strip()
+    if _GUESS_RE.match(limpa):
+        return None, limpa
+    m = _GUESS_NOME_RE.match(limpa)
+    if not m or not bonus_codes:
+        return None
+    nome = (m.group("n1") or m.group("n2")).strip().strip("*_:-").strip()
+    pos = m.group("p1") or m.group("p2")
+    codigo = normalize_driver(nome, driver_aliases) if nome else ""
+    if codigo in bonus_codes:
+        return codigo, pos
+    return None
 
 
 def _is_guess_line(linha: str) -> bool:
@@ -249,6 +281,7 @@ def _parse_players(
     player_aliases: dict,
     top_n: int = 6,
     n_bonus: int = 1,
+    bonus_codes: list[str] | None = None,
 ) -> list[Bet]:
     """Agrupa o corpo em jogadores usando a linha ``P#`` como terminador.
 
@@ -262,29 +295,38 @@ def _parse_players(
 
     Com ``n_bonus`` > 1 (mais de um piloto da rodada), as linhas ``P#`` logo
     depois da primeira são os chutes dos pilotos seguintes, na ordem do
-    cabeçalho. Chute faltando vira 0; ``P#`` a mais é erro.
+    cabeçalho. Chute faltando vira 0; ``P#`` a mais é erro. A linha pode citar
+    o piloto (``P9 BOR``/``BOR P9``): aí o chute vai para ele (``bonus_codes``).
     """
+    bonus_codes = list(bonus_codes or [])
+    n_bonus = max(n_bonus, len(bonus_codes))
     bets: list[Bet] = []
+    # Chutes de cada bet, na ordem lida: (piloto citado ou None, posição).
+    chutes: list[list[tuple[str | None, int]]] = []
     buffer: list[str] = []
     esperado_sem_bonus = top_n + 1  # nome + top_n pilotos
     ultimo_era_chute = False
+
+    def fecha_sem_bonus() -> None:
+        bets.append(_fecha_bloco_sem_bonus(buffer, driver_aliases, player_aliases, top_n))
+        chutes.append([])
+
     for linha in corpo:
-        chute = _is_guess_line(linha)
+        g = _guess_line(linha, bonus_codes, driver_aliases)
+        chute = g is not None
         if chute and n_bonus > 1 and not buffer and bets and ultimo_era_chute:
             anterior = bets[-1]
-            if len(anterior.bonus_guesses) >= n_bonus:
+            if len(chutes[-1]) >= n_bonus:
                 raise ParseError(
                     f"Palpite de {anterior.player_raw.strip()!r} com mais linhas P# "
                     f"que pilotos da rodada ({n_bonus}): {linha!r}"
                 )
-            anterior.bonus_guesses.append(_parse_bonus_guess(linha, anterior.player_raw))
+            chutes[-1].append((g[0], _parse_bonus_guess(g[1], anterior.player_raw)))
             continue
         ultimo_era_chute = chute
         if not chute:
             if len(buffer) == esperado_sem_bonus:
-                bets.append(
-                    _fecha_bloco_sem_bonus(buffer, driver_aliases, player_aliases, top_n)
-                )
+                fecha_sem_bonus()
                 buffer = []
             buffer.append(linha)
             continue
@@ -295,7 +337,7 @@ def _parse_players(
             raise ParseError(_msg_bloco_errado(bloco, top_n))
         nome = bloco[0]
         top6 = [normalize_driver(c, driver_aliases) for c in bloco[1 : 1 + top_n]]
-        bonus_guess = _parse_bonus_guess(bloco[-1], nome)
+        bonus_guess = _parse_bonus_guess(g[1], nome)
         bets.append(
             Bet(
                 player_id=normalize_player(nome, player_aliases),
@@ -304,16 +346,35 @@ def _parse_players(
                 bonus_guess=bonus_guess,
             )
         )
+        chutes.append([(g[0], bonus_guess)])
     if buffer:
         if len(buffer) == esperado_sem_bonus:
-            bets.append(
-                _fecha_bloco_sem_bonus(buffer, driver_aliases, player_aliases, top_n)
-            )
+            fecha_sem_bonus()
         else:
             raise ParseError(f"Bloco de jogador incompleto (sem linha P#): {buffer!r}")
-    # Rodada com mais de um piloto: quem mandou menos P# fica com 0 no que faltou.
-    for bet in bets:
-        bet.bonus_guesses += [0] * (n_bonus - len(bet.bonus_guesses))
+    # Distribui os chutes: o que cita o piloto vai para ele; os sem nome ocupam
+    # as vagas livres na ordem do cabeçalho. Faltou chute -> 0.
+    for bet, lidos in zip(bets, chutes):
+        if not lidos:
+            bet.bonus_guesses = [0] * n_bonus
+            bet.bonus_guess = 0
+            continue
+        vagas: list[int | None] = [None] * n_bonus
+        for codigo, pos in lidos:
+            if codigo is None:
+                continue
+            k = bonus_codes.index(codigo)
+            if vagas[k] is not None:
+                raise ParseError(
+                    f"Palpite de {bet.player_raw.strip()!r} com dois chutes para {codigo}."
+                )
+            vagas[k] = pos
+        for codigo, pos in lidos:
+            if codigo is None:
+                k = vagas.index(None)
+                vagas[k] = pos
+        bet.bonus_guesses = [0 if v is None else v for v in vagas]
+        bet.bonus_guess = bet.bonus_guesses[0]
     return bets
 
 
@@ -409,7 +470,8 @@ def parse_sheet(
         raise ParseError("Mensagem sem palpites de jogadores.")
 
     bets = _parse_players(
-        corpo, driver_aliases, player_aliases, top_n, max(1, len(bonus_drivers))
+        corpo, driver_aliases, player_aliases, top_n, max(1, len(bonus_drivers)),
+        bonus_drivers,
     )
     if not bets:
         raise ParseError("Nenhum palpite de jogador encontrado.")

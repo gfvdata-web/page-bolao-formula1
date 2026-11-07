@@ -73,6 +73,47 @@ class TestParserDoisPilotos(unittest.TestCase):
             parse_sheet(texto.replace("P4\n", "P4\nP5\n", 1), DRIVERS, PLAYERS)
 
 
+class TestChuteComNomeDoPiloto(unittest.TestCase):
+    """Mensagem real de Interlagos 2026: ``P9 BOR``, ``BOR P9``, ``Cam 17``, ``P10``."""
+
+    def setUp(self):
+        texto = (RAIZ / "tests" / "fixtures" / "interlagos_2026_real.txt").read_text(encoding="utf-8")
+        self.sheet = parse_sheet(texto, DRIVERS, PLAYERS)
+        self.chutes = {b.player_id: b.bonus_guesses for b in self.sheet.bets}
+
+    def test_todos_os_jogadores_lidos(self):
+        self.assertEqual(len(self.sheet.bets), 9)
+        self.assertEqual(self.sheet.bonus_drivers, ["BOR", "CAM"])
+
+    def test_formatos_do_chute(self):
+        self.assertEqual(self.chutes["guilherme"], [9, 14])  # P9 BOR / P14 CAM
+        self.assertEqual(self.chutes["ferrari"], [10, 15])  # P10 Bor / P15 Cam
+        self.assertEqual(self.chutes["caio_l"], [9, 16])  # BOR P9 / CAM P16
+        self.assertEqual(self.chutes["francez"], [7, 17])  # BOR p7 / Cam 17
+        self.assertEqual(self.chutes["dalla"], [10, 17])  # P10 / P17 (sem nome)
+
+    def test_nome_fora_de_ordem_vai_para_o_piloto(self):
+        texto = TEXTO.replace("P8\nP15\n", "CAM P15\nBOR P8\n", 1)
+        guilherme = parse_sheet(texto, DRIVERS, PLAYERS).bets[0]
+        self.assertEqual(guilherme.bonus_guesses, [8, 15])
+        self.assertEqual(guilherme.bonus_guess, 8)
+
+    def test_so_o_segundo_com_nome(self):
+        texto = TEXTO.replace("P8\nP15\n", "P15 CAM\n", 1)
+        guilherme = parse_sheet(texto, DRIVERS, PLAYERS).bets[0]
+        self.assertEqual(guilherme.bonus_guesses, [0, 15])
+
+    def test_dois_chutes_para_o_mesmo_piloto_e_erro(self):
+        texto = TEXTO.replace("P8\nP15\n", "P8 BOR\nP15 BOR\n", 1)
+        with self.assertRaisesRegex(ParseError, "Guilherme"):
+            parse_sheet(texto, DRIVERS, PLAYERS)
+
+    def test_nome_que_nao_e_piloto_da_rodada_nao_vira_chute(self):
+        texto = TEXTO.replace("P8\nP15\n", "P8 VER\nP15\n", 1)
+        with self.assertRaises(ParseError):
+            parse_sheet(texto, DRIVERS, PLAYERS)
+
+
 class TestPontuacaoDoisPilotos(unittest.TestCase):
     def setUp(self):
         sheet = parse_sheet(TEXTO, DRIVERS, PLAYERS)
