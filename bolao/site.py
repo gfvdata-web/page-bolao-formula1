@@ -536,6 +536,8 @@ def generate(
     _dump_json(docs_data / "calendar.json", calendar_doc)
 
     gerar_equipes(data_dir, docs_dir)
+    if season == TEMPORADA_ATUAL:
+        gerar_pendentes(data_dir, docs_dir, season)
 
     # --- docs/data/seasons.json (índice das temporadas disponíveis) ---
     # Varre as pastas irmãs com standings.json — assim gerar uma temporada não
@@ -562,6 +564,39 @@ def generate(
         "rounds": [info["round"] for info in round_infos],
         "players": len(standings_players),
     }
+
+
+def gerar_pendentes(data_dir: Path, docs_dir: Path, season: int) -> dict:
+    """Gera ``docs/data/pendentes.json``: rodadas da temporada atual com palpites
+    gravados (``messages/<r>.txt``) e ainda **sem resultado** (``results/<r>.json``).
+
+    Lido pelo Worker ``bolao-vigia`` (``vigia/``, Cron de 5 min): ele consulta a
+    Jolpica a partir do horário do quali e dispara o ``pipeline.yml`` (retry) quando
+    o resultado sai. Formato: ``{temporada, pendentes:[{round, race, qualifying_utc}]}``.
+    Ver ``contexto/etapas/etapa-5-github-actions.md`` "Ajuste posterior (2026-10-30)".
+    """
+    season_dir = data_dir / str(season)
+    calendario = {
+        r["round"]: r for r in _load_json(season_dir / "calendar.json").get("races", [])
+    }
+    rodadas = sorted(
+        int(m.stem)
+        for m in (season_dir / "messages").glob("*.txt")
+        if m.stem.isdigit() and not (season_dir / "results" / f"{m.stem}.json").exists()
+    )
+    doc = {
+        "temporada": season,
+        "pendentes": [
+            {
+                "round": rnd,
+                "race": calendario.get(rnd, {}).get("race", ""),
+                "qualifying_utc": calendario.get(rnd, {}).get("qualifying_utc"),
+            }
+            for rnd in rodadas
+        ],
+    }
+    _dump_json(docs_dir / "data" / "pendentes.json", doc)
+    return doc
 
 
 def gerar_equipes(data_dir: Path, docs_dir: Path) -> dict:

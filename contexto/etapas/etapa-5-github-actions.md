@@ -129,3 +129,24 @@ parser mais tolerante + alias de calendário.**
   fraseado ainda não vista pode enganar os dois sem avisar).
 - Testes novos em `tests/test_parser.py` (bloco sem bônus no meio/fim da
   mensagem, "Piloto da vez") — total do projeto: **93**.
+
+**Ajuste posterior (2026-10-30): vigia no Cron da Cloudflare (item d do `plano-futuro-cloudflare.md`).**
+*Registrado em 2026-11-07:* o Worker foi publicado em 30/10, mas a pasta `vigia/`, o teste e
+o `pendentes.json` não chegaram a ser commitados (só as menções no CLAUDE.md/`scripts/check`).
+O código foi recuperado do Worker publicado (source map) e o resto refeito.
+- `vigia/src/index.js` (JS puro, sem npm) + `vigia/wrangler.jsonc` (Worker `bolao-vigia`,
+  Cron `*/5 * * * *`, sem rota/D1/KV). Lê `https://bolaof1.gfvdata.com/data/pendentes.json`;
+  a partir de quali + 45 min consulta a Jolpica; quando sai, faz `workflow_dispatch` do
+  `pipeline.yml` (`round=N`, retry). Sem resultado em quali + 6 h → dispara uma vez (run
+  vermelha = e-mail). Segredo `GITHUB_TOKEN_DISPARO` (fine-grained, Actions: write).
+  Deploy manual, só com OK: `npx --yes wrangler@4.150.0 deploy --config vigia/wrangler.jsonc`.
+- `docs/data/pendentes.json` = `{temporada, pendentes:[{round, race, qualifying_utc}]}`:
+  rodadas da temporada atual com `messages/<r>.txt` e sem `results/<r>.json`
+  (`bolao/site.py`, `gerar_pendentes`, chamado pelo `generate` só na temporada atual).
+- **A vigília dentro do `pipeline.yml` continua ligada** (redundante com o vigia; o
+  `commit-push.sh` faz rebase, então dois retries não brigam). Desligar a vigília —
+  objetivo do item d, economizar minutos do Actions num repo privado — fica para depois de
+  confirmar que o vigia disparou sozinho numa rodada real (logs do Worker na Cloudflare).
+- Testes: `tests/vigia.test.mjs` (`node --test`), `test_pipeline.py` e
+  `test_dados_publicados.py` (contrato do `pendentes.json`).
+

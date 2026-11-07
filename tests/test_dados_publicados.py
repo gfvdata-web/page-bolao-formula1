@@ -110,7 +110,7 @@ class TestPastaDeTemporada(unittest.TestCase):
                     self.assertTrue((PUB / str(ano) / f"{nome}.json").exists())
 
     def test_nao_ha_json_sobrando_em_docs_data(self):
-        esperados = {"seasons.json", "equipes.json", "hall_of_fame.json", "regras.json"}
+        esperados = {"seasons.json", "equipes.json", "hall_of_fame.json", "regras.json", "pendentes.json"}
         soltos = {p.name for p in PUB.glob("*.json")}
         self.assertEqual(soltos, esperados)
 
@@ -368,6 +368,24 @@ class TestHallRegrasEquipes(unittest.TestCase):
             sem_equipe = sorted(codigos - set(eq[str(ano)]["pilotos"]))
             with self.subTest(ano=ano):
                 self.assertEqual(sem_equipe, [], f"{ano}: piloto no grid sem equipe em equipes.json")
+
+
+class TestPendentes(unittest.TestCase):
+    """docs/data/pendentes.json: o que o Worker bolao-vigia (vigia/src/index.js) lê."""
+
+    def test_contrato(self):
+        doc = _json(PUB / "pendentes.json")
+        self.assertEqual(doc["temporada"], SEASONS["atual"])
+        cal = {r["round"]: r for r in _json(PUB / str(doc["temporada"]) / "calendar.json")["races"]}
+        res = _json(PUB / str(doc["temporada"]) / "results.json")["rounds"]
+        for p in doc["pendentes"]:
+            self.assertIsInstance(p["round"], int)
+            self.assertNotIn(str(p["round"]), res, "rodada pendente já tem resultado")
+            self.assertEqual(p["qualifying_utc"], cal[p["round"]].get("qualifying_utc"))
+        # o vigia lê exatamente estas chaves
+        vigia = (RAIZ / "vigia" / "src" / "index.js").read_text(encoding="utf-8")
+        for chave in ("pendentes", "temporada", "round", "qualifying_utc"):
+            self.assertIn(chave, vigia)
 
 
 class TestPublicadoIgualAoGerado(unittest.TestCase):

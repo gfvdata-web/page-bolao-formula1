@@ -1,0 +1,14 @@
+// Worker bolao-vigia (Etapa 5, item (d) do contexto/plano-futuro-cloudflare.md): só Cron de
+// 5 min, sem rota, sem npm, sem D1/KV. Lê docs/data/pendentes.json no ar, consulta a Jolpica
+// e dispara o workflow_dispatch do pipeline.yml quando o quali sai. Detalhes: vigia/src/index.js.
+// Deploy manual, só com OK: npx --yes wrangler@4.150.0 deploy --config vigia/wrangler.jsonc
+{
+  "name": "bolao-vigia",
+  "main": "src/index.js",
+  "compatibility_date": "2026-10-01",
+  "observability": { "enabled": true },
+  "workers_dev": false,
+  "triggers": { "crons": ["*/5 * * * *"] }
+  // Segredo (wrangler secret put GITHUB_TOKEN_DISPARO --config vigia/wrangler.jsonc):
+  // fine-grained, só gfvdata-web/page-bolao-formula1, Actions: write.
+}

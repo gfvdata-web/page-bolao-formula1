@@ -112,6 +112,19 @@ class TestPipeline(unittest.TestCase):
         self.assertEqual(resumo["resultado"], "gravado")
         self.assertEqual(resumo["site"]["rounds"], [1])
 
+    def test_pendentes_json_lista_rodada_sem_resultado_e_esvazia_no_retry(self):
+        # docs/data/pendentes.json é o que o Worker bolao-vigia lê (vigia/).
+        pend = self.docs / "data" / "pendentes.json"
+        with mock.patch("bolao.pipeline.fetch_result", side_effect=ResultUnavailable("sem resultado")):
+            P.run(MSG_1, None, SEASON, self.data, self.docs)
+        doc = json.loads(pend.read_text(encoding="utf-8"))
+        self.assertEqual(doc, {"temporada": SEASON, "pendentes": [
+            {"round": 1, "race": "Testland", "qualifying_utc": None}]})
+
+        with mock.patch("bolao.pipeline.fetch_result", return_value=RESULT_1):
+            P.retry(1, SEASON, self.data, self.docs)
+        self.assertEqual(json.loads(pend.read_text(encoding="utf-8"))["pendentes"], [])
+
     def test_retry_sem_mensagem_gravada_falha(self):
         with self.assertRaises(FileNotFoundError):
             P.retry(99, SEASON, self.data, self.docs)

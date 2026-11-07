@@ -46,4 +46,7 @@ para não invadir as etapas vizinhas.
 - **Rodada 20/2026 (Interlagos) com dois pilotos da rodada** (2026-11-07):
   leitor, pontuação e site prontos. Depois do quali, conferir se o Câmara saiu
   como `CAM` no `results/20.json` (senão ajustar o alias e rodar `retry 20`).
+- **Vigia (item d):** código recuperado para `vigia/` em 2026-11-07 e
+  `pendentes.json` passou a ser gerado. Falta conferir nos logs do Worker se o
+  disparo funcionou numa rodada real e então desligar a vigília do `pipeline.yml`.
 - Pendências gerais e decisões adiadas: seção 9 de `visao-geral.md`.
