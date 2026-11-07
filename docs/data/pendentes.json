@@ -1,4 +1,10 @@
 {
   "temporada": 2026,
-  "pendentes": []
+  "pendentes": [
+    {
+      "round": 20,
+      "race": "São Paulo",
+      "qualifying_utc": "2026-11-07T18:00:00Z"
+    }
+  ]
 }
