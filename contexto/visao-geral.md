@@ -37,8 +37,17 @@ como vieram (preservam o palpite), mas nunca casam com a posição real → 0 pt
 Esse palpite é **independente** do top6 (o piloto pode aparecer no top6 do
 jogador em outra posição sem conflito).
 
+**Exceção — rodada com dois pilotos da rodada (decidida em 2026-11-07, estreia
+em Interlagos 2026, R20: Bortoleto e Câmara).** O cabeçalho lista os dois
+(`Piloto da vez *Bortoleto* e *Camara*`) e cada jogador manda **um `P#` por
+piloto, na ordem do cabeçalho**. Cada piloto vale **1 pt** pela posição exata,
+somados → **máximo 14 pts** nessa rodada. Faltou o 2º `P#` → 0 nesse piloto;
+piloto fora do resultado do quali → 0 para todos. Vale para qualquer rodada
+futura que repetir o formato; com um piloto só nada muda. Implementação:
+`etapa-3` "Ajuste posterior (2026-11-07)".
+
 ### Total
-**Máximo por corrida: 13 pts.** Sem desempate definido por enquanto (adiado).
+**Máximo por corrida: 13 pts** (14 na rodada com dois pilotos da rodada). Sem desempate definido por enquanto (adiado).
 
 ### Pontuação mínima (compensação de quem não aposta)
 Nem todo jogador aposta em toda corrida. Para não penalizar demais quem falta

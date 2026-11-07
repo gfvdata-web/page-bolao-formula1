@@ -122,6 +122,7 @@ Todos em `contexto/`. "§" = seção; títulos entre aspas = bloco em negrito no
 |------|----------|
 | Objetivo, regras de pontuação e compensação (atual) | `visao-geral.md` §1–2 |
 | Formato da mensagem do WhatsApp | `visao-geral.md` §3; tolerâncias do parser: `etapa-3` "Parser fortalecido", `etapa-5` "3 bugs reais na rodada de Madrid" |
+| Rodada com dois pilotos da rodada (Interlagos 2026, máx 14) | regra: `visao-geral.md` §2 "Exceção"; leitor/dados: `etapa-3` "Ajuste posterior (2026-11-07)"; site: `etapa-4` mesma data |
 | Decisões técnicas, fluxo pelo celular, setup/PAT | `visao-geral.md` §4, §5, §10 |
 | Status das etapas e o que está em aberto | `status.md` |
 | Regras por temporada 2021–2025 (top5, bônus 2 pts em 2024, compensação, desempate) | `etapa-7` "Regras por temporada", "Fechamento do histórico" |

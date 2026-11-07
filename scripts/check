@@ -20,6 +20,7 @@
 #   - docs/data/ == o que bolao.site gera de data/ (nada defasado) ......... test_dados_publicados.py
 #  Regras e geração de dados (bolao/)
 #   - parser da mensagem do WhatsApp ........................................ test_parser.py
+#   - rodada com 2+ pilotos da rodada (Interlagos 2026): leitor, pontos, JSON  test_dois_pilotos.py
 #   - normalização de pilotos/jogadores ..................................... test_normalize.py
 #   - pontuação 2/1/0 + bônus; formatos por temporada 2021-2026 ............. test_scoring.py, test_regras_temporadas.py
 #   - compensação, desempate, saldo inicial, placar publicado, ranking final  test_site.py, test_regras_temporadas.py

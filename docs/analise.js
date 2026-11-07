@@ -350,7 +350,7 @@ function agregarJogadores(dados, anos) {
       }
       r.feitos += feitos;
       r.corridas += corridas;
-      r.teto += corridas * maxPts;
+      r.teto += corridas * maxPts + tetoExtraRodadas(st, p.per_round);
     }
     const podio = dados.hof.anos.find((h) => String(h.ano) === a);
     if (podio) for (const m of ["ouro", "prata", "bronze"]) if (mapa.has(podio[m])) mapa.get(podio[m])[m]++;
@@ -367,9 +367,12 @@ function agregarJogadores(dados, anos) {
           if (det.points >= 1) r.noTop++;
           r.porPiloto.set(det.guess, (r.porPiloto.get(det.guess) || 0) + 1);
         }
+        // Rodada com dois pilotos da rodada conta cada piloto como uma aposta.
         if (rodada.bonus_driver && rodada.bonus_guess != null) {
-          r.bonusN++;
-          if (rodada.bonus_points > 0) r.bonusAcertos++;
+          for (const chute of chutesBonus(rodada)) {
+            r.bonusN++;
+            if (chute.points > 0) r.bonusAcertos++;
+          }
         }
       }
     }

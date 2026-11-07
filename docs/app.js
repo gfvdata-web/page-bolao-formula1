@@ -467,6 +467,58 @@ function celBonusPalpite(pos, points) {
   ]);
 }
 
+// ---------- Pilotos da rodada (um ou mais) ----------
+// Rodada normal tem um piloto da rodada (`bonus_driver`/`bonus_guess`). Rodada
+// especial com mais de um (Interlagos 2026: Bortoleto e Câmara) traz
+// `bonus_drivers` + `max_points` na rodada do standings e `bonus_detail` em cada
+// palpite (ver contexto/etapas/etapa-3). Todo lugar do ponto extra passa por aqui.
+
+// Lista de códigos dos pilotos da rodada (roundInfo do standings ou palpite do bets).
+function pilotosDaRodada(info) {
+  if (info?.bonus_drivers?.length) return info.bonus_drivers;
+  if (info?.bonus_detail?.length) return info.bonus_detail.map((b) => b.driver);
+  return info?.bonus_driver ? [info.bonus_driver] : [];
+}
+
+// Chutes de um palpite (bets.players[id].rounds[r]): um item por piloto da rodada.
+function chutesBonus(rodada) {
+  if (rodada?.bonus_detail?.length) return rodada.bonus_detail;
+  return [{
+    driver: rodada.bonus_driver,
+    guess: rodada.bonus_guess,
+    real_pos: rodada.bonus_real_pos,
+    points: rodada.bonus_points,
+  }];
+}
+
+// Máximo de pontos da rodada (14 na rodada com dois pilotos; senão o do formato).
+function maxPontosRodada(info) {
+  return info?.max_points ?? FORMATO.max_points;
+}
+
+// Pontos a mais no teto das rodadas palpitadas que valem mais que o formato
+// (rodada com dois pilotos da rodada vale 14 em vez de 13). `perRound` = chaves
+// de rodada do standings.players[].per_round.
+function tetoExtraRodadas(st, perRound) {
+  const base = Number(st?.format?.max_points) || 0;
+  let extra = 0;
+  for (const rodada of Object.keys(perRound || {})) {
+    const info = (st?.rounds || []).find((r) => String(r.round) === String(rodada));
+    if (info?.max_points != null) extra += Number(info.max_points) - base;
+  }
+  return extra;
+}
+
+// Aviso da rodada especial com mais de um piloto da rodada (null nas normais).
+function avisoPilotosDaRodada(info) {
+  const pilotos = pilotosDaRodada(info);
+  if (pilotos.length < 2) return null;
+  return el("p", { class: "aviso-pilotos-rodada" }, [
+    el("strong", {}, [`⭐ Rodada especial: ${pilotos.length} pilotos da rodada`]),
+    ` (${pilotos.join(" e ")}) — 1 pt por posição exata de cada um; máximo ${maxPontosRodada(info)} pts.`,
+  ]);
+}
+
 function celVazia() {
   return el("span", { class: "corrida-detalhe-vazio", title: "Não apostou nesta rodada" }, ["–"]);
 }
@@ -490,8 +542,7 @@ function renderCorridaDetalhe(roundNumber, standings, bets, results) {
   }
 
   const realTop6 = resultado.order.slice(0, FORMATO.top_n);
-  const bonusDriver = roundInfo.bonus_driver;
-  const bonusRealPos = resultado.order.indexOf(bonusDriver) + 1;
+  const pilotosBonus = pilotosDaRodada(roundInfo);
 
   const totalRodadaJogador = (jogador) =>
     jogador.compensated_rounds.includes(roundNumber)
@@ -534,24 +585,30 @@ function renderCorridaDetalhe(roundNumber, standings, bets, results) {
   });
 
   if (FORMATO.bonus) {
-    tbody.appendChild(
-      el("tr", {}, [
-        el("td", { class: "corrida-detalhe-rotulo" }, [
-          el("span", {}, ["Piloto"]),
-          chipPilotoLink(bonusDriver),
-        ]),
-        el("td", {}, [`P${bonusRealPos}`]),
-        ...standings.players.map((jogador) => {
-          const rodada = bets.players[jogador.player_id]?.rounds[roundNumber];
-          if (!rodada) return el("td", {}, [celVazia()]);
-          return el("td", {}, [celBonusPalpite(rodada.bonus_guess, rodada.bonus_points)]);
-        }),
-      ])
-    );
+    pilotosBonus.forEach((bonusDriver, i) => {
+      const bonusRealPos = resultado.order.indexOf(bonusDriver) + 1;
+      tbody.appendChild(
+        el("tr", {}, [
+          el("td", { class: "corrida-detalhe-rotulo" }, [
+            el("span", {}, [pilotosBonus.length > 1 ? `Piloto ${i + 1}` : "Piloto"]),
+            chipPilotoLink(bonusDriver),
+          ]),
+          el("td", {}, [bonusRealPos ? `P${bonusRealPos}` : "–"]),
+          ...standings.players.map((jogador) => {
+            const rodada = bets.players[jogador.player_id]?.rounds[roundNumber];
+            if (!rodada) return el("td", {}, [celVazia()]);
+            const chute = chutesBonus(rodada)[i];
+            if (!chute) return el("td", {}, [celVazia()]);
+            return el("td", {}, [celBonusPalpite(chute.guess, chute.points)]);
+          }),
+        ])
+      );
+    });
   }
 
   tabela.appendChild(tbody);
-  wrap.replaceChildren(tabela);
+  const aviso = FORMATO.bonus ? avisoPilotosDaRodada(roundInfo) : null;
+  wrap.replaceChildren(...(aviso ? [aviso, tabela] : [tabela]));
 }
 
 // ---------- Ranking / Geral — copiar texto p/ WhatsApp ----------
@@ -979,9 +1036,12 @@ function histCelula(round, linhaIdx, tipo) {
     } else if (!rodada) {
       linha.appendChild(el("span", { class: "hist-cel__vazio" }, ["—"]));
     } else if (tipo === "extra") {
-      linha.appendChild(chipPiloto(rodada.bonus_driver));
-      linha.appendChild(el("span", { class: "hist-cel__chute" }, [`P${rodada.bonus_guess}`]));
-      linha.appendChild(histBadgePonto(rodada.bonus_points, FORMATO.bonus_points));
+      // Rodada com dois pilotos da rodada: um par chip + chute + ponto por piloto.
+      for (const chute of chutesBonus(rodada)) {
+        linha.appendChild(chipPiloto(chute.driver));
+        linha.appendChild(el("span", { class: "hist-cel__chute" }, [`P${chute.guess}`]));
+        linha.appendChild(histBadgePonto(chute.points, FORMATO.bonus_points));
+      }
     } else {
       const detalhe = rodada.top6_detail[linhaIdx];
       linha.appendChild(chipPiloto(detalhe.guess));
@@ -1109,11 +1169,23 @@ function cardTop6(rodada) {
 }
 
 function linhaBonus(rodada) {
-  return el("div", { class: "bonus-linha" }, [
-    el("span", { class: "bonus-linha__label" }, ["Piloto da rodada:"]),
-    chipPiloto(rodada.bonus_driver),
-    el("span", { class: "bonus-linha__label" }, [`· chute P${rodada.bonus_guess} · real P${rodada.bonus_real_pos} ·`]),
-    badgePonto(rodada.bonus_points, FORMATO.bonus_points),
+  const chutes = chutesBonus(rodada);
+  const linhas = chutes.map((chute, i) =>
+    el("div", { class: "bonus-linha" }, [
+      el("span", { class: "bonus-linha__label" }, [
+        chutes.length > 1 ? `Piloto da rodada ${i + 1}:` : "Piloto da rodada:",
+      ]),
+      chipPiloto(chute.driver),
+      el("span", { class: "bonus-linha__label" }, [
+        `· chute P${chute.guess} · real ${chute.real_pos ? `P${chute.real_pos}` : "–"} ·`,
+      ]),
+      badgePonto(chute.points, FORMATO.bonus_points),
+    ])
+  );
+  if (chutes.length < 2) return linhas[0];
+  return el("div", { class: "bonus-linhas" }, [
+    el("span", { class: "selo-pilotos-rodada" }, [`⭐ ${chutes.length} pilotos da rodada`]),
+    ...linhas,
   ]);
 }
 
@@ -2969,7 +3041,7 @@ function universoJogadores(standingsPorAno) {
       }
       const temAcerto = corridas && maxPts;
       const num = temAcerto ? feitos : 0;
-      const den = temAcerto ? corridas * maxPts : 0;
+      const den = temAcerto ? corridas * maxPts + tetoExtraRodadas(st, p.per_round) : 0;
       reg.acertoNum += num;
       reg.acertoDen += den;
       reg.porAno.set(ano, { pontos, acertoNum: num, acertoDen: den });
@@ -3942,38 +4014,56 @@ async function renderPaginaPiloto(codigo, anosSet, resultsPorAno, betsPorAno) {
 // escolhido (com a rodada, a bandeira e onde ele largou) e quem cravou a
 // posição. Só existe em temporadas com bônus (FORMATO.bonus) — nas outras a
 // sub-aba some. Tudo sai de standings/bets/results, sem dado novo.
+// Cada item de `rodadas` é uma ESCOLHA (rodada × piloto da rodada): numa rodada
+// com dois pilotos (Interlagos 2026) entram dois itens, cada um com o seu
+// `bonus_driver` e `bonusIdx` (posição dele em `pilotosDaRodada`).
 function coletarPontoExtra(standings, bets, results) {
   const rodadas = (standings.rounds || [])
     .filter((r) => r.bonus_driver)
     .slice()
     .sort((a, b) => a.round - b.round)
-    .map((r) => {
+    .flatMap((r) => {
       const ordem = results?.rounds?.[String(r.round)]?.order || [];
-      const idx = ordem.indexOf(r.bonus_driver);
-      return { ...r, realPos: idx >= 0 ? idx + 1 : null, palpites: 0, acertos: [] };
+      const pilotos = pilotosDaRodada(r);
+      return pilotos.map((cod, bonusIdx) => {
+        const idx = ordem.indexOf(cod);
+        return {
+          ...r, bonus_driver: cod, bonusIdx, nPilotos: pilotos.length,
+          realPos: idx >= 0 ? idx + 1 : null, palpites: 0, acertos: [],
+        };
+      });
     });
-  const porRound = new Map(rodadas.map((r) => [r.round, r]));
+  const porRound = new Map();
+  for (const r of rodadas) {
+    if (!porRound.has(r.round)) porRound.set(r.round, []);
+    porRound.get(r.round).push(r);
+  }
 
   const jogadores = new Map(); // player_id -> {id, name, palpites, acertos[], trave, pontos}
   for (const jogador of Object.values(bets.players)) {
     for (const rd of Object.values(jogador.rounds)) {
-      const rodada = porRound.get(rd.round);
-      if (!rodada || rd.bonus_guess == null) continue;
+      const escolhas = porRound.get(rd.round);
+      if (!escolhas || rd.bonus_guess == null) continue;
       if (!jogadores.has(jogador.player_id)) {
         jogadores.set(jogador.player_id, {
           id: jogador.player_id, name: jogador.name, palpites: 0, acertos: [], trave: 0, pontos: 0,
         });
       }
       const j = jogadores.get(jogador.player_id);
-      j.palpites++;
-      rodada.palpites++;
-      const real = rd.bonus_real_pos ?? rodada.realPos;
-      if (rd.bonus_points > 0) {
-        j.acertos.push({ rodada, pos: rd.bonus_guess });
-        j.pontos += rd.bonus_points;
-        rodada.acertos.push(j.name);
-      } else if (real != null && Math.abs(Number(rd.bonus_guess) - real) === 1) {
-        j.trave++;
+      const chutes = chutesBonus(rd);
+      for (const rodada of escolhas) {
+        const chute = chutes[rodada.bonusIdx];
+        if (!chute) continue;
+        j.palpites++;
+        rodada.palpites++;
+        const real = chute.real_pos ?? rodada.realPos;
+        if (chute.points > 0) {
+          j.acertos.push({ rodada, pos: chute.guess });
+          j.pontos += chute.points;
+          rodada.acertos.push(j.name);
+        } else if (real != null && chute.guess && Math.abs(Number(chute.guess) - real) === 1) {
+          j.trave++;
+        }
       }
     }
   }
@@ -4083,6 +4173,8 @@ function renderPontoExtra(standings, bets, results) {
   const bp = FORMATO.bonus_points;
   const totalPalpites = rodadas.reduce((s, r) => s + r.palpites, 0);
   const totalAcertos = rodadas.reduce((s, r) => s + r.acertos.length, 0);
+  const nRodadas = new Set(rodadas.map((r) => r.round)).size;
+  const especiais = [...new Map(rodadas.filter((r) => r.nPilotos > 1).map((r) => [r.round, r])).values()];
   const pilotos = [...porPiloto.entries()].sort(
     (a, b) => b[1].length - a[1].length || a[0].localeCompare(b[0])
   );
@@ -4091,7 +4183,8 @@ function renderPontoExtra(standings, bets, results) {
 
   // Resumo
   const resumo = el("div", { class: "pe-tiles" }, [
-    peTile(String(rodadas.length), rodadas.length === 1 ? "rodada" : "rodadas"),
+    peTile(String(nRodadas), nRodadas === 1 ? "rodada" : "rodadas",
+      especiais.length ? `${rodadas.length} escolhas (${especiais.map((r) => `R${r.round}`).join(", ")} com ${especiais[0].nPilotos} pilotos)` : null),
     peTile(String(porPiloto.size), "pilotos diferentes"),
     peTile(
       String(totalAcertos),
@@ -4115,6 +4208,12 @@ function renderPontoExtra(standings, bets, results) {
       el("span", { class: "pe-legenda-acerto" }, ["N"]),
       " conta quantos jogadores cravaram a posição. Em cinza, quem nunca foi o da rodada.",
     ]),
+    ...especiais.map((r) =>
+      el("p", { class: "aviso-pilotos-rodada" }, [
+        el("strong", {}, [`⭐ R${r.round} · ${r.race}: ${r.nPilotos} pilotos da rodada`]),
+        ` (${pilotosDaRodada(r).join(" e ")}) — cada um conta como uma escolha e vale ${bp} pt pela posição exata.`,
+      ])
+    ),
     peGradeEquipes(porPiloto),
   ]);
 
@@ -4147,7 +4246,9 @@ function renderPontoExtra(standings, bets, results) {
         lider.length > 1 ? "Mais acertos: " : "Quem mais acertou: ",
         el("strong", {}, [lider.map((j) => j.name).join(", ")]),
         ` (${lider[0].acertos.length}).`,
-        semAcerto ? ` Em ${semAcerto} de ${rodadas.length} rodadas ninguém cravou.` : " Toda rodada teve pelo menos um acerto.",
+        semAcerto
+          ? ` Em ${semAcerto} de ${rodadas.length} ${especiais.length ? "escolhas" : "rodadas"} ninguém cravou.`
+          : ` ${especiais.length ? "Toda escolha" : "Toda rodada"} teve pelo menos um acerto.`,
       ])
     );
   }
@@ -4409,7 +4510,7 @@ function configurarTema() {
 
 // Regras de pontuação (bloco em Ranking/Geral) montadas a partir de FORMATO —
 // o texto muda por temporada (top5 vs top6, com/sem piloto da rodada, etc.).
-function renderRegras() {
+function renderRegras(standings) {
   const ul = document.getElementById("regras-lista");
   if (!ul) return;
   const n = FORMATO.top_n;
@@ -4433,6 +4534,18 @@ function renderRegras() {
         ` máximo ${FORMATO.max_points} pts (${n * 2} do top${n} + ${bp} do piloto da rodada).`,
       ])
     );
+    // Rodadas especiais com mais de um piloto da rodada (Interlagos 2026).
+    for (const r of (standings?.rounds || []).filter((x) => pilotosDaRodada(x).length > 1)) {
+      const pilotos = pilotosDaRodada(r);
+      itens.push(
+        el("li", { class: "regras-lista__especial" }, [
+          el("strong", {}, [`⭐ R${r.round} · ${r.race}:`]),
+          ` ${pilotos.length} pilotos da rodada (${pilotos.join(" e ")}). Cada jogador chuta a ` +
+            `posição de cada um (um P# por piloto, na ordem do cabeçalho); ${bp} pt por acerto ` +
+            `em cada — máximo ${maxPontosRodada(r)} pts nessa corrida.`,
+        ])
+      );
+    }
   } else {
     itens.push(
       el("li", {}, [el("strong", {}, ["Total por corrida:"]), ` máximo ${FORMATO.max_points} pts.`])
@@ -4798,7 +4911,7 @@ async function main() {
     }
     configurarRecolherCorrida();
     configurarChamadas();
-    renderRegras();
+    renderRegras(standings);
     adaptarTextosEstaticos();
     renderRanking(standings);
     document.getElementById("ranking-status").textContent = "";

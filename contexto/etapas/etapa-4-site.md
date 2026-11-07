@@ -777,3 +777,15 @@ temporadas — sub-aba "Palpites" no Ranking + card "Explore a temporada".**
   Ordem: equipes por vezes desc, depois nome; pilotos idem, depois código.
   Desktop `auto-fill minmax(15rem)`; celular 2 colunas com os blocos embaixo
   do código do piloto.
+
+**Ajuste posterior (2026-11-07): rodada com dois pilotos da rodada (Interlagos 2026).**
+Helpers em `app.js`: `pilotosDaRodada`, `chutesBonus`, `maxPontosRodada`,
+`avisoPilotosDaRodada`, `tetoExtraRodadas` (caem no formato de um piloto quando
+os campos novos não existem — ver `etapa-3` mesma data). Onde aparece:
+Geral/"Por corrida" (aviso ⭐ + uma linha "Piloto 1/2" por piloto), regras da
+temporada (item ⭐ da rodada), cards de palpite (`linhaBonus`: selo + uma linha
+por piloto), matriz de Palpites (linha "Piloto" com os dois chutes), Ponto extra
+(cada piloto da rodada é uma "escolha"; tile de rodadas mostra as escolhas e há
+aviso ⭐), % de acerto (`universoJogadores` e `analise.js` usam o teto da rodada)
+e "Piloto rodada" em `analise.js` (conta por piloto). Simulador não muda (usa
+médias). Estilos: `.aviso-pilotos-rodada`, `.selo-pilotos-rodada`, `.bonus-linhas`.

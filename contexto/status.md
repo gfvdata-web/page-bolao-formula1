@@ -43,4 +43,7 @@ para não invadir as etapas vizinhas.
   (`bolaof1.gfvdata.com/app/`), itens b/c do `plano-futuro-cloudflare.md`.
   Publicada como `app-v0.3.0`; falta instalar a 0.3.0 à mão nos celulares
   (a 0.2.0 só procura no Releases).
+- **Rodada 20/2026 (Interlagos) com dois pilotos da rodada** (2026-11-07):
+  leitor, pontuação e site prontos. Depois do quali, conferir se o Câmara saiu
+  como `CAM` no `results/20.json` (senão ajustar o alias e rodar `retry 20`).
 - Pendências gerais e decisões adiadas: seção 9 de `visao-geral.md`.

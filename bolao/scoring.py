@@ -11,11 +11,15 @@ Piloto da rodada (máx 1 pt; **2 pts em 2024**, ver ``bolao.formats``):
   * posição exata no grid (P1..P20) ..... 1 pt
   * caso contrário ...................... 0 pt
 
+Rodada com **mais de um piloto da rodada** (Interlagos 2026): cada piloto é
+pontuado à parte pela mesma regra (1 pt por posição exata) e os pontos somam —
+com dois pilotos o máximo da rodada vai a 14.
+
 Total máximo por corrida: 13 pts (14 em 2024; 10 em 2021, que era top5 e não
 tinha piloto da rodada).
 """
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from .parser import Bet, Sheet
 
@@ -32,6 +36,16 @@ class Top6Item:
 
 
 @dataclass
+class BonusItem:
+    """Detalhe da pontuação de um dos pilotos da rodada."""
+
+    driver: str  # código do piloto da rodada
+    guess: int  # posição chutada (0 = não chutou)
+    real_pos: int | None  # posição real no quali (None = não largou/ausente)
+    points: int
+
+
+@dataclass
 class PlayerScore:
     player_id: str
     player_raw: str
@@ -44,6 +58,9 @@ class PlayerScore:
     # Quando o placar publicado pelo grupo manda (Etapa 7), `total` passa a ser
     # o publicado e este campo guarda o que a regra da temporada daria.
     total_recalculado: int | None = None
+    # Um item por piloto da rodada (vazio nas temporadas sem bônus).
+    # ``bonus_points`` é a soma; ``bonus_guess``/``bonus_real_pos`` são do 1º.
+    bonus_detail: list[BonusItem] = field(default_factory=list)
 
 
 @dataclass
@@ -77,12 +94,18 @@ class Result:
 
 
 def score_bet(
-    bet: Bet, result: Result, bonus_driver: str, bonus_points: int = 1
+    bet: Bet,
+    result: Result,
+    bonus_driver: str,
+    bonus_points: int = 1,
+    bonus_drivers: list[str] | None = None,
 ) -> PlayerScore:
     """Pontua um palpite individual contra o resultado.
 
     ``bonus_points`` é quanto vale acertar a posição do piloto da rodada: 1 hoje,
-    mas 2 em 2024 (ver ``bolao.formats``).
+    mas 2 em 2024 (ver ``bolao.formats``). ``bonus_drivers`` lista os pilotos
+    da rodada quando há mais de um (cada um com seu chute em
+    ``bet.bonus_guesses``, na mesma ordem); ausente = só ``bonus_driver``.
     """
     # Referência = as primeiras N posições reais, com N = tamanho do palpite
     # (6 hoje; 5 na temporada de 2021 — ver bolao.formats).
@@ -103,9 +126,20 @@ def score_bet(
         detalhe.append(Top6Item(pos=pos, guess=guess, real=real_aqui, points=pts, reason=motivo))
 
     # Temporadas sem piloto da rodada (2021-2023) chegam com bonus_driver vazio.
-    real_bonus_pos = result.position_of(bonus_driver) if bonus_driver else None
-    acertou = real_bonus_pos is not None and real_bonus_pos == bet.bonus_guess
-    bonus_pts = bonus_points if acertou else 0
+    if bonus_drivers is None:
+        bonus_drivers = [bonus_driver] if bonus_driver else []
+    chutes = list(bet.bonus_guesses) if len(bonus_drivers) > 1 else [bet.bonus_guess]
+    chutes += [0] * (len(bonus_drivers) - len(chutes))
+    bonus_detail: list[BonusItem] = []
+    for piloto, chute in zip(bonus_drivers, chutes):
+        real = result.position_of(piloto)
+        acertou = real is not None and real == chute
+        bonus_detail.append(
+            BonusItem(driver=piloto, guess=chute, real_pos=real,
+                      points=bonus_points if acertou else 0)
+        )
+    bonus_pts = sum(b.points for b in bonus_detail)
+    real_bonus_pos = bonus_detail[0].real_pos if bonus_detail else None
 
     return PlayerScore(
         player_id=bet.player_id,
@@ -116,6 +150,7 @@ def score_bet(
         bonus_guess=bet.bonus_guess,
         bonus_real_pos=real_bonus_pos,
         total=top6_pts + bonus_pts,
+        bonus_detail=bonus_detail,
     )
 
 
@@ -124,7 +159,8 @@ def score_sheet(
 ) -> list[PlayerScore]:
     """Pontua todos os jogadores de uma mensagem, ordenados por total desc."""
     scores = [
-        score_bet(bet, result, sheet.bonus_driver, bonus_points) for bet in sheet.bets
+        score_bet(bet, result, sheet.bonus_driver, bonus_points, sheet.bonus_drivers)
+        for bet in sheet.bets
     ]
     scores.sort(key=lambda s: (-s.total, s.player_id))
     return scores

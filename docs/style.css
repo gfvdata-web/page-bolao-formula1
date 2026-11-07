@@ -2533,3 +2533,34 @@ a.analise-jogador:hover { color: var(--acento); }
 .link-perfil:hover, .link-perfil:focus-visible { color: var(--acento); text-decoration: underline; }
 .link-perfil-svg { cursor: pointer; }
 .link-perfil-svg:hover text, .link-perfil-svg:focus-visible text { fill: var(--acento); text-decoration: underline; }
+
+/* Rodada especial com mais de um piloto da rodada (Interlagos 2026). */
+.aviso-pilotos-rodada {
+  margin: 0 0 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--ok1);
+  border-radius: 6px;
+  background: var(--ok1-bg);
+  font-size: 0.9rem;
+}
+
+.bonus-linhas {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.selo-pilotos-rodada {
+  align-self: flex-start;
+  padding: 0.1rem 0.5rem;
+  border: 1px solid var(--ok1);
+  border-radius: 999px;
+  background: var(--ok1-bg);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.bonus-linhas .bonus-linha + .bonus-linha {
+  padding-top: 0;
+  border-top: none;
+}

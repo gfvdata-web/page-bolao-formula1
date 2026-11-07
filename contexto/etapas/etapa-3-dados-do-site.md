@@ -80,3 +80,24 @@
   deve ocorrer na prática, já que a rodada só entra com `messages/<round>.txt`).
 - **Sem timestamp** nos JSONs gerados (saída determinística → diffs limpos e
   testes estáveis).
+
+**Ajuste posterior (2026-11-07): rodada com dois pilotos da rodada (Interlagos 2026, R20).**
+Regra e formato da mensagem: `visao-geral.md` §2 "Exceção". Genérico para N pilotos.
+- Leitor (`parser.py`): `_parse_bonus_drivers` separa a linha `Piloto ...` por
+  `e`/`,`/`&`/`+`/`/`; `Sheet.bonus_drivers` (lista) e `Bet.bonus_guesses` (um
+  chute por piloto). `bonus_driver`/`bonus_guess` continuam = o 1º. Os `P#`
+  seguidos depois do primeiro vão para o mesmo jogador; `P#` faltando = 0; `P#`
+  a mais ou piloto repetido = `ParseError`.
+- Pontuação (`scoring.py`): `PlayerScore.bonus_detail` (um item por piloto);
+  `bonus_points` = soma; `bonus_guess`/`bonus_real_pos` = do 1º.
+- **Campos aditivos, só em rodada com 2+ pilotos** (rodadas normais ficam
+  idênticas — o app Android continua lendo `bonus_guess`/`bonus_points`):
+  rodada do `standings.json` ganha `bonus_drivers` e `max_points` (14);
+  palpite em `bets.json` e jogador em `scores/<r>.json` ganham
+  `bonus_detail:[{driver, guess, real_pos, points}]`.
+- Câmara: alias manual `camara`/`rafael camara`/`rafael`/`cam` → `CAM` em
+  `data/drivers.json` (a Jolpica não dá código a ele; o resultado usa as 3
+  primeiras letras do sobrenome = `CAM`). ⚠ `python -m bolao.jolpica drivers`
+  regrava o arquivo e apaga esses aliases.
+- Testes: `tests/test_dois_pilotos.py` (+ fixture) e contrato em
+  `test_dados_publicados.py` (máximo por rodada). Site: `etapa-4` mesma data.

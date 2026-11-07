@@ -28,6 +28,12 @@ que o exemplo acima. O parser tolera, **sem mudar o formato de saída**:
 - **Chute até P22** (grid 2026 tem até 22 pilotos).
 - **Linha do chute com enfeite** de negrito/itálico do WhatsApp (``*P14*``,
   ``_P14_``) — ignora ``*``/``_`` ao redor ao reconhecer o fim do bloco.
+
+**Mais de um piloto da rodada** (estreou em Interlagos 2026, rodada 20): a linha
+do piloto lista todos, separados por ``e``/``,``/``&``/``+``/``/``
+(``Piloto da vez *Bortoleto* e *Camara*``), e cada jogador fecha o bloco com
+**uma linha ``P#`` por piloto, na ordem do cabeçalho**. Faltou um ``P#`` → esse
+chute vale 0 (como o ``P#`` esquecido). Com um piloto só, nada muda.
 """
 
 import re
@@ -43,7 +49,14 @@ class Bet:
     player_id: str
     player_raw: str
     top6: list[str]  # 6 códigos canônicos, P1..P6
-    bonus_guess: int  # posição chutada do piloto da rodada (1..22)
+    bonus_guess: int  # posição chutada do (1º) piloto da rodada (1..22)
+    # Um chute por piloto da rodada, na ordem do cabeçalho (rodadas com mais
+    # de um piloto). Vazio = só o ``bonus_guess``.
+    bonus_guesses: list[int] = field(default_factory=list)
+
+    def __post_init__(self) -> None:
+        if not self.bonus_guesses:
+            self.bonus_guesses = [self.bonus_guess]
 
 
 @dataclass
@@ -52,8 +65,15 @@ class Sheet:
 
     race: str  # nome bruto da corrida (ex.: "Silverstone")
     header_raw: str  # linha de identificação da corrida, para rastreabilidade
-    bonus_driver: str  # código canônico do piloto da rodada
+    bonus_driver: str  # código canônico do (1º) piloto da rodada
     bets: list[Bet] = field(default_factory=list)
+    # Todos os pilotos da rodada, na ordem do cabeçalho. Vazio = só o
+    # ``bonus_driver`` (ou nenhum, nas temporadas sem bônus).
+    bonus_drivers: list[str] = field(default_factory=list)
+
+    def __post_init__(self) -> None:
+        if not self.bonus_drivers:
+            self.bonus_drivers = [self.bonus_driver] if self.bonus_driver else []
 
 
 class ParseError(ValueError):
@@ -111,6 +131,34 @@ def _parse_bonus_guess(linha: str, player_raw: str) -> int:
             f"Posição fora de P0..P{_MAX_GRID} para '{player_raw}': {linha!r}"
         )
     return pos
+
+
+# Separadores entre pilotos da rodada quando há mais de um ("A e B", "A, B").
+_SEP_BONUS = re.compile(r"[,&+/;]")
+
+
+def _parse_bonus_drivers(linha: str, driver_aliases: dict) -> list[str]:
+    """Lista de códigos dos pilotos da rodada (um ou mais) da linha ``Piloto ...``.
+
+    ``Piloto da vez *Bortoleto* e *Camara*`` -> ``["BOR", "CAM"]``. Com um piloto
+    só devolve ``[código]``; ``Piloto (nenhum)`` devolve ``[]``.
+    """
+    partes = [t for t in normalize_key(_SEP_BONUS.sub(" e ", linha)).split()
+              if t not in _FILLER_BONUS]
+    grupos: list[list[str]] = [[]]
+    for tok in partes:
+        if tok == "e":
+            grupos.append([])
+        else:
+            grupos[-1].append(tok)
+    grupos = [g for g in grupos if g]
+    if len(grupos) <= 1:
+        unico = _parse_bonus_driver(linha, driver_aliases)
+        return [unico] if unico else []
+    codigos = [normalize_driver(" ".join(g), driver_aliases) for g in grupos]
+    if len(set(codigos)) != len(codigos):
+        raise ParseError(f"Piloto da rodada repetido no cabeçalho: {linha!r}")
+    return codigos
 
 
 def _parse_bonus_driver(linha: str, driver_aliases: dict) -> str:
@@ -196,7 +244,11 @@ def _msg_bloco_errado(bloco: list[str], top_n: int) -> str:
 
 
 def _parse_players(
-    corpo: list[str], driver_aliases: dict, player_aliases: dict, top_n: int = 6
+    corpo: list[str],
+    driver_aliases: dict,
+    player_aliases: dict,
+    top_n: int = 6,
+    n_bonus: int = 1,
 ) -> list[Bet]:
     """Agrupa o corpo em jogadores usando a linha ``P#`` como terminador.
 
@@ -207,12 +259,28 @@ def _parse_players(
     bloco fecha sozinho ao acumular ``nome + top_n`` linhas (o tamanho de um
     bloco completo sem bônus) assim que a linha seguinte não for um chute —
     ela pertence ao próximo jogador, não a este. Vale 0 pt no bônus.
+
+    Com ``n_bonus`` > 1 (mais de um piloto da rodada), as linhas ``P#`` logo
+    depois da primeira são os chutes dos pilotos seguintes, na ordem do
+    cabeçalho. Chute faltando vira 0; ``P#`` a mais é erro.
     """
     bets: list[Bet] = []
     buffer: list[str] = []
     esperado_sem_bonus = top_n + 1  # nome + top_n pilotos
+    ultimo_era_chute = False
     for linha in corpo:
-        if not _is_guess_line(linha):
+        chute = _is_guess_line(linha)
+        if chute and n_bonus > 1 and not buffer and bets and ultimo_era_chute:
+            anterior = bets[-1]
+            if len(anterior.bonus_guesses) >= n_bonus:
+                raise ParseError(
+                    f"Palpite de {anterior.player_raw.strip()!r} com mais linhas P# "
+                    f"que pilotos da rodada ({n_bonus}): {linha!r}"
+                )
+            anterior.bonus_guesses.append(_parse_bonus_guess(linha, anterior.player_raw))
+            continue
+        ultimo_era_chute = chute
+        if not chute:
             if len(buffer) == esperado_sem_bonus:
                 bets.append(
                     _fecha_bloco_sem_bonus(buffer, driver_aliases, player_aliases, top_n)
@@ -243,6 +311,9 @@ def _parse_players(
             )
         else:
             raise ParseError(f"Bloco de jogador incompleto (sem linha P#): {buffer!r}")
+    # Rodada com mais de um piloto: quem mandou menos P# fica com 0 no que faltou.
+    for bet in bets:
+        bet.bonus_guesses += [0] * (n_bonus - len(bet.bonus_guesses))
     return bets
 
 
@@ -330,13 +401,16 @@ def parse_sheet(
         )
 
     race, header_raw = _resolve_race_line(linhas[:idx_piloto])
-    bonus_driver = _parse_bonus_driver(linhas[idx_piloto], driver_aliases)
+    bonus_drivers = _parse_bonus_drivers(linhas[idx_piloto], driver_aliases)
+    bonus_driver = bonus_drivers[0] if bonus_drivers else ""
 
     corpo = linhas[idx_piloto + 1:]
     if not corpo:
         raise ParseError("Mensagem sem palpites de jogadores.")
 
-    bets = _parse_players(corpo, driver_aliases, player_aliases, top_n)
+    bets = _parse_players(
+        corpo, driver_aliases, player_aliases, top_n, max(1, len(bonus_drivers))
+    )
     if not bets:
         raise ParseError("Nenhum palpite de jogador encontrado.")
 
@@ -345,4 +419,5 @@ def parse_sheet(
         header_raw=header_raw,
         bonus_driver=bonus_driver,
         bets=bets,
+        bonus_drivers=bonus_drivers,
     )

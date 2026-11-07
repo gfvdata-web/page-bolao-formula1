@@ -49,6 +49,9 @@ BET_JS = {
     "bonus_guess": int, "bonus_points": int, "total": int,
 }
 DETALHE_JS = {"pos": int, "guess": str, "real": (str, type(None)), "points": int}
+# Rodada com mais de um piloto da rodada (Interlagos 2026): campos aditivos.
+ROUND_MULTI_JS = {"bonus_drivers": list, "max_points": int}
+BONUS_DETALHE_JS = {"driver": str, "guess": int, "real_pos": (int, type(None)), "points": int}
 CALENDAR_JS = {"round": int, "race_id": str, "race": str, "circuit": str, "date": str, "sprint": bool}
 
 
@@ -68,7 +71,8 @@ class TestCamposLidosPeloJs(unittest.TestCase):
     """Cada campo do contrato é de fato lido por algum trecho do JS."""
 
     def test_campos_do_contrato_aparecem_no_js(self):
-        todos = {*PLAYER_JS, *ROUND_JS, *BET_JS, *DETALHE_JS, *CALENDAR_JS, *FORMAT_CAMPOS}
+        todos = {*PLAYER_JS, *ROUND_JS, *BET_JS, *DETALHE_JS, *CALENDAR_JS, *FORMAT_CAMPOS,
+                 *ROUND_MULTI_JS, *BONUS_DETALHE_JS, "bonus_detail"}
         sem_uso = sorted(c for c in todos if not re.search(rf"\b{c}\b", JS))
         # 'race_id' e 'sprint' só estão no calendário (contrato do gerador, não lidos pelo app)
         self.assertEqual([c for c in sem_uso if c not in {"race_id", "sprint"}], [])
@@ -135,6 +139,13 @@ class TestStandings(unittest.TestCase):
                 self.assertEqual(numeros, sorted(set(numeros)))
                 for r in st["rounds"]:
                     _confere(self, r, ROUND_JS, f"{ano} rodada {r['round']}")
+                    if "bonus_drivers" in r:  # rodada com 2+ pilotos da rodada
+                        _confere(self, r, ROUND_MULTI_JS, f"{ano} rodada {r['round']}")
+                        self.assertGreaterEqual(len(r["bonus_drivers"]), 2)
+                        self.assertEqual(r["bonus_drivers"][0], r["bonus_driver"])
+                        fmt_r = st["format"]
+                        self.assertEqual(r["max_points"], fmt_r["top_n"] * 2
+                                         + fmt_r["bonus_points"] * len(r["bonus_drivers"]))
                 ids = [p["player_id"] for p in st["players"]]
                 self.assertEqual(len(ids), len(set(ids)), "player_id repetido")
                 self.assertEqual([p["position"] for p in st["players"]], list(range(1, len(ids) + 1)))
@@ -192,9 +203,13 @@ class TestStandings(unittest.TestCase):
     def test_pontos_por_rodada_respeitam_o_maximo_do_formato(self):
         for ano in ANOS:
             maximo = season_format(ano).max_points
-            for p in _json(PUB / str(ano) / "standings.json")["players"]:
+            st = _json(PUB / str(ano) / "standings.json")
+            # Rodada com 2+ pilotos da rodada tem o próprio máximo (14 em Interlagos 2026).
+            teto = {str(r["round"]): r.get("max_points", maximo) for r in st["rounds"]}
+            for p in st["players"]:
                 with self.subTest(ano=ano, jogador=p["player_id"]):
-                    self.assertLessEqual(max(p["per_round"].values(), default=0), maximo)
+                    for rnd, pts in p["per_round"].items():
+                        self.assertLessEqual(pts, teto.get(rnd, maximo), f"R{rnd}")
 
 
 class TestBets(unittest.TestCase):
@@ -204,6 +219,7 @@ class TestBets(unittest.TestCase):
             st = _json(PUB / str(ano) / "standings.json")
             res = _json(PUB / str(ano) / "results.json")
             fmt = season_format(ano)
+            n_pilotos = {r["round"]: len(r.get("bonus_drivers") or [1]) for r in st["rounds"]}
             with self.subTest(ano=ano):
                 self.assertEqual(bets["season"], ano)
                 self.assertTrue(bets["players"])
@@ -224,9 +240,19 @@ class TestBets(unittest.TestCase):
                             self.assertIn(det["points"], (0, 1, 2))
                             self.assertEqual(det["guess"], aposta["top6"][i - 1])
                             self.assertEqual(det["points"], {"exata": 2, "no top6": 1, "fora": 0}[det["reason"]], onde)
-                        self.assertLessEqual(aposta["total"], fmt.max_points, onde)
+                        n = n_pilotos.get(aposta["round"], 1)
+                        bp = fmt.bonus_points if fmt.bonus else 0
+                        self.assertLessEqual(aposta["total"], fmt.max_points + bp * (n - 1), onde)
                         self.assertGreaterEqual(aposta["total"], 0, onde)
-                        self.assertIn(aposta["bonus_points"], (0, fmt.bonus_points if fmt.bonus else 0), onde)
+                        if n > 1:
+                            self.assertEqual(len(aposta["bonus_detail"]), n, onde)
+                            for b in aposta["bonus_detail"]:
+                                _confere(self, b, BONUS_DETALHE_JS, onde)
+                                self.assertIn(b["points"], (0, bp), onde)
+                            self.assertEqual(aposta["bonus_points"],
+                                             sum(b["points"] for b in aposta["bonus_detail"]), onde)
+                        else:
+                            self.assertIn(aposta["bonus_points"], (0, bp), onde)
                 nomes_standings = {p["player_id"] for p in st["players"]}
                 self.assertTrue(set(bets["players"]) <= nomes_standings)
 

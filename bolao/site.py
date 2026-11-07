@@ -99,6 +99,20 @@ def _score_to_dict(s: PlayerScore, name: str) -> dict:
         # Presente só quando o placar publicado pelo grupo diverge da regra da
         # temporada — o site pode mostrar a diferença em vez de escondê-la.
         "total_recalculado": s.total_recalculado,
+        **_bonus_detail_doc(s),
+    }
+
+
+def _bonus_detail_doc(s: PlayerScore) -> dict:
+    """``bonus_detail`` só em rodada com mais de um piloto da rodada (aditivo:
+    as rodadas normais ficam idênticas). Um item por piloto, na ordem do cabeçalho."""
+    if len(s.bonus_detail) <= 1:
+        return {}
+    return {
+        "bonus_detail": [
+            {"driver": b.driver, "guess": b.guess, "real_pos": b.real_pos, "points": b.points}
+            for b in s.bonus_detail
+        ]
     }
 
 
@@ -219,6 +233,18 @@ def generate(
             {
                 **_round_meta(race),
                 "bonus_driver": sheet.bonus_driver,
+                # Rodada com mais de um piloto da rodada (Interlagos 2026):
+                # lista completa + máximo da rodada. Aditivo — rodadas normais
+                # não ganham os campos.
+                **(
+                    {
+                        "bonus_drivers": sheet.bonus_drivers,
+                        "max_points": fmt.top_n * 2
+                        + fmt.bonus_points * len(sheet.bonus_drivers),
+                    }
+                    if len(sheet.bonus_drivers) > 1
+                    else {}
+                ),
                 "min_score": min_score,
                 "bet_order": bet_order,
             }
@@ -469,6 +495,7 @@ def generate(
                 "bonus_real_pos": s.bonus_real_pos,
                 "bonus_points": s.bonus_points,
                 "total": s.total,
+                **_bonus_detail_doc(s),
             }
     bets = {
         "season": season,
