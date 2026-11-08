@@ -611,77 +611,80 @@
     },
     "pilotos": {
       "ALB": {
-        "Williams": 19
+        "Williams": 20
       },
       "ALO": {
-        "Aston Martin": 19
+        "Aston Martin": 20
       },
       "ANT": {
-        "Mercedes": 19
+        "Mercedes": 20
       },
       "BEA": {
-        "Haas": 18
+        "Haas": 19
       },
       "BOR": {
-        "Audi": 19
+        "Audi": 20
       },
       "BOT": {
-        "Cadillac": 19
+        "Cadillac": 20
+      },
+      "CAM": {
+        "Haas": 1
       },
       "COL": {
-        "Alpine": 19
+        "Alpine": 20
       },
       "GAS": {
-        "Alpine": 19
+        "Alpine": 20
       },
       "HAD": {
-        "Red Bull": 16
+        "Red Bull": 17
       },
       "HAM": {
-        "Ferrari": 19
+        "Ferrari": 20
       },
       "HIR": {
         "Haas": 1
       },
       "HUL": {
-        "Audi": 19
+        "Audi": 20
       },
       "LAW": {
-        "RB": 16,
+        "RB": 17,
         "Red Bull": 3
       },
       "LEC": {
-        "Ferrari": 19
+        "Ferrari": 20
       },
       "LIN": {
-        "RB": 19
+        "RB": 20
       },
       "NOR": {
-        "McLaren": 19
+        "McLaren": 20
       },
       "OCO": {
         "Haas": 18
       },
       "PER": {
-        "Cadillac": 19
+        "Cadillac": 20
       },
       "PIA": {
-        "McLaren": 19
+        "McLaren": 20
       },
       "RUS": {
-        "Mercedes": 19
+        "Mercedes": 20
       },
       "SAI": {
-        "Williams": 18
+        "Williams": 19
       },
       "STR": {
-        "Aston Martin": 17
+        "Aston Martin": 18
       },
       "TSU": {
         "RB": 3
       },
       "VER": {
-        "Red Bull": 18
+        "Red Bull": 19
       }
     }
   }

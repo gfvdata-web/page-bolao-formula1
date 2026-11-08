@@ -1,0 +1,745 @@
+{
+  "round": 20,
+  "race_id": "2026-20",
+  "race": "São Paulo",
+  "circuit": "interlagos",
+  "date": "2026-11-08",
+  "sprint": false,
+  "bonus_driver": "BOR",
+  "bonus_drivers": [
+    "BOR",
+    "CAM"
+  ],
+  "max_points": 14,
+  "min_score": 2,
+  "bet_order": [
+    "guilherme",
+    "paganini",
+    "vinicius",
+    "ferrari",
+    "filipe",
+    "dalla",
+    "caio_l",
+    "francez",
+    "caliman"
+  ],
+  "result_order": [
+    "NOR",
+    "RUS",
+    "ANT",
+    "LEC",
+    "LAW",
+    "HUL",
+    "HAD",
+    "BEA",
+    "ALO",
+    "ALB",
+    "HAM",
+    "PIA",
+    "CAM",
+    "LIN",
+    "SAI",
+    "VER",
+    "COL",
+    "GAS",
+    "STR",
+    "BOT",
+    "PER",
+    "BOR"
+  ],
+  "players": [
+    {
+      "player_id": "ferrari",
+      "player_raw": "Ferrari",
+      "name": "Ferrari",
+      "top6": [
+        "VER",
+        "ANT",
+        "HAM",
+        "LEC",
+        "NOR",
+        "RUS"
+      ],
+      "top6_detail": [
+        {
+          "pos": 1,
+          "guess": "VER",
+          "real": "NOR",
+          "points": 0,
+          "reason": "fora"
+        },
+        {
+          "pos": 2,
+          "guess": "ANT",
+          "real": "RUS",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 3,
+          "guess": "HAM",
+          "real": "ANT",
+          "points": 0,
+          "reason": "fora"
+        },
+        {
+          "pos": 4,
+          "guess": "LEC",
+          "real": "LEC",
+          "points": 2,
+          "reason": "exata"
+        },
+        {
+          "pos": 5,
+          "guess": "NOR",
+          "real": "LAW",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 6,
+          "guess": "RUS",
+          "real": "HUL",
+          "points": 1,
+          "reason": "no top6"
+        }
+      ],
+      "top6_points": 5,
+      "bonus_guess": 10,
+      "bonus_real_pos": 22,
+      "bonus_points": 0,
+      "total": 5,
+      "total_recalculado": null,
+      "bonus_detail": [
+        {
+          "driver": "BOR",
+          "guess": 10,
+          "real_pos": 22,
+          "points": 0
+        },
+        {
+          "driver": "CAM",
+          "guess": 15,
+          "real_pos": 13,
+          "points": 0
+        }
+      ]
+    },
+    {
+      "player_id": "paganini",
+      "player_raw": "Paganini",
+      "name": "Paganini",
+      "top6": [
+        "VER",
+        "ANT",
+        "NOR",
+        "LEC",
+        "HAM",
+        "RUS"
+      ],
+      "top6_detail": [
+        {
+          "pos": 1,
+          "guess": "VER",
+          "real": "NOR",
+          "points": 0,
+          "reason": "fora"
+        },
+        {
+          "pos": 2,
+          "guess": "ANT",
+          "real": "RUS",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 3,
+          "guess": "NOR",
+          "real": "ANT",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 4,
+          "guess": "LEC",
+          "real": "LEC",
+          "points": 2,
+          "reason": "exata"
+        },
+        {
+          "pos": 5,
+          "guess": "HAM",
+          "real": "LAW",
+          "points": 0,
+          "reason": "fora"
+        },
+        {
+          "pos": 6,
+          "guess": "RUS",
+          "real": "HUL",
+          "points": 1,
+          "reason": "no top6"
+        }
+      ],
+      "top6_points": 5,
+      "bonus_guess": 10,
+      "bonus_real_pos": 22,
+      "bonus_points": 0,
+      "total": 5,
+      "total_recalculado": null,
+      "bonus_detail": [
+        {
+          "driver": "BOR",
+          "guess": 10,
+          "real_pos": 22,
+          "points": 0
+        },
+        {
+          "driver": "CAM",
+          "guess": 17,
+          "real_pos": 13,
+          "points": 0
+        }
+      ]
+    },
+    {
+      "player_id": "caliman",
+      "player_raw": "Caliman",
+      "name": "Caliman",
+      "top6": [
+        "ANT",
+        "VER",
+        "NOR",
+        "RUS",
+        "HAM",
+        "LEC"
+      ],
+      "top6_detail": [
+        {
+          "pos": 1,
+          "guess": "ANT",
+          "real": "NOR",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 2,
+          "guess": "VER",
+          "real": "RUS",
+          "points": 0,
+          "reason": "fora"
+        },
+        {
+          "pos": 3,
+          "guess": "NOR",
+          "real": "ANT",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 4,
+          "guess": "RUS",
+          "real": "LEC",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 5,
+          "guess": "HAM",
+          "real": "LAW",
+          "points": 0,
+          "reason": "fora"
+        },
+        {
+          "pos": 6,
+          "guess": "LEC",
+          "real": "HUL",
+          "points": 1,
+          "reason": "no top6"
+        }
+      ],
+      "top6_points": 4,
+      "bonus_guess": 10,
+      "bonus_real_pos": 22,
+      "bonus_points": 0,
+      "total": 4,
+      "total_recalculado": null,
+      "bonus_detail": [
+        {
+          "driver": "BOR",
+          "guess": 10,
+          "real_pos": 22,
+          "points": 0
+        },
+        {
+          "driver": "CAM",
+          "guess": 15,
+          "real_pos": 13,
+          "points": 0
+        }
+      ]
+    },
+    {
+      "player_id": "dalla",
+      "player_raw": "Dalla",
+      "name": "Dalla",
+      "top6": [
+        "VER",
+        "ANT",
+        "RUS",
+        "NOR",
+        "HAM",
+        "LEC"
+      ],
+      "top6_detail": [
+        {
+          "pos": 1,
+          "guess": "VER",
+          "real": "NOR",
+          "points": 0,
+          "reason": "fora"
+        },
+        {
+          "pos": 2,
+          "guess": "ANT",
+          "real": "RUS",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 3,
+          "guess": "RUS",
+          "real": "ANT",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 4,
+          "guess": "NOR",
+          "real": "LEC",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 5,
+          "guess": "HAM",
+          "real": "LAW",
+          "points": 0,
+          "reason": "fora"
+        },
+        {
+          "pos": 6,
+          "guess": "LEC",
+          "real": "HUL",
+          "points": 1,
+          "reason": "no top6"
+        }
+      ],
+      "top6_points": 4,
+      "bonus_guess": 10,
+      "bonus_real_pos": 22,
+      "bonus_points": 0,
+      "total": 4,
+      "total_recalculado": null,
+      "bonus_detail": [
+        {
+          "driver": "BOR",
+          "guess": 10,
+          "real_pos": 22,
+          "points": 0
+        },
+        {
+          "driver": "CAM",
+          "guess": 17,
+          "real_pos": 13,
+          "points": 0
+        }
+      ]
+    },
+    {
+      "player_id": "francez",
+      "player_raw": "Francez",
+      "name": "Francez",
+      "top6": [
+        "VER",
+        "HAM",
+        "ANT",
+        "RUS",
+        "NOR",
+        "PIA"
+      ],
+      "top6_detail": [
+        {
+          "pos": 1,
+          "guess": "VER",
+          "real": "NOR",
+          "points": 0,
+          "reason": "fora"
+        },
+        {
+          "pos": 2,
+          "guess": "HAM",
+          "real": "RUS",
+          "points": 0,
+          "reason": "fora"
+        },
+        {
+          "pos": 3,
+          "guess": "ANT",
+          "real": "ANT",
+          "points": 2,
+          "reason": "exata"
+        },
+        {
+          "pos": 4,
+          "guess": "RUS",
+          "real": "LEC",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 5,
+          "guess": "NOR",
+          "real": "LAW",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 6,
+          "guess": "PIA",
+          "real": "HUL",
+          "points": 0,
+          "reason": "fora"
+        }
+      ],
+      "top6_points": 4,
+      "bonus_guess": 7,
+      "bonus_real_pos": 22,
+      "bonus_points": 0,
+      "total": 4,
+      "total_recalculado": null,
+      "bonus_detail": [
+        {
+          "driver": "BOR",
+          "guess": 7,
+          "real_pos": 22,
+          "points": 0
+        },
+        {
+          "driver": "CAM",
+          "guess": 17,
+          "real_pos": 13,
+          "points": 0
+        }
+      ]
+    },
+    {
+      "player_id": "guilherme",
+      "player_raw": "Guilherme",
+      "name": "Guilherme",
+      "top6": [
+        "ANT",
+        "NOR",
+        "VER",
+        "RUS",
+        "LEC",
+        "HAM"
+      ],
+      "top6_detail": [
+        {
+          "pos": 1,
+          "guess": "ANT",
+          "real": "NOR",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 2,
+          "guess": "NOR",
+          "real": "RUS",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 3,
+          "guess": "VER",
+          "real": "ANT",
+          "points": 0,
+          "reason": "fora"
+        },
+        {
+          "pos": 4,
+          "guess": "RUS",
+          "real": "LEC",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 5,
+          "guess": "LEC",
+          "real": "LAW",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 6,
+          "guess": "HAM",
+          "real": "HUL",
+          "points": 0,
+          "reason": "fora"
+        }
+      ],
+      "top6_points": 4,
+      "bonus_guess": 9,
+      "bonus_real_pos": 22,
+      "bonus_points": 0,
+      "total": 4,
+      "total_recalculado": null,
+      "bonus_detail": [
+        {
+          "driver": "BOR",
+          "guess": 9,
+          "real_pos": 22,
+          "points": 0
+        },
+        {
+          "driver": "CAM",
+          "guess": 14,
+          "real_pos": 13,
+          "points": 0
+        }
+      ]
+    },
+    {
+      "player_id": "vinicius",
+      "player_raw": "Vinícius",
+      "name": "Vinícius",
+      "top6": [
+        "VER",
+        "ANT",
+        "NOR",
+        "RUS",
+        "HAM",
+        "LEC"
+      ],
+      "top6_detail": [
+        {
+          "pos": 1,
+          "guess": "VER",
+          "real": "NOR",
+          "points": 0,
+          "reason": "fora"
+        },
+        {
+          "pos": 2,
+          "guess": "ANT",
+          "real": "RUS",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 3,
+          "guess": "NOR",
+          "real": "ANT",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 4,
+          "guess": "RUS",
+          "real": "LEC",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 5,
+          "guess": "HAM",
+          "real": "LAW",
+          "points": 0,
+          "reason": "fora"
+        },
+        {
+          "pos": 6,
+          "guess": "LEC",
+          "real": "HUL",
+          "points": 1,
+          "reason": "no top6"
+        }
+      ],
+      "top6_points": 4,
+      "bonus_guess": 10,
+      "bonus_real_pos": 22,
+      "bonus_points": 0,
+      "total": 4,
+      "total_recalculado": null,
+      "bonus_detail": [
+        {
+          "driver": "BOR",
+          "guess": 10,
+          "real_pos": 22,
+          "points": 0
+        },
+        {
+          "driver": "CAM",
+          "guess": 16,
+          "real_pos": 13,
+          "points": 0
+        }
+      ]
+    },
+    {
+      "player_id": "caio_l",
+      "player_raw": "Caio",
+      "name": "Caio Lopes",
+      "top6": [
+        "ANT",
+        "NOR",
+        "VER",
+        "RUS",
+        "PIA",
+        "HAM"
+      ],
+      "top6_detail": [
+        {
+          "pos": 1,
+          "guess": "ANT",
+          "real": "NOR",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 2,
+          "guess": "NOR",
+          "real": "RUS",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 3,
+          "guess": "VER",
+          "real": "ANT",
+          "points": 0,
+          "reason": "fora"
+        },
+        {
+          "pos": 4,
+          "guess": "RUS",
+          "real": "LEC",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 5,
+          "guess": "PIA",
+          "real": "LAW",
+          "points": 0,
+          "reason": "fora"
+        },
+        {
+          "pos": 6,
+          "guess": "HAM",
+          "real": "HUL",
+          "points": 0,
+          "reason": "fora"
+        }
+      ],
+      "top6_points": 3,
+      "bonus_guess": 9,
+      "bonus_real_pos": 22,
+      "bonus_points": 0,
+      "total": 3,
+      "total_recalculado": null,
+      "bonus_detail": [
+        {
+          "driver": "BOR",
+          "guess": 9,
+          "real_pos": 22,
+          "points": 0
+        },
+        {
+          "driver": "CAM",
+          "guess": 16,
+          "real_pos": 13,
+          "points": 0
+        }
+      ]
+    },
+    {
+      "player_id": "filipe",
+      "player_raw": "Filipe",
+      "name": "Filipe",
+      "top6": [
+        "VER",
+        "ANT",
+        "HAM",
+        "NOR",
+        "LEC",
+        "HAD"
+      ],
+      "top6_detail": [
+        {
+          "pos": 1,
+          "guess": "VER",
+          "real": "NOR",
+          "points": 0,
+          "reason": "fora"
+        },
+        {
+          "pos": 2,
+          "guess": "ANT",
+          "real": "RUS",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 3,
+          "guess": "HAM",
+          "real": "ANT",
+          "points": 0,
+          "reason": "fora"
+        },
+        {
+          "pos": 4,
+          "guess": "NOR",
+          "real": "LEC",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 5,
+          "guess": "LEC",
+          "real": "LAW",
+          "points": 1,
+          "reason": "no top6"
+        },
+        {
+          "pos": 6,
+          "guess": "HAD",
+          "real": "HUL",
+          "points": 0,
+          "reason": "fora"
+        }
+      ],
+      "top6_points": 3,
+      "bonus_guess": 10,
+      "bonus_real_pos": 22,
+      "bonus_points": 0,
+      "total": 3,
+      "total_recalculado": null,
+      "bonus_detail": [
+        {
+          "driver": "BOR",
+          "guess": 10,
+          "real_pos": 22,
+          "points": 0
+        },
+        {
+          "driver": "CAM",
+          "guess": 16,
+          "real_pos": 13,
+          "points": 0
+        }
+      ]
+    }
+  ]
+}
